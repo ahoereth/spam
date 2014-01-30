@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+  var pkg = grunt.file.readJSON('package.json');
+
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-less');
@@ -8,23 +10,19 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-ngmin');
   grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-banner');
 
 
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-
+    pkg: pkg,
 
     clean: {
-      dev: {
-        src: [
-          'src/fonts',
-          'src/**/*.css'
-        ]
-      },
+      dev: [
+        'src/fonts',
+        'src/**/*.css'
+      ],
 
-      build: {
-        src: ['app']
-      }
+      build: ['app']
     },
 
 
@@ -63,7 +61,8 @@ module.exports = function(grunt) {
 
       build: {
         options: {
-          cleancss: true
+          cleancss: true,
+          compress: true
         },
         files: {
           "app/css/spamin.css": "src/styles/app.less"
@@ -173,6 +172,19 @@ module.exports = function(grunt) {
       }
     },
 
+    usebanner: {
+      build: {
+        options: {
+          banner: "// <%= pkg.name %> - v<%= pkg.version %> - " +
+                  "<%= grunt.template.today('yyyy-mm-dd') %>",
+          linebreak: true
+        },
+        files: {
+          src: [ 'app/css/spamin.css', 'app/js/spamin.js' ]
+        }
+      }
+    },
+
     bump: {
       options: {
         pushTo: 'origin'
@@ -188,7 +200,7 @@ module.exports = function(grunt) {
     var fs = require('fs');
     fs.readFile('src/index-ship.html', 'utf8', function (err,data) {
       if (err) return console.log(err);
-      var result = data.replace( /VERSION/g, new Date().getTime() );
+      var result = data.replace( /VERSION/g, pkg.version );
 
       fs.writeFile('app/index.html', result, 'utf8', function (err) {
         if (err) return console.log(err);
@@ -228,7 +240,7 @@ module.exports = function(grunt) {
   grunt.registerTask(
     'build',
     'Runs all tasks so the app can be run from /app or /src.',
-    ['clean', 'copy', 'index', 'htaccess', 'less', 'scripts']
+    ['clean', 'copy', 'index', 'htaccess', 'less', 'scripts', 'usebanner']
   );
 
 
