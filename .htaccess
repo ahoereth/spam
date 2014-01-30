@@ -1,0 +1,10 @@
+RewriteEngine on
+
+RewriteCond %{REQUEST_URI} !^/~SPAM/api
+RewriteCond %{REQUEST_URI} !^/~SPAM/app
+RewriteCond %{REQUEST_URI} !^/~SPAM/src
+RewriteCond %{REQUEST_URI} !^/~SPAM/tools
+RewriteCond %{REQUEST_URI} !^/~SPAM/bower_components
+RewriteCond %{REQUEST_URI} !^/~SPAM/phpmyadmin
+###RewriteRule ^(.*) /~SPAM/app/$1 [L]
+RewriteRule ^(.*) /~SPAM/src/$1 [L]

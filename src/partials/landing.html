@@ -1,0 +1,33 @@
+<div class="jumbotron">
+	<h1>Welcome<span ng-show="loginform.username||(user&&!demo)">, {{loginform.username}}<span ng-hide="demo">{{user.username}}</span></span>!</h1>
+	<p>This is your personal <span class="text-success">study planning machine</span>. It will help you to keep track of your courses, grades and credits throughout your course of study; Not only of the stuff you already accomplished but also which fields still might need some work. Find new interesting courses for the next semesters and generate your transcript of records with ease when applying for your semester abroad.</p>
+</div>
+
+<div class="col-md-4">
+	<h2>Work in progress</h2>
+	<p>The study planning machine is not yet finished and still might have some rough edges. Feel free to report bugs per mail to <a href="mailto:ahoereth@uos.de">ahoereth@uos.de</a>.</p>
+</div>
+
+<div class="col-md-4" id="landing_login" ng-hide="user">
+	<h2>Get started: Login!</h2>
+	<ng-include src="'partials/loginform.html'"></ng-include>
+</div>
+
+<div class="col-md-4" ng-if="user">
+	<h2>You are logged in!</h2>
+	<p>Click on your username in the top navigation and enroll in some courses using the quick search in the top right. Add your grades and check out what your expected bachelor grade is.</p>
+</div>
+
+<div class="col-md-4">
+	<h2>Roadmap</h2>
+	<ul>
+		<li>Module examinations</li>
+		<li>Generate transcript & export your data</li>
+		<li>M.Sc. and old B.Sc. study regulations</li>
+		<li>Crowdsourced course database maintance</li>
+		<li>Course groups and future semester planning</li>
+	</ul>
+</div>
+
+<div class="col-md-4">
+</div>

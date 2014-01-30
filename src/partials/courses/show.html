@@ -1,0 +1,81 @@
+<div class="alert alert-danger" ng-if="course.preliminary" ng-hide="course.sidebyside">
+	<strong>Watch out!</strong>
+	This course is <strong>preliminary</strong> and is not listed in the public database!
+	<span ng-if="course.parent_course_id">The data on this page is a proposed update for <a ng-href="courses/{{course.parent_course_id}}">#{{course.parent_course_id}}</a>.</span>
+</div>
+
+
+<h1>
+	{{course.course}}
+	<small>{{course.term}}{{course.year}}</small>
+	<code class="pull-right">{{course.code}}</code>
+	<img src="img/loading.gif" alt="loading" ng-if="loading.course||loading.fields" class="pull-right" />
+</h1>
+
+<hr>
+
+<div class="alert alert-danger" ng-if="course.proposal">
+	You proposed changes for this course which were not yet accepted! You can <a ng-href="courses/{{course.proposal}}">view them</a>.
+</div>
+
+<p class="lead pull-right">
+	<span ng-if="course.ects">
+		<span class="bold">ECTS:</span> {{course.ects}}<span ng-if="course.language">,</span>
+	</span>
+	<span ng-if="course.language">
+		<span class="bold">Language:</span> {{course.language}}<span ng-if="course.type">,</span>
+	</span>
+	<span ng-if="course.type">
+		<span class="bold">Type:</span> {{course.type}}
+	</span>
+</p>
+<p class="lead" ng-if="course.teachers">
+	<a href="courses?teacher={{teacher.teacher | urlencode}}" ng-repeat-start="teacher in course.teachers">{{teacher.teacher}}</a><span ng-repeat-end ng-hide="$last">,&nbsp;</span>
+</p>
+
+<div class="alert alert-warning" ng-if="course.course_comment">
+	<strong>Important Notice</strong>
+	{{course.course_comment}}
+</div>
+
+<div class="row">
+
+	<div class="col-md-6" ng-if="course.course_desc">
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2 style="margin-bottom: 0;">Description</h2></div>
+			<div class="panel-body" ng-bind-html="course.course_desc | prerequisites"></div>
+		</div>
+	</div>
+
+	<div class="col-md-6" ng-if="course.fields.length">
+		<div class="panel panel-default">
+			<div class="panel-heading"><h2 style="margin-bottom: 0;">Fields</h2></div>
+			<div class="panel-body">
+				<ul class="list-unstyled">
+					<li ng-repeat="(regulation, fields) in fields_in_regulations">
+						{{regulation}}
+						<ul>
+							<li ng-repeat="field in fields">{{field.field}}<span ng-if="field.course_in_field_type=='PM'">&nbsp;(PM)</span></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<hr>
+
+<div class="pull-right">
+	<a class="btn btn-info" ng-href="{{course.course_url}}" ng-if="course.course_url" target="_blank">External</a>
+	<a class="btn btn-primary" ng-href="{{course.studip_url}}" ng-if="course.studip_url" target="_blank">StudIP</a>
+
+	<span ng-if="user">
+
+		<a ng-click="guideModal()" class="btn btn-default" ng-if="user.rank>=16">Guide options</a>
+
+		<a class="btn btn-warning" ng-show="user.rank>=2" ng-href="courses/{{course.course_id}}/edit">Propose changes</a>
+
+	</span>
+</div>

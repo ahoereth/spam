@@ -1,0 +1,25 @@
+<form class="form-horizontal" ng-submit="login()">
+	<div class="form-group">
+		<label class="col-md-4 control-label" for="username" style="text-align: left;">Username</label>
+		<div class="col-md-8 input-group" style="padding-left: 15px; padding-right: 15px;">
+			<input class="form-control" type="text" id="username" ng-model="loginform.username" placeholder="wwacker" />
+  		<span class="input-group-addon">@uos.de</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-md-4 control-label" for="password" style="text-align: left;">Password</label>
+		<div class="col-md-8">
+			<input class="form-control" type="password" id="password" ng-model="loginform.password">
+			<div class="checkbox">
+				<label>
+					<input type="checkbox" id="remember" ng-model="loginform.remember"> I trust this device <a href="help?faq=remember">(?)</a>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-offset-4 col-md-8">
+			<button type="submit" class="btn btn-primary btn-large btn-block" ng-class="{disabled : loginform.loading}" ng-disabled="loginform.loading">{{loginform.loading | iif: 'Loading...' : 'Let\'s go!'}}</button>
+		</div>
+	</div>
+</form>

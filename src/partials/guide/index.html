@@ -1,0 +1,73 @@
+<h1>Study Guide</h1>
+
+<p class="lead">This page holds course recommendations for the first semesters for bachelor students.</p>
+<p>When adding them to your personal study plan be aware of duplicates. This list always contains the courses from the current and the next semester and is not filtered with courses you already have been enrolled in.</p>
+
+<hr>
+
+<div class="alert alert-info" ng-if="user&&user.rank>=16">
+	To add or hide a course to/from the guide open it's individual page (e.g. find it using <a href="courses">/courses</a>) and use the appropriate button on the bottom there.
+</div>
+
+<!--<div class="row form-horizontal" style="margin-bottom: 10px;">
+	<label class="col-lg-1 col-sm-2 col-xs-3 control-label" for="regulationId">Regulation:</label>
+	<div class="col-lg-6 col-sm-5 col-xs-9">
+		<select class="form-control disabled" ng-model="regulationId" id="filter" ng-options="r.regulation_id as r.regulation for r in regulations" ng-change="fetch()" disabled="disabled"></select>
+	</div>
+	<div class="col-sm-5 hidden-xs help-block">Specify a study regulation here.</div>
+</div>-->
+
+<!-- guide table -->
+<div class="guide" ng-repeat="(semester, fields) in guide track by semester" bindonce style="margin: 40px 0;">
+
+	<!-- guide table headline -->
+	<div class="row head">
+		<div class="col-sm-1 hidden-xs">#</div>
+		<div class="col-md-5 col-sm-5 col-xs-8">Title</div>
+		<div class="col-sm-2 hidden-xs">Teachers</div>
+		<div class="col-md-1 hidden-sm hidden-xs">Type</div>
+		<div class="col-xs-1">ECTS</div>
+		<div class="col-md-2 col-xs-3">
+			<h2 style="text-align: center; margin: 0;">
+				<span class="label label-info" style="display: block; width: 100%;" bo-text="semester + ' / ' + getTerm(semester)"></span>
+			</h2>
+		</div>
+	</div>
+
+	<!-- guide field block -->
+	<div class="field" ng-repeat="(field, courses) in fields track by field">
+
+		<!-- field headline -->
+		<div class="row title">
+			<h3 class="col-xs-12" style="margin: 0;">{{courses[0].fields[0].field}}</h3>
+		</div>
+
+		<!-- courses in field -->
+		<div class="row course" ng-repeat="course in courses track by course.course_id">
+
+			<div class="col-sm-1 hidden-xs"><code>{{course.code}}</code></div>
+
+			<div class="col-md-5 col-sm-5 col-xs-8">
+				{{course.course}}
+				<span ng-if="course.field.course_in_field_type=='WPM'">&nbsp;(WPM)</span>
+			</div>
+
+			<div class="col-sm-2 hidden-xs">{{course.teachers_str}}</div>
+			<div class="col-md-1 hidden-sm hidden-xs">{{course.type}}</div>
+			<div class="col-xs-1">{{course.ects}}</div>
+			<div class="col-md-2 col-xs-3">
+
+				<div class="btn-group btn-group-justified">
+					<add-remove-course course="course" style="width: 50%; float: left;" btn-class="btn-block" add-course="addCourse" remove-course="removeCourse" ng-if="user"></add-remove-course>
+
+					<!-- view details -->
+					<a class="btn btn-warning" style="width: 50%; float: right;" ng-href="courses/{{course.course_id}}">
+						<span class="glyphicon glyphicon-share-alt"></span>
+					</a>
+				</div>
+			</div>
+
+		</div><!-- /guide course -->
+
+	</div><!-- /guide field block -->
+</div><!-- /guide table -->

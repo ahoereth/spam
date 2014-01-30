@@ -1,0 +1,225 @@
+<div
+	ng-init="field = getFieldById(idx)"
+	class="panel"
+	ng-class="{
+		'panel-success' : field.completed_ects_percent>=100,
+		'panel-default' : field.completed_ects_percent<100,
+		'hidden-sm hidden-md' : (visibilityIndex==0&&$odd)||(visibilityIndex==1&&$even)}">
+
+	<div class="panel-heading">
+		<div class="row">
+
+			<h4 class="col-xs-9" ng-bind="field.field"></h4>
+
+			<!-- field grade input -->
+			<div class="col-xs-2">
+				<input
+					type="text"
+					class="input-tiny"
+					ng-class="{'no-grade-passed' : field.auto_grade}"
+					ng-model="field.grade"
+					onclick="select()"
+					ng-keydown="blurOnEnter($event)"
+					ng-blur="editFieldGrade()"
+					ng-disabled="field.auto_grade">
+			</div>
+
+			<!-- field button + dropdown -->
+			<div class="col-xs-1">
+				<div class="btn-group" style="width: 100%;">
+
+					<button type="button"
+						class="btn btn-xs btn-block dropdown-toggle"
+						ng-class="{
+							'btn-success' : field.required_ects_percent==0&&field.completed_ects>=field.field_pm,
+							'btn-warning' : field.required_ects_percent!=0||field.completed_ects<field.field_pm}"
+						style="height: 100%;">
+
+						<span
+							class="glyphicon"
+							ng-class="{
+								'glyphicon-saved'     : field.bsc_relevant,
+								'glyphicon-ok'        : field.required_ects_percent==0
+								                     &&!field.bsc_relevant,
+								'glyphicon-pencil'    : field.required_ects_percent!=0
+								                     && field.completed_ects_percent<100
+								                     &&!field.bsc_relevant}">
+						</span>
+
+					</button>
+
+					<ul class="dropdown-menu">
+
+						<li>
+							<a ng-href="courses?regulation={{user.regulation_id}}&field={{field.field}}">
+								Find courses
+							</a>
+						</li>
+
+						<li>
+							<a ng-href="~/courses/new?field_id={{field.field_id}}">
+								Add unofficial course
+							</a>
+						</li>
+
+						<li>
+							<label class="dropdown-checkbox">
+								Examination
+								<input type="checkbox"
+									class="pull-right"
+									ng-checked="!field.auto_grade"
+									ng-change="fieldGradeInit()"
+									ng-model="course.passed"
+									style="margin-top: 3px;">
+							</label>
+						</li>
+
+					</ul>
+				</div>
+			</div>
+
+		</div>
+	</div><!--/panel-heading-->
+
+	<div class="panel-body">
+
+			<div
+				ng-repeat="course in courses_by_fields[field.field_id] track by course.student_in_course_id"
+				ng-hide="course.removed"
+				class="row course"
+				ng-class="{overflowing : course.doesnt_count||course.muted||course.grade==5}"
+				id="course{{course.course_id}}">
+
+				<!-- title + ects -->
+				<div class="col-xs-9">
+					<span ng-switch="course.course_id">
+						<a
+							ng-switch-default
+							ng-href="courses/{{course.course_id}}"
+							tooltip="{{course.term}}{{course.year}}"
+							ng-bind="course.course"></a>
+						<span
+							ng-switch-when="0"
+							tooltip="{{course.term}}{{course.year}}"
+							ng-bind="course.course"></span>
+					</span>
+					<small ng-show="course.ects" class="text-info">
+						[{{course.ects}}]
+					</small>
+				</div>
+
+				<!-- grade -->
+				<div class="col-xs-2">
+					<input
+						type="text"
+						class="input-tiny"
+						ng-class="{'no-grade-passed' : course.passed&&!course.grade}"
+						ng-model="course.grade"
+						onclick="select()"
+						ng-keydown="blurOnEnter( $event )"
+						ng-blur="editGrade()">
+				</div>
+
+				<!-- dropdown button -->
+				<div class="col-xs-1">
+
+					<div class="btn-group" style="width: 100%;">
+						<button type="button"
+							class="btn btn-xs btn-block dropdown-toggle"
+							ng-class="{
+								'btn-info' : course.grade<1&&!course.passed&&!course.muted,
+								'btn-success' : ((course.grade>=1&&course.grade<=4)||course.passed)&&!course.muted,
+								'btn-default' : !course.passed||course.muted}">
+							<span
+								class="glyphicon"
+								ng-class="
+									{'glyphicon-pencil' : course.grade<1&&!course.passed,
+									 'glyphicon-ok' : (course.grade>=1&&course.grade<=4)||course.passed,
+									 'glyphicon-remove' : course.grade>4}">
+							</span>
+						</button>
+
+						<ul class="dropdown-menu">
+
+							<li ng-hide="course.grade">
+								<label class="dropdown-checkbox">
+									Passed
+									<input type="checkbox"
+										class="pull-right"
+										ng-model="course.passed"
+										ng-change="editProp(course)"
+										ng-checked="course.passed"
+										style="margin-top: 3px;">
+								</label>
+							</li>
+
+							<li>
+								<label class="dropdown-checkbox">
+									Muted
+									<input type="checkbox"
+										class="pull-right"
+										ng-model="course.muted"
+										ng-change="editProp(course)"
+										ng-checked="course.muted"
+										style="margin-top: 3px;">
+								</label>
+							</li>
+
+							<li><a class="pointer" ng-click="removeCourse(course)">Remove</a></li>
+
+							<li class="dropdown-header" ng-hide="course.fields.length==0&&course.enrolled_field_id==1">
+								Move to other field
+							</li>
+
+							<!-- move to other fields -->
+							<li ng-repeat="field in course.fields" ng-hide="field.field_id==course.enrolled_field_id">
+								<a class="pointer" ng-click="moveCourse(field.field_id)">
+									{{field.field}}
+								</a>
+							</li>
+
+							<!-- move to open studies -->
+							<li ng-hide="1==course.enrolled_field_id">
+								<a class="pointer" ng-click="moveCourse('null')">Open Studies</a>
+							</li>
+
+						</ul>
+
+					</div>
+				</div>
+
+			</div>
+	</div>
+
+	<!-- progress bar panel footer -->
+	<div class="panel-footer">
+		<div class="progress" style="margin-bottom: 0">
+
+			<!-- completed -->
+			<div
+				class="progress-bar progress-bar-success"
+				style="width: {{field.completed_ects_percent}}%"
+				ng-bind="field.completed_ects"></div>
+
+			<!-- enrolled -->
+			<div
+				class="progress-bar progress-bar-info"
+				style="width: {{field.enrolled_ects_percent}}%"
+				ng-bind="field.enrolled_ects"></div>
+
+			<!-- required -->
+			<div
+				class="progress-bar progress-required"
+				style="width: {{field.required_ects_percent}}%"
+				ng-bind="field.required_ects"></div>
+
+			<!-- open -->
+			<div
+				class="progress-bar progress-background"
+				style="width: {{field.open_ects_percent}}%"
+				ng-bind="field.open_ects"></div>
+
+		</div>
+	</div><!-- /panel-footer -->
+
+</div>

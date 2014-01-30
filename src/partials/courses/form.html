@@ -1,0 +1,148 @@
+<div class="col-md-6">
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="code">Number</label>
+		<div class="col-md-9">
+			<input type="text" class="form-control" ng-model="course.code" id="code" placeholder="8.042">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="title">Title</label>
+		<div class="col-md-9">
+			<input type="text" class="form-control" ng-model="course.course" id="title" placeholder="Full course name">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="course.teacher_input">Teachers</label>
+		<div class="col-md-9">
+			<div class="checkbox" ng-repeat="teacher in course.teachers">
+				<label>
+					<input type="checkbox" ng-model="course.teacher_ids[teacher.teacher_id]" />
+					{{teacher.teacher}}
+			</div>
+			<div class="form-group"></div>
+			<input type="text" class="form-control" id="course.teacher_input" ng-model="course.teacher_input" onclick="select()" typeahead="t as t.teacher for t in teachers | filter: $viewValue | limitTo:5">
+			<p class="help-block">Use exact teacher names and preferably use teacher names which are being suggested when you start typing!</p>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3">Type</label>
+		<div class="col-md-9">
+			<label class="radio-inline"><input type="radio" ng-model="course.type" value="L"> L</label>
+			<label class="radio-inline"><input type="radio" ng-model="course.type" value="S"> S</label>
+			<label class="radio-inline"><input type="radio" ng-model="course.type" value="K"> K</label>
+			<label class="radio-inline"><input type="radio" ng-model="course.type" value="P"> P</label>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3">Language</label>
+		<div class="col-md-9">
+			<label class="radio-inline"><input type="radio" ng-model="course.language" value="EN"> EN</label>
+			<label class="radio-inline"><input type="radio" ng-model="course.language" value="DE"> DE</label>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="ects">Credits</label>
+		<div class="col-md-9">
+			<input type="number" class="form-control" ng-model="course.ects" id="ects" min="0" max="12">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3">Term</label>
+		<div class="col-md-9">
+			<div class="row">
+				<div class="col-md-8">
+					<input type="number" class="form-control" min="2000" max="2030" ng-model="course.year" id="year">
+				</div>
+				<div class="col-md-4">
+					<label style="margin: 0 !important; font-weight:normal"><input type="radio" ng-model="course.term" value="S"> Summer</label>
+					<label style="margin: 0 !important; font-weight:normal"><input type="radio" ng-model="course.term" value="W"> Winter</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="semester">Semester</label>
+		<div class="col-md-9">
+			<input type="number" class="form-control" min="0" max="6" ng-model="course.semester" id="semester" value="0">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="hours">Hours</label>
+		<div class="col-md-9">
+			<input type="number" class="form-control" min="0" max="32" ng-model="course.hours" id="hours" value="0">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="notice">Notice</label>
+		<div class="col-md-9">
+			<input type="text" class="form-control" ng-model="course.course_notice" id="notice" placeholder="Notice like course got cancelled or simmilar">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-3" for="description">Description</label>
+		<div class="col-md-9">
+			<textarea rows="5" class="form-control" id="description" ng-model="course.course_desc"></textarea>
+			<p class="help-block">If there are any prerequisites for this course, begin the description with a line starting with "<i>Prerequisites: </i>" followed by a comma seperated list of course names!</p>
+		</div>
+	</div>
+
+</div>
+<div class="col-md-6">
+
+	<div class="form-group">
+		<label class="control-label col-md-2" for="studip_url">StudIP</label>
+		<div class="col-md-10">
+			<input type="text" class="form-control" ng-model="course.studip_url" id="studip_url" placeholder="https://">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-2" for="course_url">URL</label>
+		<div class="col-md-10">
+			<input type="text" class="form-control" ng-model="course.course_url" id="course_url" placeholder="https://">
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label class="control-label col-md-2">Fields</label>
+		<div class="col-md-10">
+			<p class="help-block">All courses are eligible for the 'open studies' field by default. If a course is eligible in a field of the current BSC study regulation it's also eligible for older study regulations.</p>
+		
+			<div class="panel-group">
+				<div class="panel panel-default" ng-repeat="(regulation, fields) in fields_in_regulations">
+					<div class="panel-heading" ng-click="course.regulationExpanded=$index">
+						<h5 class="panel-title" class="pointer">{{regulation}}</h5>
+					</div>
+					<div ng-show="course.regulationExpanded==$index">
+						<div class="panel-body">
+							<div class="checkbox col-md-10" ng-repeat-start="field in fields">
+								<label>
+									<input type="checkbox" ng-model="course.fields[field.field_id]" ng-disabled="loading" />
+									{{field.field}}
+								</label>
+							</div>
+							<div class="checkbox col-md-2" ng-repeat-end>
+								<label>
+									<input type="checkbox" ng-model="course.fields_pm[field.field_id]" ng-disabled="loading" />
+									PM
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>

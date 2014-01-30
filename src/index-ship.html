@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" data-ng-app="spam">
+<head>
+
+	<base href="/~SPAM/">
+
+	<meta charset="utf-8">
+	<meta name="fragment" content="!">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<title data-ng-bind="title">Study Planning in Cognitive Science</title>
+
+	<link href="img/spam.png" rel="apple-touch-icon">
+	<link href="img/spam.ico" rel="icon" type="image/x-icon">
+	<style>.ng-cloak { display: none !important; }</style>
+
+	<link href="app/css/spamin.css?v=VERSION" rel="stylesheet">
+	<script src="app/js/spamin.js?v=VERSION"></script>
+
+</head>
+<body class="ng-cloak">
+
+	<div class="content wrap">
+		<div data-ng-include="'partials/navbar.html'"></div>
+		<div class="container" data-ng-view></div>
+	</div>
+
+	<div class="footer wrap" data-ng-include="'partials/footer.html'"></div>
+
+<script>
+(function(){var p=[],w=window,d=document,e=f=0;p.push('ua='+encodeURIComponent(navigator.userAgent));e|=w.ActiveXObject?1:0;e|=w.opera?2:0;e|=w.chrome?4:0;e|='getBoxObjectFor' in d || 'mozInnerScreenX' in w?8:0;e|=('WebKitCSSMatrix' in w||'WebKitPoint' in w||'webkitStorageInfo' in w||'webkitURL' in w)?16:0;e|=(e&16&&({}.toString).toString().indexOf("\n")===-1)?32:0;p.push('e='+e);f|='sandbox' in d.createElement('iframe')?1:0;f|='WebSocket' in w?2:0;f|=w.Worker?4:0;f|=w.applicationCache?8:0;f|=w.history && history.pushState?16:0;f|=d.documentElement.webkitRequestFullScreen?32:0;f|='FileReader' in w?64:0;p.push('f='+f);p.push('r='+Math.random().toString(36).substring(7));p.push('w='+screen.width);p.push('h='+screen.height);var s=d.createElement('script');s.src='https://cogsci.uos.de/~SPAM/tools/WhichBrowser/detect.js?' + p.join('&');d.getElementsByTagName('head')[0].appendChild(s);})();
+</script>
+
+</body>
+</html>

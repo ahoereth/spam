@@ -1,0 +1,18 @@
+<h1>Login</h1>
+<p class="lead" ng-hide="params.delete_data||params.loggedout">Nice that you want to login.<span ng-show="params.error" class="text-danger">&nbsp;Seems like an error occured when you last tried. Please reenter your username/password combination and try again.</span> Use your <a href="http://www.rz.uni-osnabrueck.de/Ueber_Uns/Benutzerkonto/index.htm">university credentials</a>.</p>
+
+<p class="lead" ng-show="params.delete_data">Sad to see you leave. <span class="text-success">All data connected to your user account has been deleted.</span> By logging in below, a new, clean account will be setup for you.</p>
+
+<p class="lead" ng-show="params.loggedout"><span class="text-success">You have been logged out.</span> Until next time! Forgot something? Login below.</p>
+
+
+<div class="row">
+<div class="col-md-4">
+	<ng-include src="'partials/loginform.html'"></ng-include>
+</div>
+
+<div class="col-md-4">
+<p class="help-block">This will also work if you have not used this application before. You do not need to create an application specific account for this.</p>
+<p class="help-block">You can read more on <a href="help?faq=privacy">privacy & security</a> on /help.</p>
+</div>
+</div>

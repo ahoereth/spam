@@ -1,0 +1,130 @@
+<div
+	class="navbar navbar-fixed-top navbar-default"
+	ng-controller="Navbar"
+	ng-mouseover="search.hover=true"
+	ng-mouseout="search.hover=false">
+
+	<!-- animated loader -->
+	<div class="loader">
+		<div class="container" ng-class="{'animate-fade-out':loading<=0}">
+			<div class="loadingbar" ng-show="showLoader"></div>
+		</div>
+	</div>
+
+
+	<!-- top navigation bar -->
+	<div class="container">
+
+		<!-- SPAM icon text and home link + navbar-toggle for small devices -->
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" ng-click="navExpanded=!navExpanded">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+
+			<a href="." class="navbar-brand pointer">SPAM</a>
+		</div>
+
+		<div class="navbar-collapse collapse" ng-class="{in : navExpanded}">
+			<ul class="nav navbar-nav">
+				<li ng-class="getNavigationActiveClass('/courses')">
+					<a href="courses" ng-href="courses?regulation={{user.regulation_id | iif : user.regulation_id : 1}}">
+						courses
+					</a>
+				</li>
+
+				<li ng-class="getNavigationActiveClass('/guide')">
+					<a href="guide">guide</a>
+				</li>
+
+				<li ng-class="getNavigationActiveClass('/~')" ng-hide="!user||user.role!='student'">
+					<a href="~" ng-bind="user.username"></a>
+				</li>
+
+				<li ng-class="getNavigationActiveClass('/admin')" ng-if="user.rank>=16">
+					<a href="admin">admin</a>
+				</li>
+			</ul>
+
+			<form class="navbar-form navbar-right hidden-xs">
+				<input
+					type="text"
+					class="form-control"
+					placeholder="{{search.placeholder}}"
+					ng-model="search.query"
+					ng-focus="search.focus=true"
+					ng-blur="search.focus=false"
+					ng-keydown="keyboardNavigation($event)">
+			<!--
+					popover='By default this searches the last, current and next year. Try "w07: cognition" or "2002: mind". Use the up/down/enter/esc keys for quickly adding courses.'
+					popover-placement="bottom"
+					popover-trigger="mouseenter"-->
+			</form>
+		</div>
+	</div>
+
+	<!-- quick search section -->
+	<div
+		class="container quicksearch"
+		ng-show="search.active&&search.filtered.length > 0"
+		style="background: #fff;">
+
+
+		<!-- quick search result rows -->
+		<div
+			class="row"
+			ng-class="{
+				success : course.enrolled,
+				warning : course.course_id==search.selected && !course.enrolled && search.focus}"
+			ng-repeat="course in search.filtered track by course.course_id">
+
+			<div class="col-sm-1 hidden-xs"><code ng-bind="course.code"></code></div>
+
+			<div class="col-sm-4 col-xs-6" ng-bind-html="course.course | highlight: search.filter.course"></div>
+
+			<div class="col-sm-1 col-xs-2" style="text-align: right;">{{course.term}}{{course.year | year}}</div>
+
+			<div class="col-sm-2 hidden-xs" ng-bind="course.teachers_str"></div>
+
+			<div class="col-sm-2 hidden-xs" ng-bind="course.fields_str"></div>
+
+			<!-- add/remove + details buttons -->
+			<div class="col-sm-2 col-xs-4">
+				<add-remove-course
+					style="width: 50%; float: left;"
+					course="course"
+					btn-class="btn-block"
+					add-course="addCourse"
+					remove-course="removeCourse"
+					ng-show="user">
+				</add-remove-course>
+
+				<a
+					class="btn btn-warning"
+					style="width: 50%; float: right;"
+					ng-href="courses/{{course.course_id}}"
+					ng-click="leaveSearch()">
+					<span class="glyphicon glyphicon-share-alt"></span>
+				</a>
+
+			</div>
+
+		</div>
+	</div><!--/quick search section -->
+</div>
+
+
+<!-- warnings -->
+<div class="container">
+	<div class="alert alert-info" ng-if="share">
+		<strong>Hello stranger!</strong>
+		You are using a private key to view this page. It expires in {{share.timeout}}<span ng-if="share.routes.length>1"> and gives you access to the following routes: <span ng-repeat="route in share.routes">{{route}}<span ng-hide="$last">,</span></span></span>.
+	</div>
+
+	<div class="alert alert-danger" ng-show="http.error" ng-controller="HttpNotice">
+	  <button type="button" class="close" ng-click="close()">&times;</button>
+		<strong>Error!</strong>
+		The server responded with an error (Code: {{http.status}}). Check your network connection. The app&nbsp;<span ng-hide="http.permanentError">is retrying to reach the server...</span><span ng-show="http.permanentError">couldn't reestablish the connection. Changes might not be saved. Try to <a href=".">reload the app</a></span>.
+	</div>
+</div>

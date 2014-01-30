@@ -1,0 +1,10 @@
+.gitignore
+node_modules/
+bower_components/
+src/fonts/
+app/
+*.css
+*.eot
+*.svg
+*.ttf
+*.woff

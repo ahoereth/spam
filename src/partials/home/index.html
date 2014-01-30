@@ -1,0 +1,136 @@
+<div class="alert alert-warning" ng-if="user.username=='demo'">
+	You are currently viewing the live demo. To make sustaining changes please log in with your own credentials!
+</div>
+
+<h1>{{user.username}}'s overview</h1>
+
+<!-- already enrolled in some courses -->
+<p class="lead" ng-show="studentCourses.length">
+	You <abbr title="passed and neither muted nor overflowing courses [{{completed_course_ects}}C]{{user.thesis_grade | iif : ' + bachelor thesis ['+user.thesis_ects+'C]' : ''}}">earned a total</abbr> of {{completed_ects}} credits with an average grade of <strong>{{average_grade}}</strong>.<!--, module examination [3C] -->
+
+	<!-- enrolled ects -->
+	<span ng-show="enrolled_ects">Further more the courses you are currently <abbr title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise another {{enrolled_ects}} credits.</span>
+
+	<!-- current semester -->
+	<span ng-show="currentSemester.ects">
+		<span ng-show="currentSemester.ects==enrolled_ects">
+			All of them in the current semester.
+		</span>
+		<span ng-hide="currentSemester.ects==enrolled_ects">
+			<abbr title="{{currentSemester.abbr}}">This semester</abbr> you are pursuing {{currentSemester.ects}} credits.
+		</span>
+	</span>
+
+	<!-- last semester -->
+	<span ng-show="lastSemester.grade">
+		In your <abbr title="{{lastSemester.abbr}}">last semester</abbr> you earned a total of {{lastSemester.completed_ects}} credits with an average grade of <strong>{{lastSemester.grade}}</strong>.
+	</span>
+
+	<!-- next semester -->
+	<span ng-show="nextSemester.ects">
+		Lastly, for the <abbr title="{{nextSemester.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{nextSemester.ects}} credits.
+	</span>
+
+	<span ng-if="false">
+		By the end of the second semester you are required to have completed a total of XX credits. XX2 to go!
+	</span>
+
+	<!-- bachelor -->
+	<span ng-show="bachelor_grade">
+		If I had to make a guess on your final bachelor grade I currently would answer with <strong>{{bachelor_grade}}</strong> - but do not pin me down on it.
+	</span>
+
+	<span class="undercover" ng-hide="user.thesis_title||user.thesis_grade" ng-click="thesis_active=!thesis_active">
+		You did not yet write your bachelor thesis.
+	</span>
+</p>
+
+<!-- no courses yet -->
+<p class="lead" ng-hide="studentCourses.length||loadingStudentCourses">
+	You have not yet added any courses. To do so you can either use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
+</p>
+
+
+<hr>
+
+<!-- bachelor thesis row -->
+<span ng-if="thesis_active||user.thesis_title||user.thesis_grade">
+	<form class="inline-form row" ng-init="user.thesis_grade=formatGrade(user.thesis_grade)">
+		<div class="form-group col-lg-10 col-sm-9 col-xs-7">
+			<input
+				type="text"
+				class="form-control"
+				placeholder="Bachelor thesis title"
+				ng-model="user.thesis_title"
+				ng-blur="updateThesis()"
+				ng-keydown="blurOnEnter($event)"
+				ng-init="user.thesis_title_old=user.thesis_title">
+		</div>
+
+		<div class="form-group col-sm-2 col-xs-3">
+			<input
+				type="text"
+				class="form-control form-control-tight"
+				placeholder="Grade"
+				onclick="select()"
+				ng-model="user.thesis_grade"
+				ng-blur="updateThesis()"
+				ng-keydown="blurOnEnter($event)"
+				ng-init="user.thesis_grade_old=user.thesis_grade">
+		</div>
+	</form>
+
+	<hr style="margin-top: 0">
+</span>
+
+
+
+<div class="overview-container row">
+
+	<div
+		ng-repeat="column in columns"
+		ng-init="outerIndex = $index"
+		class="col-lg-4 col-md-6"
+		ng-class="{'hidden-sm hidden-md' : $index==2}">
+
+		<ng-include
+			src="'partials/home/field.html'"
+			ng-repeat="idx in column track by idx">
+		</ng-include><!--ng-init="field = getFieldById(idx)"-->
+
+		<div ng-if="outerIndex==0">
+			<ng-include
+				src="'partials/home/field.html'"
+				ng-repeat="idx in columns[2] track by idx"
+				ng-init="visibilityIndex = outerIndex"
+				class="visible-sm visible-md">
+			</ng-include>
+		</div>
+
+		<div ng-if="outerIndex==1">
+			<ng-include
+				src="'partials/home/field.html'"
+				ng-repeat="idx in columns[2] track by idx"
+				ng-init="visibilityIndex = outerIndex"
+				class="visible-sm visible-md">
+			</ng-include>
+		</div>
+	</div>
+</div>
+
+<hr>
+
+<!-- legend -->
+<p class="pull-right">
+	<small>
+		<span class="text-primary glyphicon glyphicon-pencil"></span> Current,&nbsp;
+		<span class="text-success glyphicon glyphicon-ok"></span> Completed,&nbsp;
+		<span class="text-danger glyphicon glyphicon-remove"></span> Failed,&nbsp;
+		<span class="glyphicon glyphicon-saved"></span> BSC grade relevant field
+	</small>
+</p>
+<p>
+	<small>
+		{{user.regulation}}
+	</small>
+</p>

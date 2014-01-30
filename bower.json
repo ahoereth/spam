@@ -1,0 +1,15 @@
+{
+  "name": "Cognitive Science Study Planning Machine",
+  "devDependencies" : {
+    "lodash": "~2.4.1",
+    "underscore.string": "~2.3.3",
+    "angular": "~1.2.11",
+    "angular-route": "~1.2.11",
+    "angular-sanitize": "~1.2.11",
+    "angular-bindonce": "~0.3.0",
+    "restangular": "~1.3.1",
+    "angular-bootstrap": "~0.10.0",
+    "bootstrap": "~3.0.3",
+    "open-sans-fontface": "~1.0.4"
+  }
+}

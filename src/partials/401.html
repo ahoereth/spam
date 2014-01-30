@@ -1,0 +1,38 @@
+<h1>Authorization error</h1>
+<p class="lead">You are currently not authorized to view the page you have requested: <code>{{requested_route}}</code></p>
+<p><span ng-show="!user||demo">Use the login form on the left and try again.</span> On the right you find a (maybe incomplete) list of routes available to you at the moment.</p>
+
+<hr>
+
+<div class="row">
+	<div class="col-md-4"  ng-show="!user||demo">
+		<h2>Fix this: Login!</h2>
+		<ng-include src="'partials/loginform.html'"></ng-include>
+	</div>
+	<div class="col-md-4">
+		<h2>Public routes</h2>
+		<ul>
+			<li><a href=".">/</a></li>
+			<li><a href="courses">/courses</a></li>
+			<li><a href="guide">/guide</a></li>
+			<li><a href="help">/help</a></li>
+		</ul>
+	</div>
+	<div class="col-md-4" ng-show="user">
+		<h2>Your routes</h2>
+		<ul>
+			<li><a href="~">/~</a></li>
+			<li><a href="~/settings">/~/settings</a></li>
+			<li><a href="~/logout">/~/logout</a></li>
+		</ul>
+	</div>
+	<div class="col-md-4" ng-show="user&&user.rank>=16">
+		<h2>Admin routes</h2>
+		<ul>
+			<li><a href="admin">/admin</a></li>
+			<li><a href="admin/courses/proposals">/admin/courses/proposals</a></li>
+		</ul>
+	</div>
+</div>
+
+<hr>

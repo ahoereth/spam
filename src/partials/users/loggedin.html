@@ -1,0 +1,63 @@
+<div class="modal-content" ng-controller="UserCtrl">
+	<div class="loader"><div class="container" ng-class="{'animate-fade-out':loading<=0}"><div class="loadingbar"></div></div></div>
+
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Hey {{user.username}}!</h4>
+	</div>
+
+	<div class="modal-body">
+		<div class="alert alert-warning" ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}</div>
+
+		<form class="form-horizontal row">
+
+				<div class="form-group">
+					<label class="control-label col-lg-3" for="name">Name</label>
+					<div class="col-lg-4">
+						<input type="text" class="form-control" ng-model="user.firstname" id="name" ng-blur="updateStudent(user)" placeholder="Firstname">
+					</div>
+					<div class="col-lg-4">
+						<input type="text" class="form-control" ng-model="user.lastname" id="lastname" ng-blur="updateStudent(user)" placeholder="Lastname">
+					</div>
+				</div>
+
+				<div class="form-group">
+					<label class="control-label col-lg-3">CogSci since</label>
+					<div class="col-lg-8">
+						<div class="row">
+							<div class="col-lg-8">
+								<input type="number" class="form-control" min="2000" max="2030" ng-model="user.mat_year" id="year" ng-blur="updateStudent(user)" placeholder="Year">
+							</div>
+							<div class="col-lg-4">
+								<label style="margin: 0 !important; font-weight:normal"><input type="radio" ng-model="user.mat_term" value="S" ng-click="updateStudent(user)"> Summer</label>
+								<label style="margin: 0 !important; font-weight:normal"><input type="radio" ng-model="user.mat_term" value="W" ng-click="updateStudent(user)"> Winter</label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="form-group">
+					<label class="control-label col-lg-3" for="regulation">Regulation</label>
+					<div class="col-lg-8">
+						<!--<select class="form-control" ng-model="constraint.field" id="regulation" ng-required="true" ng-options="f as f.title for f in fields"></select>-->
+						<select class="form-control" ng-model="user.regulation_abbr" id="regulation" disabled="disabled">
+							<option selected="selected">{{user.regulation_abbr}}</option>
+						</select>
+					</div>
+					<div class="col-1">
+						<img src="img/loading.gif" alt="loading" ng-show="loading.fields" />
+					</div>
+				</div>
+
+		</form>
+	</div>
+
+	<div class="modal-footer">
+		<a class="btn btn-info" href="/" ng-hide="home">Go home</a>
+		<button type="button" class="btn btn-info disabled" ng-disabled="true">Export Data</button>
+		<button type="button" class="btn btn-danger disabled" ng-disabled="true">Delete Accout</button>
+		<button type="button" class="btn btn-warning" ng-click="logout()">Sign Out</button>
+	</div>
+
+</div>
