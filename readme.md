@@ -13,8 +13,8 @@ Requirements: Node >= 0.10
 
 
 ## TODO ##
-(partial...)
 
-[ ] Clean up code
-[ ] Speed up /api/courses?regulation=1
-[ ] Make API public
+* [ ] Clean up code
+* [ ] Speed up /api/courses?regulation=1
+* [ ] Make API public
+* [ ] Make this todo list more complete
