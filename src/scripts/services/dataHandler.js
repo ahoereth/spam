@@ -42,6 +42,7 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 			localStorage.removeItem('authdata');
 			localStorage.removeItem('username');
 		}
+		$rootScope.user = false;
 	};
 
 	self.resetGuide = function() {
