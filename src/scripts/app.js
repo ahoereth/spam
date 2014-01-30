@@ -359,6 +359,7 @@ config( function(
 			DataHandler.removeUserDependent();
 
 			if ( $rootScope.user ) {
+				$rootScope.loginform = {};
 				$location.path('/~');
 			} else {
 				$rootScope.loginform.password = '';
