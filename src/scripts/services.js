@@ -83,6 +83,7 @@ factory('Auth', function(
 
 	var logout = function () {
 		TheUser.logout();
+		$rootScope.user = false;
 		username = null;
 
 		getter();

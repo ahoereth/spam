@@ -12,11 +12,6 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 		authdata : webstorage ? sessionStorage.getItem('authdata') || localStorage.getItem('authdata') : null
 	};
 
-	var objects = {
-		studentCourses : $rootScope.studentCourses,
-		loginform : $rootScope.loginform
-	};
-
 	self.getLogininfo = function(key) {
 		return logininfo[key];
 	};
@@ -47,9 +42,6 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 			localStorage.removeItem('authdata');
 			localStorage.removeItem('username');
 		}
-		objects.studentCourses = {};
-		objects.loginform = { username : '' };
-		$rootScope.user = false;
 	};
 
 	self.resetGuide = function() {
@@ -60,8 +52,8 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 	self.removeUserDependent = function() {
 		self.resetGuide();
 		Courses.reset();
-		objects.studentCourses = {};
-		objects.loginform = { username : '' };
+		$rootScope.studentCourses = {};
+		$rootScope.loginform = { username : '' };
 	};
 
 	self.removeAll = function() {
