@@ -188,7 +188,7 @@ config( function(
 .run(function(Restangular) {
 
 	Restangular.configuration.getIdFromElem = function(elem) {
-		if ( ! elem.$fromServer )
+		if ( ! elem.$fromServer || elem.id )
 			return elem.id;
 
 		if ( elem.route == 'users' ) {
