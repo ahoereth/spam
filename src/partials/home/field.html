@@ -199,24 +199,28 @@
 			<div
 				class="progress-bar progress-bar-success"
 				style="width: {{field.completed_ects_percent}}%"
+				ng-hide="field.completed_ects_percent==0"
 				ng-bind="field.completed_ects"></div>
 
 			<!-- enrolled -->
 			<div
 				class="progress-bar progress-bar-info"
 				style="width: {{field.enrolled_ects_percent}}%"
+				ng-hide="field.enrolled_ects_percent==0"
 				ng-bind="field.enrolled_ects"></div>
 
 			<!-- required -->
 			<div
 				class="progress-bar progress-required"
 				style="width: {{field.required_ects_percent}}%"
+				ng-hide="field.required_ects_percent==0"
 				ng-bind="field.required_ects"></div>
 
 			<!-- open -->
 			<div
 				class="progress-bar progress-background"
 				style="width: {{field.open_ects_percent}}%"
+				ng-hide="field.open_ects_percent==0"
 				ng-bind="field.open_ects"></div>
 
 		</div>
