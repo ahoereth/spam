@@ -1,5 +1,5 @@
 <div class="jumbotron">
-	<h1>Welcome<span ng-show="loginform.username||user">, {{loginform.username}}<span ng-hide="demo">{{user.username}}</span></span>!</h1>
+	<h1>Welcome<span ng-show="(loginform.username||user)&&(!demo)">, {{loginform.username}}</span>!</h1>
 	<p>This is your personal <span class="text-success">study planning machine</span>. It will help you to keep track of your courses, grades and credits throughout your course of study; Not only of the stuff you already accomplished but also which fields still might need some work. Find new interesting courses for the next semesters and generate your transcript of records with ease when applying for your semester abroad.</p>
 </div>
 
@@ -29,6 +29,6 @@
 <div class="col-md-4" ng-if="user">
 	<h2>Meta</h2>
 	<p>
-		The app currently has over 220 users with nearly 3100 individual course enrollments. The course database contains 2260 distinct listings with a total of 260 teachers.
+		The app currently has over 260 users with nearly 4100 individual course enrollments. The course database contains 2260 distinct listings with a total of 260 teachers.
 	</p>
 </div>
