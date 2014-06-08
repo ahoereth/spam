@@ -116,15 +116,15 @@
 		<!-- first row of course information -->
 		<div class="row courses-row" ng-class="{'expanded' : course.expanded}">
 
-			<div class="col-md-1 hidden-sm hidden-xs"><code bo-text="course.code"></code></div>
+			<div class="col-md-1 hidden-sm hidden-xs"><code ng-bind="::course.code"></code></div>
 
-			<div class="col-sm-1 col-xs-2" style="text-align: center;"><span bo-text="course.term"></span><span bo-text="course.year | year"></span></div>
+			<div class="col-sm-1 col-xs-2" style="text-align: center;"><span ng-bind="::course.term"></span><span ng-bind="::course.year | year"></span></div>
 
-			<div class="col-md-4 col-sm-6 col-xs-8" bo-text="course.course"></div>
+			<div class="col-md-4 col-sm-6 col-xs-8" ng-bind="::course.course"></div>
 
-			<div class="col-md-2 hidden-sm hidden-xs" bo-text="course.teachers_str"></div>
+			<div class="col-md-2 hidden-sm hidden-xs" ng-bind="::course.teachers_str"></div>
 
-			<div class="col-md-3 col-sm-4 hidden-xs" bo-text="course.fields_str"></div>
+			<div class="col-md-3 col-sm-4 hidden-xs" ng-bind="::course.fields_str"></div>
 
 			<div class="col-sm-1 col-xs-2">
 				<button

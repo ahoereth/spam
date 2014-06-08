@@ -1,12 +1,10 @@
 angular.module('spam', [
 	'ngRoute',
 	'ngSanitize',
-//	'ngResource',
 //	'ngAnimate',
 
 	'restangular',
 	'ui.bootstrap',
-	'pasvaz.bindonce',
 
 	'spam.filters',
 
