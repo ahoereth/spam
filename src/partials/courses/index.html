@@ -15,7 +15,7 @@
 	<div class="col-md-5 hidden-sm hidden-xs help-block">Specify a study regulation here.</div>
 </div>
 
-<!-- field input for tiny devices -->
+<!-- field filter input for tiny devices -->
 <div class="row form-horizontal visible-xs" style="margin-bottom: 10px;">
 	<label class="col-xs-3 control-label" for="filter.fields_str">Field:</label>
 	<div class="col-xs-9 input-group" style="padding-left: 15px; padding-right: 15px;">
@@ -26,7 +26,7 @@
 	</div>
 </div>
 
-<!-- teacher input for small devices -->
+<!-- teacher filter input for small devices -->
 <div class="row form-horizontal visible-sm visible-xs" style="margin-bottom: 10px;">
 	<label class="col-sm-2 col-xs-3 control-label" for="filter.teachers_str">Teacher:</label>
 	<div class="col-sm-5 col-xs-9">
@@ -35,32 +35,49 @@
 	<div class="col-sm-5 hidden-xs help-block">Search for a specific teacher.</div>
 </div>
 
-<form class="form-inline" ng-submit="fetchCourses(1)">
+<!-- filter form -->
+<form ng-submit="fetchCourses(1)">
+
+	<!-- filter label row -->
 	<div class="row">
+		<!-- code label -->
 		<div class="col-md-1 hidden-sm hidden-xs">
-			<label for="filter.code" ng-click="orderBy('code')">No.</label>
+			<label for="filter.code" ng-click="orderBy('code')">Code</label>
 			<span ng-class="{caret: order==orderBys['-code'], 'caret up': order==orderBys['code']}"></span>
 		</div>
+
+		<!-- time label -->
 		<div class="col-sm-1 col-xs-2">
 			<label for="timeframe" ng-click="orderBy('time')">Time</label>
 			<span ng-class="{caret: order==orderBys['-time'], 'caret up': order==orderBys['time']}"></span>
 		</div>
+
+		<!-- title label -->
 		<div class="col-md-4 col-sm-6 col-xs-8">
 			<label for="filter.course" ng-click="orderBy('course')">Title</label>
 			<span ng-class="{caret: order==orderBys['-course'], 'caret up': order==orderBys['course']}"></span>
 		</div>
+
+		<!-- teachers label -->
 		<div class="col-md-2 hidden-sm hidden-xs">
 			<label for="filter.teachers_str" ng-click="orderBy('teachers')">Teachers</label>
 			<span ng-class="{caret: order==orderBys['-teachers'], 'caret up': order==orderBys['teachers']}"></span>
 		</div>
+
+		<!-- field of study label -->
 		<div class="col-md-3 col-sm-4 hidden-xs">
 			<label for="filter.fields_str" ng-click="orderBy('fields')">Field of Study</label>
 			<span ng-class="{caret: order==orderBys['-fields'], 'caret up': order==orderBys['fields']}"></span>
 		</div>
+
+		<!-- loading spinner and result counter label -->
+		<div class="col-sm-1 col-xs-2">
+			<label>Results</label>
+		</div>
 	</div>
 
-	<div class="row courses-row" style="padding-bottom: 10px;">
-
+	<!-- filter input row -->
+	<div class="row courses-row">
 		<!-- code filter -->
 		<div class="col-md-1 hidden-sm hidden-xs form-group">
 			<input class="form-control" type="text" id="filter.code" ng-model="filter.code">
@@ -98,6 +115,13 @@
 			</div>
 		</div>
 
+		<!-- loading spinner and result counter -->
+		<div class="col-sm-1 col-xs-2">
+			<div class="form-control" style="border: none; text-align: center;">
+				<span class="glyphicon glyphicon-refresh spin" ng-show="loading"></span>
+				<span ng-hide="loading">{{filteredCourses.length}}<span ng-if="filteredCourses.length>displayLimit">+</span></span>
+			</div>
+		</div>
 	</div>
 </form>
 
@@ -110,15 +134,14 @@
 	<!-- ngRepeat for the course list -->
 	<div
 		class="courses-rowpair"
-		ng-repeat="course in filteredCourses | orderBy:order | limitTo: displayLimit track by course.course_id"
-		bindonce>
+		ng-repeat="course in filteredCourses | orderBy:order | limitTo: displayLimit track by course.course_id">
 
 		<!-- first row of course information -->
 		<div class="row courses-row" ng-class="{'expanded' : course.expanded}">
 
-			<div class="col-md-1 hidden-sm hidden-xs"><code ng-bind="::course.code"></code></div>
+			<div class="col-md-1 hidden-sm hidden-xs"><code>{{::course.code}}</code></div>
 
-			<div class="col-sm-1 col-xs-2" style="text-align: center;"><span ng-bind="::course.term"></span><span ng-bind="::course.year | year"></span></div>
+			<div class="col-sm-1 col-xs-2 centering">{{::course.term}}{{::course.year | year}}</div>
 
 			<div class="col-md-4 col-sm-6 col-xs-8" ng-bind="::course.course"></div>
 
@@ -144,7 +167,7 @@
 		</div>
 
 		<!-- expandable row of course information -->
-		<div ng-if="course.expanded||filteredCourses.legth==1">
+		<div ng-if="course.expanded||filteredCourses.length==1">
 
 			<!-- studip url input field -->
 			<div class="row form-horizontal" style="margin-bottom: 10px;" ng-if="filter.studip=='false'">
@@ -156,26 +179,35 @@
 
 			<div class="row courses-row">
 				<div class="col-sm-11 col-xs-10">
-					<p ng-if="course.course_comment"><span class="bold">Notice:</span>&nbsp;{{course.course_comment}}</p>
-					<p class="visible-sm visible-xs"><span class="bold">Teachers:</span>&nbsp;{{course.teachers_str}}</p>
-					<p class="visible-xs"><span class="bold">Fields:</span>&nbsp;{{course.fields_str}}</p>
+					<p ng-if="course.course_comment">
+						<span class="bold">Notice:</span>&nbsp;{{::course.course_comment}}
+					</p>
+
+					<p class="visible-sm visible-xs">
+						<span class="bold">Teachers:</span>&nbsp;{{::course.teachers_str}}
+					</p>
+
+					<p class="visible-xs">
+						<span class="bold">Fields:</span>&nbsp;{{::course.fields_str}}
+					</p>
+
 					<p>
 						<span ng-if="course.ects">
-							<span class="bold">ECTS:</span>&nbsp;{{course.ects}}
+							<span class="bold">ECTS:</span>&nbsp;{{::course.ects}}
 							<span ng-if="course.language">,&nbsp;</span>
 						</span>
 
 						<span ng-if="course.language">
-							<span class="bold">Language:</span>&nbsp;{{course.language}}
+							<span class="bold">Language:</span>&nbsp;{{::course.language}}
 							<span ng-if="course.type">,&nbsp;</span>
 						</span>
 
 						<span ng-if="course.type">
-							<span class="bold">Type:</span>&nbsp;{{course.type}}
+							<span class="bold">Type:</span>&nbsp;{{::course.type}}
 						</span>
 					</p>
 
-					<div ng-if="course.course_desc" ng-bind-html="course.course_desc | prerequisites"></div>
+					<p ng-if="course.course_desc" ng-bind-html="course.course_desc | prerequisites"></p>
 				</div>
 
 				<!-- buttons on the right when expanded -->
