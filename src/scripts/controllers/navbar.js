@@ -107,7 +107,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 
 		if ( $scope.search.limit > $scope.search.filtered.length ) {
 			fetching = true;
-			Courses.fetch(TheUser.getRegulation(true), lowerYear, upperYear, TheUser.username).then(function(newCourses) {
+			Courses.fetch(TheUser.getRegulation(true), lowerYear, upperYear, null).then(function(newCourses) {
 				courses = newCourses;
 				fetching = false;
 				applyFilter();

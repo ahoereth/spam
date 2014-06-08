@@ -37,6 +37,17 @@ factory('TheUser', function(DataHandler, _) {
 		return data.username ? data.regulation_id : ( useDefault ? 1 : undefined );
 	};
 
+
+	self.courses = null;
+	self.getCourses = function() {
+		// if are not/have not yet pulled the courses, do so
+		if (_.isEmpty(self.courses))
+			self.courses = self.getList('courses');
+
+		// return the promise which might already contain the courses
+		return self.courses;
+	};
+
 	return r || self;
 }).
 

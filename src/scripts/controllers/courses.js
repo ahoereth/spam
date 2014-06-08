@@ -214,7 +214,8 @@ angular.module(spamControllersCourses).controller('Courses', function(
 
 		if ( $scope.displayLimit > ( $scope.filteredCourses.length - 5 ) || force ) {
 			fetching = true;
-			Courses.fetch($scope.regulation_id, lowerYear, upperYear, TheUser.username).then(function(newCourses) {
+
+			Courses.fetch($scope.regulation_id, lowerYear, upperYear, null).then(function(newCourses) {
 				courses = newCourses;
 				fetching = false;
 				applyFilter();
