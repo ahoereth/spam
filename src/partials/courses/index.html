@@ -119,7 +119,7 @@
 		<div class="col-sm-1 col-xs-2">
 			<div class="form-control" style="border: none; text-align: center;">
 				<span class="glyphicon glyphicon-refresh spin" ng-show="loading"></span>
-				<span ng-hide="loading">{{filteredCourses.length}}<span ng-if="filteredCourses.length>displayLimit">+</span></span>
+				<span ng-hide="loading">{{displayLimit>filteredCourses.length | iif : filteredCourses.length : displayLimit + '+'}}
 			</div>
 		</div>
 	</div>
