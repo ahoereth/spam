@@ -55,10 +55,10 @@ angular.module('services.courses', []).factory('Courses', function(
 				lower: lowerDb,
 				upper: upperDb,
 				limit: 2000,
-				student: student,
-				context: 'navbar'
+				// Student will be NULL in most cases. Matching the enrolled courses
+				// on the client side for speedier server requests.
+				student: student
 			} ).then( function( newCourses ) {
-				console.log(reg,newCourses,courses); // using console.log because it gets stripped on build
 				courses[reg] = _.union( courses[reg], newCourses.data );
 				deferred.resolve();
 			});
