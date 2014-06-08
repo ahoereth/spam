@@ -191,6 +191,14 @@ h6,
   border-bottom-width: 0px;
 }
 
+.courses-row code {
+  padding: 2px 0;
+  display: block;
+  min-width: 100%;
+  text-align: center;
+  min-height: 1.4em;
+}
+
 /* ***************************************************************************/
 /* Quick Search */
 .quicksearch .row {
@@ -368,8 +376,8 @@ h6,
   width: 40%;
 }
 
-.navbar-form .form-group {
-  width: 100%;
+.navbar-form .form-control {
+  width: 100% !important;
 }
 
 @media (max-width: 767px) {
@@ -426,6 +434,8 @@ h6,
 
 .bold { font-weight: bold; }
 
+.centering { text-align: center; }
+
 .undercover {
   cursor: pointer;
 }
@@ -438,4 +448,49 @@ h6,
   border-top: 0;
   border-bottom: 4px solid;
   content: "";
+}
+
+
+/***************************************************************************** /
+/* spinning animation */
+.spin {
+  -webkit-animation: spin 2s infinite linear;
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
 }
