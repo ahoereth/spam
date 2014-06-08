@@ -10,18 +10,18 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-ngmin');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-banner');
+  grunt.loadNpmTasks('grunt-angular-templates');
 
 
   grunt.initConfig({
     pkg: pkg,
 
     clean: {
-      dev: [
-        'src/fonts',
-        'src/**/*.css'
-      ],
+      dev: ['src/fonts'],
 
-      build: ['app']
+      before: ['app/**/**'],
+
+      after: ['app/js/tmp.*.js']
     },
 
 
@@ -41,7 +41,6 @@ module.exports = function(grunt) {
       build: {
         cwd: 'src',
         src: [
-          'partials/**',
           'fonts/**',
           'robots.txt'
         ],
@@ -70,11 +69,36 @@ module.exports = function(grunt) {
     },
 
 
+    ngtemplates: {
+      spam: {
+        cwd: 'src',
+        src: 'partials/**/**.html',
+        dest: 'app/js/tmp.templates.js',
+        options: {
+          htmlmin: {
+            collapseBooleanAttributes     : true,
+            collapseWhitespace            : true,
+            removeAttributeQuotes         : true,
+            removeEmptyAttributes         : true,
+            removeRedundantAttributes     : true,
+            removeScriptTypeAttributes    : true,
+            removeStyleLinkTypeAttributes : true,
+            // beware of comment directives!
+            removeComments                : true
+          },
+          bootstrap: function(module, script) {
+            return "angular.module('"+module+"').run(function($templateCache) {\n"+script+" });";
+          }
+        }
+      }
+    },
+
+
     ngmin: {
       // requires uglify task afterwards for merging this with bower_components
       build: {
         files: {
-          'app/js/spamin.js': [
+          'app/js/tmp.app.js': [
             'src/scripts/controllers.js',
             'src/scripts/controllers/*.js',
 
@@ -87,7 +111,9 @@ module.exports = function(grunt) {
             'src/scripts/directives.js',
             'src/scripts/directives/*.js',
 
-            'src/scripts/app.js'
+            'src/scripts/app.js',
+
+            'app/js/tmp.templates.js'
           ]
         }
       }
@@ -99,9 +125,27 @@ module.exports = function(grunt) {
       options: {
         mangle: true,
         compress: {
-          unsafe: true,
-          pure_getters: true,
-          drop_console: true
+          sequences     : true,  // join consecutive statemets with the “comma operator”
+          properties    : true,  // optimize property access: a["foo"] → a.foo
+          dead_code     : true,  // discard unreachable code
+          drop_debugger : true,  // discard “debugger” statements
+          unsafe        : true, // some unsafe optimizations (see below)
+          conditionals  : true,  // optimize if-s and conditional expressions
+          comparisons   : true,  // optimize comparisons
+          evaluate      : true,  // evaluate constant expressions
+          booleans      : true,  // optimize boolean expressions
+          loops         : true,  // optimize loops
+          unused        : true,  // drop unused variables/functions
+          hoist_funs    : false,  // hoist function declarations
+          hoist_vars    : false, // hoist variable declarations
+          if_return     : true,  // optimize if-s followed by return/continue
+          join_vars     : true,  // join var declarations
+          cascade       : true,  // try to cascade `right` into `left` in sequences
+          side_effects  : true,  // drop side-effect-free statements
+          warnings      : false,  // warn about potentially dangerous optimizations/code
+          global_defs   : {},     // global definitions
+          pure_getters  : true,
+          drop_console  : true
         },
         beautify: false
       },
@@ -118,9 +162,7 @@ module.exports = function(grunt) {
             'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
             'bower_components/restangular/dist/restangular.js',
 
-            'bower_components/angular-bindonce/bindonce.js',
-
-            'app/js/spamin.js' // contains everything from src/scripts/**
+            'app/js/tmp.app.js' // contains src/scripts/** and src/partials/**
           ]
         }
       }
@@ -232,14 +274,14 @@ module.exports = function(grunt) {
   grunt.registerTask(
     'scripts',
     'Build and minify scripts for production.',
-    ['ngmin', 'uglify']
+    ['ngtemplates', 'ngmin', 'uglify']
   );
 
 
   grunt.registerTask(
     'build',
     'Runs all tasks so the app can be run from /app or /src.',
-    ['clean', 'copy', 'index', 'htaccess', 'less', 'scripts', 'usebanner']
+    ['clean', 'copy', 'index', 'htaccess', 'less', 'scripts', 'usebanner', 'clean:after']
   );
 
 
