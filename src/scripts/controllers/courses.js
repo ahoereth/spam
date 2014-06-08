@@ -52,18 +52,9 @@ angular.module(spamControllersCourses).controller('Courses', function(
 	$scope.order = $scope.orderBys['-time'];
 
 
-	// get all regulations
-	Restangular.all("regulations").getList().then(function( regulations ) {
-		var t = _.findWhere( regulations, { regulation_id : 4 } );
-		$scope.regulations = _.without( regulations, t );
-
-		$scope.regulations.unshift( { regulation_id : '', regulation: "All courses" } );
-		fetchParams();
-	});
-
-
 	/**
-	 * TODO
+	 * watches the general filter object. Contains the code, title, teachers and
+	 * field of study input fields.
 	 */
 	$scope.$watch('filter', function(next, current) {
 		if (next == current) return;
@@ -74,7 +65,7 @@ angular.module(spamControllersCourses).controller('Courses', function(
 
 
 	/**
-	 * TODO
+	 * Watches the "obligatory module" checkbox.
 	 */
 	$scope.$watch('pm', function(next, current) {
 		if ( _.isUndefined(next) ) return;
@@ -89,7 +80,7 @@ angular.module(spamControllersCourses).controller('Courses', function(
 
 
 	/**
-	 * TODO
+	 * Watches the timeframe input field.
 	 */
 	$scope.$watch('timeframe', function(next, current) {
 		if ( _.isUndefined(next) ) return;
@@ -110,7 +101,7 @@ angular.module(spamControllersCourses).controller('Courses', function(
 
 
 	/**
-	 * TODO
+	 * Is triggered when the user changes the regulation input field.
 	 */
 	$scope.$watch('regulation_id', function(next, current) {
 		if ( _.isUndefined(next) ) return;
@@ -125,7 +116,8 @@ angular.module(spamControllersCourses).controller('Courses', function(
 
 
 	/**
-	 * TODO
+	 * Called when user explicitly clicks the "show more courses" button. This
+	 * won't be used in most cases because of infinite scrolling.
 	 */
 	$scope.scrollOn = function(amount) {
 		if ( $scope.displayLimit < $scope.filteredCourses.length )
@@ -204,6 +196,8 @@ angular.module(spamControllersCourses).controller('Courses', function(
 
 
 	/**
+	 * Refreshes des course list with the new filters applied.
+	 *
 	 * TODO: unify with navbar.js
 	 */
 	var applyFilter = function(justFetch, force) {
@@ -224,6 +218,15 @@ angular.module(spamControllersCourses).controller('Courses', function(
 		}
 	};
 
+
+	// get all regulations
+	Restangular.all("regulations").getList().then(function( regulations ) {
+		var t = _.findWhere( regulations, { regulation_id : 4 } );
+		$scope.regulations = _.without( regulations, t );
+
+		$scope.regulations.unshift( { regulation_id : '', regulation: "All courses" } );
+		fetchParams();
+	});
 });
 
 
