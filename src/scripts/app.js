@@ -81,7 +81,7 @@ config( function(
 
 	// home
 	$routeProvider.when('/~', {
-		templateUrl: base + '/home/index.html?v=1',
+		templateUrl: base + '/home/index.html',
 		controller: 'Home',
 		access: 1,
 		title: ':username',
@@ -188,13 +188,12 @@ config( function(
 .run(function(Restangular) {
 
 	Restangular.configuration.getIdFromElem = function(elem) {
-		if ( ! elem.$fromServer || elem.id )
+		if (elem.id)
 			return elem.id;
 
 		if ( elem.route == 'users' ) {
 			return elem['username'];
 		} else {
-			console.log(elem);
 			var e = elem[_.initial(elem.route).join('') + "_id"];
 			return e;
 		}
