@@ -66,7 +66,7 @@ angular.module(spamControllersCourses).controller('Courses', function(
 	 * TODO
 	 */
 	$scope.$watch('filter', function(next, current) {
-		if ( _.isEmpty(next) ) return;
+		if (next == current) return;
 
 		applyFilter();
 		refreshUrl();
