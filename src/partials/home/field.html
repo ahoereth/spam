@@ -26,7 +26,7 @@
 
 			<!-- field button + dropdown -->
 			<div class="col-xs-1">
-				<div class="btn-group" style="width: 100%;">
+				<div class="btn-group dropdown" style="width: 100%;">
 
 					<button type="button"
 						class="btn btn-xs btn-block dropdown-toggle"
@@ -123,8 +123,9 @@
 				<!-- dropdown button -->
 				<div class="col-xs-1">
 
-					<div class="btn-group" style="width: 100%;">
-						<button type="button"
+					<div class="btn-group dropdown" style="width: 100%;">
+						<button 
+							type="button"
 							class="btn btn-xs btn-block dropdown-toggle"
 							ng-class="{
 								'btn-info' : course.grade<1&&!course.passed&&!course.muted,
