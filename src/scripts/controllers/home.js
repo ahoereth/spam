@@ -23,8 +23,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	TheUser
 ) {
 
-	var studentInCoursesCache = $cacheFactory.get('studentInCourses'),
-		promises = {};
+	var promises = {};
 
 	$scope.courses_by_fields = {};
 	$scope.fieldsRange = [];
@@ -74,14 +73,18 @@ angular.module(spamControllersHome).controller('Home', function(
 
 			// extend the field with some variables later required on the front end
 			_.extend( field, {
-				average_grade  : 0,
-				completed_ects : 0, // completed ects <= field's ects
-				enrolled_ects  : 0, // completed ects <= field's ects
-				required_ects  : field.field_pm,
-				ects           : field.field_pm + field.field_wpm,
+				completed_ects : 0,                                //    completed ects
+				enrolled_ects  : 0,                                //  + enrolled ects
+				required_ects  : field.field_pm,                   //  + required ects
+				ects           : field.field_pm + field.field_wpm, // <= field's ects
+				grade          : formatGrade( field.grade ),
+				average_grade  : 0, // calculated from the courses
+
+				// use average_grade as grade
 				auto_grade     : field.auto_grade || _.isNull( field.grade ),
+
+				// used for not updating the database when actually nothing changed
 				old_grade      : formatGrade( field.grade ),
-				grade          : formatGrade( field.grade )
 			});
 
 			// some variables only required for calculations on the backend
@@ -304,9 +307,6 @@ angular.module(spamControllersHome).controller('Home', function(
 	 */
 	$scope.editProp = function(course) {
 		course = _.isNull(course) ? this.course : course;
-
-		// clear cache because we will post something to the server
-		//studentInCoursesCache.removeAll();
 
 		// TODO: remove this with an restangular update
 		course.id = course.student_in_course_id;
