@@ -44,7 +44,7 @@
 		If I had to make a guess on your final bachelor grade I currently would answer with <strong>{{bachelor_grade}}</strong> - but do not pin me down on it.
 	</span>
 
-	<span class="undercover" ng-hide="user.thesis_title||user.thesis_grade" ng-click="user.thesis_active=!user.thesis_active">
+	<span class="undercover" ng-if="!user.thesis_title&&!user.thesis_grade&&user.completed_ects>100" ng-click="user.thesis_active=!user.thesis_active">
 		You did not yet write your bachelor thesis.
 	</span>
 </p>
@@ -62,11 +62,13 @@
 
 <!-- verify enrollment semester -->
 <div ng-if="!user.mat_verify">
+	<hr ng-if="studentCourses.length">
+
 	<p class="lead">
 		Please verify your matriculation semester:
 	</p>
 
-	<div class="form-group row" ng-controller="UserMatVerify">
+	<form class="form-group row" name="UserMatVerify" ng-controller="UserMatVerify">
 		<div class="col-md-3">
 			<div class="btn-group btn-group-justified">
 				<label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'S'">Summer</label>
@@ -74,7 +76,7 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="input-group">
+			<div class="input-group" ng-class="{'has-error': UserMatVerify.year.$invalid}">
 				<div class="input-group-btn" style="width: 25%" ng-repeat="year in years">
 					<label class="btn btn-block btn-primary" ng-model="user.mat_year" btn-radio="year">
 						{{year}}
@@ -84,16 +86,21 @@
 					type="number"
 					class="form-control centering"
 					ng-model="user.mat_year"
-					placeholder="Year">
+					placeholder="Year"
+					name="year"
+					required>
 			</div>
 		</div>
 		<div class="col-md-3">
-			<button class="btn btn-block btn-success" ng-click="verify()">
+			<button
+				class="btn btn-block btn-success"
+				ng-click="verify()"
+				ng-disabled="UserMatVerify.$invalid">
 				Submit
 				<span class="glyphicon glyphicon-ok"></span>
 			</button>
 		</div>
-	</div>
+	</form>
 
 	<p>
 		This can be changed anytime in the <a href="~/settings">settings</a>.

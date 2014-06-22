@@ -614,6 +614,10 @@ angular.module(spamControllersHome).controller('UserMatVerify', function(
 
 	$scope.verify = function() {
 		$scope.user.mat_verify = 1;
+
+		if (_.isEmpty($scope.user.mat_term))
+			$scope.user.mat_term =  'W';
+
 		TheUser.refreshData($scope.user);
 
 		TheUser.put().then(function(user) {
