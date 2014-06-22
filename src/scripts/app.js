@@ -33,7 +33,6 @@ config( function(
 	$httpProvider,
 	RestangularProvider
 ) {
-
 	$locationProvider.html5Mode(true).hashPrefix('!');
 
 	var base = 'partials';
@@ -55,7 +54,8 @@ config( function(
 		resolve : auth
 	});
 
-	$routeProvider.when('/help', { templateUrl: base + '/help.html',
+	$routeProvider.when('/help', {
+		templateUrl: base + '/help.html',
 		access: 0,
 		controller: 'Help',
 		title: 'Help',
