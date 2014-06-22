@@ -51,6 +51,46 @@
 </p>
 
 
+<!-- verify enrollment semester -->
+<div ng-if="!user.mat_verify">
+	<p class="lead">
+		Please verify your matriculation semester:
+	</p>
+
+	<div class="form-group row" ng-controller="UserMatVerify">
+		<div class="col-md-3">
+			<div class="btn-group btn-group-justified">
+				<label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'S'">Summer</label>
+				<label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'W'">Winter</label>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="input-group">
+				<div class="input-group-btn" style="width: 25%" ng-repeat="year in years">
+					<label class="btn btn-block btn-primary" ng-model="user.mat_year" btn-radio="year">
+						{{year}}
+					</label>
+				</div>
+				<input
+					type="number"
+					class="form-control centering"
+					ng-model="user.mat_year"
+					placeholder="Year">
+			</div>
+		</div>
+		<div class="col-md-3">
+			<button class="btn btn-block btn-success" ng-click="verify()">
+				Submit
+				<span class="glyphicon glyphicon-ok"></span>
+			</button>
+		</div>
+	</div>
+
+	<p>
+		This can be changed anytime in the <a href="~/settings">settings</a>.
+	</p>
+</div>
+
 <hr>
 
 <!-- bachelor thesis row -->

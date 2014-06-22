@@ -581,6 +581,31 @@ angular.module(spamControllersHome).controller('UserSettings', function(
 });
 
 
+/**
+ * CONTROLLER: UserMatVerify
+ * ROUTES: /~
+ *         /~/settings
+ */
+angular.module(spamControllersHome).controller('UserMatVerify', function(
+	$scope,
+	$log,
+	TheUser,
+	_
+) {
+	var currentYear = new Date().getFullYear();
+	$scope.years = _.range(currentYear, currentYear-3, -1);
+
+	$scope.verify = function() {
+		$scope.user.mat_verify = 1;
+		TheUser.refreshData($scope.user);
+
+		TheUser.put().then(function(user) {
+			$log.info( "Updated user information saved." );
+		});
+	};
+});
+
+
 
 /**
  * TODO
