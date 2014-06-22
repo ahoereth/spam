@@ -45,9 +45,14 @@
 	</span>
 </p>
 
+
 <!-- no courses yet -->
-<p class="lead" ng-hide="studentCourses.length||loadingStudentCourses">
-	You have not yet added any courses. To do so you can either use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
+<p class="lead" ng-if="user.mat_verify&&!studentCourses.length">
+	You have not yet added any courses.
+
+	To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
+
+	Alternatively I can also give you a head start by adding the typical courses for your first	semester: <button class="btn btn-primary" ng-click="headstart()">Initialize</button>
 </p>
 
 

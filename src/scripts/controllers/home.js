@@ -352,6 +352,23 @@ angular.module(spamControllersHome).controller('Home', function(
 
 
 	/**
+	 * Function to give the user a headstart and add the guide courses for his
+	 * first semester.
+	 */
+	$scope.headstart = function() {
+		Restangular.one( 'guide' ).getList(1, {
+			semester : 1,
+			year     : $scope.user.mat_year,
+			term     : $scope.user.mat_term
+		}).then(function(guide) {
+			_.each(guide, function(course, idx) {
+				$rootScope.addCourse(course.course_id,course.fields[0].field_id);
+			});
+		});
+	};
+
+
+	/**
 	 * Format a given string to a grade.
 	 *
 	 * Legal grades: [1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0 5.0]
