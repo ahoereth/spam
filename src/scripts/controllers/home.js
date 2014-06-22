@@ -612,6 +612,12 @@ angular.module(spamControllersHome).controller('UserMatVerify', function(
 	var currentYear = new Date().getFullYear();
 	$scope.years = _.range(currentYear, currentYear-3, -1);
 
+	if (_.isEmpty($scope.user.mat_year))
+		$scope.user.mat_year =  currentYear;
+
+	if (_.isEmpty($scope.user.mat_term))
+		$scope.user.mat_term =  'W';
+
 	$scope.verify = function() {
 		$scope.user.mat_verify = 1;
 
