@@ -8,10 +8,12 @@
 
 <!-- already enrolled in some courses -->
 <p class="lead" ng-if="studentCourses.length">
-	You <abbr title="passed and neither muted nor overflowing courses [{{completed_course_ects}}C]{{user.thesis_grade | iif : ' + bachelor thesis ['+user.thesis_ects+'C]' : ''}}">earned a total</abbr> of {{completed_ects}} credits with an average grade of <strong>{{average_grade}}</strong>.<!--, module examination [3C] -->
+	<span ng-show="average_grade">
+		You <abbr title="passed and neither muted nor overflowing courses [{{completed_course_ects}}C]{{user.thesis_grade | iif : ' + bachelor thesis ['+user.thesis_ects+'C]' : ''}}">earned a total</abbr> of {{completed_ects}} credits with an average grade of <strong>{{average_grade}}</strong>.<!--, module examination [3C] -->
+	</span>
 
 	<!-- enrolled ects -->
-	<span ng-show="enrolled_ects">Further more the courses you are currently <abbr title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise another {{enrolled_ects}} credits.</span>
+	<span ng-show="enrolled_ects">The courses you are currently <abbr title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{enrolled_ects}} credits.</span>
 
 	<!-- current semester -->
 	<span ng-show="currentSemester.ects">
