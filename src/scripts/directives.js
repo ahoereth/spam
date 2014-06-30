@@ -23,7 +23,7 @@ angular.module('spam.directives').directive('addRemoveCourse', function(TheUser,
 		},
 		template:
 			'<div>'+
-				'<div ng-if="!course.singleField&&!course.student_in_course_id&&!course.enrolled" class="btn-group" ng-class="{open : course.open}" style="width: 100%">'+
+				'<div ng-if="!course.singleField&&!course.student_in_course_id&&!course.enrolled" class="btn-group dropdown" ng-class="{open : course.open}" style="width: 100%">'+
 					'<a class="btn btn-success dropdown-toggle {{btnClass}}">'+
 						'<span class="glyphicon glyphicon-plus"></span>'+
 					'</a>'+
