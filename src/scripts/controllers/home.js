@@ -179,7 +179,7 @@ angular.module(spamControllersHome).controller('Home', function(
 							course.doesnt_count = true;
 						}
 
-					// course not passed and but also not failed
+					// course not passed but also not failed?
 					} else if ( course.grade != 5 ) {
 						// are there any spare credits so enrolling in the course is worth it?
 						var spareCredits = field.ects - (field.full_ects + field.required_ects);
