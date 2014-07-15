@@ -117,11 +117,6 @@
 
 <!-- warnings -->
 <div class="container">
-	<div class="alert alert-info" ng-if="share">
-		<strong>Hello stranger!</strong>
-		You are using a private key to view this page. It expires in {{share.timeout}}<span ng-if="share.routes.length>1"> and gives you access to the following routes: <span ng-repeat="route in share.routes">{{route}}<span ng-hide="$last">,</span></span></span>.
-	</div>
-
 	<div class="alert alert-danger" ng-show="http.error" ng-controller="HttpNotice">
 	  <button type="button" class="close" ng-click="close()">&times;</button>
 		<strong>Error!</strong>

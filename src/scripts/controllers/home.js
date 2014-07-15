@@ -677,24 +677,3 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 	};
 
 });
-
-
-
-/**
- * CONTROLLER: Share
- *
- * TODO: unneeded?
- */
-angular.module(spamControllersHome).controller('Share', function(
-	$rootScope,
-	$scope,
-	$route
-) {
-
-	$scope.share = {
-		key : $route.current.params.key,
-		timeout : '59 minutes',
-		routes : [ '/~ahoereth' ]
-	};
-
-});
