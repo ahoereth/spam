@@ -136,6 +136,8 @@ angular.module(spamControllersHome).controller('Home', function(
 				// has the course been muted manually?
 				if ( ! course.muted ) {
 
+					field.full_ects = field.completed_ects + field.enrolled_ects;
+
 					// does the user still require ects for the PM part of this field?
 					if ( field.required_ects > 0 && course.enrolled_course_in_field_type == 'PM' )
 						field.required_ects = field.required_ects >= course.ects ? field.required_ects - course.ects : 0;
@@ -145,34 +147,46 @@ angular.module(spamControllersHome).controller('Home', function(
 
 						$scope.completed_courses++;
 
-						// to which amount does this course count? maybe the field is already satisfied completely
-						var i = ( field.ects - field.completed_ects ) >= course.ects ? course.ects : field.ects - field.completed_ects;
-						if ( i > 0 && (field.ects - ( field.completed_ects + field.enrolled_ects ) ) > 0 ) {
-							if ( i != course.ects )
+						// to which amount does this course count? maybe the field is
+						// already satisfied partially or completely
+						var courseEctsOfInterest = ( field.ects - field.completed_ects ) >= course.ects ? course.ects : field.ects - field.completed_ects;
+
+						// course counts at least partially and field is not already full
+						// because of completed and/or enrolled courses
+						if ( courseEctsOfInterest > 0 && (field.ects - field.full_ects) > 0 ) {
+
+							// course counts only partially
+							if ( courseEctsOfInterest != course.ects )
 								course.counts_only_partially = true;
 
-							field.completed_ects += i;
-							term.completed_ects += i;
+							field.completed_ects += courseEctsOfInterest;
+							term.completed_ects  += courseEctsOfInterest;
 
+							// not just "passed", but passed with grade?
 							if ( course.grade ) {
-								data.averaging_ects += i;
-								$scope.average_grade += course.grade * i;
+								data.averaging_ects  += courseEctsOfInterest;
+								$scope.average_grade += courseEctsOfInterest * course.grade;
 
-								fieldData.averaging_ects += i;
-								field.average_grade += course.grade * i;
+								fieldData.averaging_ects += courseEctsOfInterest;
+								field.average_grade      += courseEctsOfInterest * course.grade;
 
-								term.averaging_ects += i;
-								term.grade += course.grade * i;
+								term.averaging_ects += courseEctsOfInterest;
+								term.grade          += courseEctsOfInterest * course.grade;
 							}
+
+						// course does not count because the field is full
 						} else {
 							course.doesnt_count = true;
 						}
 
-					// course not passed
+					// course not passed and but also not failed
 					} else if ( course.grade != 5 ) {
-						var j = field.ects - (field.enrolled_ects + field.completed_ects + field.required_ects);
-						if ( j > 0 && (field.ects - ( field.completed_ects + field.enrolled_ects ) ) > 0 ) {
-							field.enrolled_ects = j >= course.ects ? field.enrolled_ects + course.ects : field.enrolled_ects + j;
+						// are there any spare credits so enrolling in the course is worth it?
+						var spareCredits = field.ects - (field.full_ects + field.required_ects);
+						if ( spareCredits > 0 && (field.ects - field.full_ects) > 0 ) {
+							field.enrolled_ects = spareCredits >= course.ects ?
+								field.enrolled_ects + course.ects :
+								field.enrolled_ects + spareCredits;
 						} else {
 							course.doesnt_count = true;
 						}
