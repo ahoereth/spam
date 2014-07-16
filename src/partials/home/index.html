@@ -51,7 +51,7 @@
 
 
 <!-- no courses yet -->
-<p class="lead" ng-if="user.mat_verify&&!studentCourses.length">
+<p class="lead" ng-if="user.mat_verify&&studentCourses.length==0">
 	You have not yet added any courses.
 
 	To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
