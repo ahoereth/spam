@@ -129,7 +129,7 @@ module.exports = function(grunt) {
           properties    : true,  // optimize property access: a["foo"] → a.foo
           dead_code     : true,  // discard unreachable code
           drop_debugger : true,  // discard “debugger” statements
-          unsafe        : true, // some unsafe optimizations (see below)
+         // unsafe        : true, // some unsafe optimizations (see below)
           conditionals  : true,  // optimize if-s and conditional expressions
           comparisons   : true,  // optimize comparisons
           evaluate      : true,  // evaluate constant expressions
@@ -155,12 +155,12 @@ module.exports = function(grunt) {
             'bower_components/lodash/dist/lodash.min.js',
             'bower_components/underscore.string/dist/underscore.string.min.js',
 
-            'bower_components/angular/angular.js',
-            'bower_components/angular-route/angular-route.js',
-            'bower_components/angular-sanitize/angular-sanitize.js',
+            'bower_components/angular/angular.min.js',
+            'bower_components/angular-route/angular-route.min.js',
+            'bower_components/angular-sanitize/angular-sanitize.min.js',
 
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-            'bower_components/restangular/dist/restangular.js',
+            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            'bower_components/restangular/dist/restangular.min.js',
 
             'app/js/tmp.app.js' // contains src/scripts/** and src/partials/**
           ]
