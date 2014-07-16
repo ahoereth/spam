@@ -67,16 +67,16 @@ factory('Auth', function(
 ) {
 
 	$rootScope.user = false;
-	var username, promise;
+	var username, deferred;
 
 	var getter = function () {
-		promise = $q.defer();
+		deferred = $q.defer();
 
 		$http.defaults.headers.common['Authorization'] = 'Basic ' + DataHandler.getLogininfo('authdata');
 		username = DataHandler.getLogininfo('username');
 
 		if ( ! username ) {
-			promise.resolve();
+			deferred.resolve();
 			return;
 		}
 
@@ -84,20 +84,12 @@ factory('Auth', function(
 			$rootScope.user = user;
 			TheUser.init(user);
 
-			promise.resolve();
+			deferred.resolve();
 		}, function() {
 			logout();
 
-			promise.resolve();
+			deferred.resolve();
 		});
-	};
-
-	var logout = function () {
-		TheUser.logout();
-		$rootScope.user = false;
-		username = null;
-
-		getter();
 	};
 
 	getter();
@@ -108,16 +100,11 @@ factory('Auth', function(
 			DataHandler.updateLogininfo(nick, encoded, useLocalStorage);
 
 			getter();
-			return promise;
-		},
-
-		clearCredentials: function () {
-			logout();
-			return promise;
+			return deferred.promise;
 		},
 
 		promise: function () {
-			return promise;
+			return deferred.promise;
 		}
 	};
 }).

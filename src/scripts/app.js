@@ -37,7 +37,7 @@ config( function(
 
 	var base = 'partials';
 
-	var auth = { auth : [ 'Auth', '$q', function( Auth, $q ) { return $q.all( Auth.promise() ); } ] };
+	var auth = { auth : ['Auth', function(Auth) { return Auth.promise(); }] };
 
 	$routeProvider.when('/', {
 		templateUrl: base + '/landing.html',
@@ -349,9 +349,13 @@ config( function(
 	 */
 	$rootScope.login = function() {
 		var t = this.loginform;
-		var username = t.username;
 		t.loading = true;
-		$q.all( Auth.setCrededentials( this.loginform.username, this.loginform.password, this.loginform.remember ) ).then( function() {
+
+		Auth.setCrededentials(
+			t.username,
+			t.password,
+			t.remember
+		).then( function() {
 			t.loading = false;
 			DataHandler.removeUserDependent();
 
