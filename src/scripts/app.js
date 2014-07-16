@@ -83,8 +83,28 @@ config( function(
 		controller: 'Home',
 		access: 1,
 		title: ':username',
-		resolve : auth,
-		reloadOnSearch: false
+		reloadOnSearch: false,
+
+		// the route requires not only authentication but also relies on course data
+		// this - in a nicer way - should be implemented for more routes
+		resolve : { studentCourses : [
+			'$q',
+			'Auth',
+			'TheUser',
+			function(
+				$q,
+				Auth,
+				TheUser
+			) {
+				var deferred = $q.defer();
+
+				Auth.promise().then(function() {
+					deferred.resolve(TheUser.getCourses());
+				});
+
+				return deferred.promise;
+			}
+		]}
 	});
 
 	// home - settings

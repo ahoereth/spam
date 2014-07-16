@@ -520,7 +520,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 	// query student courses if they have not been queried yet
 	if ( ! $rootScope.studentCourses || _.isEmpty( $rootScope.studentCourses ) ) {
-		promises.studentCourses = TheUser.getList('courses');
+		promises.studentCourses = TheUser.getCourses();
 	}
 
 
