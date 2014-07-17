@@ -99,7 +99,11 @@ config( function(
 				var deferred = $q.defer();
 
 				Auth.promise().then(function() {
-					deferred.resolve(TheUser.getCourses());
+					if(typeof TheUser.getData().username != 'undefined') {
+						deferred.resolve(TheUser.getCourses());
+					} else {
+						deferred.resolve();
+					}
 				});
 
 				return deferred.promise;
