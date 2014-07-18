@@ -269,8 +269,8 @@ config( function(
 		// handle the page title
 		var username = TheUser.getUsername();
 		if (!_.isEmpty(username)) {
-			$rootScope.title = next.title.replace(':username', username) +
-				(next.title.length > 0 ? ' :: ' : '' ) +
+			$rootScope.title = current.title.replace(':username', username) +
+				(current.title.length > 0 ? ' :: ' : '' ) +
 				"Study Planning in Cognitive Science";
 		}
 	});
@@ -351,7 +351,7 @@ config( function(
 		var t = this.loginform;
 		t.loading = true;
 
-		Auth.setCrededentials(
+		Auth.init(
 			t.username,
 			t.password,
 			t.remember

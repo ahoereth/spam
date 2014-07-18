@@ -42,11 +42,11 @@ factory('TheUser', function(DataHandler, _) {
 	};
 
 	self.getUsername = function() {
-		return data.username;
+		return data.username || null;
 	};
 
 	self.getRank = function() {
-		return data.rank;
+		return data.rank || null;
 	};
 
 	self.courses = null;
@@ -142,7 +142,7 @@ factory('Auth', function(
 					if (
 						// accessSet is a explicit user rank integer and the users rank is
 						// equal or higher
-						(_.isInteger(accessSet) && accessSet <= TheUser.getRank()) ||
+						(_.isNumber(accessSet) && accessSet <= TheUser.getRank()) ||
 
 						// The user himself is allowed to see this route, we will
 						// only retrieve data related to him
