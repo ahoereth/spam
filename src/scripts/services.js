@@ -79,8 +79,6 @@ factory('Auth', function(
 ) {
 	var deferredLogin = 'not_initiated';
 
-	$rootScope.user = false;
-
 	var login = function () {
 		deferredLogin = $q.defer();
 

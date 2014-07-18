@@ -343,21 +343,21 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * TODO
 	 */
 	$scope.updateThesis = function() {
-		var u = $rootScope.user;
-		u.thesis_grade = formatGrade( u.thesis_grade, true );
+		var user = TheUser;
+		user.thesis_grade = formatGrade( user.thesis_grade, true );
 
-		if ( u.thesis_title_old == u.thesis_title && u.thesis_grade_old == u.thesis_grade )
+		if ( user.thesis_title_old == user.thesis_title && user.thesis_grade_old == user.thesis_grade )
 			return;
 
-		TheUser.one('regulations',u.regulation_id).customPUT({
-			title: u.thesis_title,
-			grade: u.thesis_grade
+		TheUser.one('regulations',user.regulation_id).customPUT({
+			title: user.thesis_title,
+			grade: user.thesis_grade
 		}).then(function(t) {
-			$log.info('Student thesis updated: ' + u.thesis_title + ' - ' + u.thesis_grade);
+			$log.info('Student thesis updated: ' + user.thesis_title + ' - ' + user.thesis_grade);
 
 			// remember old stuff
-			u.thesis_title_old = u.thesis_title;
-			u.thesis_grade_old = u.thesis_grade;
+			user.thesis_title_old = user.thesis_title;
+			user.thesis_grade_old = user.thesis_grade;
 
 			generateCourseMeta();
 		});

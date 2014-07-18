@@ -3,7 +3,12 @@
  *
  * TODO: Documentation
  */
-angular.module('services.dataHandler', []).factory('DataHandler', function($rootScope, $cacheFactory, Courses) {
+angular.module('services.dataHandler', []).factory('DataHandler', function(
+	$rootScope,
+	$cacheFactory,
+	Courses,
+	TheUser
+) {
 	var webstorage = ( typeof( Storage ) !== "undefined" ) ? true : false;
 	var self = {};
 
@@ -42,7 +47,7 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 			localStorage.removeItem('authdata');
 			localStorage.removeItem('username');
 		}
-		$rootScope.user = false;
+		TheUser.unset();
 	};
 
 	self.resetGuide = function() {
