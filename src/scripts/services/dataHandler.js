@@ -6,8 +6,7 @@
 angular.module('services.dataHandler', []).factory('DataHandler', function(
 	$rootScope,
 	$cacheFactory,
-	Courses,
-	TheUser
+	Courses
 ) {
 	var webstorage = ( typeof( Storage ) !== "undefined" ) ? true : false;
 	var self = {};
@@ -47,7 +46,6 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 			localStorage.removeItem('authdata');
 			localStorage.removeItem('username');
 		}
-		TheUser.unset();
 	};
 
 	self.resetGuide = function() {
