@@ -74,7 +74,8 @@ factory('Auth', function(
 	$q,
 	Restangular,
 	DataHandler,
-	TheUser
+	TheUser,
+	_
 ) {
 	var deferredLogin = 'not_initiated';
 
@@ -83,15 +84,20 @@ factory('Auth', function(
 	var login = function () {
 		deferredLogin = $q.defer();
 
+		var username = DataHandler.getLogininfo('username');
 		$http.defaults.headers.common['Authorization'] = 'Basic ' + DataHandler.getLogininfo('authdata');
 
-		Restangular.one('users', DataHandler.getLogininfo('username')).get().then(function(user) {
-			TheUser.init(user);
-			deferredLogin.resolve(TheUser);
-		}, function() {
-			TheUser.logout();
+		if (!_.isEmpty(username)) {
+			Restangular.one('users', username).get().then(function(user) {
+				TheUser.init(user);
+				deferredLogin.resolve(TheUser);
+			}, function() {
+				TheUser.logout();
+				deferredLogin.reject();
+			});
+		} else {
 			deferredLogin.reject();
-		});
+		}
 
 		return deferredLogin.promise;
 	};
@@ -151,7 +157,7 @@ factory('Auth', function(
 					} else {
 						// Could not match the accessSet to the current user, reject
 						// the authentication request
-						deferredAuthentication.reject();
+						deferredAuthentication.reject('not_authenticated');
 					}
 
 				}, function() {
@@ -159,7 +165,7 @@ factory('Auth', function(
 					// this page, because we already checked accessSet === 0
 
 					// Reject authentication request
-					deferredAuthentication.reject();
+					deferredAuthentication.reject('not_authenticated');
 				});
 			}
 

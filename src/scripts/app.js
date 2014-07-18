@@ -240,49 +240,40 @@ config( function(
 
 
 	/**
+	 * Handle errors occurring on route changing. This is called when one of the
+	 * promises to be resolved before visiting the route is rejected.
+	 */
+	$rootScope.$on("$routeChangeError", function(event, current, previous, rejection) {
+		if ('not_authenticated' == rejection) {
+			$rootScope.requested_route = $location.path();
+			$location.path( '/401' );
+		} else {
+			$location.path( '/login' );
+		}
+	});
+
+
+	/**
 	 * Called on every route change for user authentication verification and
 	 * possible redirecting.
 	 */
-	$rootScope.$on("$routeChangeSuccess", function( event, next, current ) {
-		if ( _.isUndefined( next ) ) return;
+	$rootScope.$on("$routeChangeSuccess", function(event, current, previous) {
+		if (_.isUndefined(current)) return;
 
 		// don't allow entering the page on /401
-		if ( next.originalPath == "/401" && _.isUndefined( current ) ) {
+		if (current.originalPath == "/401" && _.isUndefined(previous)) {
 				$location.path('/');
 				return;
 		}
 
-		// access: public | user | editor
-		if ( next.access != 0 ) {
-
-			//  0 : visitor
-			//  1 : logged in
-			//  2 : ldap logged in
-			//  4 : approved
-			//  8 :
-			// 16 : teacher
-			// 32 : editor
-			// 64 : administrator
-			if ( $rootScope.user ) {
-				$rootScope.title = next.title.replace(':username', $rootScope.user.username || 'you') + ( next.title.length > 0 ? ' :: ' : '' ) + "Study Planning in Cognitive Science";
-
-				if ( next.access > $rootScope.user.rank ) {
-					$rootScope.requested_route = next.originalPath;
-					$location.path( '/401' );
-				}
-
-				// editors, teachers and admins do not get access to /~ routes
-				if ( next.access > 0 && next.access < 4 && $rootScope.user.rank >= 16 ) {
-					$rootScope.requested_route = next.originalPath;
-					$location.path( '/401' );
-				}
-			} else {
-				$rootScope.requested_route = next.originalPath;
-				$location.path( '/401' );
-			}
+		// handle the page title
+		var username = TheUser.getUsername();
+		if (!_.isEmpty(username)) {
+			$rootScope.title = next.title.replace(':username', username) +
+				(next.title.length > 0 ? ' :: ' : '' ) +
+				"Study Planning in Cognitive Science";
 		}
 	});
-	$rootScope.courseTerms = [];
 
 
 	/**
