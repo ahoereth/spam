@@ -28,6 +28,10 @@ factory('TheUser', function(DataHandler, _) {
 		self.init(updated);
 	};
 
+	self.loggedIn = function() {
+		return !_.isEmpty(data.username);
+	};
+
 	self.logout = function() {
 		self.unset();
 		DataHandler.removeAll();
@@ -37,6 +41,13 @@ factory('TheUser', function(DataHandler, _) {
 		return data.username ? data.regulation_id : ( useDefault ? 1 : undefined );
 	};
 
+	self.getUsername = function() {
+		return data.username;
+	};
+
+	self.getRank = function() {
+		return data.rank;
+	};
 
 	self.courses = null;
 	self.getCourses = function() {
@@ -65,46 +76,95 @@ factory('Auth', function(
 	DataHandler,
 	TheUser
 ) {
+	var deferredLogin = 'not_initiated';
 
 	$rootScope.user = false;
-	var username, deferred;
 
-	var getter = function () {
-		deferred = $q.defer();
+	var login = function () {
+		deferredLogin = $q.defer();
 
 		$http.defaults.headers.common['Authorization'] = 'Basic ' + DataHandler.getLogininfo('authdata');
-		username = DataHandler.getLogininfo('username');
 
-		if ( ! username ) {
-			deferred.resolve();
-			return;
-		}
-
-		Restangular.one('users', username).get().then(function(user) {
-			$rootScope.user = user;
+		Restangular.one('users', DataHandler.getLogininfo('username')).get().then(function(user) {
 			TheUser.init(user);
-
-			deferred.resolve();
+			deferredLogin.resolve(TheUser);
 		}, function() {
-			logout();
-
-			deferred.resolve();
+			TheUser.logout();
+			deferredLogin.reject();
 		});
+
+		return deferredLogin.promise;
 	};
 
-	getter();
+	// Initiate the login process as early as possible so we do not have to start
+	// it when a controller is initiated. No matter what page the user is viewing,
+	// we are interested in if he is logged in or not.
+	login();
 
 	return {
-		setCrededentials: function (nick, password, useLocalStorage) {
+		init: function (nick, password, useLocalStorage) {
 			var encoded = Base64.encode(nick + ':' + password);
 			DataHandler.updateLogininfo(nick, encoded, useLocalStorage);
-
-			getter();
-			return deferred.promise;
+			return login();
 		},
 
-		promise: function () {
-			return deferred.promise;
+
+		authenticate: function (accessSet) {
+			var loginPromise, deferredAuthentication = $q.defer();
+
+			if ('not_initiated' == deferredLogin) {
+				// Login process was not initiated yet, do so
+				loginPromise = login();
+
+			} else {
+				// Login process was initiated before, get the promise
+				loginPromise = deferredLogin.promise;
+			}
+
+			if (accessSet === 0) {
+				// accessSet is 0, therefore everybody is legitimated to view this site
+				deferredAuthentication.resolve(TheUser);
+
+			} else {
+				// accessSet is something more specific, therefore we need to check
+				// the user information (after the login promise is fulfilled)
+
+				// when login was successful
+				loginPromise.then(function() {
+					// Login was successful.
+
+					if (
+						// accessSet is a explicit user rank integer and the users rank is
+						// equal or higher
+						(_.isInteger(accessSet) && accessSet <= TheUser.getRank()) ||
+
+						// The user himself is allowed to see this route, we will
+						// only retrieve data related to him
+						(! _.isUndefined(accessSet['self'])) ||
+
+						// The user is explicitly named in the accessSet, so he is allowed
+						// to view this route as well
+						(!_.isUndefined(accessSet[TheUser.getUsername()]))
+					) {
+						deferredAuthentication.resolve(TheUser);
+
+					} else {
+						// Could not match the accessSet to the current user, reject
+						// the authentication request
+						deferredAuthentication.reject();
+					}
+
+				}, function() {
+					// Login was not successful. User is certainly not allowed to see
+					// this page, because we already checked accessSet === 0
+
+					// Reject authentication request
+					deferredAuthentication.reject();
+				});
+			}
+
+			// return the authentication promise
+			return deferredAuthentication.promise;
 		}
 	};
 }).
