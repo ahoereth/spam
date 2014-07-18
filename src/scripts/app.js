@@ -37,43 +37,52 @@ config( function(
 
 	var base = 'partials';
 
-	var auth = { auth : ['Auth', function(Auth) { return Auth.promise(); }] };
+	var auth = { authentication : [
+		'$route',
+		'Auth',
+		function(
+			$route,
+			Auth
+		) {
+			return Auth.authenticate($route.current.access);
+		}
+	]};
 
 	$routeProvider.when('/', {
 		templateUrl: base + '/landing.html',
-		access: 0,
 		title: '',
+		access: 0,
 		resolve : auth
 	});
 
 	$routeProvider.when('/login', {
 		templateUrl: base + '/login.html',
-		access: 0,
 		controller: 'Login',
 		title: 'Login',
+		access: 0,
 		resolve : auth
 	});
 
 	$routeProvider.when('/help', {
 		templateUrl: base + '/help.html',
-		access: 0,
 		controller: 'Help',
 		title: 'Help',
+		access: 0,
 		resolve : auth
 	});
 
 	$routeProvider.when('/401', {
 		templateUrl: base + '/401.html',
-		access: 0,
 		title: 'Page not found',
+		access: 0,
 		resolve : auth
 	});
 
 	$routeProvider.when('/guide', {
 		templateUrl: base + '/guide/index.html',
-		access: 0,
 		controller: 'GuideCtrl',
 		title: 'Guide',
+		access: 0,
 		resolve : auth
 	});
 
@@ -81,42 +90,18 @@ config( function(
 	$routeProvider.when('/~', {
 		templateUrl: base + '/home/index.html',
 		controller: 'Home',
-		access: 1,
 		title: ':username',
 		reloadOnSearch: false,
-
-		// the route requires not only authentication but also relies on course data
-		// this - in a nicer way - should be implemented for more routes
-		resolve : { studentCourses : [
-			'$q',
-			'Auth',
-			'TheUser',
-			function(
-				$q,
-				Auth,
-				TheUser
-			) {
-				var deferred = $q.defer();
-
-				Auth.promise().then(function() {
-					if(typeof TheUser.getData().username != 'undefined') {
-						deferred.resolve(TheUser.getCourses());
-					} else {
-						deferred.resolve();
-					}
-				});
-
-				return deferred.promise;
-			}
-		]}
+		access: 1,
+		resolve : auth
 	});
 
 	// home - settings
 	$routeProvider.when('/~/settings', {
 		templateUrl: base + '/home/settings.html',
 		controller: 'UserSettings',
-		access: 1,
 		title: ':username\'s settings',
+		access: 1,
 		resolve : auth
 	});
 
@@ -124,8 +109,8 @@ config( function(
 	$routeProvider.when('/~/logout', {
 		templateUrl: base + '/landing.html',
 		controller: 'Logout',
-		access: 1,
 		title : 'Logout',
+		access: 1,
 		resolve : auth
 	});
 
@@ -142,18 +127,18 @@ config( function(
 	$routeProvider.when('/courses', {
 		templateUrl: base + '/courses/index.html',
 		controller: 'Courses',
-		access: 0,
 		title: 'Courses',
+		reloadOnSearch: false,
+		access: 0,
 		resolve : auth,
-		reloadOnSearch: false
 	});
 
 	// courses - create new
 	$routeProvider.when('/courses/new', {
 		templateUrl: base + '/courses/edit.html',
 		controller: 'Course_edit',
-		access: 32,
 		title: 'New Course',
+		access: 32,
 		resolve : auth
 	});
 
@@ -161,8 +146,8 @@ config( function(
 	$routeProvider.when('/courses/proposals', {
 		templateUrl: base + '/courses/proposals.html',
 		controller: 'Course_proposals',
-		access: 32,
 		title: 'Edit proposals',
+		access: 32,
 		resolve : auth
 	});
 
@@ -170,8 +155,8 @@ config( function(
 	$routeProvider.when('/courses/:courseId', {
 		templateUrl: base + '/courses/show.html',
 		controller: 'CourseCtrl',
-		access: 0,
 		title: ':course',
+		access: 0,
 		resolve : auth
 	});
 
@@ -179,16 +164,16 @@ config( function(
 	$routeProvider.when('/courses/:courseId/edit', {
 		templateUrl: base + '/courses/edit.html',
 		controller: 'Course_edit',
-		access: 4,
 		title: 'Edit :course',
+		access: 4,
 		resolve : auth
 	});
 
 	// admin index
 	$routeProvider.when('/admin', {
 		templateUrl: base + '/admin/index.html',
-		access: 32,
 		title: 'Administration',
+		access: 32,
 		resolve : auth
 	});
 
