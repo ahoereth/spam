@@ -359,9 +359,11 @@ config( function(
 			t.loading = false;
 			DataHandler.removeUserDependent();
 
-			if ( $rootScope.user ) {
+			if (TheUser.loggedIn()) {
 				$rootScope.loginform = {};
-				$location.path('/~');
+
+				var targetRoute = _.isEmpty($rootScope.requested_route) ? '/~' : $rootScope.requested_route;
+				$location.path(targetRoute);
 			} else {
 				$rootScope.loginform.password = '';
 				$location.path('/login').search( { error : true } );
