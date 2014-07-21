@@ -6,6 +6,17 @@ angular.module(spamControllersMain, []);
 
 
 /**
+ * CONTROLLER: Root
+ */
+angular.module(spamControllersMain).controller('Root', function(
+	$scope
+) {
+
+});
+
+
+
+/**
  * CONTROLLER: Login
  * ROUTE: /login
  *
