@@ -15,10 +15,8 @@ angular.module('spam.directives').directive('addRemoveCourse', function(_) {
 
 			// check if user is enrolled in this course
 			if (_.isUndefined(course.enrolled)) {
-				$rootScope.user.getCourses().then(function(courses) {
-					var target = _.find(courses, {course_id: course.course_id});
-					course.enrolled = target ? true : false;
-				});
+				var target = _.find($rootScope.user.courses, {course_id: course.course_id});
+				course.enrolled = target ? true : false;
 			}
 		},
 		template:
