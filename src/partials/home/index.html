@@ -7,7 +7,7 @@
 
 
 <!-- already enrolled in some courses -->
-<p class="lead" ng-if="studentCourses.length">
+<p class="lead" ng-if="user.courses.length">
 	<span ng-show="average_grade">
 		You <abbr tooltip-html-unsafe="passed and neither muted nor overflowing courses [{{completed_course_ects}}C]{{user.thesis_grade | iif : ' + bachelor thesis ['+user.thesis_ects+'C]' : ''}}">earned a total</abbr> of {{completed_ects}} credits with an average grade of <strong>{{average_grade}}</strong>.<!--, module examination [3C] -->
 	</span>
@@ -51,7 +51,7 @@
 
 
 <!-- no courses yet -->
-<p class="lead" ng-if="user.mat_verify&&studentCourses.length==0">
+<p class="lead" ng-if="user.mat_verify&&user.courses.length==0">
 	You have not yet added any courses.
 
 	To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
@@ -62,7 +62,7 @@
 
 <!-- verify enrollment semester -->
 <div ng-if="!user.mat_verify">
-	<hr ng-if="studentCourses.length">
+	<hr ng-if="user.courses.length">
 
 	<p class="lead">
 		Please verify your matriculation semester:
@@ -140,7 +140,7 @@
 
 
 <!-- the fields -->
-<div class="overview-container row" ng-if="studentCourses.length">
+<div class="overview-container row" ng-if="user.courses.length">
 	<hr style="margin-top: 0">
 
 	<div

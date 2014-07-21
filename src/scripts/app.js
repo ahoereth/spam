@@ -303,8 +303,8 @@ config( function(
 			if ( target )
 				target.student_in_course_id = course.student_in_course_id;
 
-			if ( $rootScope.studentCourses )
-				$rootScope.studentCourses.push( course );
+			if ( $rootScope.user.courses )
+				$rootScope.user.courses.push( course );
 
 			if ( studentInCourse.course_id )
 				$rootScope.$broadcast('courseAdded_' + studentInCourse.course_id, course);
@@ -322,8 +322,8 @@ config( function(
 	 * @param {object} course   object used for broadcasting
 	 */
 	$rootScope.removeCourse = function (course) {
-		var target2 = _.findWhere( $rootScope.studentCourses, { student_in_course_id : course.student_in_course_id } );
-		$rootScope.studentCourses = _.without( $rootScope.studentCourses, target2 );
+		var target2 = _.findWhere( $rootScope.user.courses, { student_in_course_id : course.student_in_course_id } );
+		$rootScope.user.courses = _.without( $rootScope.user.courses, target2 );
 
 		var target = Courses.get($rootScope.user.getRegulation(), course.course_id);
 		if ( target )

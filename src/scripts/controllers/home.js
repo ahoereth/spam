@@ -37,8 +37,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 *                           required when for example only recalculating grades
 	 */
 	var generateCourseMeta = function(regroup) {
-		if ( ( ! $rootScope.fields || _.isEmpty( $rootScope.fields ) ) ||
-			   ( ! $rootScope.studentCourses || _.isEmpty( $rootScope.studentCourses ) ) )
+		if ( ! $rootScope.fields || _.isEmpty( $rootScope.fields ) )
 			return false;
 
 		var data = {
@@ -59,7 +58,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		// regroup the courses to their assigned field?
 		if ( _.isEmpty( $scope.courses_by_fields ) || regroup ) {
-			$scope.courses_by_fields = _.groupBy( $rootScope.studentCourses, 'enrolled_field_id' );
+			$scope.courses_by_fields = _.groupBy( $scope.user.courses, 'enrolled_field_id' );
 			$scope.columns = [[], [], []];
 		}
 
@@ -477,7 +476,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	$scope.moveCourse = function( newFieldId ) {
 		var c = this.course;
 
-		var target = _.findWhere( $rootScope.studentCourses, { student_in_course_id : c.student_in_course_id } );
+		var target = _.findWhere( $scope.user.courses, { student_in_course_id : c.student_in_course_id } );
 		target.enrolled_field_id = ( newFieldId == 'null' ? 1 : newFieldId );
 		generateCourseMeta(true);
 
@@ -511,25 +510,9 @@ angular.module(spamControllersHome).controller('Home', function(
 	};
 
 
-	// query fields if they have not been queried yet
-	if ( ! $rootScope.fields || _.isEmpty( $rootScope.fields )  ) {
-		promises.fields = $scope.user.getList('fields');
-	}
-
-
-	// query student courses if they have not been queried yet
-	if ( ! $rootScope.studentCourses || _.isEmpty( $rootScope.studentCourses ) ) {
-		promises.studentCourses = $scope.user.getCourses();
-	}
-
-
-	// when done querying start generating the meta data
-	$q.all([promises.fields, promises.studentCourses]).then(function(data) {
-		if ( data[0] )
-			$rootScope.fields = data[0];
-
-		if ( data[1] )
-			$rootScope.studentCourses = $scope.user.courses.$object;
+	// generate course meta after querying fields
+	$scope.user.getList('fields').then(function(data) {
+		$rootScope.fields = data;
 
 		for( var i = 0; i < $rootScope.fields.length; i = i + 2 )
 			$scope.fieldsRange.push(i);

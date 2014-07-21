@@ -59,7 +59,6 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 	self.removeUserDependent = function() {
 		self.resetGuide();
 		Courses.reset();
-		$rootScope.studentCourses = {};
 		$rootScope.loginform = { username : '' };
 	};
 
@@ -92,16 +91,6 @@ factory('User', function(
 	_
 ) {
 	var methods = {};
-
-	methods.getCourses = function() {
-		// if are not/have not yet pulled the courses, do so
-		if (_.isEmpty($rootScope.user.courses)) {
-			$rootScope.user.courses = $rootScope.user.getList('courses');
-		}
-
-		// return the promise which might already contain the courses
-		return $rootScope.user.courses;
-	};
 
 	methods.save = function(user) {
 		$log.info('Saving local user data to global.');
