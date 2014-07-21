@@ -19,8 +19,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	$log,
 	$q,
 	_,
-	Restangular,
-	TheUser
+	Restangular
 ) {
 
 	var promises = {};
@@ -220,11 +219,11 @@ angular.module(spamControllersHome).controller('Home', function(
 		// TODO: move bachelor thesis ects to database!!! => regulations
 		// TODO: module/field examinations give ECTS!
 		$scope.thesis = {
-			thesis_ects : _.isUndefined( TheUser.thesis_ects ) ? 12 : TheUser.thesis_ects
+			thesis_ects : _.isUndefined( $scope.user.thesis_ects ) ? 12 : $scope.user.thesis_ects
 		};
 
-		if ( ! _.isEmpty( TheUser.thesis_grade ) ) {
-			$scope.average_grade += TheUser.thesis_grade * thesis.thesis_ects;
+		if ( ! _.isEmpty( $scope.user.thesis_grade ) ) {
+			$scope.average_grade += $scope.user.thesis_grade * thesis.thesis_ects;
 			data.averaging_ects += thesis.thesis_ects;
 			$scope.completed_ects += thesis.thesis_ects;
 
@@ -343,13 +342,13 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * TODO
 	 */
 	$scope.updateThesis = function() {
-		var user = TheUser;
+		var user = $scope.user;
 		user.thesis_grade = formatGrade( user.thesis_grade, true );
 
 		if ( user.thesis_title_old == user.thesis_title && user.thesis_grade_old == user.thesis_grade )
 			return;
 
-		TheUser.one('regulations',user.regulation_id).customPUT({
+		$scope.user.one('regulations',user.regulation_id).customPUT({
 			title: user.thesis_title,
 			grade: user.thesis_grade
 		}).then(function(t) {
@@ -362,7 +361,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			generateCourseMeta();
 		});
 	};
-	$scope.thesis_active = TheUser.thesis_title || TheUser.thesis_grade ? true : false;
+	$scope.thesis_active = $scope.user.thesis_title || $scope.user.thesis_grade ? true : false;
 
 
 	/**
@@ -514,13 +513,13 @@ angular.module(spamControllersHome).controller('Home', function(
 
 	// query fields if they have not been queried yet
 	if ( ! $rootScope.fields || _.isEmpty( $rootScope.fields )  ) {
-		promises.fields = TheUser.getList('fields');
+		promises.fields = $scope.user.getList('fields');
 	}
 
 
 	// query student courses if they have not been queried yet
 	if ( ! $rootScope.studentCourses || _.isEmpty( $rootScope.studentCourses ) ) {
-		promises.studentCourses = TheUser.getCourses();
+		promises.studentCourses = $scope.user.getCourses();
 	}
 
 
@@ -530,7 +529,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			$rootScope.fields = data[0];
 
 		if ( data[1] )
-			$rootScope.studentCourses = data[1];
+			$rootScope.studentCourses = $scope.user.courses.$object;
 
 		for( var i = 0; i < $rootScope.fields.length; i = i + 2 )
 			$scope.fieldsRange.push(i);
@@ -565,13 +564,10 @@ angular.module(spamControllersHome).controller('Home', function(
  */
 angular.module(spamControllersHome).controller('Logout', function(
 	$scope,
-	$location,
-	TheUser
+	$location
 ) {
-
-	TheUser.logout();
+	$scope.user.destroy();
 	$location.path('/login').search( { loggedout : true } ).replace();
-
 });
 
 
@@ -583,30 +579,19 @@ angular.module(spamControllersHome).controller('Logout', function(
 angular.module(spamControllersHome).controller('UserSettings', function(
 	$scope,
 	$location,
-	$log,
-	TheUser
+	$log
 ) {
-	$scope.user = TheUser.getData();
-
 	var lastState = angular.copy($scope.user);
 
 	$scope.updateStudent = function(user) {
 		if ( angular.equals( lastState, $scope.user ) ) return;
-
 		lastState = angular.copy( user );
 
-		TheUser.refreshData($scope.user);
-
-		TheUser.put().then(function(user) {
-			$log.info( "Updated user information saved." );
-		});
+		$scope.user.save();
 	};
 
 	$scope.deleteData = function() {
-		TheUser.remove().then(function() {
-			TheUser.logout();
-			$location.path('/login').search( { delete_data : true } );
-		});
+		$scope.user.delete();
 	};
 
 });
@@ -620,7 +605,7 @@ angular.module(spamControllersHome).controller('UserSettings', function(
 angular.module(spamControllersHome).controller('UserMatVerify', function(
 	$scope,
 	$log,
-	TheUser,
+	DataHandler,
 	_
 ) {
 	var currentYear = new Date().getFullYear();
@@ -638,11 +623,7 @@ angular.module(spamControllersHome).controller('UserMatVerify', function(
 		if (_.isEmpty($scope.user.mat_term))
 			$scope.user.mat_term =  'W';
 
-		TheUser.refreshData($scope.user);
-
-		TheUser.put().then(function(user) {
-			$log.info( "Updated user information saved." );
-		});
+		$scope.user.save();
 	};
 });
 
@@ -657,11 +638,10 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 	$location,
 	$routeParams,
 	Restangular,
-	TheUser,
 	_
 ) {
 
-	$scope.fields = TheUser.getList('fields').$object;
+	$scope.fields = $scope.user.getList('fields').$object;
 
 	$scope.course = { field_id : parseInt($routeParams.field_id, 10), unofficial_year: $rootScope.meta.year, unofficial_term: $rootScope.meta.term };
 

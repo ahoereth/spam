@@ -221,7 +221,6 @@ config( function(
 	Auth,
 	_,
 	Courses,
-	TheUser,
 	DataHandler
 ){
 	var d = new Date(), m = d.getMonth(), y = d.getFullYear();
@@ -267,7 +266,7 @@ config( function(
 		}
 
 		// handle the page title
-		var username = TheUser.getUsername();
+		var username = $rootScope.user.getUsername();
 		if (!_.isEmpty(username)) {
 			$rootScope.title = current.title.replace(':username', username) +
 				(current.title.length > 0 ? ' :: ' : '' ) +
@@ -293,14 +292,14 @@ config( function(
 	 * Replaces $rootScope.addCourse
 	 */
 	$rootScope.addCourse2 = function(studentInCourse) {
-		var target = Courses.get(TheUser.getRegulation(), studentInCourse.course_id);
+		var target = Courses.get($rootScope.user.getRegulation(), studentInCourse.course_id);
 		if ( target )
 			target.enrolled = true;
 
-		TheUser.all('courses').post( studentInCourse ).then(function( course ) {
+		$rootScope.user.all('courses').post( studentInCourse ).then(function( course ) {
 			DataHandler.resetGuide();
 
-			//Courses.enroll(TheUser.getRegulation(), course.course_id, course.student_in_course_id);
+			//Courses.enroll($rootScope.user.getRegulation(), course.course_id, course.student_in_course_id);
 			if ( target )
 				target.student_in_course_id = course.student_in_course_id;
 
@@ -326,14 +325,14 @@ config( function(
 		var target2 = _.findWhere( $rootScope.studentCourses, { student_in_course_id : course.student_in_course_id } );
 		$rootScope.studentCourses = _.without( $rootScope.studentCourses, target2 );
 
-		var target = Courses.get(TheUser.getRegulation(), course.course_id);
+		var target = Courses.get($rootScope.user.getRegulation(), course.course_id);
 		if ( target )
 			target.enrolled = false;
 
-		TheUser.one('courses', course.student_in_course_id).remove().then(function() {
+		$rootScope.user.one('courses', course.student_in_course_id).remove().then(function() {
 			DataHandler.resetGuide();
 
-			//Courses.unroll(TheUser.getRegulation(), course.course_id);
+			//Courses.unroll($rootScope.user.getRegulation(), course.course_id);
 			if ( target )
 				target.student_in_course_id = null;
 
@@ -359,7 +358,7 @@ config( function(
 			t.loading = false;
 			DataHandler.removeUserDependent();
 
-			if (TheUser.loggedIn()) {
+			if ($rootScope.user) {
 				$rootScope.loginform = {};
 
 				var targetRoute = _.isEmpty($rootScope.requested_route) ? '/~' : $rootScope.requested_route;

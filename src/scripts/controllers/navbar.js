@@ -8,8 +8,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	$filter,
 	$timeout,
 	_,
-	Courses,
-	TheUser
+	Courses
 ) {
 
 	var courses = [],
@@ -107,7 +106,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 
 		if ( $scope.search.limit > $scope.search.filtered.length ) {
 			fetching = true;
-			Courses.fetch(TheUser.getRegulation(true), lowerYear, upperYear, null).then(function(newCourses) {
+			Courses.fetch($scope.user.getRegulation(1), lowerYear, upperYear, null).then(function(newCourses) {
 				courses = newCourses;
 				fetching = false;
 				applyFilter();
@@ -237,7 +236,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		filteredIds = [];
 		filteredSelectedKey = 0;
 
-		if ( TheUser.username ) { // logged in?
+		if ( $scope.user.username ) { // logged in?
 			_.each($scope.search.filtered, function( course, idx ) {
 				if ( ! course.enrolled )
 					filteredIds.push( course.course_id );
@@ -256,7 +255,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	 * @param angularEvent $event contains information about the keypress
 	 */
 	$scope.keyboardNavigation = function( $event ) {
-		if ( ! _.contains( [40, 38, 13, 27], $event.keyCode ) || ! TheUser.username ) // down, up, enter, esc, logged in?
+		if ( ! _.contains( [40, 38, 13, 27], $event.keyCode ) || ! $scope.user.loggedin ) // down, up, enter, esc, not logged in?
 			return;
 
 		$event.preventDefault();

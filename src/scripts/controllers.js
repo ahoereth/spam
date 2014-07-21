@@ -9,9 +9,15 @@ angular.module(spamControllersMain, []);
  * CONTROLLER: Root
  */
 angular.module(spamControllersMain).controller('Root', function(
-	$scope
+	$rootScope,
+	$scope,
+	DataHandler
 ) {
+	DataHandler.userInit();
 
+	$scope.$on('userDestroy', function(event) {
+		DataHandler.userInit();
+	});
 });
 
 

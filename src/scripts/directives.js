@@ -1,6 +1,6 @@
 angular.module('spam.directives', []);
 
-angular.module('spam.directives').directive('addRemoveCourse', function(TheUser,_) {
+angular.module('spam.directives').directive('addRemoveCourse', function(_) {
 	return {
 		restrict: 'E',
 		replace: true,
@@ -10,12 +10,12 @@ angular.module('spam.directives').directive('addRemoveCourse', function(TheUser,
 			addCourse: '=',
 			removeCourse: '='
 		},
-		controller: function($scope) {
+		controller: function($rootScope, $scope) {
 			var course = $scope.course;
 
 			// check if user is enrolled in this course
 			if (_.isUndefined(course.enrolled)) {
-				TheUser.getCourses().then(function(courses) {
+				$rootScope.user.getCourses().then(function(courses) {
 					var target = _.find(courses, {course_id: course.course_id});
 					course.enrolled = target ? true : false;
 				});

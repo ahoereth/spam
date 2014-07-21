@@ -3,66 +3,6 @@
 angular.module('services', []).
 
 
-/**
- * User provider
- */
-factory('TheUser', function(DataHandler, _) {
-	var self = {}, data = {}, r;
-
-	self.init = function(d) {
-		data = d;
-		r = _.extend(self, data);
-	};
-
-	self.unset = function() {
-		data = {};
-		r = self;
-	};
-
-	self.getData = function() {
-		return data;
-	};
-
-	self.refreshData = function(updated) {
-		self.unset();
-		self.init(updated);
-	};
-
-	self.loggedIn = function() {
-		return !_.isEmpty(data.username);
-	};
-
-	self.logout = function() {
-		self.unset();
-		DataHandler.removeAll();
-	};
-
-	self.getRegulation = function(useDefault) {
-		return data.username ? data.regulation_id : ( useDefault ? 1 : undefined );
-	};
-
-	self.getUsername = function() {
-		return data.username || null;
-	};
-
-	self.getRank = function() {
-		return data.rank || null;
-	};
-
-	self.courses = null;
-	self.getCourses = function() {
-		// if are not/have not yet pulled the courses, do so
-		if (_.isEmpty(self.courses))
-			self.courses = self.getList('courses');
-
-		// return the promise which might already contain the courses
-		return self.courses;
-	};
-
-	return r || self;
-}).
-
-
 
 /**
  * HTTP Authentication factory.
@@ -74,7 +14,6 @@ factory('Auth', function(
 	$q,
 	Restangular,
 	DataHandler,
-	TheUser,
 	_
 ) {
 	var deferredLogin = 'not_initiated';
@@ -87,10 +26,10 @@ factory('Auth', function(
 
 		if (!_.isEmpty(username)) {
 			Restangular.one('users', username).get().then(function(user) {
-				TheUser.init(user);
-				deferredLogin.resolve(TheUser);
+				DataHandler.userInit(user);
+				deferredLogin.resolve($rootScope.user);
 			}, function() {
-				TheUser.logout();
+				$rootScope.user.destroy();
 				deferredLogin.reject();
 			});
 		} else {
@@ -127,7 +66,7 @@ factory('Auth', function(
 
 			if (accessSet === 0) {
 				// accessSet is 0, therefore everybody is legitimated to view this site
-				deferredAuthentication.resolve(TheUser);
+				deferredAuthentication.resolve($rootScope.user);
 
 			} else {
 				// accessSet is something more specific, therefore we need to check
@@ -140,7 +79,7 @@ factory('Auth', function(
 					if (
 						// accessSet is a explicit user rank integer and the users rank is
 						// equal or higher
-						(_.isNumber(accessSet) && accessSet <= TheUser.getRank()) ||
+						(_.isNumber(accessSet) && accessSet <= $rootScope.user.rank) ||
 
 						// The user himself is allowed to see this route, we will
 						// only retrieve data related to him
@@ -148,9 +87,9 @@ factory('Auth', function(
 
 						// The user is explicitly named in the accessSet, so he is allowed
 						// to view this route as well
-						(!_.isUndefined(accessSet[TheUser.getUsername()]))
+						(!_.isUndefined(accessSet[$rootScope.user.getUsername()]))
 					) {
-						deferredAuthentication.resolve(TheUser);
+						deferredAuthentication.resolve($rootScope.user);
 
 					} else {
 						// Could not match the accessSet to the current user, reject
