@@ -8,6 +8,7 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 	$cacheFactory,
 	$log,
 	Courses,
+	User,
 	_
 ) {
 	var webstorage = ( typeof( Storage ) !== "undefined" ) ? true : false;
@@ -67,9 +68,32 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 		self.removeUserDependent();
 	};
 
+	self.userInit = function(data) {
+		$rootScope.user = User(data);
+	};
 
-	var user = {}
-	user.getCourses = function() {
+	self.userDestroy = function(data) {
+		$rootScope.user.destroy();
+		self.removeAll();
+	};
+
+	return self;
+}).
+
+
+
+/**
+ * User functionality factory. All functionality provided by this factory is
+ * injected into the global ($rootScope) user object.
+ */
+factory('User', function(
+	$rootScope,
+	$log,
+	_
+) {
+	var methods = {};
+
+	methods.getCourses = function() {
 		// if are not/have not yet pulled the courses, do so
 		if (_.isEmpty($rootScope.user.courses)) {
 			$rootScope.user.courses = $rootScope.user.getList('courses');
@@ -79,7 +103,7 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 		return $rootScope.user.courses;
 	};
 
-	user.save = function(user) {
+	methods.save = function(user) {
 		$log.info('Saving local user data to global.');
 		$rootScope.user.put().then(function(result) {
 			$log.info('User data saved.');
@@ -88,13 +112,12 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 		});
 	};
 
-	user.destroy = function() {
+	methods.destroy = function() {
 		$log.info('Destroying local user data.');
 		$rootScope.$broadcast('userDestroy');
-		self.removeAll();
 	};
 
-	user.delete = function() {
+	methods.delete = function() {
 		$log.info('Deleting global user data.');
 		//$rootScope.$broadcast('userDelete');
 		if ($rootScope.user) {
@@ -107,21 +130,20 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 			});
 
 			// handle local and global user data deletion asynchronously
-			user.destroy();
+			methods.destroy();
 		}
 	};
 
-	user.getRegulation = function(reg) {
-		return user.regulation_id || (reg || null);
+	methods.getRegulation = function(reg) {
+		return this.regulation_id || (reg || null);
 	};
 
-	user.getUsername = function() {
-		return user.username || null;
+	methods.getUsername = function() {
+		return this.username || null;
 	};
 
-	self.userInit = function(data) {
-		$rootScope.user = angular.extend(user, data, {loggedin : !_.isEmpty(data)});
-	}
 
-	return self;
+	return function(data) {
+		return angular.extend(methods, data, {loggedin : !_.isEmpty(data)});
+	};
 });
