@@ -132,9 +132,10 @@ angular.module(spamControllersMain).controller('Loginform', function(
 	$rootScope,
 	$scope,
 	$location,
+	$routeParams,
 	Auth
 ) {
-	$rootScope.loginform = { username : '' };
+	$rootScope.loginform = { username : $routeParams.username };
 
 	/**
 	 * User login
@@ -148,17 +149,10 @@ angular.module(spamControllersMain).controller('Loginform', function(
 			t.password,
 			t.remember
 		).then( function() {
-			t.loading = false;
-
-			if ($rootScope.user) {
-				$rootScope.loginform = {};
-
-				var targetRoute = _.isEmpty($rootScope.requested_route) ? '/~' : $rootScope.requested_route;
-				$location.path(targetRoute);
-			} else {
-				$rootScope.loginform.password = '';
-				$location.path('/login').search( { error : true } );
-			}
+			var targetRoute = _.isEmpty($rootScope.requested_route) ? '/~' : $rootScope.requested_route;
+			$location.path(targetRoute).search({});
+		}, function() {
+			$location.path('/login').search({ username : t.username });
 		});
 	};
 });

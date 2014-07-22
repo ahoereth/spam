@@ -652,7 +652,7 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 
 		var added = $scope.$on( 'courseAdded', function(event, course) {
 			$scope.submitted = false;
-			$location.path('/~');
+			$location.search({}).path('/~');
 
 			added();
 		});
