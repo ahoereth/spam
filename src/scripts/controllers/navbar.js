@@ -64,7 +64,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		// don't do anything if noting actually changed
 		if ( query === oldQuery ) return;
 
-		var match = query.match( /^([ws])?(\d{2,4})?:?(.*)$/i);
+		var match = query.match(/^([ws])?s?(\d{2,4})?:? (.*)$/i);
 		if ( match ) {
 			$scope.search.filter = {
 				'term'   : _.isEmpty( match[1] ) ? '' : match[1].toUpperCase(),
@@ -171,9 +171,10 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		}
 
 		// if input is focused always show the results
-		if ( states.input ) {
+		if ( states.input && ! $scope.search.active) {
 			$scope.search.active = true;
-			$scope.search.placeholder = '11: Try prepending a year or term';
+			var prefix = ['W11', 'WS', 'SS2013', 'W1984', 'S12', 'W13', '12'];
+			$scope.search.placeholder = _.sample(prefix) + ': Try prepending a term and/or year';
 
 		// if input is not focused and mouse is not hovering the
 		} else if ( ! states.input && ! states.mouse ) {
