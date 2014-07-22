@@ -38,7 +38,7 @@
 					<a href="guide">guide</a>
 				</li>
 
-				<li ng-class="getNavigationActiveClass('/~')" ng-hide="!user||user.role!='student'">
+				<li ng-class="getNavigationActiveClass('/~')" ng-hide="!user.loggedin||user.role!='student'">
 					<a href="~" ng-bind="user.username"></a>
 				</li>
 
