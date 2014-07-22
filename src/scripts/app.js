@@ -343,35 +343,6 @@ config( function(
 	};
 
 
-	/**
-	 * User login
-	 */
-	$rootScope.login = function() {
-		var t = this.loginform;
-		t.loading = true;
-
-		Auth.init(
-			t.username,
-			t.password,
-			t.remember
-		).then( function() {
-			t.loading = false;
-			DataHandler.removeUserDependent();
-
-			if ($rootScope.user) {
-				$rootScope.loginform = {};
-
-				var targetRoute = _.isEmpty($rootScope.requested_route) ? '/~' : $rootScope.requested_route;
-				$location.path(targetRoute);
-			} else {
-				$rootScope.loginform.password = '';
-				$location.path('/login').search( { error : true } );
-			}
-		});
-	};
-	$rootScope.loginform = { username : '' };
-
-
 	var whichbrowser = function () {
 		$timeout( function() {
 			if ( ( typeof $window.WhichBrowser === 'undefined' ) ) {

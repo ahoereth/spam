@@ -68,12 +68,8 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 	};
 
 	self.userInit = function(data) {
+		self.removeUserDependent();
 		$rootScope.user = User(data);
-	};
-
-	self.userDestroy = function(data) {
-		$rootScope.user.destroy();
-		self.removeAll();
 	};
 
 	return self;

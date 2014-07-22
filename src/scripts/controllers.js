@@ -16,6 +16,7 @@ angular.module(spamControllersMain).controller('Root', function(
 	DataHandler.userInit();
 
 	$scope.$on('userDestroy', function(event) {
+		DataHandler.removeAll();
 		DataHandler.userInit();
 	});
 });
@@ -38,6 +39,47 @@ angular.module(spamControllersMain).controller('Login', function(
 
 });
 
+
+/**
+ * CONTROLLER: Loginform
+ *
+ * Contains the loginform functionality which triggers authentication and redirects
+ * appropriately.
+ */
+angular.module(spamControllersMain).controller('Loginform', function(
+	$rootScope,
+	$scope,
+	$location,
+	Auth
+) {
+	$rootScope.loginform = { username : '' };
+
+	/**
+	 * User login
+	 */
+	$scope.login = function() {
+		var t = this.loginform;
+		t.loading = true;
+
+		Auth.init(
+			t.username,
+			t.password,
+			t.remember
+		).then( function() {
+			t.loading = false;
+
+			if ($rootScope.user) {
+				$rootScope.loginform = {};
+
+				var targetRoute = _.isEmpty($rootScope.requested_route) ? '/~' : $rootScope.requested_route;
+				$location.path(targetRoute);
+			} else {
+				$rootScope.loginform.password = '';
+				$location.path('/login').search( { error : true } );
+			}
+		});
+	};
+});
 
 
 /**
