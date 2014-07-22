@@ -173,8 +173,9 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		// if input is focused always show the results
 		if ( states.input && ! $scope.search.active) {
 			$scope.search.active = true;
-			var prefix = ['W11', 'WS', 'SS2013', 'W1984', 'S12', 'W13', '12'];
-			$scope.search.placeholder = _.sample(prefix) + ': Try prepending a term and/or year';
+			$scope.search.placeholder =
+				prefix[prefix_i++ % prefix.length] +
+				': Try prepending a term and/or year';
 
 		// if input is not focused and mouse is not hovering the
 		} else if ( ! states.input && ! states.mouse ) {
@@ -189,6 +190,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		}
 	};
 	var states = { mouse : false, input : false, timer : null };
+	var prefix = _.shuffle(['W11', 'WS', 'SS2013', 'W1984', 'S12', 'W13', '12']), prefix_i = 0;
 
 
 	/**
