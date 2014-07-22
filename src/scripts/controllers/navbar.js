@@ -272,10 +272,10 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 
 		// react differently for different key presses
 		switch ( $event.keyCode ) {
-			case 40: courseListMove( t, 'down'); break; // arrow down
-			case 38: courseListMove( t, 'up'  ); break; // arrow up
-			case 13: courseSubmit(t);            break; // enter key
-			case 27: $scope.leaveSearch(t);      break; // esc key
+			case 40: courseListMove( t, 'down');    break; // arrow down
+			case 38: courseListMove( t, 'up'  );    break; // arrow up
+			case 13: courseSubmit(t);               break; // enter key
+			case 27: $scope.leaveSearch(t, $event); break; // esc key
 		}
 	};
 
@@ -344,7 +344,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	 *
 	 * @param angular.element e button group which contains all available fields (if multiple)
 	 */
-	$scope.leaveSearch = function( t ) {
+	$scope.leaveSearch = function(t, $event) {
 		// leave search
 		if ( _.isUndefined(t) || ! t.open ) {
 			$scope.search.active = false;
@@ -352,6 +352,11 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 				$scope.search.results = [];
 				$scope.search.quick = '';
 			}
+
+			// blur input field
+			$timeout(function() {
+				$event.target.blur();
+			}, 0);
 
 		// exit dropdown menu
 		} else {
