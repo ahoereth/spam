@@ -238,6 +238,12 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 
 		if ( $scope.user.username ) { // logged in?
 			_.each($scope.search.filtered, function( course, idx ) {
+				// check if user is enrolled in this course
+				if (!_.isEmpty($rootScope.user.courses) && _.isUndefined(course.enrolled)) {
+					var target = _.find($rootScope.user.courses, {course_id: course.course_id});
+					course.enrolled = target ? true : false;
+				}
+
 				if ( ! course.enrolled )
 					filteredIds.push( course.course_id );
 			});
@@ -308,6 +314,12 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	 * @param course t currently selected courseD
 	 */
 	var courseSubmit = function( t ) {
+		// if trying to enroll in an course the student already is enrolled in
+		if (t.enrolled) {
+			courseListMove(t, 'down');
+			return;
+		}
+
 		// if course has only one field add it directly
 		if ( t.singleField ) {
 			$scope.addCourse( t.course_id, t.singleField );
