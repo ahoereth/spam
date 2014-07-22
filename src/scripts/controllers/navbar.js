@@ -206,7 +206,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		$scope.search.selected = filteredIds[filteredSelectedKey];
 
 		// located in js/app.js
-		$rootScope.addCourse( courseId, fieldId );
+		$scope.$parent.addCourse( courseId, fieldId );
 	};
 
 
@@ -224,7 +224,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		});
 
 		// located in js/app.js
-		$rootScope.removeCourse(course);
+		$scope.$parent.removeCourse(course);
 	};
 
 

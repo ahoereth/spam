@@ -374,7 +374,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			term     : $scope.user.mat_term
 		}).then(function(guide) {
 			_.each(guide, function(course, idx) {
-				$rootScope.addCourse(course.course_id,course.fields[0].field_id);
+				$scope.addCourse(course.course_id,course.fields[0].field_id);
 			});
 		});
 	};
@@ -647,7 +647,7 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 
 		if ( _.isUndefined(course) || _.isEmpty(course.unofficial_course) ) return;
 
-		$rootScope.addCourse2(course);
+		$scope.addCourse2(course);
 
 		var added = $scope.$on( 'courseAdded', function(event, course) {
 			$scope.submitted = false;

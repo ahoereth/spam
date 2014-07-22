@@ -47,7 +47,7 @@ angular.module(spamControllersGuide).controller('GuideCtrl', function(
 	$scope.addCourse = function( courseId, fieldId, e ) {
 		if ( ! courseId || ! fieldId ) return;
 
-		$rootScope.addCourse( courseId, fieldId );
+		$scope.$parent.addCourse( courseId, fieldId );
 
 		var target = _.findWhere( guideCourses, { course_id : courseId } );
 		target.enrolled = true;
@@ -61,7 +61,7 @@ angular.module(spamControllersGuide).controller('GuideCtrl', function(
 
 	$scope.removeCourse = function (course) {
 		// located in js/app.js
-		$rootScope.removeCourse(course );
+		$scope.$parent.removeCourse(course);
 
 		// instant feedback to user
 		var target = _.findWhere( guideCourses, { course_id : course.course_id } );

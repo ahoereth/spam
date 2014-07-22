@@ -11,9 +11,80 @@ angular.module(spamControllersMain, []);
 angular.module(spamControllersMain).controller('Root', function(
 	$rootScope,
 	$scope,
-	DataHandler
+	$log,
+	DataHandler,
+	Courses
 ) {
 	DataHandler.userInit();
+
+
+	/**
+	 * Adds a course to the curent user's planner.
+	 *
+	 * @param {int} courseId course_id database field
+	 * @param {int} fieldId  field_id database field
+	 */
+	$scope.addCourse = function(courseId, fieldId) {
+		if (courseId === null || fieldId === null) return;
+
+		$scope.addCourse2({course_id : courseId, field_id : fieldId});
+	};
+
+
+	/**
+	 * TODO: join with addCourse()
+	 */
+	$scope.addCourse2 = function(studentInCourse) {
+		var target = Courses.get($scope.user.getRegulation(), studentInCourse.course_id);
+		if (target)
+			target.enrolled = true;
+
+		$scope.user.all('courses').post(studentInCourse).then(function(course) {
+			DataHandler.resetGuide();
+
+			//Courses.enroll($rootScope.user.getRegulation(), course.course_id, course.student_in_course_id);
+			if (target)
+				target.student_in_course_id = course.student_in_course_id;
+
+			if ($rootScope.user.courses)
+				$scope.user.courses.push(course);
+
+			if (studentInCourse.course_id)
+				$scope.$broadcast('courseAdded_' + studentInCourse.course_id, course);
+
+			$scope.$broadcast('courseAdded', course);
+			$log.info('Added: ' + course.course);
+		});
+	};
+
+
+	/**
+	 * Removes a course from the current user's planner.
+	 *
+	 * @param {int}    courseId course_id database field
+	 * @param {object} course   object used for broadcasting
+	 */
+	$scope.removeCourse = function(course) {
+		var target2 = _.findWhere($scope.user.courses, {student_in_course_id : course.student_in_course_id});
+		$rootScope.user.courses = _.without($scope.user.courses, target2);
+
+		var target = Courses.get($rootScope.user.getRegulation(), course.course_id);
+		if (target)
+			target.enrolled = false;
+
+		$scope.user.one('courses', course.student_in_course_id).remove().then(function() {
+			DataHandler.resetGuide();
+
+			//Courses.unroll($rootScope.user.getRegulation(), course.course_id);
+			if (target)
+				target.student_in_course_id = null;
+
+			$log.info('Removed: ' + course.course);
+			$scope.$broadcast('courseRemoved', course);
+			$scope.$broadcast('courseRemoved_'+course.course_id, course);
+		});
+	};
+
 
 	$scope.$on('userDestroy', function(event) {
 		DataHandler.removeAll();
