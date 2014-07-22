@@ -24,25 +24,33 @@ angular.module(spamControllersMain).controller('Root', function(
 	 * @param {int} courseId course_id database field
 	 * @param {int} fieldId  field_id database field
 	 */
-	$scope.addCourse = function(courseId, fieldId) {
-		if (courseId === null || fieldId === null) return;
+	$scope.addCourse = function(studentInCourse, fieldId) {
+		var courseId;
 
-		$scope.addCourse2({course_id : courseId, field_id : fieldId});
-	};
+		// if first parameter is empty we wont be doing anything
+		if (_.isUndefined(studentInCourse))
+			return;
 
+		// first parameter is the course_id;
+		if (_.isNumber(studentInCourse)) {
+			courseId = studentInCourse;
+			studentInCourse = {
+				course_id: courseId,
+				field_id : fieldId
+			};
 
-	/**
-	 * TODO: join with addCourse()
-	 */
-	$scope.addCourse2 = function(studentInCourse) {
-		var target = Courses.get($scope.user.getRegulation(), studentInCourse.course_id);
+		// got the whole course object as first parameter
+		} else {
+			courseId = studentInCourse.course_id;
+		}
+
+		var target = Courses.get($scope.user.getRegulation(), courseId);
 		if (target)
 			target.enrolled = true;
 
 		$scope.user.all('courses').post(studentInCourse).then(function(course) {
 			DataHandler.resetGuide();
 
-			//Courses.enroll($rootScope.user.getRegulation(), course.course_id, course.student_in_course_id);
 			if (target)
 				target.student_in_course_id = course.student_in_course_id;
 
@@ -82,6 +90,9 @@ angular.module(spamControllersMain).controller('Root', function(
 			$log.info('Removed: ' + course.course);
 			$scope.$broadcast('courseRemoved', course);
 			$scope.$broadcast('courseRemoved_'+course.course_id, course);
+		}, function() {
+			$log.info('Couldnt remove: ' + course.course);
+			$rootScope.user.courses.push(target2);
 		});
 	};
 

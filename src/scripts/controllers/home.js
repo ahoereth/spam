@@ -633,6 +633,7 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 	$scope.course = { field_id : parseInt($routeParams.field_id, 10), unofficial_year: $rootScope.meta.year, unofficial_term: $rootScope.meta.term };
 
 	/**
+	 * Adds an unofficial course to the user's course collection.
 	 *
 	 * @param course object
 	 *     unofficial_code
@@ -647,7 +648,7 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 
 		if ( _.isUndefined(course) || _.isEmpty(course.unofficial_course) ) return;
 
-		$scope.addCourse2(course);
+		$scope.addCourse(course);
 
 		var added = $scope.$on( 'courseAdded', function(event, course) {
 			$scope.submitted = false;

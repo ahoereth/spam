@@ -44,6 +44,13 @@ angular.module(spamControllersGuide).controller('GuideCtrl', function(
 	};
 
 
+	/**
+	 * Local implementation of addCourse in order to provide instant feedback
+	 * to user.
+	 *
+	 * TODO: Merge with $scope.$parent.addCourse - in order to do this the
+	 * should rely on the same course collection as the other course searches.
+	 */
 	$scope.addCourse = function( courseId, fieldId, e ) {
 		if ( ! courseId || ! fieldId ) return;
 
@@ -59,6 +66,13 @@ angular.module(spamControllersGuide).controller('GuideCtrl', function(
 	};
 
 
+	/**
+	 * Local implementation of removeCourse in order to provide instant feedback
+	 * to user.
+	 *
+	 * TODO: Merge with $scope.$parent.removeCourse - in order to do this the
+	 * should rely on the same course collection as the other course searches.
+	 */
 	$scope.removeCourse = function (course) {
 		// located in js/app.js
 		$scope.$parent.removeCourse(course);
