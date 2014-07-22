@@ -19,8 +19,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	$log,
 	$q,
 	_,
-	Restangular,
-	TheUser
+	Restangular
 ) {
 
 	var promises = {};
@@ -38,8 +37,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 *                           required when for example only recalculating grades
 	 */
 	var generateCourseMeta = function(regroup) {
-		if ( ( ! $rootScope.fields || _.isEmpty( $rootScope.fields ) ) ||
-			   ( ! $rootScope.studentCourses || _.isEmpty( $rootScope.studentCourses ) ) )
+		if ( _.isEmpty($rootScope.fields) )
 			return false;
 
 		var data = {
@@ -60,7 +58,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		// regroup the courses to their assigned field?
 		if ( _.isEmpty( $scope.courses_by_fields ) || regroup ) {
-			$scope.courses_by_fields = _.groupBy( $rootScope.studentCourses, 'enrolled_field_id' );
+			$scope.courses_by_fields = _.groupBy( $scope.user.courses, 'enrolled_field_id' );
 			$scope.columns = [[], [], []];
 		}
 
@@ -220,11 +218,11 @@ angular.module(spamControllersHome).controller('Home', function(
 		// TODO: move bachelor thesis ects to database!!! => regulations
 		// TODO: module/field examinations give ECTS!
 		$scope.thesis = {
-			thesis_ects : _.isUndefined( TheUser.thesis_ects ) ? 12 : TheUser.thesis_ects
+			thesis_ects : _.isUndefined( $scope.user.thesis_ects ) ? 12 : $scope.user.thesis_ects
 		};
 
-		if ( ! _.isEmpty( TheUser.thesis_grade ) ) {
-			$scope.average_grade += TheUser.thesis_grade * thesis.thesis_ects;
+		if ( ! _.isEmpty( $scope.user.thesis_grade ) ) {
+			$scope.average_grade += $scope.user.thesis_grade * thesis.thesis_ects;
 			data.averaging_ects += thesis.thesis_ects;
 			$scope.completed_ects += thesis.thesis_ects;
 
@@ -343,26 +341,26 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * TODO
 	 */
 	$scope.updateThesis = function() {
-		var u = $rootScope.user;
-		u.thesis_grade = formatGrade( u.thesis_grade, true );
+		var user = $scope.user;
+		user.thesis_grade = formatGrade( user.thesis_grade, true );
 
-		if ( u.thesis_title_old == u.thesis_title && u.thesis_grade_old == u.thesis_grade )
+		if ( user.thesis_title_old == user.thesis_title && user.thesis_grade_old == user.thesis_grade )
 			return;
 
-		TheUser.one('regulations',u.regulation_id).customPUT({
-			title: u.thesis_title,
-			grade: u.thesis_grade
+		$scope.user.one('regulations',user.regulation_id).customPUT({
+			title: user.thesis_title,
+			grade: user.thesis_grade
 		}).then(function(t) {
-			$log.info('Student thesis updated: ' + u.thesis_title + ' - ' + u.thesis_grade);
+			$log.info('Student thesis updated: ' + user.thesis_title + ' - ' + user.thesis_grade);
 
 			// remember old stuff
-			u.thesis_title_old = u.thesis_title;
-			u.thesis_grade_old = u.thesis_grade;
+			user.thesis_title_old = user.thesis_title;
+			user.thesis_grade_old = user.thesis_grade;
 
 			generateCourseMeta();
 		});
 	};
-	$scope.thesis_active = TheUser.thesis_title || TheUser.thesis_grade ? true : false;
+	$scope.thesis_active = $scope.user.thesis_title || $scope.user.thesis_grade ? true : false;
 
 
 	/**
@@ -376,7 +374,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			term     : $scope.user.mat_term
 		}).then(function(guide) {
 			_.each(guide, function(course, idx) {
-				$rootScope.addCourse(course.course_id,course.fields[0].field_id);
+				$scope.addCourse(course.course_id,course.fields[0].field_id);
 			});
 		});
 	};
@@ -478,7 +476,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	$scope.moveCourse = function( newFieldId ) {
 		var c = this.course;
 
-		var target = _.findWhere( $rootScope.studentCourses, { student_in_course_id : c.student_in_course_id } );
+		var target = _.findWhere( $scope.user.courses, { student_in_course_id : c.student_in_course_id } );
 		target.enrolled_field_id = ( newFieldId == 'null' ? 1 : newFieldId );
 		generateCourseMeta(true);
 
@@ -512,31 +510,19 @@ angular.module(spamControllersHome).controller('Home', function(
 	};
 
 
-	// query fields if they have not been queried yet
-	if ( ! $rootScope.fields || _.isEmpty( $rootScope.fields )  ) {
-		promises.fields = TheUser.getList('fields');
-	}
+	// generate course meta after querying fields
+	if (_.isEmpty($rootScope.fields)) {
+		$scope.user.getList('fields').then(function(data) {
+			$rootScope.fields = data;
 
+			for( var i = 0; i < $rootScope.fields.length; i = i + 2 )
+				$scope.fieldsRange.push(i);
 
-	// query student courses if they have not been queried yet
-	if ( ! $rootScope.studentCourses || _.isEmpty( $rootScope.studentCourses ) ) {
-		promises.studentCourses = TheUser.getCourses();
-	}
-
-
-	// when done querying start generating the meta data
-	$q.all([promises.fields, promises.studentCourses]).then(function(data) {
-		if ( data[0] )
-			$rootScope.fields = data[0];
-
-		if ( data[1] )
-			$rootScope.studentCourses = data[1];
-
-		for( var i = 0; i < $rootScope.fields.length; i = i + 2 )
-			$scope.fieldsRange.push(i);
-
+			generateCourseMeta();
+		});
+	} else {
 		generateCourseMeta();
-	});
+	}
 
 
 	/**
@@ -565,13 +551,10 @@ angular.module(spamControllersHome).controller('Home', function(
  */
 angular.module(spamControllersHome).controller('Logout', function(
 	$scope,
-	$location,
-	TheUser
+	$location
 ) {
-
-	TheUser.logout();
+	$scope.user.destroy();
 	$location.path('/login').search( { loggedout : true } ).replace();
-
 });
 
 
@@ -583,30 +566,19 @@ angular.module(spamControllersHome).controller('Logout', function(
 angular.module(spamControllersHome).controller('UserSettings', function(
 	$scope,
 	$location,
-	$log,
-	TheUser
+	$log
 ) {
-	$scope.user = TheUser.getData();
-
 	var lastState = angular.copy($scope.user);
 
 	$scope.updateStudent = function(user) {
 		if ( angular.equals( lastState, $scope.user ) ) return;
-
 		lastState = angular.copy( user );
 
-		TheUser.refreshData($scope.user);
-
-		TheUser.put().then(function(user) {
-			$log.info( "Updated user information saved." );
-		});
+		$scope.user.save();
 	};
 
 	$scope.deleteData = function() {
-		TheUser.remove().then(function() {
-			TheUser.logout();
-			$location.path('/login').search( { delete_data : true } );
-		});
+		$scope.user.delete();
 	};
 
 });
@@ -620,7 +592,7 @@ angular.module(spamControllersHome).controller('UserSettings', function(
 angular.module(spamControllersHome).controller('UserMatVerify', function(
 	$scope,
 	$log,
-	TheUser,
+	DataHandler,
 	_
 ) {
 	var currentYear = new Date().getFullYear();
@@ -638,11 +610,7 @@ angular.module(spamControllersHome).controller('UserMatVerify', function(
 		if (_.isEmpty($scope.user.mat_term))
 			$scope.user.mat_term =  'W';
 
-		TheUser.refreshData($scope.user);
-
-		TheUser.put().then(function(user) {
-			$log.info( "Updated user information saved." );
-		});
+		$scope.user.save();
 	};
 });
 
@@ -657,15 +625,15 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 	$location,
 	$routeParams,
 	Restangular,
-	TheUser,
 	_
 ) {
 
-	$scope.fields = TheUser.getList('fields').$object;
+	$scope.fields = $scope.user.getList('fields').$object;
 
 	$scope.course = { field_id : parseInt($routeParams.field_id, 10), unofficial_year: $rootScope.meta.year, unofficial_term: $rootScope.meta.term };
 
 	/**
+	 * Adds an unofficial course to the user's course collection.
 	 *
 	 * @param course object
 	 *     unofficial_code
@@ -680,11 +648,11 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 
 		if ( _.isUndefined(course) || _.isEmpty(course.unofficial_course) ) return;
 
-		$rootScope.addCourse2(course);
+		$scope.addCourse(course);
 
 		var added = $scope.$on( 'courseAdded', function(event, course) {
 			$scope.submitted = false;
-			$location.path('/~');
+			$location.search({}).path('/~');
 
 			added();
 		});

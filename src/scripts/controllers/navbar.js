@@ -8,8 +8,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	$filter,
 	$timeout,
 	_,
-	Courses,
-	TheUser
+	Courses
 ) {
 
 	var courses = [],
@@ -65,7 +64,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		// don't do anything if noting actually changed
 		if ( query === oldQuery ) return;
 
-		var match = query.match( /^([ws])?(\d{2,4})?:?(.*)$/i);
+		var match = query.match(/^([ws])?s?(\d{2,4})?:? (.*)$/i);
 		if ( match ) {
 			$scope.search.filter = {
 				'term'   : _.isEmpty( match[1] ) ? '' : match[1].toUpperCase(),
@@ -107,7 +106,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 
 		if ( $scope.search.limit > $scope.search.filtered.length ) {
 			fetching = true;
-			Courses.fetch(TheUser.getRegulation(true), lowerYear, upperYear, null).then(function(newCourses) {
+			Courses.fetch($scope.user.getRegulation(1), lowerYear, upperYear, null).then(function(newCourses) {
 				courses = newCourses;
 				fetching = false;
 				applyFilter();
@@ -172,9 +171,11 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		}
 
 		// if input is focused always show the results
-		if ( states.input ) {
+		if ( states.input && ! $scope.search.active) {
 			$scope.search.active = true;
-			$scope.search.placeholder = '11: Try prepending a year or term';
+			$scope.search.placeholder =
+				prefix[prefix_i++ % prefix.length] +
+				': Try prepending a term and/or year';
 
 		// if input is not focused and mouse is not hovering the
 		} else if ( ! states.input && ! states.mouse ) {
@@ -189,6 +190,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		}
 	};
 	var states = { mouse : false, input : false, timer : null };
+	var prefix = _.shuffle(['W11', 'WS', 'SS2013', 'W1984', 'S12', 'W13', '12']), prefix_i = 0;
 
 
 	/**
@@ -207,7 +209,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		$scope.search.selected = filteredIds[filteredSelectedKey];
 
 		// located in js/app.js
-		$rootScope.addCourse( courseId, fieldId );
+		$scope.$parent.addCourse( courseId, fieldId );
 	};
 
 
@@ -225,7 +227,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		});
 
 		// located in js/app.js
-		$rootScope.removeCourse(course);
+		$scope.$parent.removeCourse(course);
 	};
 
 
@@ -237,8 +239,14 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 		filteredIds = [];
 		filteredSelectedKey = 0;
 
-		if ( TheUser.username ) { // logged in?
+		if ( $scope.user.username ) { // logged in?
 			_.each($scope.search.filtered, function( course, idx ) {
+				// check if user is enrolled in this course
+				if (!_.isEmpty($rootScope.user.courses) && _.isUndefined(course.enrolled)) {
+					var target = _.find($rootScope.user.courses, {course_id: course.course_id});
+					course.enrolled = target ? true : false;
+				}
+
 				if ( ! course.enrolled )
 					filteredIds.push( course.course_id );
 			});
@@ -256,7 +264,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	 * @param angularEvent $event contains information about the keypress
 	 */
 	$scope.keyboardNavigation = function( $event ) {
-		if ( ! _.contains( [40, 38, 13, 27], $event.keyCode ) || ! TheUser.username ) // down, up, enter, esc, logged in?
+		if ( ! _.contains( [40, 38, 13, 27], $event.keyCode ) || ! $scope.user.loggedin ) // down, up, enter, esc, not logged in?
 			return;
 
 		$event.preventDefault();
@@ -267,10 +275,10 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 
 		// react differently for different key presses
 		switch ( $event.keyCode ) {
-			case 40: courseListMove( t, 'down'); break; // arrow down
-			case 38: courseListMove( t, 'up'  ); break; // arrow up
-			case 13: courseSubmit(t);            break; // enter key
-			case 27: $scope.leaveSearch(t);      break; // esc key
+			case 40: courseListMove( t, 'down');    break; // arrow down
+			case 38: courseListMove( t, 'up'  );    break; // arrow up
+			case 13: courseSubmit(t);               break; // enter key
+			case 27: $scope.leaveSearch(t, $event); break; // esc key
 		}
 	};
 
@@ -309,6 +317,12 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	 * @param course t currently selected courseD
 	 */
 	var courseSubmit = function( t ) {
+		// if trying to enroll in an course the student already is enrolled in
+		if (t.enrolled) {
+			courseListMove(t, 'down');
+			return;
+		}
+
 		// if course has only one field add it directly
 		if ( t.singleField ) {
 			$scope.addCourse( t.course_id, t.singleField );
@@ -333,7 +347,7 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 	 *
 	 * @param angular.element e button group which contains all available fields (if multiple)
 	 */
-	$scope.leaveSearch = function( t ) {
+	$scope.leaveSearch = function(t, $event) {
 		// leave search
 		if ( _.isUndefined(t) || ! t.open ) {
 			$scope.search.active = false;
@@ -341,6 +355,11 @@ angular.module('spam.controllers.navbar', []).controller('Navbar', function(
 				$scope.search.results = [];
 				$scope.search.quick = '';
 			}
+
+			// blur input field
+			$timeout(function() {
+				$event.target.blur();
+			}, 0);
 
 		// exit dropdown menu
 		} else {

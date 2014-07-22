@@ -3,55 +3,6 @@
 angular.module('services', []).
 
 
-/**
- * User provider
- */
-factory('TheUser', function(DataHandler, _) {
-	var self = {}, data = {}, r;
-
-	self.init = function(d) {
-		data = d;
-		r = _.extend(self, data);
-	};
-
-	self.unset = function() {
-		data = {};
-		r = self;
-	};
-
-	self.getData = function() {
-		return data;
-	};
-
-	self.refreshData = function(updated) {
-		self.unset();
-		self.init(updated);
-	};
-
-	self.logout = function() {
-		self.unset();
-		DataHandler.removeAll();
-	};
-
-	self.getRegulation = function(useDefault) {
-		return data.username ? data.regulation_id : ( useDefault ? 1 : undefined );
-	};
-
-
-	self.courses = null;
-	self.getCourses = function() {
-		// if are not/have not yet pulled the courses, do so
-		if (_.isEmpty(self.courses))
-			self.courses = self.getList('courses');
-
-		// return the promise which might already contain the courses
-		return self.courses;
-	};
-
-	return r || self;
-}).
-
-
 
 /**
  * HTTP Authentication factory.
@@ -63,48 +14,100 @@ factory('Auth', function(
 	$q,
 	Restangular,
 	DataHandler,
-	TheUser
+	_
 ) {
+	var deferredLogin = 'not_initiated';
 
-	$rootScope.user = false;
-	var username, deferred;
+	var login = function () {
+		deferredLogin = $q.defer();
 
-	var getter = function () {
-		deferred = $q.defer();
-
+		var username = DataHandler.getLogininfo('username');
 		$http.defaults.headers.common['Authorization'] = 'Basic ' + DataHandler.getLogininfo('authdata');
-		username = DataHandler.getLogininfo('username');
 
-		if ( ! username ) {
-			deferred.resolve();
-			return;
+		if (!_.isEmpty(username)) {
+			Restangular.one('users', username).get().then(function(user) {
+				DataHandler.userInit(user);
+				deferredLogin.resolve($rootScope.user);
+			}, function() {
+				$rootScope.user.destroy();
+				deferredLogin.reject();
+			});
+		} else {
+			deferredLogin.reject();
 		}
 
-		Restangular.one('users', username).get().then(function(user) {
-			$rootScope.user = user;
-			TheUser.init(user);
-
-			deferred.resolve();
-		}, function() {
-			logout();
-
-			deferred.resolve();
-		});
+		return deferredLogin.promise;
 	};
 
-	getter();
+	// Initiate the login process as early as possible so we do not have to start
+	// it when a controller is initiated. No matter what page the user is viewing,
+	// we are interested in if he is logged in or not.
+	login();
 
 	return {
-		setCrededentials: function (nick, password, useLocalStorage) {
+		init: function (nick, password, useLocalStorage) {
 			var encoded = Base64.encode(nick + ':' + password);
 			DataHandler.updateLogininfo(nick, encoded, useLocalStorage);
-
-			getter();
-			return deferred.promise;
+			return login();
 		},
 
-		promise: function () {
-			return deferred.promise;
+
+		authenticate: function (accessSet) {
+			var loginPromise, deferredAuthentication = $q.defer();
+
+			if ('not_initiated' == deferredLogin) {
+				// Login process was not initiated yet, do so
+				loginPromise = login();
+
+			} else {
+				// Login process was initiated before, get the promise
+				loginPromise = deferredLogin.promise;
+			}
+
+			if (accessSet === 0) {
+				// accessSet is 0, therefore everybody is legitimated to view this site
+				deferredAuthentication.resolve($rootScope.user);
+
+			} else {
+				// accessSet is something more specific, therefore we need to check
+				// the user information (after the login promise is fulfilled)
+
+				// when login was successful
+				loginPromise.then(function() {
+					// Login was successful.
+
+					if (
+						// accessSet is a explicit user rank integer and the users rank is
+						// equal or higher
+						(_.isNumber(accessSet) && accessSet <= $rootScope.user.rank) ||
+
+						// The user himself is allowed to see this route, we will
+						// only retrieve data related to him
+						(! _.isUndefined(accessSet['self'])) ||
+
+						// The user is explicitly named in the accessSet, so he is allowed
+						// to view this route as well
+						(!_.isUndefined(accessSet[$rootScope.user.getUsername()]))
+					) {
+						deferredAuthentication.resolve($rootScope.user);
+
+					} else {
+						// Could not match the accessSet to the current user, reject
+						// the authentication request
+						deferredAuthentication.reject('not_authenticated');
+					}
+
+				}, function() {
+					// Login was not successful. User is certainly not allowed to see
+					// this page, because we already checked accessSet === 0
+
+					// Reject authentication request
+					deferredAuthentication.reject('not_authenticated');
+				});
+			}
+
+			// return the authentication promise
+			return deferredAuthentication.promise;
 		}
 	};
 }).

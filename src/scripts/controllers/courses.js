@@ -15,7 +15,6 @@ angular.module(spamControllersCourses).controller('Courses', function(
 	$filter,
 	$q,
 	Restangular,
-	TheUser,
 	_,
 	Courses
 ) {
@@ -246,7 +245,7 @@ angular.module(spamControllersCourses).controller('CourseCtrl', function(
 
 	Restangular
 		.one('courses', $routeParams.courseId )
-		.get( { user : $rootScope.user ? $rootScope.user.username : null } )
+		.get( { user : $scope.user.getUsername() } )
 		.then(function(course) {
 
 		$scope.course = course;
@@ -331,7 +330,7 @@ angular.module(spamControllersCourses).controller('Course_edit', function(
 	// course and fields
 	if ( $scope.pageType == 'edit' ) {
 		$scope.course = {};
-			course = Restangular.one( 'courses', $routeParams.courseId ).get( { user : $rootScope.user ? $rootScope.user.username : null } ).then(function(course) {
+		course = Restangular.one( 'courses', $routeParams.courseId ).get( { user : $scope.user.getUsername() } ).then(function(course) {
 			$scope.course = course;
 			course.id = course.course_id;
 

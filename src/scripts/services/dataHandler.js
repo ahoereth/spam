@@ -3,7 +3,14 @@
  *
  * TODO: Documentation
  */
-angular.module('services.dataHandler', []).factory('DataHandler', function($rootScope, $cacheFactory, Courses) {
+angular.module('services.dataHandler', []).factory('DataHandler', function(
+	$rootScope,
+	$cacheFactory,
+	$log,
+	Courses,
+	User,
+	_
+) {
 	var webstorage = ( typeof( Storage ) !== "undefined" ) ? true : false;
 	var self = {};
 
@@ -42,7 +49,6 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 			localStorage.removeItem('authdata');
 			localStorage.removeItem('username');
 		}
-		$rootScope.user = false;
 	};
 
 	self.resetGuide = function() {
@@ -53,7 +59,6 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 	self.removeUserDependent = function() {
 		self.resetGuide();
 		Courses.reset();
-		$rootScope.studentCourses = {};
 		$rootScope.loginform = { username : '' };
 	};
 
@@ -62,5 +67,68 @@ angular.module('services.dataHandler', []).factory('DataHandler', function($root
 		self.removeUserDependent();
 	};
 
+	self.userInit = function(data) {
+		self.removeUserDependent();
+		$rootScope.user = User(data);
+	};
+
 	return self;
+}).
+
+
+
+/**
+ * User functionality factory. All functionality provided by this factory is
+ * injected into the global ($rootScope) user object.
+ */
+factory('User', function(
+	$rootScope,
+	$log,
+	_
+) {
+	var methods = {};
+
+	methods.save = function(user) {
+		$log.info('Saving local user data to global.');
+		$rootScope.user.put().then(function(result) {
+			$log.info('User data saved.');
+		}, function() {
+			$log.info('Error while saving user data.');
+		});
+	};
+
+	methods.destroy = function() {
+		$log.info('Destroying local user data.');
+		$rootScope.$broadcast('userDestroy');
+	};
+
+	methods.delete = function() {
+		$log.info('Deleting global user data.');
+		//$rootScope.$broadcast('userDelete');
+		if ($rootScope.user) {
+			$rootScope.user.remove().then(function() {
+				// notify client that deletion was successful
+				$log.info('Global user data deleted.');
+			}, function() {
+				// do something when removing fails
+				$log.info('Error while deleting global user data.');
+			});
+
+			// handle local and global user data deletion asynchronously
+			methods.destroy();
+		}
+	};
+
+	methods.getRegulation = function(reg) {
+		return this.regulation_id || (reg || null);
+	};
+
+	methods.getUsername = function() {
+		return this.username || null;
+	};
+
+
+	return function(data) {
+		return angular.extend(methods, data, {loggedin : !_.isEmpty(data)});
+	};
 });
