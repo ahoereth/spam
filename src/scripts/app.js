@@ -14,7 +14,6 @@ angular.module('spam', [
 	'services.httpIntercept',
 
 	'spam.directives',
-	'souffleur',
 	'infiniteScroll',
 
 	'spam.controllers.main',
@@ -287,9 +286,7 @@ config( function(
 					os      : { name : b.os.name, version : _.isNull( b.os.version ) ? null : b.os.version.original },
 					device  : b.device.type,
 					screen  : { width: $window.screen.width, height: $window.screen.height }
-				}}).success( function( data ) {
-					$rootScope.souffleur = data;
-				});
+				}});
 			}
 		}, 5000);
 	};
