@@ -272,25 +272,5 @@ config( function(
 				"Study Planning in Cognitive Science";
 		}
 	});
-
-
-	var whichbrowser = function () {
-		$timeout( function() {
-			if ( ( typeof $window.WhichBrowser === 'undefined' ) ) {
-				whichbrowser();
-			} else {
-				var b = new $window.WhichBrowser();
-
-				$http.get('/~SPAM/api/loginfo', { params : {
-					browser : { name : b.browser.name, version : b.browser.version.major },
-					os      : { name : b.os.name, version : _.isNull( b.os.version ) ? null : b.os.version.original },
-					device  : b.device.type,
-					screen  : { width: $window.screen.width, height: $window.screen.height }
-				}});
-			}
-		}, 5000);
-	};
-	whichbrowser();
-
 });
 
