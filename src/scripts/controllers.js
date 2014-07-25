@@ -101,6 +101,23 @@ angular.module(spamControllersMain).controller('Root', function(
 		DataHandler.removeAll();
 		DataHandler.userInit();
 	});
+
+
+	$scope.$on('title', function(event, variables) {
+		var title = angular.isDefined(variables.title) ? variables.title : $rootScope.title;
+
+		angular.forEach(variables, function(value, key) {
+			if (key.charAt(0) == ':') {
+				title = title.replace(key, value);
+			}
+		});
+
+		if ( title != '' ) {
+			title += ' :: ';
+		}
+
+		$rootScope.title = title + 'Studyplanning in Cognitive Science';
+	});
 });
 
 

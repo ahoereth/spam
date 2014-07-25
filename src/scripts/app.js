@@ -163,7 +163,7 @@ config( function(
 	$routeProvider.when('/courses/:courseId/edit', {
 		templateUrl: base + '/courses/edit.html',
 		controller: 'Course_edit',
-		title: 'Edit :course',
+		title: ':course :: Edit',
 		access: 4,
 		resolve : auth
 	});
@@ -255,13 +255,15 @@ config( function(
 				return;
 		}
 
+
 		// handle the page title
+		var title = { title: current.title };
 		var username = $rootScope.user.getUsername();
 		if (!_.isEmpty(username)) {
-			$rootScope.title = current.title.replace(':username', username) +
-				(current.title.length > 0 ? ' :: ' : '' ) +
-				"Study Planning in Cognitive Science";
+			title = angular.extend(title, { ':username' : username });
 		}
+
+		$rootScope.$broadcast('title', title);
 	});
 });
 

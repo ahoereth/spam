@@ -261,7 +261,7 @@ angular.module(spamControllersCourses).controller('CourseCtrl', function(
 		});
 
 		// refresh page title
-		$scope.$emit('titleVariable', { variable : ':course', value : course.course });
+		$scope.$emit('title', { ':course': course.course + ' ' + course.year });
 
 	});
 
@@ -334,7 +334,7 @@ angular.module(spamControllersCourses).controller('Course_edit', function(
 			$scope.course = course;
 			course.id = course.course_id;
 
-			$scope.$emit('titleVariable', { variable : ':course', value : course.course + ' ' + course.year });
+			$scope.$emit('title', { ':course': course.course + ' ' + course.year });
 
 			course.fields = {};
 			course.fields_pm = {};
