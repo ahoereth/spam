@@ -331,32 +331,32 @@ angular.module(spamControllersCourses).controller('Course_edit', function(
 	if ( $scope.pageType == 'edit' ) {
 		$scope.course = {};
 		course = Restangular.one( 'courses', $routeParams.courseId ).get( { user : $scope.user.getUsername() } ).then(function(course) {
-			$scope.course = course;
 			course.id = course.course_id;
 
 			$scope.$emit('title', { ':course': course.course + ' ' + course.year });
 
+			// init open regulation
+			course.regulationExpanded = 0;
+
+			course.teacher_ids = {};
+			_.each( course.teachers, function( teacher ) {
+				this[ teacher.teacher_id ] = true;
+			}, course.teacher_ids );
+
+			// handle fields
+			var fields = course.fields;
 			course.fields = {};
 			course.fields_pm = {};
 
-			// init open regulation
-			$scope.course.regulationExpanded = 0;
+			_.forEach( fields, function( field ) {
+				this[field.field_id] = true;
+				if ( field.course_in_field_type == 'PM' )
+					course.fields_pm[field.field_id] = true;
+			}, course.fields );
 
-			$scope.course.teacher_ids = {};
-			_.each( $scope.course.teachers, function( teacher ) {
-				this[ teacher.teacher_id ] = true;
-			}, $scope.course.teacher_ids );
-
-			course.getList('fields').then(function( fields ) {
-				_.forEach( fields, function( field ) {
-					this[field.field_id] = true;
-					if ( field.course_in_field_type == 'PM' )
-						$scope.course.fields_pm[field.field_id] = true;
-				}, $scope.course.fields );
-			});
+			$scope.course = angular.extend($scope.course, course);
 		});
 	} else {
-		course = Restangular.all('courses');
 		$scope.course = {
 			term : $rootScope.meta.term,
 			year : $rootScope.meta.year,
