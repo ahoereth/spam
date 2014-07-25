@@ -211,16 +211,7 @@ config( function(
 	$rootScope,
 	$location,
 	$route,
-	$q,
-	$http,
-	$timeout,
-	$window,
-	$log,
-	$modal,
-	Auth,
-	_,
-	Courses,
-	DataHandler
+	_
 ){
 	var d = new Date(), m = d.getMonth(), y = d.getFullYear();
 	$rootScope.meta = {
