@@ -52,10 +52,13 @@
 			<div class="panel-heading"><h2 style="margin-bottom: 0;">Fields</h2></div>
 			<div class="panel-body">
 				<ul class="list-unstyled">
-					<li ng-repeat="(regulation, fields) in fields_in_regulations">
+					<li ng-repeat="(regulation, fields) in course.fields_by_regulations">
 						{{regulation}}
 						<ul>
-							<li ng-repeat="field in fields">{{field.field}}<span ng-if="field.course_in_field_type=='PM'">&nbsp;(PM)</span></li>
+							<li ng-repeat="field in fields">
+								<a ng-href="{{field.search}}">{{field.field}}</a>
+								<a ng-href="{{field.searchpm}}" ng-if="field.course_in_field_type=='PM'">(PM)</span>
+							</li>
 						</ul>
 					</li>
 				</ul>

@@ -250,13 +250,22 @@ angular.module(spamControllersCourses).controller('CourseCtrl', function(
 
 		$scope.course = course;
 
-		$scope.fields_in_regulations = {};
-		_.each( course.fields, function( field ) {
-			_.each( field.regulations, function( regulation ) {
-				if ( _.isUndefined( $scope.fields_in_regulations[regulation.regulation] ) )
-					$scope.fields_in_regulations[regulation.regulation] = [ field ];
-				else
-					$scope.fields_in_regulations[regulation.regulation].push( field );
+		course.fields_by_regulations = {};
+
+		_.forEach(course.fields, function(field) {
+			_.forEach(field.regulations, function(regulation) {
+				if (_.isUndefined(course.fields_by_regulations[regulation.regulation])) {
+					course.fields_by_regulations[regulation.regulation] = [];
+				}
+
+				// generate links
+				var fieldclone = angular.copy(field);
+				fieldclone.search =
+					"courses?regulation=" + regulation.regulation_id +
+					"&field=" + fieldclone.field;
+				fieldclone.searchpm = fieldclone.search + "&pm";
+
+				course.fields_by_regulations[regulation.regulation].push(fieldclone);
 			});
 		});
 
