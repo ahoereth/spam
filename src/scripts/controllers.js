@@ -13,7 +13,8 @@ angular.module(spamControllersMain).controller('Root', function(
 	$scope,
 	$log,
 	DataHandler,
-	Courses
+	Courses,
+	_
 ) {
 	DataHandler.userInit();
 
@@ -36,7 +37,7 @@ angular.module(spamControllersMain).controller('Root', function(
 			courseId = studentInCourse;
 			studentInCourse = {
 				course_id: courseId,
-				field_id : fieldId
+				field_id : ! _.isString(fieldId) ? fieldId : null
 			};
 
 		// got the whole course object as first parameter
