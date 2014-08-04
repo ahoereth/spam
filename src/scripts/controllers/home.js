@@ -322,6 +322,9 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		// TODO: remove this with an restangular update
 		course.id = course.student_in_course_id;
+
+		Restangular.restangularizeElement($scope.user, course, 'courses');
+
 		course.put().then(function(c) {
 			// remember new old grade
 			course.old_grade = course.grade;
@@ -331,7 +334,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			course.grade     = c.grade;
 			course.muted     = c.muted;
 
-			$log.info( "Student in course poperty changed: " + course.course );
+			$log.info( "Student in course property changed: " + course.course );
 			generateCourseMeta();
 		});
 	};
