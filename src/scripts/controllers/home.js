@@ -515,14 +515,12 @@ angular.module(spamControllersHome).controller('Home', function(
 
 	// generate course meta after querying fields
 	if (_.isEmpty($rootScope.fields)) {
-		$scope.user.getList('fields').then(function(data) {
-			$rootScope.fields = data;
+		$rootScope.fields = $scope.user.fields;
 
-			for( var i = 0; i < $rootScope.fields.length; i = i + 2 )
-				$scope.fieldsRange.push(i);
+		for( var i = 0; i < $rootScope.fields.length; i = i + 2 )
+			$scope.fieldsRange.push(i);
 
-			generateCourseMeta();
-		});
+		generateCourseMeta();
 	} else {
 		generateCourseMeta();
 	}
