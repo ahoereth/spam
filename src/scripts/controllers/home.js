@@ -317,7 +317,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 *
 	 * @param course course the course which properties has changed
 	 */
-	$scope.editProp = function(course) {
+	$scope.editProp = function(course, generate) {
 		course = _.isNull(course) ? this.course : course;
 
 		// TODO: remove this with an restangular update
@@ -325,17 +325,23 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		Restangular.restangularizeElement($scope.user, course, 'courses');
 
+		course.enrolled_field_id = ! _.isString(course.enrolled_field_id) ? course.enrolled_field_id : null;
+
 		course.put().then(function(c) {
 			// remember new old grade
 			course.old_grade = course.grade;
 
 			// maybe the server had something to say about those?
 			course.passed    = c.passed;
-			course.grade     = c.grade;
+			course.grade     = formatGrade(c.grade);
 			course.muted     = c.muted;
+			course.enrolled_field_id = c.enrolled_field_id;
+			course.enrolled_course_in_field_type = c.enrolled_course_in_field_type;
 
 			$log.info( "Student in course property changed: " + course.course );
-			generateCourseMeta();
+
+			if (! _.isUndefined(generate) && generate)
+				generateCourseMeta();
 		});
 	};
 
@@ -478,20 +484,11 @@ angular.module(spamControllersHome).controller('Home', function(
 	 */
 	$scope.moveCourse = function( newFieldId ) {
 		var c = this.course;
-
 		var target = _.findWhere( $scope.user.courses, { student_in_course_id : c.student_in_course_id } );
-		target.enrolled_field_id = ( newFieldId == 'null' ? 1 : newFieldId );
+		target.enrolled_field_id = ! _.isNull(newFieldId) ? newFieldId : 1;
+
+		$scope.editProp(target);
 		generateCourseMeta(true);
-
-		// TODO: change this when restangular is updated...
-		// TODO: update route to not contain fields
-		this.course.id = this.course.student_in_course_id;
-		this.course.one('fields',newFieldId).put().then(function(courseInField) {
-			target.enrolled_course_in_field_type = courseInField.enrolled_course_in_field_type;
-
-			$log.info( 'Moved: ' + target.course );
-			generateCourseMeta( true );
-		});
 	};
 
 	/**
