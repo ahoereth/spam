@@ -147,7 +147,7 @@ angular.module(spamControllersCourses).controller('Courses', function(
 			}
 
 			var pattern = /(?:^(?:20)?(\d{2})$)|(?:(?:20)?(\d{2})([+-])(?:(?:20)?(\d{2}))?)|(?:([WS])S?(?:20)?(\d{2}))|([WS])/i;
-			var r = _.compact(pattern.exec(params.timeframe));
+			var r = _.compact(pattern.exec(_.trim(params.timeframe)));
 
 			if ( ! _.isEmpty(r) ) {
 				if ( _.isEmpty(r[2]) ) {

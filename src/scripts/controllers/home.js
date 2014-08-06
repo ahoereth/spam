@@ -320,7 +320,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 *
 	 * @param course course the course which properties has changed
 	 */
-	$scope.editProp = function(course, generate) {
+	$scope.editProp = function(course) {
 		course = _.isNull(course) ? this.course : course;
 
 		// TODO: remove this with an restangular update
@@ -343,8 +343,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 			$log.info( "Student in course property changed: " + course.course );
 
-			if (! _.isUndefined(generate) && generate)
-				generateCourseMeta();
+			generateCourseMeta();
 		});
 	};
 
