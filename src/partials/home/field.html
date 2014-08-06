@@ -168,7 +168,7 @@
 
 							<li><a class="pointer" ng-click="removeCourse(course)">Remove</a></li>
 
-							<li class="dropdown-header" ng-hide="course.fields.length==0&&course.enrolled_field_id==1">
+							<li class="dropdown-header" ng-hide="course.fields===null&&course.enrolled_field_id==1">
 								Move to other field
 							</li>
 
@@ -180,8 +180,8 @@
 							</li>
 
 							<!-- move to open studies -->
-							<li ng-hide="1==course.enrolled_field_id">
-								<a class="pointer" ng-click="moveCourse('null')">Open Studies</a>
+							<li ng-hide="course.enrolled_field_id==1">
+								<a class="pointer" ng-click="moveCourse(null)">Open Studies</a>
 							</li>
 
 						</ul>
