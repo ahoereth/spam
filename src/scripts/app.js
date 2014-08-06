@@ -72,6 +72,10 @@ config( function(
 		resolve : auth
 	});
 
+	$routeProvider.when('/help', {
+		redirectTo: '/help/remember'
+	});
+
 	$routeProvider.when('/401', {
 		templateUrl: base + '/401.html',
 		title: 'Page not found',
