@@ -284,7 +284,10 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		field.old_grade = formatGrade( grade );
 
-		field.post().then(function(studentInField) {
+		field = Restangular.restangularizeElement($scope.user, field, 'fields');
+
+		// this might create, delete or update the student-in-this-field information
+		field.put().then(function(studentInField) {
 			$log.info( 'Student in field grade updated: ' + field.field + ' - ' + field.grade );
 
 			generateCourseMeta();
