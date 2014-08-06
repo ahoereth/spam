@@ -10,67 +10,78 @@ angular.module(spamFilters, []);
  */
 angular.module(spamFilters).filter('courseFilter', function() {
 
-	return function (array, obj) {
-		var check = function(objKey, comp, value) {
+	return function (data, obj) {
+		var filters = [], k, c, index;
+
+		if ( angular.equals(obj, {}) )
+			return data;
+
+		// check a value against a term using a comparator
+		var check = function(term, comparator, value) {
 			var text, key;
 
-			if ( objKey.charAt(objKey.length-2) === '#' ) {
-				key = objKey.slice(0,-2);
-				text = (''+value[key]).replace(/[-_]/gi, ' ').toLowerCase();
+			if ( comparator === '>' && term < value )
+				return false;
 
-				// equal
-				if ( objKey.charAt(objKey.length-1) === '~' && text != comp )
+			else if ( comparator === '<' && term > value )
+				return false;
+
+			else if ( comparator === '=' && ! angular.equals(term, value) )
+				return false;
+
+			else if ( comparator === '!' && angular.equals(term, value) )
+				return false;
+
+			else if ( (comparator === null || comparator === '~') && value.indexOf(term) === -1 )
+				return false;
+
+			return true;
+		};
+
+
+		var search = function(dataObject) {
+			// for every filter item
+			for (var i = filters.length - 1; i >= 0; i--) {
+				var f = filters[i];
+
+				if ( ! check(f.value, f.comparator, (''+dataObject[f.key]).toString().toLowerCase() ) )
 					return false;
+			}
 
-				// unequal
-				else if ( objKey.charAt(objKey.length-1) === '!' && text === comp )
-					return false;
+			return true;
+		};
 
-				else if ( objKey.charAt(objKey.length-1) === '>' && text >= comp )
-					return false;
+		// clean up the filters
+		angular.forEach(obj, function(value, key) {
 
-				else if ( objKey.charAt(objKey.length-1) === '<' && text <= comp )
-					return false;
-
-			// contains
+			if ( key.indexOf('&&') !== -1 && value.indexOf('&&') !== -1 ) {
+				key   = key.split('&&');
+				value = value.split('&&');
 			} else {
-				text = (''+value[objKey]).replace(/[-_]/gi, ' ').toLowerCase();
-				if ( text.indexOf(comp) === -1 )
-					return false;
+				key   = [key];
+				value = [value];
 			}
 
-			return true;
-		};
-
-		var search = function(value) {
-			for ( var objKey in obj) {
-				var comp = (''+obj[objKey]), key = objKey;
-
-				if ( objKey.indexOf('&&') !== -1 && comp.indexOf('&&') !== -1 ) {
-					objKey = objKey.split('&&');
-					comp = comp.split('&&');
+			for ( var i = 0; i < key.length; i++ ) {
+				k = key[i], c = null, index = key[i].lastIndexOf('#');
+				if ( index !== -1 ) {
+					k = key[i].slice(0,index);
+					c = key[i].slice(index+1);
 				}
 
-				if ( typeof objKey !== 'string' ) {
-					for ( var i = 0; i < objKey.length; i++ ) {
-						var c = comp[i].replace(/[-_]/gi, ' ').toLowerCase();
-						if ( ! check(objKey[i], c, value) )
-							return false;
-					}
-				} else {
-					comp = comp.replace(/[-_]/gi, ' ').toLowerCase();
-					if ( ! check(objKey, comp, value) )
-						return false;
-				}
+				filters.push({
+					key: (''+k).toLowerCase(),
+					value: (''+value[i]).toLowerCase(),
+					comparator: c
+				});
 			}
+		});
 
-			return true;
-		};
-
+		// for every data item
 		var filtered = [];
-		for ( var j = 0; j < array.length; j++ ) {
-			if ( search( array[j] ) )
-				filtered.push( array[j] );
+		for ( var j = 0; j < data.length; j++ ) {
+			if ( search( data[j] ) )
+				filtered.push( data[j] );
 		}
 		return filtered;
 	};

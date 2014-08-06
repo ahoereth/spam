@@ -29,7 +29,7 @@
 		<div class="navbar-collapse collapse" ng-class="{in : navExpanded}">
 			<ul class="nav navbar-nav">
 				<li ng-class="getNavigationActiveClass('/courses')">
-					<a href="courses" ng-href="courses?regulation={{user.regulation_id | iif : user.regulation_id : 1}}">
+					<a href="courses" ng-href="courses?regulation={{user.regulation_id | iif : user.regulation_id : 1}}&timeframe=11+">
 						courses
 					</a>
 				</li>

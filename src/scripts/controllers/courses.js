@@ -70,9 +70,9 @@ angular.module(spamControllersCourses).controller('Courses', function(
 		if ( _.isUndefined(next) ) return;
 
 		if ( next ) {
-			$scope.filter['course_in_field_type#~'] = 'PM';
+			$scope.filter['fields_str#~'] = '(PM)';
 		} else {
-			delete $scope.filter['course_in_field_type#~'];
+			delete $scope.filter['fields_str#~'];
 			refreshUrl(); // delete does not trigger the filter watch
 		}
 	});
@@ -84,18 +84,7 @@ angular.module(spamControllersCourses).controller('Courses', function(
 	$scope.$watch('timeframe', function(next, current) {
 		if ( _.isUndefined(next) ) return;
 
-		if ( _.isEmpty(next) ) {
-			delete $scope.filter['term'];
-			delete $scope.filter['year'];
-			refreshUrl(); // delete does not trigger the filter watch
-		} else {
-			if ( next[0].match(/[ws]/i) ) {
-				$scope.filter.year = next.length > 2 ? '20' + next.slice(-2) : '';
-				$scope.filter.term = next[0];
-			} else {
-				$scope.filter.year = '20' + next.slice(-2);
-			}
-		}
+		refreshUrl(); // delete does not trigger the filter watch
 	});
 
 
@@ -145,17 +134,41 @@ angular.module(spamControllersCourses).controller('Courses', function(
 			course: params.course,
 			teachers_str: params.teacher,
 			fields_str: params.field,
-			'course_in_field_type#~': params.pm ? 'PM' : null
+			'fields_str#~': params.pm ? '(PM)' : null
 		};
 
 		if ( ! _.isUndefined( params.timeframe ) ) {
-			if ( params.timeframe[0].match(/[ws]/i) ) {
-				$scope.filter.year = params.timeframe.length > 2 ? '20' + params.timeframe.slice(-2) : '';
-				$scope.filter.term = params.timeframe[0];
-			} else {
-				$scope.filter.year = '20' + params.timeframe.slice(-2);
-			}
 			$scope.timeframe = params.timeframe;
+
+			params.timeframe = params.timeframe.toLowerCase();
+			if ( params.timeframe.charAt(0) === 'w' || params.timeframe.charAt(0) === 's' ) {
+				$scope.filter['term#='] = params.timeframe.charAt(0);
+				params.timeframe = params.timeframe.slice(1);
+			}
+
+			var pattern = /(?:^(?:20)?(\d{2})$)|(?:(?:20)?(\d{2})([+-])(?:(?:20)?(\d{2}))?)|(?:([WS])S?(?:20)?(\d{2}))|([WS])/i;
+			var r = _.compact(pattern.exec(params.timeframe));
+
+			if ( ! _.isEmpty(r) ) {
+				if ( _.isEmpty(r[2]) ) {
+					$scope.filter['year#='] = '20' + r[1];
+				} else if ( r[2] === '+' ) {
+					// year lower limit
+					$scope.filter['year#<'] = '20' + r[1];
+
+				} else if ( r[2] === '-' ) {
+					if ( ! _.isEmpty(r[3]) ) {
+						// years range
+						$scope.filter['year#<'] = '20' + r[1];
+						$scope.filter['year#>'] = '20' + r[3];
+
+					} else {
+						// year upper limit
+						$scope.filter['year#>'] = '20' + r[1];
+
+					}
+				}
+			}
 		}
 
 		$scope.filter = _.compactObject($scope.filter);
@@ -176,7 +189,7 @@ angular.module(spamControllersCourses).controller('Courses', function(
 			course : filter.course,
 			teacher : filter.teachers_str,
 			field : filter.fields_str,
-			pm : filter['course_in_field_type#~'] ? true : false
+			pm : filter['fields_str#~'] ? true : false
 		};
 		url = _.compactObject( url );
 
