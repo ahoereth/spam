@@ -191,22 +191,3 @@ angular.module(spamControllersMain).controller('Alert', function($scope) {
 	};
 
 });
-
-
-
-/**
- * CONTROLLER: Help
- * ROUTE: /help
- *
- * Processes some route params
- */
-angular.module(spamControllersMain).controller('Help', function(
-	$scope,
-	$routeParams
-){
-
-	$scope.faqIn = $routeParams.faq;
-
-	$scope.open =  $routeParams.faq || 'remember';
-
-});

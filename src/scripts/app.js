@@ -15,6 +15,7 @@ angular.module('spam', [
 
 	'spam.directives',
 	'infiniteScroll',
+	'helpFragment',
 
 	'spam.controllers.main',
 	'spam.controllers.admin',
@@ -22,7 +23,8 @@ angular.module('spam', [
 	'spam.controllers.guide',
 	'spam.controllers.http',
 	'spam.controllers.home',
-	'spam.controllers.navbar'
+	'spam.controllers.navbar',
+	'spam.controllers.help'
 ]).
 
 
@@ -62,7 +64,7 @@ config( function(
 		resolve : auth
 	});
 
-	$routeProvider.when('/help', {
+	$routeProvider.when('/help/:subject*?', {
 		templateUrl: base + '/help.html',
 		controller: 'Help',
 		title: 'Help',
