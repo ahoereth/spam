@@ -138,6 +138,14 @@ factory('User', function(
 
 
 	return function(data) {
+		if ( angular.isDefined(data) ) {
+			if ( angular.isDefined(data.courses) )
+				Restangular.restangularizeCollection(data, data.courses, 'courses');
+
+			if ( angular.isDefined(data.fields) )
+				Restangular.restangularizeCollection(data, data.fields, 'fields');
+		}
+
 		return angular.extend(methods, data, {loggedin : !_.isEmpty(data)});
 	};
 });

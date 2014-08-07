@@ -284,8 +284,6 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		field.old_grade = formatGrade( grade );
 
-		field = Restangular.restangularizeElement($scope.user, field, 'fields');
-
 		// this might create, delete or update the student-in-this-field information
 		field.put().then(function(studentInField) {
 			$log.info( 'Student in field grade updated: ' + field.field + ' - ' + field.grade );
@@ -325,8 +323,6 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		// TODO: remove this with an restangular update
 		course.id = course.student_in_course_id;
-
-		Restangular.restangularizeElement($scope.user, course, 'courses');
 
 		course.enrolled_field_id = ! _.isString(course.enrolled_field_id) ? course.enrolled_field_id : null;
 

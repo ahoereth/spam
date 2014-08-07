@@ -111,19 +111,8 @@ factory('Auth', function(
 		}
 	};
 }).
-/*
 
-factory('Rest', function(Restangular, _) {
-	var self;
 
-	return _.expand(Restangular, {
-		unit: function(route, id, parent) {
-			var obj;
-			obj[route + '_id'] = id;
-			return Restangular.restangularizeElement(null, , 'users').get().then(function(user) {
-		}
-	});
-});*/
 
 /**
  * UnderscoreJS
