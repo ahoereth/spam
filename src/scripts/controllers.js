@@ -12,6 +12,7 @@ angular.module(spamControllersMain).controller('Root', function(
 	$rootScope,
 	$scope,
 	$log,
+	$location,
 	DataHandler,
 	Courses,
 	_
@@ -101,6 +102,7 @@ angular.module(spamControllersMain).controller('Root', function(
 	$scope.$on('userDestroy', function(event) {
 		DataHandler.removeAll();
 		DataHandler.userInit();
+		$location.path('/');
 	});
 
 

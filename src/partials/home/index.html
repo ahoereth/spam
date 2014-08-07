@@ -71,21 +71,21 @@
 	<form class="form-group row" name="UserMatVerify" ng-controller="UserMatVerify">
 		<div class="col-md-3">
 			<div class="btn-group btn-group-justified">
-				<label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'S'">Summer</label>
-				<label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'W'">Winter</label>
+				<label class="btn btn-primary" ng-model="verify.mat_term" btn-radio="'S'">Summer</label>
+				<label class="btn btn-primary" ng-model="verify.mat_term" btn-radio="'W'">Winter</label>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="input-group" ng-class="{'has-error': UserMatVerify.year.$invalid}">
 				<div class="input-group-btn" style="width: 25%" ng-repeat="year in years">
-					<label class="btn btn-block btn-primary" ng-model="user.mat_year" btn-radio="year">
+					<label class="btn btn-block btn-primary" ng-model="verify.mat_year" btn-radio="year">
 						{{year}}
 					</label>
 				</div>
 				<input
 					type="number"
 					class="form-control centering"
-					ng-model="user.mat_year"
+					ng-model="verify.mat_year"
 					placeholder="Year"
 					name="year"
 					required>
@@ -94,7 +94,7 @@
 		<div class="col-md-3">
 			<button
 				class="btn btn-block btn-success"
-				ng-click="verify()"
+				ng-click="doVerify()"
 				ng-disabled="UserMatVerify.$invalid">
 				Submit
 				<span class="glyphicon glyphicon-ok"></span>

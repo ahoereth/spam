@@ -597,23 +597,11 @@ angular.module(spamControllersHome).controller('UserSettings', function(
 
 		lastState = angular.copy( $scope.user );
 
-		var put = {};
-		angular.forEach($scope.user, function(value, key) {
-			if ( ! angular.equals($rootScope.user[key], value) ) {
-				put[key] = value;
-			}
-		});
-
-		put.username = $rootScope.user.username;
-		put = Restangular.restangularizeElement(null, put, 'users');
-
-		put.put().then( function(user) {
-			$scope.$emit('userUpdated', user);
-		});
+		$rootScope.user.updateUser($scope.user);
 	};
 
-	$scope.deleteData = function() {
-		$scope.user.delete();
+	$scope.deleteUser = function() {
+		$rootScope.user.deleteUser();
 	};
 
 });
@@ -633,19 +621,15 @@ angular.module(spamControllersHome).controller('UserMatVerify', function(
 	var currentYear = new Date().getFullYear();
 	$scope.years = _.range(currentYear, currentYear-3, -1);
 
-	if (_.isEmpty($scope.user.mat_year))
-		$scope.user.mat_year =  currentYear;
+	$scope.verify = {
+		mat_year   : ! _.isEmpty($scope.user.mat_year) ? $scope.user.mat_year : currentYear,
+		mat_term   : ! _.isEmpty($scope.user.mat_term) ? $scope.user.mat_term : 'W',
+		mat_verify : 0
+	};
 
-	if (_.isEmpty($scope.user.mat_term))
-		$scope.user.mat_term =  'W';
-
-	$scope.verify = function() {
-		$scope.user.mat_verify = 1;
-
-		if (_.isEmpty($scope.user.mat_term))
-			$scope.user.mat_term =  'W';
-
-		$scope.user.save();
+	$scope.doVerify = function() {
+		$scope.verify.mat_verify = 1;
+		$scope.user.updateUser($scope.verify);
 	};
 });
 

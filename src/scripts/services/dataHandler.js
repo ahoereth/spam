@@ -84,16 +84,25 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 factory('User', function(
 	$rootScope,
 	$log,
+	Restangular,
 	_
 ) {
 	var methods = {};
 
-	methods.save = function(user) {
-		$log.info('Saving local user data to global.');
-		$rootScope.user.put().then(function(result) {
+	methods.updateUser = function(data) {
+		var put = {};
+		angular.forEach(data, function(value, key) {
+			if ( ! angular.equals($rootScope.user[key], value) ) {
+				put[key] = value;
+			}
+		});
+
+		put.username = $rootScope.user.username;
+		put = Restangular.restangularizeElement(null, put, 'users');
+
+		put.put().then( function(user) {
+			$rootScope.$broadcast('userUpdated', user);
 			$log.info('User data saved.');
-		}, function() {
-			$log.info('Error while saving user data.');
 		});
 	};
 
@@ -102,7 +111,7 @@ factory('User', function(
 		$rootScope.$broadcast('userDestroy');
 	};
 
-	methods.delete = function() {
+	methods.deleteUser = function() {
 		$log.info('Deleting global user data.');
 		//$rootScope.$broadcast('userDelete');
 		if ($rootScope.user) {
