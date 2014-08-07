@@ -112,7 +112,7 @@
 <div ng-if="user.thesis_active||user.thesis_title||user.thesis_grade">
 	<hr>
 
-	<form class="inline-form row" ng-init="user.thesis_grade=formatGrade(user.thesis_grade)">
+	<form class="inline-form row" ng-init="user.thesis_grade=user.thesis_grade">
 		<div class="form-group col-lg-10 col-sm-9 col-xs-7">
 			<input
 				type="text"

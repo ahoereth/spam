@@ -75,14 +75,14 @@ angular.module(spamControllersHome).controller('Home', function(
 				enrolled_ects  : 0,                                //  + enrolled ects
 				required_ects  : field.field_pm,                   //  + required ects
 				ects           : field.field_pm + field.field_wpm, // <= field's ects
-				grade          : formatGrade( field.grade ),
+				grade          : _.formatGrade( field.grade ),
 				average_grade  : 0, // calculated from the courses
 
 				// use average_grade as grade
 				auto_grade     : field.auto_grade || _.isNull( field.grade ),
 
 				// used for not updating the database when actually nothing changed
-				old_grade      : formatGrade( field.grade ),
+				old_grade      : _.formatGrade( field.grade ),
 			});
 
 			// some variables only required for calculations on the backend
@@ -100,7 +100,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			_.each( $scope.courses_by_fields[field.field_id], function(course, idx) {
 				fieldData.courses++;
 
-				course.grade     = formatGrade( course.grade );
+				course.grade     = _.formatGrade( course.grade );
 				course.old_grade = course.grade;
 				course.doesnt_count = false;
 				course.counts_only_partially = false;
@@ -193,7 +193,7 @@ angular.module(spamControllersHome).controller('Home', function(
 				}
 			});
 
-			field.average_grade   = fieldData.averaging_ects === 0 ? '' : formatGrade( field.average_grade / fieldData.averaging_ects );
+			field.average_grade   = fieldData.averaging_ects === 0 ? '' : _.formatGrade( field.average_grade / fieldData.averaging_ects );
 			field.grade           = field.auto_grade ? field.average_grade : field.grade;
 
 			$scope.completed_course_ects += field.completed_ects;
@@ -231,11 +231,11 @@ angular.module(spamControllersHome).controller('Home', function(
 		}
 
 		// calculate the overall average grade
-		$scope.average_grade = formatGrade( $scope.average_grade / data.averaging_ects );
+		$scope.average_grade = _.formatGrade( $scope.average_grade / data.averaging_ects );
 
 		// format all term average grades
 		_.each( $scope.terms, function( term ) {
-			term.grade = formatGrade( term.grade / term.averaging_ects );
+			term.grade = _.formatGrade( term.grade / term.averaging_ects );
 		});
 
 		// get some specific terms which we currently want to show on the front-end
@@ -254,7 +254,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			$scope.bachelor_grade += parseFloat( field.grade ) * field.completed_ects;
 			$scope.bachelor_grade_ects += field.completed_ects;
 		});
-		$scope.bachelor_grade = formatGrade( $scope.bachelor_grade / $scope.bachelor_grade_ects );
+		$scope.bachelor_grade = _.formatGrade( $scope.bachelor_grade / $scope.bachelor_grade_ects );
 	};
 
 
@@ -278,11 +278,11 @@ angular.module(spamControllersHome).controller('Home', function(
 	 */
 	$scope.editFieldGrade = function(field) {
 		field = this.field || field;
-		var grade = formatGrade( field.grade );
+		var grade = _.formatGrade( field.grade );
 
 		if ( grade == field.old_grade ) return;
 
-		field.old_grade = formatGrade( grade );
+		field.old_grade = _.formatGrade( grade );
 
 		// this might create, delete or update the student-in-this-field information
 		field.put().then(function(studentInField) {
@@ -299,7 +299,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * @uses $scope.editProp for saving the changed grade
 	 */
 	$scope.editGrade = function() {
-		this.course.grade = formatGrade( this.course.grade );
+		this.course.grade = _.formatGrade( this.course.grade );
 		var course = this.course;
 
 		// dont make a http request if nothing has changed
@@ -332,7 +332,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 			// maybe the server had something to say about those?
 			course.passed    = c.passed;
-			course.grade     = formatGrade(c.grade);
+			course.grade     = _.formatGrade( c.grade );
 			course.muted     = c.muted;
 			course.enrolled_field_id = c.enrolled_field_id;
 			course.enrolled_course_in_field_type = c.enrolled_course_in_field_type;
@@ -349,7 +349,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 */
 	$scope.updateThesis = function() {
 		var user = $scope.user;
-		user.thesis_grade = formatGrade( user.thesis_grade, true );
+		user.thesis_grade = _.formatGrade( user.thesis_grade );
 
 		if ( user.thesis_title_old == user.thesis_title && user.thesis_grade_old == user.thesis_grade )
 			return;
@@ -386,46 +386,6 @@ angular.module(spamControllersHome).controller('Home', function(
 		});
 	};
 
-
-	/**
-	 * Format a given string to a grade.
-	 *
-	 * Legal grades: [1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0 5.0]
-	 * Everything below 1 will be formated to an empty string, everything above 5 to 5.0.
-	 * commas are swapped with periods, all non numerical characters are stripped.
-	 *
-	 * @param  float v any string
-	 * @return float grade
-	 */
-	var formatGrade = function( v, onlyPassed ) {
-		if ( v === null ) return '';
-
-		v = v + '';
-		v = v.replace( ',', '.' ).replace( /[^\d\.]/g, "" );
-		if ( isNaN( v = Math.round( parseFloat( v ) * 10) / 10 ) ) return '';
-		v = v < 1 ? "0.0" : ( v > 4 ? "5.0" : v + '' );
-		if ( v.indexOf('.') == -1 ) v += '.';
-		if ( v.length < 3 )         v += '0';
-
-		var f = v[0];
-		var l = v[v.length-1];
-		if      ( l <= 1           ) l = 0;
-		else if ( l >= 2 && l <= 4 ) l = 3;
-		else if ( l >= 5 && l <= 8 ) l = 7;
-		else                       { l = 0; f++; }
-
-		v = f + '.' + l;
-
-		if ( v == '0.0' )
-			v = '';
-
-		if ( onlyPassed && v == '5.0' )
-			v = '';
-
-		return v;
-	};
-
-	$scope.formatGrade = formatGrade;
 
 	var percent = function(a, b) {
 		return a / b * 100;

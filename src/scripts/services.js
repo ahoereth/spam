@@ -127,8 +127,61 @@ factory('_', function ($window) {
 				}
 			});
 			return to_clean;
+		},
+
+		/**
+		 * Format a given string to a grade.
+		 *
+		 * Legal grades: [1.0, 1.3, 1.7, 2.0, 2.3, 2.7, 3.0, 3.3, 3.7, 4.0 5.0]
+		 * Everything below 1 will be formated to an empty string, everything above 5 to 5.0.
+		 * commas are swapped with periods, all non numerical characters are stripped.
+		 *
+		 * @param  string/int/float g any kind of number representation
+		 * @return string             grade
+		 */
+		formatGrade: function(g) {
+			if ( $window._.isNull(g) || $window._.isNaN(g) )
+				return '';
+
+			// convert to string
+			g = g + '';
+
+			// replace commas with periods
+			// remove everything but numbers and periods
+			g = g.replace( ',', '.' ).replace( /[^\d\.]/g, "" );
+
+			// round to one decimal behind the full stop
+			g = Math.round( parseFloat(g) * 10 ) / 10;
+
+			// did we get a real number or maybe a grade smaller than 1? Resolve to an
+			// empty string
+			if ( ! $window._.isNumber(g) || $window._.isNaN(g) || g < 1 )
+				return '';
+
+			// all grades bigger than 4 are resolved to 5
+			if ( g > 4 )
+				return '5.0';
+
+			// convert to string again
+			g = g + '';
+
+			// get digit before the period
+			var a = g[0];
+
+			// Get number behind the period
+			var b = g.length > 1 ? g[g.length-1] : 0;
+
+			// format decimal place number
+			if      ( b <= 1           ) b = 0;
+			else if ( b >= 2 && b <= 4 ) b = 3;
+			else if ( b >= 5 && b <= 8 ) b = 7;
+			else                       { b = 0; a++; }
+
+			// concatenate again
+			return a + '.' + b;
 		}
 	});
+
 	return $window._;
 }).
 
