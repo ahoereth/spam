@@ -120,7 +120,17 @@ factory('Auth', function(
 factory('_', function ($window) {
 	$window._.mixin( $window._.string.exports() );
 	$window._.mixin({
+
+		/**
+		 * Creates an object with all falsey key/value pairs removed. The values
+		 * false, null, 0, "", undefined, and NaN are all falsey.
+		 *
+		 * @param object: The object to compact.
+		 */
 		compactObject: function(to_clean) {
+			if ( $window._.isArray(to_clean) )
+				return $window._.compact(to_clean);
+
 			$window._.map(to_clean, function(value, key, to_clean) {
 				if ( !!!value || ($window._.isString(value) && $window._.trim(value).length === 0)) {
 					delete to_clean[key];
@@ -179,6 +189,13 @@ factory('_', function ($window) {
 
 			// concatenate again
 			return a + '.' + b;
+		},
+
+		/**
+		 * Calculates the percentage ratio of two given numbers.
+		 */
+		percent: function(a, b) {
+			return a / b * 100;
 		}
 	});
 

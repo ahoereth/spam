@@ -201,10 +201,10 @@ angular.module(spamControllersHome).controller('Home', function(
 
 			field.open_ects = field.ects - ( field.completed_ects + field.enrolled_ects + field.required_ects );
 
-			field.open_ects_percent      = percent(field.open_ects, field.ects);
-			field.completed_ects_percent = percent(field.completed_ects, field.ects);
-			field.enrolled_ects_percent  = percent(field.enrolled_ects, field.ects);
-			field.required_ects_percent  = percent(field.required_ects, field.ects);
+			field.open_ects_percent      = _.percent(field.open_ects, field.ects);
+			field.completed_ects_percent = _.percent(field.completed_ects, field.ects);
+			field.enrolled_ects_percent  = _.percent(field.enrolled_ects, field.ects);
+			field.required_ects_percent  = _.percent(field.required_ects, field.ects);
 
 			// field completed and not open studies, statistics or logic
 			if ( field.completed_ects_percent == 100 && -1 === _.indexOf( [1, 2, 3], field.field_id ) ) {
@@ -384,11 +384,6 @@ angular.module(spamControllersHome).controller('Home', function(
 				$scope.addCourse(course.course_id,course.fields[0].field_id);
 			});
 		});
-	};
-
-
-	var percent = function(a, b) {
-		return a / b * 100;
 	};
 
 
