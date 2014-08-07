@@ -119,6 +119,13 @@ angular.module(spamControllersMain).controller('Root', function(
 
 		$rootScope.title = title + 'Studyplanning in Cognitive Science';
 	});
+
+
+	$scope.$on('userUpdated', function(event, user) {
+		angular.forEach(user, function(value, key) {
+			$scope.user[key] = value;
+		});
+	});
 });
 
 

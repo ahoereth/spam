@@ -564,17 +564,52 @@ angular.module(spamControllersHome).controller('Logout', function(
  * ROUTE: /~/settings
  */
 angular.module(spamControllersHome).controller('UserSettings', function(
+	$rootScope,
 	$scope,
 	$location,
-	$log
+	$timeout,
+	$log,
+	Restangular
 ) {
-	var lastState = angular.copy($scope.user);
+	var timer = null, last;
 
-	$scope.updateStudent = function(user) {
-		if ( angular.equals( lastState, $scope.user ) ) return;
-		lastState = angular.copy( user );
+	$scope.user = {
+		firstname      : $rootScope.user.firstname,
+		lastname       : $rootScope.user.lastname,
+		mat_year       : $rootScope.user.mat_year,
+		mat_term       : $rootScope.user.mat_term,
+		regulation_abbr: $rootScope.user.regulation_abbr
+	};
 
-		$scope.user.save();
+	last = angular.copy($scope.user);
+
+	$scope.$watch('user', function(next, current) {
+		if ( angular.equals(next, current) )
+			return;
+
+		$timeout.cancel(timer);
+		timer = $timeout( $scope.updateUser, 250 );
+	}, true);
+
+	$scope.updateUser = function() {
+		if ( angular.equals( $scope.user, last ) )
+			return;
+
+		lastState = angular.copy( $scope.user );
+
+		var put = {};
+		angular.forEach($scope.user, function(value, key) {
+			if ( ! angular.equals($rootScope.user[key], value) ) {
+				put[key] = value;
+			}
+		});
+
+		put.username = $rootScope.user.username;
+		put = Restangular.restangularizeElement(null, put, 'users');
+
+		put.put().then( function(user) {
+			$scope.$emit('userUpdated', user);
+		});
 	};
 
 	$scope.deleteData = function() {
