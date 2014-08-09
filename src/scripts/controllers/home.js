@@ -27,236 +27,6 @@ angular.module(spamControllersHome).controller('Home', function(
 	$scope.courses_by_fields = {};
 	$scope.fieldsRange = [];
 
-	/**
-	 * Generate all information about the current state of the user's study plan.
-	 *
-	 * This includes all field and overall grade and ects calculations but also the
-	 * grouping of courses to their assigned field for the overview page.
-	 *
-	 * @param  {boolean} regroup pass true to force regrouping - regrouping is not
-	 *                           required when for example only recalculating grades
-	 */
-	var generateCourseMeta = function(regroup) {
-		if ( _.isEmpty($rootScope.fields) )
-			return false;
-
-		var data = {
-			averaging_ects : 0,
-		};
-
-		// initiate all required overview scope variables
-		_.extend( $scope, {
-			enrolled_ects : 0, // ects of all courses without muted
-			completed_course_ects : 0, // passed ects of the above
-			average_grade : 0, // average grade in those passed ects
-			terms : {}, // reset all terms
-			bsc_relevant_fields : [],
-			bachelor_grade : 0,
-			bachelor_grade_ects : 0,
-			columns : $scope.columns || [[], [], []]
-		});
-
-		// regroup the courses to their assigned field?
-		if ( _.isEmpty( $scope.courses_by_fields ) || regroup ) {
-			$scope.courses_by_fields = _.groupBy( $scope.user.courses, 'enrolled_field_id' );
-			$scope.columns = [[], [], []];
-		}
-
-		// build the three layout columns so they are equally sized
-		if ( ! $scope.columns[0].length )
-			$scope.columns = buildColumns($rootScope.fields, $scope.courses_by_fields);
-
-		// iterate over all fields
-		_.each($rootScope.fields, function(field) {
-
-			// extend the field with some variables later required on the front end
-			_.extend( field, {
-				completed_ects : 0,                                //    completed ects
-				enrolled_ects  : 0,                                //  + enrolled ects
-				required_ects  : field.field_pm,                   //  + required ects
-				ects           : field.field_pm + field.field_wpm, // <= field's ects
-				grade          : _.formatGrade( field.grade ),
-				average_grade  : 0, // calculated from the courses
-
-				// use average_grade as grade
-				auto_grade     : field.auto_grade || _.isNull( field.grade ),
-
-				// used for not updating the database when actually nothing changed
-				old_grade      : _.formatGrade( field.grade ),
-			});
-
-			// some variables only required for calculations on the backend
-			var fieldData = {
-				courses : 0,
-				averaging_ects : 0
-			};
-
-			// sort courses in the current field by year/term/title
-			$scope.courses_by_fields[field.field_id] = _.sortBy( $scope.courses_by_fields[field.field_id], function(course) {
-				return course.year + course.term + course.course;
-			});
-
-			// iterate over all courses in the current field
-			_.each( $scope.courses_by_fields[field.field_id], function(course, idx) {
-				fieldData.courses++;
-
-				course.grade     = _.formatGrade( course.grade );
-				course.old_grade = course.grade;
-				course.doesnt_count = false;
-				course.counts_only_partially = false;
-
-				var abbr = course.term + course.year;
-
-				// does the current term already contain some data? if not create it
-				if ( _.isUndefined( $scope.terms[ abbr ] ) ) {
-					$scope.terms[ abbr ] = {
-						sort : course.year + course.term,
-						abbr : abbr,
-						term : course.term,
-						year : course.year,
-						grade : 0,
-						ects : 0,
-						completed_ects : 0,
-						completed_courses : 0,
-						averaging_ects : 0,
-						courses : []
-					};
-				}
-
-				// remember current term
-				var term = $scope.terms[ abbr ];
-
-				// save data to the array containing all terms,
-				// required for an term view and some term specific numbers
-				term.ects += course.ects;
-				term.courses.push(course);
-
-				// has the course been muted manually?
-				if ( ! course.muted ) {
-
-					field.full_ects = field.completed_ects + field.enrolled_ects;
-
-					// does the user still require ects for the PM part of this field?
-					if ( field.required_ects > 0 && course.enrolled_course_in_field_type == 'PM' )
-						field.required_ects = field.required_ects >= course.ects ? field.required_ects - course.ects : 0;
-
-					// passed this course?
-					if ( course.passed ) {
-
-						$scope.completed_courses++;
-
-						// to which amount does this course count? maybe the field is
-						// already satisfied partially or completely
-						var courseEctsOfInterest = ( field.ects - field.completed_ects ) >= course.ects ? course.ects : field.ects - field.completed_ects;
-
-						// course counts at least partially and field is not already full
-						// because of completed and/or enrolled courses
-						if ( courseEctsOfInterest > 0 && (field.ects - field.full_ects) > 0 ) {
-
-							// course counts only partially
-							if ( courseEctsOfInterest != course.ects )
-								course.counts_only_partially = true;
-
-							field.completed_ects += courseEctsOfInterest;
-							term.completed_ects  += courseEctsOfInterest;
-
-							// not just "passed", but passed with grade?
-							if ( course.grade ) {
-								data.averaging_ects  += courseEctsOfInterest;
-								$scope.average_grade += courseEctsOfInterest * course.grade;
-
-								fieldData.averaging_ects += courseEctsOfInterest;
-								field.average_grade      += courseEctsOfInterest * course.grade;
-
-								term.averaging_ects += courseEctsOfInterest;
-								term.grade          += courseEctsOfInterest * course.grade;
-							}
-
-						// course does not count because the field is full
-						} else {
-							course.doesnt_count = true;
-						}
-
-					// course not passed but also not failed?
-					} else if ( course.grade != 5 ) {
-						// are there any spare credits so enrolling in the course is worth it?
-						var spareCredits = field.ects - (field.full_ects + field.required_ects);
-						if ( spareCredits > 0 && (field.ects - field.full_ects) > 0 ) {
-							field.enrolled_ects = spareCredits >= course.ects ?
-								field.enrolled_ects + course.ects :
-								field.enrolled_ects + spareCredits;
-						} else {
-							course.doesnt_count = true;
-						}
-					}
-
-				}
-			});
-
-			field.average_grade   = fieldData.averaging_ects === 0 ? '' : _.formatGrade( field.average_grade / fieldData.averaging_ects );
-			field.grade           = field.auto_grade ? field.average_grade : field.grade;
-
-			$scope.completed_course_ects += field.completed_ects;
-			$scope.enrolled_ects  += field.enrolled_ects;
-
-			field.open_ects = field.ects - ( field.completed_ects + field.enrolled_ects + field.required_ects );
-
-			field.open_ects_percent      = _.percent(field.open_ects, field.ects);
-			field.completed_ects_percent = _.percent(field.completed_ects, field.ects);
-			field.enrolled_ects_percent  = _.percent(field.enrolled_ects, field.ects);
-			field.required_ects_percent  = _.percent(field.required_ects, field.ects);
-
-			// field completed and not open studies, statistics or logic
-			if ( field.completed_ects_percent == 100 && -1 === _.indexOf( [1, 2, 3], field.field_id ) ) {
-				$scope.bsc_relevant_fields.push( field );
-			}
-		});
-
-		$scope.completed_ects = $scope.completed_course_ects;
-
-		// calculate bachelor grade
-		// TODO: move bachelor thesis ects to database!!! => regulations
-		// TODO: module/field examinations give ECTS!
-		$scope.thesis = {
-			thesis_ects : _.isUndefined( $scope.user.thesis_ects ) ? 12 : $scope.user.thesis_ects
-		};
-
-		if ( ! _.isEmpty( $scope.user.thesis_grade ) ) {
-			$scope.average_grade += $scope.user.thesis_grade * thesis.thesis_ects;
-			data.averaging_ects += thesis.thesis_ects;
-			$scope.completed_ects += thesis.thesis_ects;
-
-			$scope.bachelor_grade += thesis.thesis_grade * thesis.thesis_ects;
-			$scope.bachelor_grade_ects += thesis.thesis_ects;
-		}
-
-		// calculate the overall average grade
-		$scope.average_grade = _.formatGrade( $scope.average_grade / data.averaging_ects );
-
-		// format all term average grades
-		_.each( $scope.terms, function( term ) {
-			term.grade = _.formatGrade( term.grade / term.averaging_ects );
-		});
-
-		// get some specific terms which we currently want to show on the front-end
-		$scope.lastSemester    = _.findWhere( $scope.terms, { term : $rootScope.meta.otherTerm, year : $rootScope.meta.lastTermYear } );
-		$scope.currentSemester = _.findWhere( $scope.terms, { term : $rootScope.meta.term,      year : $rootScope.meta.currentTermYear } );
-		$scope.nextSemester    = _.findWhere( $scope.terms, { term : $rootScope.meta.otherTerm, year : $rootScope.meta.nextTermYear } );
-
-		// get the 5 best relevant fields
-		$scope.bsc_relevant_fields = _.sortBy( $scope.bsc_relevant_fields, 'grade' );
-		$scope.bsc_relevant_fields = $scope.bsc_relevant_fields.slice(0,5);
-
-		// calculate the bachelor grade
-		_.each( $scope.bsc_relevant_fields, function(field) {
-			field.bsc_relevant = true;
-
-			$scope.bachelor_grade += parseFloat( field.grade ) * field.completed_ects;
-			$scope.bachelor_grade_ects += field.completed_ects;
-		});
-		$scope.bachelor_grade = _.formatGrade( $scope.bachelor_grade / $scope.bachelor_grade_ects );
-	};
-
 
 	$scope.fieldGradeInit = function() {
 		var field = this.field;
@@ -265,8 +35,8 @@ angular.module(spamControllersHome).controller('Home', function(
 
 		$scope.editFieldGrade(field);
 
-		if ( field.auto_grade )
-			generateCourseMeta();
+		//if ( field.auto_grade )
+		//	generateCourseMeta();
 	};
 
 
@@ -288,7 +58,7 @@ angular.module(spamControllersHome).controller('Home', function(
 		field.put().then(function(studentInField) {
 			$log.info( 'Student in field grade updated: ' + field.field + ' - ' + field.grade );
 
-			generateCourseMeta();
+			//generateCourseMeta();
 		});
 	};
 
@@ -303,7 +73,7 @@ angular.module(spamControllersHome).controller('Home', function(
 		var course = this.course;
 
 		// dont make a http request if nothing has changed
-		if ( angular.equals( course.old_grade, course.grade ) || ( ! course.old_grade && ! course.grade ) )
+		if ( angular.equals( course.old_grade, course.grade ) || ( course.old_grade && ! course.grade ) )
 			return;
 
 		$scope.editProp( course );
@@ -339,7 +109,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 			$log.info( "Student in course property changed: " + course.course );
 
-			generateCourseMeta();
+			//generateCourseMeta();
 		});
 	};
 
@@ -364,7 +134,7 @@ angular.module(spamControllersHome).controller('Home', function(
 			user.thesis_title_old = user.thesis_title;
 			user.thesis_grade_old = user.thesis_grade;
 
-			generateCourseMeta();
+			//generateCourseMeta();
 		});
 	};
 	$scope.thesis_active = $scope.user.thesis_title || $scope.user.thesis_grade ? true : false;
@@ -441,7 +211,7 @@ angular.module(spamControllersHome).controller('Home', function(
 		target.enrolled_field_id = ! _.isNull(newFieldId) ? newFieldId : 1;
 
 		$scope.editProp(target);
-		generateCourseMeta(true);
+		//generateCourseMeta(true);
 	};
 
 	/**
@@ -463,25 +233,12 @@ angular.module(spamControllersHome).controller('Home', function(
 	};
 
 
-	// generate course meta after querying fields
-	if (_.isEmpty($rootScope.fields)) {
-		$rootScope.fields = $scope.user.fields;
-
-		for( var i = 0; i < $rootScope.fields.length; i = i + 2 )
-			$scope.fieldsRange.push(i);
-
-		generateCourseMeta();
-	} else {
-		generateCourseMeta();
-	}
-
-
 	/**
 	 * Listen for the courseAdded event. If it occurs add the course to
 	 * the user's course array.
 	 */
 	$scope.$on( 'courseAdded', function(event, course) {
-		generateCourseMeta( true );
+		//generateCourseMeta( true );
 	});
 
 
@@ -489,7 +246,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * Listen for the courseRemoved event.
 	 */
 	$scope.$on( 'courseRemoved', function(event, course) {
-		generateCourseMeta( true );
+		//generateCourseMeta( true );
 	});
 
 });
