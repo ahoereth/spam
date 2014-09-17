@@ -22,7 +22,7 @@ angular.module(spamControllersGuide).controller('GuideCtrl', function(
 	var tmp, guideCourses;
 
 	var fetch = function() {
-		Restangular.one( 'guide' ).getList( 1 ).then(function( guide ) {
+		Restangular.one( 'guides', 1 ).getList( 'courses' ).then(function( guide ) {
 			guideCourses = guide;
 			tmp = _.groupBy( guide, 'semester' );
 			_.each( tmp, function( v, k ) {
