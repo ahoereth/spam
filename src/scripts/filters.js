@@ -161,6 +161,46 @@ angular.module(spamFilters).filter('iif', function() {
 });
 
 
+/**
+ * FILTER: multiplicity
+ *
+ * Similar to iif filter but used for multiplicity treatment of text.
+ */
+angular.module(spamFilters).filter('multiplicity', function() {
+
+	return function(input, singular, plural) {
+		return input == 1 ? singular : plural;
+	};
+
+});
+
+
+/**
+ * FILTER: spelledOutTo
+ *
+ * Spells the given number out when its lower than the given maximum.
+ */
+angular.module(spamFilters).filter('spelledOutTo', function() {
+	var numbers = [
+		'one',
+		'two',
+		'three',
+		'four',
+		'five',
+		'six',
+		'seven',
+		'eight',
+		'nine',
+		'ten'
+	];
+
+	return function(input, max) {
+		input = parseInt( input );
+		return input <= max ? numbers[ input-1 ] || input : input;
+	};
+
+});
+
 
 /**
  * FILTER: urlencode
