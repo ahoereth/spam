@@ -115,7 +115,7 @@ factory('Auth', function(
 
 
 /**
- * UnderscoreJS
+ * LoDash / Underscore.js alternative
  */
 factory('_', function ($window) {
 
@@ -132,8 +132,8 @@ factory('_', function ($window) {
 	 * @return string             grade
 	 */
 	var formatGrade = function(g) {
-		if ( $window._.isNull(g) || $window._.isNaN(g) )
-			return '';
+		if ( $window._.isNull( g ) || $window._.isNaN( g ) )
+			return null;
 
 		// convert to string
 		g = g + '';
@@ -143,12 +143,12 @@ factory('_', function ($window) {
 		g = g.replace( ',', '.' ).replace( /[^\d\.]/g, "" );
 
 		// round to one decimal behind the full stop
-		g = Math.round( parseFloat(g) * 10 ) / 10;
+		g = Math.round( parseFloat( g ) * 10 ) / 10;
 
 		// did we get a real number or maybe a grade smaller than 1? Resolve to an
 		// empty string
-		if ( ! $window._.isNumber(g) || $window._.isNaN(g) || g < 1 )
-			return '';
+		if ( ! $window._.isNumber( g ) || $window._.isNaN( g ) || g < 1 )
+			return null;
 
 		// grades bigger 4 normally means failed...
 		if ( g > 4 ) {
@@ -158,7 +158,7 @@ factory('_', function ($window) {
 
 			// grades bigger than 4 are resolved to 5
 			} else {
-				return '5.0';
+				return parseFloat( '5.0' ).toFixed( 1 );
 			}
 		}
 
@@ -169,7 +169,7 @@ factory('_', function ($window) {
 		var a = g[0];
 
 		// Get number behind the period
-		var b = g.length > 1 ? g[g.length-1] : 0;
+		var b = g.length > 1 ? g[ g.length - 1 ] : 0;
 
 		// format decimal place number
 		if      ( b <= 1           ) b = 0;
@@ -178,7 +178,7 @@ factory('_', function ($window) {
 		else                       { b = 0; a++; }
 
 		// concatenate again
-		return a + '.' + b;
+		return parseFloat( a + '.' + b ).toFixed( 1 );
 	};
 
 	$window._.mixin( $window._.string.exports() );
@@ -214,6 +214,18 @@ factory('_', function ($window) {
 		 */
 		percent: function(a, b) {
 			return a / b * 100;
+		},
+
+		/**
+		 * Checks if a given variable contains a number - lodash isNumber etc
+		 * don't handle strings etc.
+		 *
+		 * @see  http://stackoverflow.com/a/1830844/1447384
+		 * @param  {any}     n variable to check
+		 * @return {Boolean}
+		 */
+		isNumeric: function(n) {
+			return ! isNaN( parseFloat( n ) ) && isFinite( n );
 		}
 	});
 

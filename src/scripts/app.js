@@ -10,6 +10,7 @@ angular.module('spam', [
 
 	'services',
 	'services.courses',
+	'services.transcript',
 	'services.dataHandler',
 	'services.httpIntercept',
 
@@ -205,6 +206,8 @@ config( function(
 
 		if ( elem.route == 'users' ) {
 			return elem['username'];
+		} else if ( elem.route == 'courses' && elem.parentResource.route == 'users' ) {
+			return elem['student_in_course_id'];
 		} else {
 			var e = elem[_.initial(elem.route).join('') + "_id"];
 			return e;
@@ -223,6 +226,7 @@ config( function(
 	$rootScope.meta = {
 		'year'            : d.getFullYear(),
 		'month'           : m,
+		'terms'           : ['S', 'W'],
 		'term'            : ( m > 8 || m < 3 ) ? 'W' : 'S',
 		'otherTerm'       : ( m > 8 || m < 3 ) ? 'S' : 'W',
 		'currentTermYear' : ( m > 3 ) ? y : y - 1,

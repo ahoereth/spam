@@ -38,7 +38,7 @@ angular.module(spamControllersMain).controller('Root', function(
 			courseId = studentInCourse;
 			studentInCourse = {
 				course_id: courseId,
-				field_id : ! _.isString(fieldId) ? fieldId : null
+				field_id : _.isNumeric( fieldId ) ? fieldId : null
 			};
 
 		// got the whole course object as first parameter
@@ -56,7 +56,7 @@ angular.module(spamControllersMain).controller('Root', function(
 			if (target)
 				target.student_in_course_id = course.student_in_course_id;
 
-			if ($rootScope.user.courses)
+			if ($scope.user.courses)
 				$scope.user.courses.push(course);
 
 			if (studentInCourse.course_id)

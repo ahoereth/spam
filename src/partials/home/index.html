@@ -8,31 +8,39 @@
 
 <!-- already enrolled in some courses -->
 <p class="lead" ng-if="user.courses.length">
-	<span ng-show="average_grade">
-		You <abbr tooltip-html-unsafe="passed and neither muted nor overflowing courses [{{completed_course_ects}}C]{{user.thesis_grade | iif : ' + bachelor thesis ['+user.thesis_ects+'C]' : ''}}">earned a total</abbr> of {{completed_ects}} credits with an average grade of <strong>{{average_grade}}</strong>.<!--, module examination [3C] -->
+	<span ng-show="facts.grade_overall">
+		You earned a total of {{facts.ects.completed.sum}} credits with an average grade of <strong>{{facts.grade_overall}}</strong>.<!--, module examination [3C] -->
 	</span>
 
 	<!-- enrolled ects -->
-	<span ng-show="enrolled_ects">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{enrolled_ects}} credits.</span>
+	<span ng-show="facts.ects.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.ects.enrolled}} credits.</span>
 
 	<!-- current semester -->
-	<span ng-show="currentSemester.ects">
-		<span ng-show="currentSemester.ects==enrolled_ects">
-			All of them in the current semester.
+	<span ng-if="terms.currentTerm.courses.length">
+		<span ng-if="terms.currentTerm.ects.enrolled==facts.ects.enrolled">
+			All of them in the <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">current semester</abbr>.
 		</span>
-		<span ng-hide="currentSemester.ects==enrolled_ects">
-			<abbr tooltip-html-unsafe="{{currentSemester.abbr}}">This semester</abbr> you are pursuing {{currentSemester.ects}} credits.
+		<span ng-if="terms.currentTerm.ects.enrolled!=facts.ects.enrolled">
+			<abbr tooltip-html-unsafe="{{currentSemester.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.enrolled+terms.currentTerm.ects.completed.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
 		</span>
 	</span>
 
 	<!-- last semester -->
-	<span ng-show="lastSemester.grade">
-		In your <abbr tooltip-html-unsafe="{{lastSemester.abbr}}">last semester</abbr> you earned a total of {{lastSemester.completed_ects}} credits with an average grade of <strong>{{lastSemester.grade}}</strong>.
+	<span ng-if="terms.lastTerm.courses.length">
+		{{terms.currentTerm.courses.length | iif : 'i' : 'I'}}n your <abbr tooltip-html-unsafe="{{terms.lastTerm.abbr}}">last semester</abbr> you earned a total of {{terms.lastTerm.ects.completed.sum}} credits with an average grade of <strong>{{terms.lastTerm.grade}}</strong>.
 	</span>
 
 	<!-- next semester -->
-	<span ng-show="nextSemester.ects">
-		Lastly, for the <abbr tooltip-html-unsafe="{{nextSemester.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{nextSemester.ects}} credits.
+	<span ng-if="terms.nextTerm.courses.length">
+		Lastly, for the <abbr tooltip-html-unsafe="{{terms.nextTerm.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{terms.nextTerm.ects.enrolled+terms.nextTerm.ects.completed.sum}} credits.
+	</span>
+
+	<span ng-if="facts.ects.completed.floated">
+		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.floated | spelledOutTo : 9 }} {{ facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which floated to the open studies field because their original field already is completed.
+	</span>
+
+	<span ng-if="facts.ects.completed.overhang">
+		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{ facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which I couldn't account for your bachelor.
 	</span>
 
 	<span ng-if="false">
@@ -144,29 +152,33 @@
 	<hr style="margin-top: 0">
 
 	<div
-		ng-repeat="column in columns"
+		ng-repeat="(idx, column) in columns track by idx"
 		ng-init="outerIndex = $index"
 		class="col-lg-4 col-md-6"
 		ng-class="{'hidden-sm hidden-md' : $index==2}">
 
 		<ng-include
 			src="'partials/home/field.html'"
-			ng-repeat="idx in column track by idx">
+			ng-repeat="field in column">
 		</ng-include><!--ng-init="field = getFieldById(idx)"-->
 
+		<!-- add one half of the third column below the first column for medium
+		sized screens -->
 		<div ng-if="outerIndex==0">
 			<ng-include
 				src="'partials/home/field.html'"
-				ng-repeat="idx in columns[2] track by idx"
+				ng-repeat="field in columns[2]"
 				ng-init="visibilityIndex = outerIndex"
 				class="visible-sm visible-md">
 			</ng-include>
 		</div>
 
+		<!-- add the other half of the third column below the second column for
+		medium sized screens -->
 		<div ng-if="outerIndex==1">
 			<ng-include
 				src="'partials/home/field.html'"
-				ng-repeat="idx in columns[2] track by idx"
+				ng-repeat="field in columns[2]"
 				ng-init="visibilityIndex = outerIndex"
 				class="visible-sm visible-md">
 			</ng-include>
@@ -181,8 +193,8 @@
 	<small>
 		<span class="text-primary glyphicon glyphicon-pencil"></span> Current,&nbsp;
 		<span class="text-success glyphicon glyphicon-ok"></span> Completed,&nbsp;
-		<span class="text-danger glyphicon glyphicon-remove"></span> Failed,&nbsp;
-		<span class="glyphicon glyphicon-saved"></span> BSC grade relevant field
+		<span class="text-success glyphicon glyphicon-star"></span> Bsc. relevant,&nbsp;
+		<span class="text-danger glyphicon glyphicon-remove"></span> Failed
 	</small>
 </p>
 <p>

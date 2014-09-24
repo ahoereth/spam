@@ -19,47 +19,37 @@ angular.module(spamControllersHome).controller('Home', function(
 	$log,
 	$q,
 	_,
-	Restangular
+	Restangular,
+	Transcript
 ) {
-
-	var promises = {};
-
-	$scope.courses_by_fields = {};
-	$scope.fieldsRange = [];
-
-
 	$scope.fieldGradeInit = function() {
 		var field = this.field;
+
 		field.auto_grade = ! field.auto_grade;
-		field.grade = '';
+		field.grade = null;
 
-		$scope.editFieldGrade(field);
-
-		//if ( field.auto_grade )
-		//	generateCourseMeta();
+		if ( field.auto_grade ) {
+			field.put();
+			Transcript.field_changed( field );
+		}
 	};
 
 
 	/**
 	 * Student in field grade edited. Redo some calculations and save the
 	 * changes to the server.
-	 *
-	 * TODO: Do we need to clean some cache data here?
 	 */
-	$scope.editFieldGrade = function(field) {
+	$scope.editFieldGrade = function( field ) {
 		field = this.field || field;
-		var grade = _.formatGrade( field.grade );
+		field.grade = _.formatGrade( field.grade );
 
-		if ( grade == field.old_grade ) return;
+		if ( field.grade == field.old_grade ) {
+			return;
+		}
 
-		field.old_grade = _.formatGrade( grade );
-
-		// this might create, delete or update the student-in-this-field information
-		field.put().then(function(studentInField) {
-			$log.info( 'Student in field grade updated: ' + field.field + ' - ' + field.grade );
-
-			//generateCourseMeta();
-		});
+		field.put();
+		field.old_grade = field.grade;
+		Transcript.field_changed( field );
 	};
 
 
@@ -69,12 +59,12 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * @uses $scope.editProp for saving the changed grade
 	 */
 	$scope.editGrade = function() {
-		this.course.grade = _.formatGrade( this.course.grade );
+		//this.course.grade = _.formatGrade( this.course.grade );
 		var course = this.course;
 
 		// dont make a http request if nothing has changed
-		if ( angular.equals( course.old_grade, course.grade ) || ( course.old_grade && ! course.grade ) )
-			return;
+	/*	if ( angular.equals( course.old_grade, course.grade ) )
+			return;*/
 
 		$scope.editProp( course );
 	};
@@ -91,7 +81,9 @@ angular.module(spamControllersHome).controller('Home', function(
 	$scope.editProp = function(course) {
 		course = _.isNull(course) ? this.course : course;
 
-		// TODO: remove this with an restangular update
+
+		Transcript.course_put(course);
+		/*// TODO: remove this with an restangular update
 		course.id = course.student_in_course_id;
 
 		course.enrolled_field_id = ! _.isString(course.enrolled_field_id) ? course.enrolled_field_id : null;
@@ -109,8 +101,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 			$log.info( "Student in course property changed: " + course.course );
 
-			//generateCourseMeta();
-		});
+		});*/
 	};
 
 
@@ -158,51 +149,6 @@ angular.module(spamControllersHome).controller('Home', function(
 
 
 	/**
-	 * Generates an array of 3 objects from all fields.
-	 * Fields are distributed between the 3 objects so that in the end the printed
-	 * columns should have similar height.
-	 *
-	 * @param  {object} fields
-	 * @param  {object} courses_by_fields
-	 * @return {array}  columns
-	 */
-	var buildColumns = function(fields, courses_by_fields) {
-		var order = [
-				{idx: 0, val: 0, fields: 0},
-				{idx: 1, val: 0, fields: 0},
-				{idx: 2, val: 0, fields: 0}
-			],
-			added = [],
-			columns = [[], [], []];
-
-		// run through all fields which already contain courses
-		if ( courses_by_fields.length > 0 ) {
-			_.each( courses_by_fields, function( field, idx ) {
-				columns[ order[0].idx ].push( idx ); // add field to row
-				added.push( idx ); // add field to row
-				order[0].val += field.length; // remember how many courses we just added
-				order[0].fields++; // remember how many fields we added to this row
-				order = _.sortBy( order, ['fields', 'val'] ); // reorder the three columns
-			});
-		}
-
-		// are there any empty fields? add those as well to the columns
-		if ( added.length != fields.length ) {
-			_.each( fields, function( field, idx ) {
-				if ( -1 === _.indexOf( added, (''+field.field_id) ) ) {
-					columns[ order[0].idx ].push( field.field_id ); // add field to row
-					order[0].val += field.length; // remember how many courses we just added
-					order[0].fields++; // remember how many fields we added to this row
-					order = _.sortBy( order, ['fields', 'val'] ); // reorder the three columns
-				}
-			});
-		}
-
-		return columns.reverse();
-	};
-
-
-	/**
 	 * Moves a specific course to a different field. Student in course data.
 	 */
 	$scope.moveCourse = function( newFieldId ) {
@@ -238,7 +184,7 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * the user's course array.
 	 */
 	$scope.$on( 'courseAdded', function(event, course) {
-		//generateCourseMeta( true );
+		Transcript.course_put(course);
 	});
 
 
@@ -246,9 +192,14 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * Listen for the courseRemoved event.
 	 */
 	$scope.$on( 'courseRemoved', function(event, course) {
-		//generateCourseMeta( true );
+		Transcript.course_removed(course);
 	});
 
+	var pointers = Transcript.init();
+	$scope.fields  = pointers.fields;
+	$scope.terms   = pointers.term;
+	$scope.facts   = pointers.facts;
+	$scope.columns = pointers.columns;
 });
 
 
@@ -355,9 +306,15 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 	_
 ) {
 
-	$scope.fields = $scope.user.getList('fields').$object;
+	$scope.fields = Restangular.all( 'fields' ).getList( {
+		regulation_id : $scope.user.regulation_id
+	} ).$object;
 
-	$scope.course = { field_id : parseInt($routeParams.field_id, 10), unofficial_year: $rootScope.meta.year, unofficial_term: $rootScope.meta.term };
+	$scope.course = {
+		field_id : parseInt( $routeParams.field_id, 10 ),
+		unofficial_year: $rootScope.meta.year,
+		unofficial_term: $rootScope.meta.term
+	};
 
 	/**
 	 * Adds an unofficial course to the user's course collection.
