@@ -197,7 +197,9 @@ config( function(
 
 })
 
-.run(function(Restangular) {
+.run(function(Restangular, FastClick) {
+
+	FastClick.attach(document.body);
 
 	Restangular.configuration.getIdFromElem = function(elem) {
 		if (elem.id)

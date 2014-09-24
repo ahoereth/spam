@@ -9,6 +9,7 @@
     "restangular": "~1.4.0",
     "angular-bootstrap": "~0.11.0",
     "bootstrap": "3.2.x",
-    "open-sans-fontface": "1.1.x"
+    "open-sans-fontface": "1.1.x",
+    "fastclick": "1.0.x"
   }
 }

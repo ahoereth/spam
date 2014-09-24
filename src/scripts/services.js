@@ -135,6 +135,15 @@ factory('_', function ($window) {
 
 
 /**
+ * FastClick
+ * Removes the touch click delay introduced by mobile browsers.
+ */
+factory('FastClick', function ($window) {
+	return $window.FastClick;
+}).
+
+
+/**
  * Base64 encoding for http authetication.
  */
 factory('Base64', function () {

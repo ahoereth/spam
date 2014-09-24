@@ -7,6 +7,10 @@
 @OpenSansPath: "../fonts/";
 @import "opensans.less";
 
+// remove webkit link active highlighting
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
 
 .jumbotron {
   border-left: 12px solid @uos-highlight;

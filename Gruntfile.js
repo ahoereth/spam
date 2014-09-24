@@ -153,6 +153,7 @@ module.exports = function(grunt) {
       build: {
         files: {
           'app/js/spamin.js': [
+            'bower_components/fastclick/lib/fastclick.js',
             'bower_components/lodash/dist/lodash.min.js',
             'bower_components/underscore.string/dist/underscore.string.min.js',
 
