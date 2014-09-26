@@ -47,9 +47,14 @@
 		By the end of the second semester you are required to have completed a total of XX credits. XX2 to go!
 	</span>
 
-	<!-- bachelor -->
-	<span ng-show="bachelor_grade">
-		If I had to make a guess on your final bachelor grade I currently would answer with <strong>{{bachelor_grade}}</strong> - but do not pin me down on it.
+	<!-- bachelor grade -->
+	<span ng-if="facts.grade_bachelor" ng-switch="facts.ects.completed.sum">
+		<span ng-switch-default>
+			Your bachelor grade presumable will turn out to be around <strong>{{facts.grade_bachelor}}</strong>.
+		</span>
+		<span ng-switch-when="180">
+			Your bachelor grade is <strong>{{facts.grade_bachelor}}</strong>.
+		</span>
 	</span>
 
 	<span class="undercover" ng-if="!user.thesis_title&&!user.thesis_grade&&user.completed_ects>100" ng-click="user.thesis_active=!user.thesis_active">

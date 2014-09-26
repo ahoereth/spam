@@ -302,7 +302,7 @@ factory('Transcript', function (
 	 * Initializes the facts object which contains information like the overall
 	 * bachelor grade, overhanging credits etc.
 	 *
-	 * @param {bool}    delegate
+	 * @param  {bool}    delegate
 	 * @return {object} Initialized facts.
 	 */
 	function init_facts(delegate) {
@@ -329,29 +329,43 @@ factory('Transcript', function (
 		var helpers = {
 			grade_overall_denominator: 0,
 			grade_bachelor_denominator: 0,
-			os: {},
-			ects_without_os: 0
+			completed_bsc_relevant_optional: 0,
+			oral_ects: 0,
+			os_ects: 0
 		};
 
 		for ( var i = fields.length - 1; i >= 0; i-- ) {
 			var field = fields[i];
+			var grade = parseFloat(field.grade);
 
 			facts.ects.enrolled              += field.ects.enrolled;
 			facts.ects.completed.optional    += field.ects.completed.optional;
 			facts.ects.completed.compulsory  += field.ects.completed.compulsory;
 
-			facts.grade_overall              += parseFloat(field.grade);
+			facts.grade_overall              += grade;
 			helpers.grade_overall_denominator++;
 
-			if ( field.field_id == 1 ) {
-				helpers.os = field;
+			if ( field.bsc_relevant ) {
+				facts.grade_bachelor += grade;
+				helpers.grade_bachelor_denominator++;
+				helpers.completed_bsc_relevant_optional += field.ects.completed.optional;
+			}
+
+			// oral module examinations give extra credits for the open studies field
+			if ( ! field.auto_grade ) {
+				helpers.oral_ects += 3;
 			}
 		}
 
-		helpers.os_ects = 79 - (facts.ects.completed.optional - helpers.os.ects.completed.optional);
-		if ( helpers.os_ects < 33 && helpers.os.field_wpm == 33) {
-			helpers.os.field_wpm = helpers.os_ects;
-			self.field_changed(helpers.os, delegate);
+		// The "open studies" field can have 22 to 33 ects - depending on which
+		// fields the student chose to complete.
+		// A student can have a maximum of 57 bachelor relevant "optional" credits.
+		var os = get_field(1);
+		helpers.os_ects = 57 - helpers.completed_bsc_relevant_optional;
+		helpers.os_ects = helpers.os_ects < 11 ? 22 + helpers.os_ects : 33;
+		if ( os.field_wpm != helpers.os_ects ) {
+			os.field_wpm = helpers.os_ects;
+			self.field_changed(os, delegate);
 
 			// If delegate is true init_facts() will be called from field_changed(),
 			// otherwise we call it here.
@@ -364,7 +378,8 @@ factory('Transcript', function (
 		}
 
 		facts.ects.completed.sum += facts.ects.completed.optional + facts.ects.completed.compulsory;
-		facts.grade_overall = _.formatGrade(facts.grade_overall / helpers.grade_overall_denominator);
+		facts.grade_overall  = _.formatGrade(facts.grade_overall / helpers.grade_overall_denominator);
+		facts.grade_bachelor = _.formatGrade(facts.grade_bachelor / helpers.grade_bachelor_denominator);
 
 		return facts;
 	};
