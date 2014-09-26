@@ -169,8 +169,8 @@
 
 							<li><a class="pointer" ng-click="removeCourse(course)">Remove</a></li>
 
-							<li class="dropdown-header" ng-hide="course.fields===null&&course.enrolled_field_id==1">
-								Move to other field
+							<li class="dropdown-header" ng-hide="course.fields.length==0&&course.enrolled_field_id==1">
+								Change field
 							</li>
 
 							<!-- move to other fields -->
