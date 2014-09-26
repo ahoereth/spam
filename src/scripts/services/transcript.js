@@ -24,7 +24,7 @@ factory('Transcript', function (
 	self.init = function() {
 		courses = [];
 		for ( var i = user.courses.length - 1; i >= 0; i-- ) {
-			self.course_put( user.courses[i], false );
+			self.course_put(user.courses[i], false);
 		};
 
 		init_fields();
@@ -48,7 +48,7 @@ factory('Transcript', function (
 	 * @param {bool}   delegate
 	 */
 	self.course_put = function(c, delegate) {
-		delegate = ! _.isUndefined( delegate ) ? delegate : true;
+		delegate = ! _.isUndefined(delegate) ? delegate : true;
 
 		if ( _.isUndefined(c) ) {
 			return false;
@@ -96,7 +96,7 @@ factory('Transcript', function (
 		var t = get_term(c.year, c.term);
 
 		// only add if not already in there
-		if ( _.isUndefined( _.find(t, c) ) ) {
+		if ( ! _.find(t.courses, c) ) {
 			t.courses.push(c);
 
 			// notify term
