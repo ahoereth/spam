@@ -16,17 +16,21 @@ factory('Transcript', function (
 	    columns  = [],
 	    overhang = {};
 
+	/**
+	 * Initializes the transcript data.
+	 *
+	 * TODO: Should cache everything so its only initialized once.
+	 */
 	self.init = function() {
-		if ( _.isEmpty( courses ) ) {
-			for ( var i = user.courses.length - 1; i >= 0; i-- ) {
-				self.course_put( user.courses[i], false );
-			};
-		}
+		courses = [];
+		for ( var i = user.courses.length - 1; i >= 0; i-- ) {
+			self.course_put( user.courses[i], false );
+		};
 
-		fields_init();
-		terms_init();
-		facts_init();
-		columns_init();
+		init_fields();
+		init_terms();
+		init_facts();
+		init_columns();
 
 		return {
 			fields : fields,
@@ -37,25 +41,20 @@ factory('Transcript', function (
 	};
 
 
-	self.course_removed = function(c) {
-		var f = _.find(fields, {field_id : c.enrolled_field_id});
-		f.courses = _.without(f.courses, c);
-		self.field_changed(f);
-
-		var t = terms[c.term+c.year];
-		t.courses = _.without(t.courses, c);
-		self.term_changed(t);
-	};
-
-
+	/**
+	 * Updates course information.
+	 *
+	 * @param {course} c        course object reference with updated information
+	 * @param {bool}   delegate
+	 */
 	self.course_put = function(c, delegate) {
 		delegate = ! _.isUndefined( delegate ) ? delegate : true;
 
-		if ( _.isUndefined( c ) ) {
+		if ( _.isUndefined(c) ) {
 			return false;
 		}
 
-		c.grade = _.formatGrade( c.grade );
+		c.grade = _.formatGrade(c.grade);
 
 		if ( c.grade != c.old_grade && ( c.grade < 1 || c.grade > 4 ) ) {
 			c.passed = false;
@@ -63,30 +62,30 @@ factory('Transcript', function (
 			c.passed = c.passed || ( c.grade >= 1 && c.grade <= 4 ) ? true : false;
 		}
 
-		var f = self.field_get( c.enrolled_field_id );
+		var f = get_field(c.enrolled_field_id);
 
 		// did the course's field change?
 		if ( c.enrolled_field_id != c.enrolled_field_id_old ) {
 			// add to new field
 			f.courses.push(c);
 
-			if ( ! _.isUndefined( c.enrolled_field_id_old ) ) {
+			if ( ! _.isUndefined(c.enrolled_field_id_old) ) {
 				// remove from old field
-				var f_old = self.field_get( c.enrolled_field_id_old, false );
-				f_old.courses = _.without( f_old.courses, c );
+				var f_old = get_field(c.enrolled_field_id_old, false);
+				f_old.courses = _.without(f_old.courses, c);
 
 				// notify old field
 				if ( delegate ) {
 					// we dont delegate here because we will delegate when changing the
 					// current/new field
-					self.field_changed( f_old, false );
+					self.field_changed(f_old, false);
 				}
 			}
 		}
 
 		// notify current/new field
 		if ( delegate ) {
-			self.field_changed( f, true );
+			self.field_changed(f, true);
 		}
 
 
@@ -94,15 +93,15 @@ factory('Transcript', function (
 		c.enrolled_field_id_old = c.enrolled_field_id;
 
 		// get term
-		var t = self.term_get( c.year, c.term );
+		var t = get_term(c.year, c.term);
 
 		// only add if not already in there
-		if ( _.isUndefined( _.find( t, c ) ) ) {
-			t.courses.push( c );
+		if ( _.isUndefined( _.find(t, c) ) ) {
+			t.courses.push(c);
 
 			// notify term
 			if ( delegate ) {
-				self.term_changed( t, true );
+				self.term_changed(t, true);
 			}
 		}
 
@@ -118,22 +117,44 @@ factory('Transcript', function (
 	};
 
 
+	/**
+	 * Removes a course from it field and term.
+	 *
+	 * @param {course} c course object reference to remove
+	 */
+	self.course_removed = function(c) {
+		var f = _.find(fields, {field_id : c.enrolled_field_id});
+		f.courses = _.without(f.courses, c);
+		self.field_changed(f);
+
+		var t = terms[c.term+c.year];
+		t.courses = _.without(t.courses, c);
+		self.term_changed(t);
+	};
+
+
+	/**
+	 * Updates field information.
+	 *
+	 * @param {int/field} f        field id or object reference
+	 * @param {bool}      delegate
+	 */
 	self.field_changed = function( f, delegate ) {
 		delegate = ! _.isUndefined( delegate ) ? delegate : true;
 
-		f = _.isNumber( f ) ? self.field_get( f ) : f;
+		f = _.isNumber(f) ? get_field(f) : f;
 
-		var aggregate = self.aggregate_courses( f.courses, {
+		var aggregate = aggregate_courses(f.courses, {
 			compulsory: f.field_pm,
 			optional: f.field_wpm
 		});
 
 		f.ects  = aggregate.ects;
 
-		if ( _.isUndefined( f.auto_grade ) ) {
+		if ( _.isUndefined(f.auto_grade) ) {
 			f.auto_grade = true;
-			if ( _.isNumber( f.grade ) ) {
-				f.grade = _.formatGrade( f.grade );
+			if ( _.isNumber(f.grade) ) {
+				f.grade = _.formatGrade(f.grade);
 				f.auto_grade = false;
 			}
 		}
@@ -163,14 +184,14 @@ factory('Transcript', function (
 			overhang[f.field_id] = f.ects.completed.overhang;
 
 			if ( delegate && f.field_id != 1 ) {
-				self.field_changed( 1, delegate );
+				self.field_changed(1, delegate);
 			}
 		}
 
 
 		if ( f.field_id == 1 ) {
 			overhang.sum = 0;
-			_.each( overhang, function( value, key ) {
+			_.each(overhang, function(value, key) {
 				if ( key === 'sum' || key === 'final' || key == 1 ) {
 					return;
 				}
@@ -205,26 +226,89 @@ factory('Transcript', function (
 		Restangular.restangularizeElement( f.parentResource, f, f.route );
 
 		if ( delegate ) {
-			facts_init( delegate );
-			$rootScope.$broadcast( "fieldsChanged", fields );
+			init_facts(true);
 		}
 	};
 
 
-	self.term_changed = function( t, delegate ) {
+	/**
+	 * Updates term information.
+	 *
+	 * @param {term} t        term object reference
+	 * @param {bool} delegate
+	 */
+	self.term_changed = function(t, delegate) {
 		delegate = ! _.isUndefined(delegate) ? delegate : true;
 
 		if ( _.isUndefined(t) )
 			return;
 
-		t = _.assign(t, self.aggregate_courses(t.courses));
+		t = _.assign(t, aggregate_courses(t.courses));
 
 		return t;
-		//$rootScope.$broadcasangulart("termsChanged", terms);
 	};
 
 
-	var facts_init = function( delegate ) {
+	/**
+	 * Initializes all fields.
+	 *
+	 * @return {array} Initialized fields.
+	 */
+	function init_fields() {
+		for ( var i = fields.length - 1; i >= 0; i-- ) {
+			self.field_changed(fields[i], false);
+		};
+
+		// open studies has to be updated again because of overflowing courses
+		self.field_changed(1, false);
+
+		return fields;
+	};
+
+
+	/**
+	 * Initialize all terms.
+	 *
+	 * @return {array} Initialized terms.
+	 */
+	function init_terms() {
+		var fromYear = user.mat_year;
+		var fromTerm = user.mat_term == 'S' ? 0 : 1;
+		var toYear   = $rootScope.meta.nextTermYear;
+		var toTerm   = $rootScope.meta.otherTerm == 'S' ? 0 : 1;
+
+		_.forIn(terms, function(t) {
+			self.term_changed(t);
+		});
+
+		// add missing terms
+		for ( var y = fromYear; y <= toYear; y++ ) {
+			for ( var t = fromTerm; t <= 1; t++ ) {
+				var semester = terms[$rootScope.meta.terms[t] + y];
+
+				if ( (y != toYear || t != toTerm) && _.isUndefined(semester) ) {
+					get_term(y, $rootScope.meta.terms[t]);
+				}
+			}
+			term = 0;
+		}
+
+		terms.currentTerm = get_term($rootScope.meta.currentTermYear, $rootScope.meta.term);
+		terms.lastTerm    = get_term($rootScope.meta.lastTermYear,    $rootScope.meta.otherTerm);
+		terms.nextTerm    = get_term($rootScope.meta.nextTermYear,    $rootScope.meta.otherTerm);
+
+		return terms;
+	};
+
+
+	/**
+	 * Initializes the facts object which contains information like the overall
+	 * bachelor grade, overhanging credits etc.
+	 *
+	 * @param {bool}    delegate
+	 * @return {object} Initialized facts.
+	 */
+	function init_facts(delegate) {
 		delegate = ! _.isUndefined(delegate) ? delegate : true;
 
 		facts = _.assign(facts, {
@@ -252,7 +336,7 @@ factory('Transcript', function (
 			ects_without_os: 0
 		};
 
-		for (var i = fields.length - 1; i >= 0; i--) {
+		for ( var i = fields.length - 1; i >= 0; i-- ) {
 			var field = fields[i];
 
 			facts.ects.enrolled              += field.ects.enrolled;
@@ -267,34 +351,74 @@ factory('Transcript', function (
 			}
 		}
 
-
 		helpers.os_ects = 79 - (facts.ects.completed.optional - helpers.os.ects.completed.optional);
 		if ( helpers.os_ects < 33 && helpers.os.field_wpm == 33) {
 			helpers.os.field_wpm = helpers.os_ects;
 			self.field_changed(helpers.os, delegate);
 
-			// if delegate is true we self.facts_init() will be called from
-			// self.field_changed(). If its false he have to call it here.
+			// If delegate is true init_facts() will be called from field_changed(),
+			// otherwise we call it here.
 			if ( ! delegate )
-				facts_init();
+				init_facts();
 
 			// We changed some essential data. The facts need to be completely
-			// recalculated.
-			return;
+			// recalculated - therefore return here.
+			return facts;
 		}
-
 
 		facts.ects.completed.sum += facts.ects.completed.optional + facts.ects.completed.compulsory;
-		facts.grade_overall = _.formatGrade( facts.grade_overall / helpers.grade_overall_denominator );
+		facts.grade_overall = _.formatGrade(facts.grade_overall / helpers.grade_overall_denominator);
 
-
-		if (delegate) {
-			$rootScope.$broadcast("factsChanged", facts);
-		}
+		return facts;
 	};
 
 
-	self.aggregate_courses = function( courses, available_ects ) {
+	/**
+	 * Initialize columns: An array of 3 objects each containing fields in a way
+	 * the number of courses is split between them equally. Idea is to get a
+	 * similar height for every column.
+	 *
+	 * @return {array} columns
+	 */
+	function init_columns() {
+		columns = [[],[],[]];
+
+		var order = [
+				{idx: 0, courses: 0, fields: 0},
+				{idx: 1, courses: 0, fields: 0},
+				{idx: 2, courses: 0, fields: 0}
+			];
+
+		var sorted = _.sortBy(fields, function(field) {
+			return field.courses.length;
+		});
+
+
+		for ( var i = sorted.length - 1; i >= 0; i-- ) {
+			var field = sorted[i];
+
+			columns[ order[0].idx ].push(field);
+			order[0].courses += field.courses.length;
+			order[0].fields++;
+			order = _.sortBy(order, ['fields', 'courses']);
+		}
+
+		return columns;
+	};
+
+
+	/**
+	 * Aggregate a given set of courses in order to get information like average
+	 * grade, number of completed and compulsory credits etc.
+	 *
+	 * TODO: Needs refactoring!
+	 *
+	 * @param  {array}  courses        courses to aggregate
+	 * @param  {object} available_ects available compulsory and optional credits -
+	 *                                 required to calculate overhanging credits
+	 * @return {object}                aggregated information
+	 */
+	function aggregate_courses(courses, available_ects) {
 		available_ects = available_ects || { optional: 999, compulsory: 999 };
 
 		var data = {
@@ -317,9 +441,8 @@ factory('Transcript', function (
 		for ( var i = courses.length - 1; i >= 0; i-- ) {
 			var c = courses[i], tmp, ectstarget;
 
-			if ( c.muted ) {
+			if ( c.muted )
 				continue;
-			}
 
 			type = c.enrolled_course_in_field_type == 'PM' ? 'compulsory' : 'optional';
 
@@ -337,8 +460,8 @@ factory('Transcript', function (
 					data.ects.completed[ type ] = tmp;
 				}
 
-				if ( ! _.isEmpty( c.grade )  ) {
-					data.grade += parseFloat( c.grade ) * c.counting_ects;
+				if ( !_.isEmpty(c.grade)  ) {
+					data.grade += parseFloat(c.grade) * c.counting_ects;
 				}
 			} else {
 				data.ects.enrolled += c.ects;
@@ -353,104 +476,44 @@ factory('Transcript', function (
 			data.ects.enrolled = maxEnrolled;
 		}
 
-		data.grade = _.formatGrade( data.grade / data.ects.completed.sum );
+		data.grade = _.formatGrade(data.grade / data.ects.completed.sum);
 
 		return data;
 	};
 
 
-	var terms_init = function() {
-		var fromYear = user.mat_year;
-		var fromTerm = user.mat_term == 'S' ? 0 : 1;
-		var toYear   = $rootScope.meta.nextTermYear;
-		var toTerm   = $rootScope.meta.otherTerm == 'S' ? 0 : 1;
-
-		_.forIn(terms, function(t) {
-			self.term_changed(t);
-		});
-
-		// add missing terms
-		for (var y = fromYear; y <= toYear; y++) {
-			for (var t = fromTerm; t <= 1; t++) {
-				var semester = terms[$rootScope.meta.terms[t] + y];
-
-				if ( (y != toYear || t != toTerm) && _.isUndefined(semester) ) {
-					self.term_get(y, $rootScope.meta.terms[t]);
-				}
-			}
-			term = 0;
-		}
-
-		terms.currentTerm = self.term_get($rootScope.meta.currentTermYear, $rootScope.meta.term);
-		terms.lastTerm    = self.term_get($rootScope.meta.lastTermYear, $rootScope.meta.otherTerm);
-		terms.nextTerm    = self.term_get($rootScope.meta.nextTermYear, $rootScope.meta.otherTerm);
-
-		$rootScope.$broadcast("termsChanged", terms);
-	};
-
-
 	/**
-	 * Generates an array of 3 objects from all fields.
-	 * Fields are distributed between the 3 objects so that in the end the printed
-	 * columns should have similar height.
+	 * Get field object by id.
 	 *
-	 * @return {array}  columns
+	 * @param  {int}   field_id
+	 * @return {field}          field object reference
 	 */
-	var columns_init = function() {
-		columns = [[],[],[]];
-
-		var order = [
-				{idx: 0, courses: 0, fields: 0},
-				{idx: 1, courses: 0, fields: 0},
-				{idx: 2, courses: 0, fields: 0}
-			];
-
-		var sorted = _.sortBy(fields, function(field) {
-			return field.courses.length;
-		});
-
-
-		for (var i = sorted.length - 1; i >= 0; i--) {
-			var field = sorted[i];
-
-			columns[ order[0].idx ].push(field);
-			order[0].courses += field.courses.length;
-			order[0].fields++;
-			order = _.sortBy( order, ['fields', 'courses'] );
-		}
-
-		return columns;
-	};
-
-	var fields_init = function() {
-		for (var i = fields.length - 1; i >= 0; i--) {
-			self.field_changed(fields[i], false);
-		};
-
-		// open studies has to be updated again because of overflowing courses
-		self.field_changed(1, false);
-	};
-
-	self.field_get = function(field_id, delegate) {
-		delegate = ! _.isUndefined(delegate) ? delegate : true;
-
-		// get field
-		var f = _.find(fields, {field_id : field_id});
+	function get_field(field_id) {
+		var field = _.find(fields, {field_id : field_id});
 
 		// field not found
-		if ( _.isUndefined(f) ) {
+		if ( _.isUndefined(field) ) {
 			// no field found yet, get the original
-			f = _.cloneDeep( _.find( user.fields, { field_id : field_id } ) );
-			f.courses = [];
-			fields.push(f);
+			field = _.cloneDeep( _.find(user.fields, { field_id: field_id }) );
+			field.courses = [];
+			fields.push(field);
 		}
 
-		return f;
+		return field;
 	}
 
 
-	self.term_get = function(year, term) {
-		var t = terms[term+year];
+	/**
+	 * Gets a term object by year and term information.
+	 *
+	 * @param  {int}    year 4 digit year
+	 * @param  {string} term W/S
+	 * @return {term}   term object reference
+	 */
+	function get_term(year, term) {
+		term = term.toUpperCase();
+
+		var t = terms[ term + year ];
 		if ( _.isUndefined(t) ) {
 			t = {
 				year : year,
@@ -459,7 +522,7 @@ factory('Transcript', function (
 				courses : []
 			};
 
-			terms[term+year] = t;
+			terms[ term + year ] = t;
 		}
 
 		return t;
