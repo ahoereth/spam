@@ -215,11 +215,8 @@ factory('Transcript', function (
 		f.ects.rest_percent       = _.percent(f.ects.rest, f.ects.sum);
 
 		// Relevant for the bachelor grade?
-		// "open studies" (field_id == 1) always, "logic" and "statistics" never
-		f.bsc_relevant = (
-				( f.field_id == 1 ) ||
-				( f.ects.completed.percent == 100 && f.field_id > 3 )
-			) ? true : false;
+		// "open studies" "logic" and "statistics" are exceptions.
+		f.bsc_relevant = f.ects.completed.percent == 100 && f.field_id > 3 ? true : false;
 
 
 		// https://github.com/mgonto/restangular/issues/378
@@ -389,8 +386,10 @@ factory('Transcript', function (
 				{idx: 2, courses: 0, fields: 0}
 			];
 
+		// Sort fields by the amount of courses they hold. Fields relevant for
+		// the bachelor are always first!
 		var sorted = _.sortBy(fields, function(field) {
-			return field.courses.length;
+			return field.bsc_relevant ? field.courses.length * 10 : field.courses.length;
 		});
 
 
