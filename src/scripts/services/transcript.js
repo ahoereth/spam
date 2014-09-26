@@ -139,8 +139,8 @@ factory('Transcript', function (
 	 * @param {int/field} f        field id or object reference
 	 * @param {bool}      delegate
 	 */
-	self.field_changed = function( f, delegate ) {
-		delegate = ! _.isUndefined( delegate ) ? delegate : true;
+	self.field_changed = function(f, delegate) {
+		delegate = ! _.isUndefined(delegate) ? delegate : true;
 
 		f = _.isNumber(f) ? get_field(f) : f;
 
@@ -252,9 +252,9 @@ factory('Transcript', function (
 	 * @return {array} Initialized fields.
 	 */
 	function init_fields() {
-		for ( var i = fields.length - 1; i >= 0; i-- ) {
-			self.field_changed(fields[i], false);
-		};
+		for ( var i = user.fields.length - 1; i >= 0; i-- ) {
+			self.field_changed(user.fields[i].field_id, false);
+		}
 
 		// open studies has to be updated again because of overflowing courses
 		self.field_changed(1, false);
