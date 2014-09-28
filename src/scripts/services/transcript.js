@@ -388,7 +388,7 @@ factory('Transcript', function (
 
 		facts.ects.completed.sum += facts.ects.completed.optional + facts.ects.completed.compulsory;
 		facts.grade_overall  = _.formatGrade(facts.grade_overall / helpers.grade_overall_denominator);
-		facts.grade_bachelor = _.formatGrade(fact
+		facts.grade_bachelor = _.formatGrade(facts.grade_bachelor / helpers.grade_bachelor_denominator);
 
 		// bsc grade = (fields*2 + thesis) / 3
 		if ( user.thesis_grade ) {

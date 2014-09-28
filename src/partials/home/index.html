@@ -126,7 +126,7 @@
 	<hr>
 
 	<form class="inline-form row" ng-init="user.thesis_grade=user.thesis_grade">
-		<div class="form-group col-lg-10 col-sm-9 col-xs-7">
+		<div class="form-group col-lg-10 col-sm-9 col-xs-8">
 			<input
 				type="text"
 				class="form-control"
@@ -137,7 +137,7 @@
 				ng-init="user.thesis_title_old=user.thesis_title">
 		</div>
 
-		<div class="form-group col-sm-2 col-xs-3">
+		<div class="form-group col-lg-2 col-sm-3 col-xs-4">
 			<input
 				type="text"
 				class="form-control form-control-tight"
@@ -159,15 +159,15 @@
 	<div
 		ng-repeat="(idx, column) in columns track by idx"
 		ng-init="outerIndex = $index"
-		class="col-lg-4 col-md-6"
+		class="col-lg-4 col-sm-6"
 		ng-class="{'hidden-sm hidden-md' : $index==2}">
 
 		<ng-include
 			src="'partials/home/field.html'"
 			ng-repeat="field in column">
-		</ng-include><!--ng-init="field = getFieldById(idx)"-->
+		</ng-include>
 
-		<!-- add one half of the third column below the first column for medium
+		<!-- add one half of the third column below the first column for 'sm'
 		sized screens -->
 		<div ng-if="outerIndex==0">
 			<ng-include
@@ -179,7 +179,7 @@
 		</div>
 
 		<!-- add the other half of the third column below the second column for
-		medium sized screens -->
+		'sm' sized screens -->
 		<div ng-if="outerIndex==1">
 			<ng-include
 				src="'partials/home/field.html'"
