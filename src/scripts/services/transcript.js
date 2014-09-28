@@ -247,6 +247,12 @@ factory('Transcript', function (
 	};
 
 
+
+	self.facts_changed = function() {
+		init_facts();
+	};
+
+
 	/**
 	 * Initializes all fields.
 	 *
@@ -347,15 +353,22 @@ factory('Transcript', function (
 			helpers.grade_overall_denominator++;
 
 			if ( field.bsc_relevant ) {
-				facts.grade_bachelor += grade;
-				helpers.grade_bachelor_denominator++;
 				helpers.completed_bsc_relevant_optional += field.ects.completed.optional;
+
+				// fields count double
+				facts.grade_bachelor += (grade * 2);
+				helpers.grade_bachelor_denominator += 2;
 			}
 
 			// oral module examinations give extra credits for the open studies field
 			if ( ! field.auto_grade ) {
 				helpers.oral_ects += 3;
 			}
+		}
+
+		if ( user.thesis_grade ) {
+			facts.grade_bachelor += parseFloat(user.thesis_grade);
+			helpers.grade_bachelor_denominator++;
 		}
 
 		// The "open studies" field can have 22 to 33 ects - depending on which

@@ -10,7 +10,6 @@ angular.module('spam', [
 
 	'services',
 	'services.courses',
-	'services.transcript',
 	'services.dataHandler',
 	'services.httpIntercept',
 

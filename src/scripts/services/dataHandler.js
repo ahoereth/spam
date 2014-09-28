@@ -144,6 +144,8 @@ factory('User', function(
 
 			if ( angular.isDefined(data.fields) )
 				Restangular.restangularizeCollection(data, data.fields, 'fields');
+
+			data.thesis_grade = _.formatGrade(data.thesis_grade);
 		}
 
 		return angular.extend(methods, data, {loggedin : !_.isEmpty(data)});

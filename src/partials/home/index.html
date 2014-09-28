@@ -40,7 +40,7 @@
 	</span>
 
 	<span ng-if="facts.ects.completed.overhang">
-		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{ facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which I couldn't account for your bachelor.
+		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which I couldn't account for your bachelor.
 	</span>
 
 	<span ng-if="false">
@@ -50,14 +50,14 @@
 	<!-- bachelor grade -->
 	<span ng-if="facts.grade_bachelor" ng-switch="facts.ects.completed.sum">
 		<span ng-switch-default>
-			Your bachelor grade presumable will turn out to be around <strong>{{facts.grade_bachelor}}</strong>.
+			Your bachelor grade presumably will turn out to be around <strong>{{facts.grade_bachelor}}</strong>.
 		</span>
 		<span ng-switch-when="180">
 			Your bachelor grade is <strong>{{facts.grade_bachelor}}</strong>.
 		</span>
 	</span>
 
-	<span class="undercover" ng-if="!user.thesis_title&&!user.thesis_grade&&user.completed_ects>100" ng-click="user.thesis_active=!user.thesis_active">
+	<span class="undercover" ng-if="!user.thesis_title&&!user.thesis_grade" ng-click="user.thesis_active=!user.thesis_active">
 		You did not yet write your bachelor thesis.
 	</span>
 </p>
