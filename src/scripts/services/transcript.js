@@ -356,19 +356,14 @@ factory('Transcript', function (
 				helpers.completed_bsc_relevant_optional += field.ects.completed.optional;
 
 				// fields count double
-				facts.grade_bachelor += (grade * 2);
-				helpers.grade_bachelor_denominator += 2;
+				facts.grade_bachelor += grade;
+				helpers.grade_bachelor_denominator++;
 			}
 
 			// oral module examinations give extra credits for the open studies field
 			if ( ! field.auto_grade ) {
 				helpers.oral_ects += 3;
 			}
-		}
-
-		if ( user.thesis_grade ) {
-			facts.grade_bachelor += parseFloat(user.thesis_grade);
-			helpers.grade_bachelor_denominator++;
 		}
 
 		// The "open studies" field can have 22 to 33 ects - depending on which
@@ -393,7 +388,14 @@ factory('Transcript', function (
 
 		facts.ects.completed.sum += facts.ects.completed.optional + facts.ects.completed.compulsory;
 		facts.grade_overall  = _.formatGrade(facts.grade_overall / helpers.grade_overall_denominator);
-		facts.grade_bachelor = _.formatGrade(facts.grade_bachelor / helpers.grade_bachelor_denominator);
+		facts.grade_bachelor = _.formatGrade(fact
+
+		// bsc grade = (fields*2 + thesis) / 3
+		if ( user.thesis_grade ) {
+			facts.grade_bachelor *= 2;
+			facts.grade_bachelor += parseFloat(user.thesis_grade);
+			facts.grade_bachelor = _.formatGrade(facts.grade_bachelor / 3);
+		}
 
 		return facts;
 	};
