@@ -54,7 +54,7 @@ factory('Transcript', function (
 			return false;
 		}
 
-		c.grade = _.formatGrade(c.grade);
+		c.grade = _.formatGrade(c.grade, true);
 
 		if ( c.grade != c.old_grade && ( c.grade < 1 || c.grade > 4 ) ) {
 			c.passed = false;
@@ -425,15 +425,13 @@ factory('Transcript', function (
 	 * Aggregate a given set of courses in order to get information like average
 	 * grade, number of completed and compulsory credits etc.
 	 *
-	 * TODO: Needs refactoring!
-	 *
 	 * @param  {array}  courses        courses to aggregate
 	 * @param  {object} available_ects available compulsory and optional credits -
 	 *                                 required to calculate overhanging credits
 	 * @return {object}                aggregated information
 	 */
 	function aggregate_courses(courses, available_ects) {
-		available_ects = available_ects || { optional: 999, compulsory: 999 };
+		available_ects = available_ects || false;
 
 		var data = {
 			ects: {
@@ -448,34 +446,43 @@ factory('Transcript', function (
 			grade: 0
 		};
 
-		var helpers = {
-			grade_denominator: 0
-		};
+		var grade_denominator = 0;
 
 		for ( var i = courses.length - 1; i >= 0; i-- ) {
-			var c = courses[i], tmp, ectstarget;
+			var c = courses[i];
+			var type = c.enrolled_course_in_field_type == 'PM' ? 'compulsory' : 'optional';
 
 			if ( c.muted )
 				continue;
 
-			type = c.enrolled_course_in_field_type == 'PM' ? 'compulsory' : 'optional';
+			var completed = data.ects.completed[ type ];
+			var completed_new = completed + c.ects;
 
 			if ( c.passed ) {
-				c.counting_ects = c.ects;
-				tmp = data.ects.completed[ type ] + c.ects;
-				if ( data.ects.completed[ type ] >= available_ects[ type ] ) {
-					c.doesnt_count = true;
-					data.ects.completed.overhang += c.ects;
-				} else if ( tmp > available_ects[ type ] ) {
-					data.ects.completed[ type ] = available_ects[ type ];
-					c.counting_ects = tmp - available_ects[ type ];
-					data.ects.completed.overhang += c.ects - c.counting_ects;
-				} else {
-					data.ects.completed[ type ] = tmp;
+
+				if ( available_ects ) {
+					var available = available_ects[ type ];
+
+					if ( completed >= available ) {
+						c.counting_ects = 0;
+						c.doesnt_count = true;
+						data.ects.completed.overhang += c.ects;
+					} else if ( completed_new > available ) {
+						c.counting_ects = c.ects - (completed_new - available);
+						data.ects.completed[ type ]  += c.counting_ects;
+						data.ects.completed.overhang += c.ects - c.counting_ects;
+					} else { // if ( completed_new <= available )
+						c.counting_ects = c.ects;
+						data.ects.completed[ type ] = completed_new;
+					}
+
+				} else { // if ( ! available_ects )
+					data.ects.completed[ type ] = completed_new;
 				}
 
-				if ( !_.isEmpty(c.grade)  ) {
+				if ( !_.isEmpty(c.grade) ) {
 					data.grade += parseFloat(c.grade) * c.counting_ects;
+					grade_denominator += c.counting_ects;
 				}
 			} else {
 				data.ects.enrolled += c.ects;
@@ -490,7 +497,7 @@ factory('Transcript', function (
 			data.ects.enrolled = maxEnrolled;
 		}
 
-		data.grade = _.formatGrade(data.grade / data.ects.completed.sum);
+		data.grade = _.formatGrade(data.grade / grade_denominator);
 
 		return data;
 	};

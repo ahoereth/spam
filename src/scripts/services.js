@@ -128,38 +128,48 @@ factory('_', function ($window) {
 	 *
 	 * NOTE: This is declared outside of the mixin because of possible recursion.
 	 *
-	 * @param  string/int/float g any kind of number representation
-	 * @return string             grade
+	 * @param  {string/int/float} g a    any kind of number
+	 * @param  {bool}             course courses are rounded very specifically
+	 * @return {string}                  formatted grade
 	 */
-	var formatGrade = function(g) {
-		if ( $window._.isNull( g ) || $window._.isNaN( g ) )
+	var formatGrade = function(g, course) {
+		// null and NaN can be directly ignored
+		if ( $window._.isNull(g) || $window._.isNaN(g) )
 			return null;
+
+		course = course || false;
 
 		// convert to string
 		g = g + '';
 
 		// replace commas with periods
 		// remove everything but numbers and periods
-		g = g.replace( ',', '.' ).replace( /[^\d\.]/g, "" );
+		g = g.replace(',', '.').replace(/[^\d\.]/g, '');
 
 		// round to one decimal behind the full stop
-		g = Math.round( parseFloat( g ) * 10 ) / 10;
+		g = Math.round( parseFloat(g) * 10 ) / 10;
 
-		// did we get a real number or maybe a grade smaller than 1? Resolve to an
-		// empty string
-		if ( ! $window._.isNumber( g ) || $window._.isNaN( g ) || g < 1 )
+		// The result should be a number. If its not or if its smaller than 1 we
+		// resolve to null.
+		if ( ! $window._.isNumber(g) || $window._.isNaN(g) || g < 1 )
 			return null;
 
 		// grades bigger 4 normally means failed...
 		if ( g > 4 ) {
-			// grade bigger than or equal to 10? Might just be missing a period
+			// grade bigger than or equal to 10? Might just be shifted to far. Shift.
 			if ( g >= 10 ) {
-				return formatGrade( g / 10 );
+				return formatGrade(g / 10);
 
 			// grades bigger than 4 are resolved to 5
 			} else {
-				return parseFloat( '5.0' ).toFixed( 1 );
+				return parseFloat('5.0').toFixed(1);
 			}
+		}
+
+		// Only course grades need to be rounded more specifically. For everything
+		// else we can return here.
+		if ( ! course ) {
+			return g.toFixed(1);
 		}
 
 		// convert to string again
@@ -169,7 +179,7 @@ factory('_', function ($window) {
 		var a = g[0];
 
 		// Get number behind the period
-		var b = g.length > 1 ? g[ g.length - 1 ] : 0;
+		var b = g.length > 1 ? parseInt( g[ g.length - 1 ] ) : 0;
 
 		// format decimal place number
 		if      ( b <= 1           ) b = 0;
@@ -178,10 +188,12 @@ factory('_', function ($window) {
 		else                       { b = 0; a++; }
 
 		// concatenate again
-		return parseFloat( a + '.' + b ).toFixed( 1 );
+		return parseFloat( a + '.' + b ).toFixed(1);
 	};
 
+	// we make use of underscore.string
 	$window._.mixin( $window._.string.exports() );
+
 	$window._.mixin({
 
 		/**
@@ -217,7 +229,7 @@ factory('_', function ($window) {
 		},
 
 		/**
-		 * Checks if a given variable contains a number - lodash isNumber etc
+		 * Checks if a given variable contains a number - lodash's similar functions
 		 * don't handle strings etc.
 		 *
 		 * @see  http://stackoverflow.com/a/1830844/1447384
@@ -225,7 +237,7 @@ factory('_', function ($window) {
 		 * @return {Boolean}
 		 */
 		isNumeric: function(n) {
-			return ! isNaN( parseFloat( n ) ) && isFinite( n );
+			return ! isNaN( parseFloat(n) ) && isFinite(n);
 		}
 	});
 
