@@ -147,7 +147,12 @@ factory('_', function ($window) {
 		g = g.replace(',', '.').replace(/[^\d\.]/g, '');
 
 		// round to one decimal behind the full stop
-		g = Math.round( parseFloat(g) * 10 ) / 10;
+		if ( course ) {
+			g = Math.round( parseFloat(g) * 10 ) / 10;
+		} else {
+			// field grades are by design floored (examinations office..)
+			g = Math.floor( parseFloat(g) * 10 ) / 10;
+		}
 
 		// The result should be a number. If its not or if its smaller than 1 we
 		// resolve to null.

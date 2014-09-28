@@ -156,6 +156,7 @@ factory('Transcript', function (
 			if ( _.isNumber(f.grade) ) {
 				f.grade = _.formatGrade(f.grade);
 				f.auto_grade = false;
+				f.bsc_relevant = true;
 			}
 		}
 
@@ -216,7 +217,7 @@ factory('Transcript', function (
 
 		// Relevant for the bachelor grade?
 		// "open studies" "logic" and "statistics" are exceptions.
-		f.bsc_relevant = f.ects.completed.percent == 100 && f.field_id > 3 ? true : false;
+		f.bsc_relevant = ( f.ects.completed.percent == 100 || ! f.auto_grade ) && f.field_id > 3 ? true : false;
 
 
 		// https://github.com/mgonto/restangular/issues/378
@@ -457,6 +458,7 @@ factory('Transcript', function (
 
 			var completed = data.ects.completed[ type ];
 			var completed_new = completed + c.ects;
+			var counting_ects = c.ects;
 
 			if ( c.passed ) {
 
@@ -464,15 +466,14 @@ factory('Transcript', function (
 					var available = available_ects[ type ];
 
 					if ( completed >= available ) {
-						c.counting_ects = 0;
+						counting_ects = 0;
 						c.doesnt_count = true;
 						data.ects.completed.overhang += c.ects;
 					} else if ( completed_new > available ) {
-						c.counting_ects = c.ects - (completed_new - available);
-						data.ects.completed[ type ]  += c.counting_ects;
-						data.ects.completed.overhang += c.ects - c.counting_ects;
+						counting_ects = c.ects - (completed_new - available);
+						data.ects.completed[ type ]  += counting_ects;
+						data.ects.completed.overhang += c.ects - counting_ects;
 					} else { // if ( completed_new <= available )
-						c.counting_ects = c.ects;
 						data.ects.completed[ type ] = completed_new;
 					}
 
@@ -481,8 +482,9 @@ factory('Transcript', function (
 				}
 
 				if ( !_.isEmpty(c.grade) ) {
-					data.grade += parseFloat(c.grade) * c.counting_ects;
-					grade_denominator += c.counting_ects;
+					// ugly rounding required because of internal javascript calculation inaccuracies
+					data.grade = Math.round( ( data.grade + (parseFloat(c.grade) * counting_ects) ) * 100 ) / 100;
+					grade_denominator += counting_ects;
 				}
 			} else {
 				data.ects.enrolled += c.ects;
