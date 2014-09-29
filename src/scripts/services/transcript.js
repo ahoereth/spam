@@ -16,17 +16,26 @@ factory('Transcript', function (
 	 * TODO: Should cache everything so its only initialized once.
 	 */
 	self.init = function(userReference) {
-		self.reset();
-		user = userReference;
+		var first_init = _.isEmpty(user);
+		if ( first_init ) {
+			self.reset();
+			user = userReference;
+		}
 
-		for ( var i = user.courses.length - 1; i >= 0; i-- ) {
-			self.course_put(user.courses[i], false);
+		for ( var i = user.courses.length - 1, course; i >= 0; i-- ) {
+			course = user.courses[i];
+			if ( ! course.in_transcript ) {
+				self.course_put(course, !first_init);
+				course.in_transcript = true;
+			}
 		};
 
-		init_fields();
-		init_terms();
-		init_facts();
-		init_columns();
+		if ( first_init ) {
+			init_fields();
+			init_terms();
+			init_facts();
+			init_columns();
+		}
 
 		return {
 			fields : fields,
@@ -41,6 +50,7 @@ factory('Transcript', function (
 	 * Resets all local data variables. Is for example called on user log out.
 	 */
 	self.reset = function() {
+		user     = {};
 		facts    = {};
 		courses  = [];
 		fields   = [];
@@ -209,7 +219,7 @@ factory('Transcript', function (
 				overhang.sum += value;
 			});
 			overhang.final = overhang.sum + f.ects.completed.overhang;
-			f.ects.completed.sum += overhang.final;
+			f.ects.completed.optional += overhang.final;
 
 			if ( f.ects.completed.sum > f.ects.sum ) {
 				f.ects.completed.overhang = f.ects.completed.sum - f.ects.sum;
@@ -361,6 +371,11 @@ factory('Transcript', function (
 			facts.grade_overall              += grade;
 			helpers.grade_overall_denominator++;
 
+			// module examinations give 3 additional credits
+			if ( ! field.auto_grade ) {
+				facts.ects.completed.optional+=3;
+			}
+
 			if ( field.bsc_relevant ) {
 				helpers.completed_bsc_relevant_optional += field.ects.completed.optional;
 
@@ -404,6 +419,7 @@ factory('Transcript', function (
 			facts.grade_bachelor *= 2;
 			facts.grade_bachelor += parseFloat(user.thesis_grade);
 			facts.grade_bachelor = _.formatGrade(facts.grade_bachelor / 3);
+			facts.ects.completed.sum += 12;
 		}
 
 		return facts;
