@@ -1,5 +1,5 @@
 var spamControllersHome = 'spam.controllers.home';
-angular.module(spamControllersHome, []);
+angular.module(spamControllersHome, [ 'services.transcript' ]);
 
 
 
@@ -110,22 +110,22 @@ angular.module(spamControllersHome).controller('Home', function(
 	 */
 	$scope.updateThesis = function() {
 		var user = $scope.user;
-		user.thesis_grade = _.formatGrade( user.thesis_grade );
+		user.thesis_grade = _.formatGrade(user.thesis_grade);
 
 		if ( user.thesis_title_old == user.thesis_title && user.thesis_grade_old == user.thesis_grade )
 			return;
 
-		$scope.user.one('regulations',user.regulation_id).customPUT({
+		Transcript.facts_changed();
+
+		// remember old stuff
+		user.thesis_title_old = user.thesis_title;
+		user.thesis_grade_old = user.thesis_grade;
+
+		$scope.user.one('regulations', user.regulation_id).customPUT({
 			title: user.thesis_title,
 			grade: user.thesis_grade
 		}).then(function(t) {
 			$log.info('Student thesis updated: ' + user.thesis_title + ' - ' + user.thesis_grade);
-
-			// remember old stuff
-			user.thesis_title_old = user.thesis_title;
-			user.thesis_grade_old = user.thesis_grade;
-
-			//generateCourseMeta();
 		});
 	};
 	$scope.thesis_active = $scope.user.thesis_title || $scope.user.thesis_grade ? true : false;
@@ -195,7 +195,7 @@ angular.module(spamControllersHome).controller('Home', function(
 		Transcript.course_removed(course);
 	});
 
-	var pointers = Transcript.init();
+	var pointers = Transcript.init($scope.user);
 	$scope.fields  = pointers.fields;
 	$scope.terms   = pointers.term;
 	$scope.facts   = pointers.facts;

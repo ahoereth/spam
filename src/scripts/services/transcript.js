@@ -6,23 +6,19 @@ factory('Transcript', function (
 	Restangular,
 	_
 ) {
-	var user = $rootScope.user;
+	var self = {};
+	var user, facts, courses, fields, terms, columns, overhang;
 
-	var self     = {},
-	    facts    = {},
-	    courses  = [],
-	    fields   = [],
-	    terms    = [],
-	    columns  = [],
-	    overhang = {};
 
 	/**
 	 * Initializes the transcript data.
 	 *
 	 * TODO: Should cache everything so its only initialized once.
 	 */
-	self.init = function() {
-		courses = [];
+	self.init = function(userReference) {
+		self.reset();
+		user = userReference;
+
 		for ( var i = user.courses.length - 1; i >= 0; i-- ) {
 			self.course_put(user.courses[i], false);
 		};
@@ -38,6 +34,19 @@ factory('Transcript', function (
 			facts  : facts,
 			columns: columns
 		};
+	};
+
+
+	/**
+	 * Resets all local data variables. Is for example called on user log out.
+	 */
+	self.reset = function() {
+		facts    = {};
+		courses  = [];
+		fields   = [];
+		terms    = [];
+		columns  = [];
+		overhang = {};
 	};
 
 
