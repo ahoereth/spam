@@ -8,7 +8,7 @@
 	<div class="panel-heading">
 		<div class="row">
 
-			<h4 class="col-xs-9" ng-bind="field.field"></h4>
+			<h4 class="col-xs-9" ng-bind="::field.field"></h4>
 
 			<!-- field grade input -->
 			<div class="col-xs-2">
@@ -20,7 +20,7 @@
 					ng-blur="editFieldGrade()"
 					ng-keydown="blurOnEnter($event)"
 					ng-disabled="field.auto_grade"
-					onclick="select()"><!--ng-model-options="{updateOn: 'blur'}"-->
+					onclick="select()">
 			</div>
 
 			<!-- field button + dropdown -->
@@ -50,13 +50,13 @@
 					<ul class="dropdown-menu">
 
 						<li>
-							<a ng-href="courses?regulation={{user.regulation_id}}&field={{field.field}}">
+							<a ng-href="courses?regulation={{::user.regulation_id}}&field={{::field.field}}">
 								Find courses
 							</a>
 						</li>
 
 						<li>
-							<a ng-href="~/courses/new?field_id={{field.field_id}}">
+							<a ng-href="~/courses/new?field_id={{::field.field_id}}">
 								Add unofficial course
 							</a>
 						</li>
@@ -83,26 +83,24 @@
 
 			<div
 				ng-repeat="course in field.courses track by course.student_in_course_id"
-				ng-hide="course.removed"
 				class="row course"
-				ng-class="{overflowing : course.doesnt_count||course.muted||course.grade==5}"
-				id="course{{course.course_id}}">
+				ng-class="{overflowing : course.doesnt_count||course.muted||course.grade==5}">
 
 				<!-- title + ects -->
 				<div class="col-xs-9">
-					<span ng-switch="course.course_id">
+					<span ng-switch="::course.course_id">
 						<a
 							ng-switch-default
-							ng-href="courses/{{course.course_id}}"
-							tooltip="{{course.term}}{{course.year}}"
-							ng-bind="course.course"></a>
+							ng-href="courses/{{::course.course_id}}"
+							tooltip="{{::course.term_abbr}}"
+							ng-bind="::course.course"></a>
 						<span
 							ng-switch-when="0"
-							tooltip="{{course.term}}{{course.year}}"
-							ng-bind="course.course"></span>
+							tooltip="{{::course.term_abbr}}"
+							ng-bind="::course.course"></span>
 					</span>
 					<small ng-show="course.ects" class="text-info">
-						[{{course.ects}}]
+						[{{::course.ects}}]
 					</small>
 				</div>
 
@@ -114,7 +112,7 @@
 						ng-class="{'no-grade-passed' : course.passed&&!course.grade}"
 						ng-model="course.grade"
 						onclick="select()"
-						ng-keydown="blurOnEnter( $event )"
+						ng-keydown="blurOnEnter($event)"
 						ng-blur="editGrade()">
 				</div>
 
@@ -129,15 +127,17 @@
 								'btn-info'        : !course.passed&&!course.muted,
 								'btn-success'     :  course.passed&&!course.muted,
 								'btn-default'     : !course.passed|| course.muted}">
+							<!-- TODO: Those following ng-class rules need some cleanup. -->
 							<span
 								class="glyphicon"
 								ng-class="{
 									'glyphicon-pencil' : !course.passed,
 									'glyphicon-star'   :((course.grade>=1&&course.grade<=4)|| course.passed)&&
-									                    (!course.muted&& field.bsc_relevant),
+									                    (!course.muted&& field.bsc_relevant)&&
+									                    (field.auto_grade),
 									'glyphicon-ok'     :((course.grade>=1&&course.grade<=4)||course.passed)&&
-									                    (!course.muted&&!field.bsc_relevant),
-									'glyphicon-remove' :  course.grade>4}">
+									                    (!course.muted&&(!field.bsc_relevant||!field.auto_grade)),
+									'glyphicon-remove' :  course.grade>4||course.muted}">
 							</span>
 						</button>
 
@@ -176,7 +176,7 @@
 							<!-- move to other fields -->
 							<li ng-repeat="field in course.fields" ng-hide="field.field_id==course.enrolled_field_id">
 								<a class="pointer" ng-click="moveCourse(field.field_id)">
-									{{field.field}}
+									{{::field.field}}
 								</a>
 							</li>
 

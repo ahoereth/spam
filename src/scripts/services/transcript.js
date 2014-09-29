@@ -74,6 +74,7 @@ factory('Transcript', function (
 		}
 
 		c.grade = _.formatGrade(c.grade, true);
+		c.term_abbr = c.term + c.year;
 
 		if ( c.grade != c.old_grade && ( c.grade < 1 || c.grade > 4 ) ) {
 			c.passed = false;
