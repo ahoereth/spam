@@ -423,6 +423,17 @@ factory('Transcript', function (
 			facts.ects.completed.sum += 12;
 		}
 
+		// calculate average ects per semester, only considering key.length 5
+		// because of "next", "last" and "current" semester information
+		var average_ects = 0, average_ects_denominator = 0;
+		_.forIn(terms, function(term, key) {
+			if ( key.length == 5 && term.ects && term.ects.completed.sum ) {
+				average_ects += term.ects.completed.sum;
+				average_ects_denominator++;
+			}
+		});
+		facts.average_ects = (average_ects / average_ects_denominator).toFixed(1);
+
 		return facts;
 	};
 

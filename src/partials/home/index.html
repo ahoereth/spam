@@ -9,7 +9,7 @@
 <!-- already enrolled in some courses -->
 <p class="lead" ng-if="user.courses.length">
 	<span ng-show="facts.grade_overall">
-		You earned a total of {{facts.ects.completed.sum}} credits with an average grade of <strong>{{facts.grade_overall}}</strong>.<!--, module examination [3C] -->
+		You earned a total of <strong>{{facts.ects.completed.sum}}</strong> credits with an average grade of <strong>{{facts.grade_overall}}</strong>.<!--, module examination [3C] -->
 	</span>
 
 	<!-- enrolled ects -->
@@ -21,7 +21,7 @@
 			All of them in the <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">current semester</abbr>.
 		</span>
 		<span ng-if="terms.currentTerm.ects.enrolled!=facts.ects.enrolled">
-			<abbr tooltip-html-unsafe="{{currentSemester.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.enrolled+terms.currentTerm.ects.completed.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
+			<abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.enrolled+terms.currentTerm.ects.completed.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
 		</span>
 	</span>
 
@@ -30,17 +30,22 @@
 		{{terms.currentTerm.courses.length | iif : 'i' : 'I'}}n your <abbr tooltip-html-unsafe="{{terms.lastTerm.abbr}}">last semester</abbr> you earned a total of {{terms.lastTerm.ects.completed.sum}} credits with an average grade of <strong>{{terms.lastTerm.grade}}</strong>.
 	</span>
 
+	<!-- semester average -->
+	<span ng-if="facts.average_ects>0&&terms.lastTerm.grade">
+		Considering all the terms in which you have completed courses, you collected an average of <strong>{{facts.average_ects}}</strong> credits/term.
+	</span>
+
 	<!-- next semester -->
 	<span ng-if="terms.nextTerm.courses.length">
 		Lastly, for the <abbr tooltip-html-unsafe="{{terms.nextTerm.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{terms.nextTerm.ects.enrolled+terms.nextTerm.ects.completed.sum}} credits.
 	</span>
 
-	<span ng-if="facts.ects.completed.floated">
+	<span ng-if="facts.ects.completed.floated&&!facts.ects.completed.overhang">
 		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.floated | spelledOutTo : 9 }} {{ facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which floated to the open studies field because their original field already is completed.
 	</span>
 
 	<span ng-if="facts.ects.completed.overhang">
-		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which I couldn't account for your bachelor.
+		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
 	</span>
 
 	<span ng-if="false">
@@ -50,7 +55,7 @@
 	<!-- bachelor grade -->
 	<span ng-if="facts.grade_bachelor" ng-switch="facts.ects.completed.sum">
 		<span ng-switch-default>
-			Your bachelor grade presumably will turn out to be around <strong>{{facts.grade_bachelor}}</strong>.
+			Your bachelor grade presumably will be around <strong>{{facts.grade_bachelor}}</strong>.
 		</span>
 		<span ng-switch-when="180">
 			Your bachelor grade is <strong>{{facts.grade_bachelor}}</strong>.

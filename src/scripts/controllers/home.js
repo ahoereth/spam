@@ -54,54 +54,13 @@ angular.module(spamControllersHome).controller('Home', function(
 
 
 	/**
-	 * Student in course grade changed.
-	 *
-	 * @uses $scope.editProp for saving the changed grade
-	 */
-	$scope.editGrade = function() {
-		//this.course.grade = _.formatGrade( this.course.grade );
-		var course = this.course;
-
-		// dont make a http request if nothing has changed
-	/*	if ( angular.equals( course.old_grade, course.grade ) )
-			return;*/
-
-		$scope.editProp( course );
-	};
-
-
-	/**
-	 * Called when some student in course property changed. Saves the changes
-	 * to the server and regenerates the meta data.
-	 *
-	 * TODO: Is clearing the cache required?
+	 * Called when some student in course property changed.
 	 *
 	 * @param course course the course which properties has changed
 	 */
 	$scope.editProp = function(course) {
-		course = _.isNull(course) ? this.course : course;
-
-
+		course = course || this.course;
 		Transcript.course_put(course);
-		/*// TODO: remove this with an restangular update
-		course.id = course.student_in_course_id;
-
-		course.enrolled_field_id = ! _.isString(course.enrolled_field_id) ? course.enrolled_field_id : null;
-
-		course.put().then(function(c) {
-			// remember new old grade
-			course.old_grade = course.grade;
-
-			// maybe the server had something to say about those?
-			course.passed    = c.passed;
-			course.grade     = _.formatGrade( c.grade );
-			course.muted     = c.muted;
-			course.enrolled_field_id = c.enrolled_field_id;
-			course.enrolled_course_in_field_type = c.enrolled_course_in_field_type;
-
-			$log.info( "Student in course property changed: " + course.course );
-
-		});*/
 	};
 
 
@@ -136,13 +95,13 @@ angular.module(spamControllersHome).controller('Home', function(
 	 * first semester.
 	 */
 	$scope.headstart = function() {
-		Restangular.one( 'guide' ).getList(1, {
+		Restangular.one( 'guides', 1 ).getList( 'courses', {
 			semester : 1,
 			year     : $scope.user.mat_year,
 			term     : $scope.user.mat_term
 		}).then(function(guide) {
 			_.each(guide, function(course, idx) {
-				$scope.addCourse(course.course_id,course.fields[0].field_id);
+				$scope.addCourse(course.course_id, course.fields[0].field_id);
 			});
 		});
 	};
@@ -157,8 +116,8 @@ angular.module(spamControllersHome).controller('Home', function(
 		target.enrolled_field_id = ! _.isNull(newFieldId) ? newFieldId : 1;
 
 		$scope.editProp(target);
-		//generateCourseMeta(true);
 	};
+
 
 	/**
 	 * Blur the grade input field when the user presses the enter key.
@@ -197,7 +156,7 @@ angular.module(spamControllersHome).controller('Home', function(
 
 	var pointers = Transcript.init($scope.user);
 	$scope.fields  = pointers.fields;
-	$scope.terms   = pointers.term;
+	$scope.terms   = pointers.terms;
 	$scope.facts   = pointers.facts;
 	$scope.columns = pointers.columns;
 });
