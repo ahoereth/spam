@@ -7,6 +7,7 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 	$rootScope,
 	$cacheFactory,
 	$log,
+	Transcript,
 	Courses,
 	User,
 	_
@@ -59,6 +60,7 @@ angular.module('services.dataHandler', []).factory('DataHandler', function(
 	self.removeUserDependent = function() {
 		self.resetGuide();
 		Courses.reset();
+		Transcript.reset();
 		$rootScope.loginform = { username : '' };
 	};
 
@@ -144,6 +146,8 @@ factory('User', function(
 
 			if ( angular.isDefined(data.fields) )
 				Restangular.restangularizeCollection(data, data.fields, 'fields');
+
+			data.thesis_grade = _.formatGrade(data.thesis_grade);
 		}
 
 		return angular.extend(methods, data, {loggedin : !_.isEmpty(data)});

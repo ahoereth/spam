@@ -20,6 +20,8 @@ angular.module(spamFilters).filter('courseFilter', function() {
 		var check = function(term, comparator, value) {
 			var text, key;
 
+			term = term.replace( /[- ]/g, '_' );
+
 			if ( comparator === '>' && term < value )
 				return false;
 
@@ -41,11 +43,13 @@ angular.module(spamFilters).filter('courseFilter', function() {
 
 		var search = function(dataObject) {
 			// for every filter item
-			for (var i = filters.length - 1; i >= 0; i--) {
-				var f = filters[i];
+			for ( var i = filters.length - 1, f, t; i >= 0; i-- ) {
+				f = filters[ i ];
+				t = ( '' + dataObject[ f.key ] ).replace( /[- ]/g, '_' ).toLowerCase();
 
-				if ( ! check(f.value, f.comparator, (''+dataObject[f.key]).toString().toLowerCase() ) )
+				if ( ! check( f.value, f.comparator, t ) ) {
 					return false;
+				}
 			}
 
 			return true;
@@ -53,7 +57,6 @@ angular.module(spamFilters).filter('courseFilter', function() {
 
 		// clean up the filters
 		angular.forEach(obj, function(value, key) {
-
 			if ( key.indexOf('&&') !== -1 && value.indexOf('&&') !== -1 ) {
 				key   = key.split('&&');
 				value = value.split('&&');
@@ -157,6 +160,46 @@ angular.module(spamFilters).filter('iif', function() {
 
 });
 
+
+/**
+ * FILTER: multiplicity
+ *
+ * Similar to iif filter but used for multiplicity treatment of text.
+ */
+angular.module(spamFilters).filter('multiplicity', function() {
+
+	return function(input, singular, plural) {
+		return input == 1 ? singular : plural;
+	};
+
+});
+
+
+/**
+ * FILTER: spelledOutTo
+ *
+ * Spells the given number out when its lower than the given maximum.
+ */
+angular.module(spamFilters).filter('spelledOutTo', function() {
+	var numbers = [
+		'one',
+		'two',
+		'three',
+		'four',
+		'five',
+		'six',
+		'seven',
+		'eight',
+		'nine',
+		'ten'
+	];
+
+	return function(input, max) {
+		input = parseInt( input );
+		return input <= max ? numbers[ input-1 ] || input : input;
+	};
+
+});
 
 
 /**

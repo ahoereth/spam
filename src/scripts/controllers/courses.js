@@ -290,7 +290,7 @@ angular.module(spamControllersCourses).controller('CourseCtrl', function(
 	// edit guide options modal
 	$scope.guideModal = function() {
 		var modal = $modal.open({
-			templateUrl : "/~SPAM/app/partials/guide/modal.html",
+			templateUrl : "partials/guide/modal.html",
 			controller : [
 				'$scope',
 				'$modalInstance',
@@ -301,11 +301,12 @@ angular.module(spamControllersCourses).controller('CourseCtrl', function(
 					var course = $scope.$parent.course;
 
 					Restangular
-						.all( 'guide' )
+						.all( 'guides' )
 						.one( 'courses', course.course_id )
 						.get()
 						.then(function(guide) {
 
+						guide.course_id = course.course_id;
 						$scope.guideInc = guide;
 						watch();
 
@@ -315,7 +316,7 @@ angular.module(spamControllersCourses).controller('CourseCtrl', function(
 						$scope.$watch( 'guideInc', function( obj, init ) {
 							if ( obj == init ) return;
 
-							$scope.guideInc.post();
+							$scope.guideInc.put();
 						}, true );
 					};
 
