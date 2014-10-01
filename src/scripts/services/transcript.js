@@ -187,6 +187,7 @@ factory('Transcript', function (
 		f.ects.compulsory = f.field_pm;
 		f.ects.optional   = f.field_wpm;
 		f.ects.sum = f.ects.compulsory + f.ects.optional;
+		f.ects.completed.overhang = 0;
 
 		if ( f.ects.completed_compulsory > f.ects.compulsory ) {
 			f.ects.completed.optional  += f.ects.completed.compulsory - f.ects.compulsory;
@@ -194,8 +195,13 @@ factory('Transcript', function (
 		}
 
 		if ( f.ects.completed.optional > f.ects.optional ) {
-			f.ects.completed.overhang = f.ects.completed.optional - f.ects.optional;
-			f.ects.completed.optional = f.ects.optional;
+			f.ects.completed.overhang += f.ects.completed.optional - f.ects.optional;
+			f.ects.completed.optional  = f.ects.optional;
+		}
+
+		// module examinations give 3 additional credits
+		if ( ! f.auto_grade ) {
+			f.ects.completed.overhang += 3;
 		}
 
 		f.ects.completed.sum = f.ects.completed.optional + f.ects.completed.compulsory;
@@ -211,6 +217,7 @@ factory('Transcript', function (
 
 
 		if ( f.field_id == 1 ) {
+			overhang.final = 0;
 			overhang.sum = 0;
 			_.each(overhang, function(value, key) {
 				if ( key === 'sum' || key === 'final' || key == 1 ) {
@@ -219,12 +226,13 @@ factory('Transcript', function (
 
 				overhang.sum += value;
 			});
-			overhang.final = overhang.sum + f.ects.completed.overhang;
-			f.ects.completed.optional += overhang.final;
 
+			f.ects.completed.optional += f.ects.completed.overhang + overhang.sum;
+			f.ects.completed.sum = f.ects.completed.optional + f.ects.completed.compulsory;
 			if ( f.ects.completed.sum > f.ects.sum ) {
 				f.ects.completed.overhang = f.ects.completed.sum - f.ects.sum;
 				f.ects.completed.sum      = f.ects.sum;
+				overhang.final = f.ects.completed.overhang;
 			}
 		}
 
@@ -244,7 +252,7 @@ factory('Transcript', function (
 		Restangular.restangularizeElement( f.parentResource, f, f.route );
 
 		if ( delegate ) {
-			init_facts(true);
+			self.facts_changed(true);
 		}
 	};
 
@@ -268,8 +276,8 @@ factory('Transcript', function (
 
 
 
-	self.facts_changed = function() {
-		init_facts();
+	self.facts_changed = function(delegate) {
+		init_facts(delegate);
 	};
 
 
@@ -371,11 +379,6 @@ factory('Transcript', function (
 
 			facts.grade_overall              += grade;
 			helpers.grade_overall_denominator++;
-
-			// module examinations give 3 additional credits
-			if ( ! field.auto_grade ) {
-				facts.ects.completed.optional+=3;
-			}
 
 			if ( field.bsc_relevant ) {
 				helpers.completed_bsc_relevant_optional += field.ects.completed.optional;

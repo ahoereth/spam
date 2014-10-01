@@ -40,10 +40,6 @@
 		Lastly, for the <abbr tooltip-html-unsafe="{{terms.nextTerm.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{terms.nextTerm.ects.enrolled+terms.nextTerm.ects.completed.sum}} credits.
 	</span>
 
-	<span ng-if="facts.ects.completed.floated&&!facts.ects.completed.overhang">
-		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.floated | spelledOutTo : 9 }} {{ facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which floated to the open studies field because their original field already is completed.
-	</span>
-
 	<span ng-if="facts.ects.completed.overhang">
 		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
 	</span>
