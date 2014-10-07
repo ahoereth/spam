@@ -22,8 +22,8 @@ IndexIgnore */*
 RewriteEngine on
 
 
-RewriteCond %{HTTP_HOST} ^ikw\.uni-osnabrueck\.de$ [NC]
-RewriteRule ^(.*) https://cogsci.uos.de/~SPAM/$1 [R=301,L]
+###RewriteCond %{HTTP_HOST} ^ikw\.uni-osnabrueck\.de$ [NC]
+###RewriteRule ^(.*) https://cogsci.uos.de/~SPAM/$1 [R=301,L]
 
 ###RewriteCond %{HTTPS} !=on
 ###RewriteCond %{ENV:HTTPS} !=on
