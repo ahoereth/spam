@@ -236,11 +236,11 @@ factory('Transcript', function (
 			}
 		}
 
-		f.ects.rest = f.ects.sum - f.ects.completed.sum - f.ects.enrolled - f.ects.compulsory + f.ects.completed.compulsory;
+		f.ects.rest = f.ects.sum - f.ects.completed.sum - f.ects.enrolled.sum - f.ects.compulsory + f.ects.completed.compulsory;
 
 		f.ects.completed.percent  = _.percent(f.ects.completed.sum, f.ects.sum);
-		f.ects.compulsory_percent = _.percent(f.ects.compulsory - f.ects.completed.compulsory, f.ects.sum);
-		f.ects.enrolled_percent   = _.percent(f.ects.enrolled, f.ects.sum);
+		f.ects.compulsory_percent = _.percent(f.ects.compulsory - f.ects.completed.compulsory - f.ects.enrolled.compulsory, f.ects.sum);
+		f.ects.enrolled_percent   = _.percent(f.ects.enrolled.sum, f.ects.sum);
 		f.ects.rest_percent       = _.percent(f.ects.rest, f.ects.sum);
 
 		// Relevant for the bachelor grade?
@@ -373,7 +373,7 @@ factory('Transcript', function (
 			var field = fields[i];
 			var grade = parseFloat(field.grade);
 
-			facts.ects.enrolled              += field.ects.enrolled;
+			facts.ects.enrolled              += field.ects.enrolled.sum;
 			facts.ects.completed.optional    += field.ects.completed.optional;
 			facts.ects.completed.compulsory  += field.ects.completed.compulsory;
 
@@ -499,7 +499,11 @@ factory('Transcript', function (
 					sum: 0,
 					overhang: 0
 				},
-				enrolled: 0
+				enrolled: {
+					optional: 0,
+					compulsory: 0,
+					sum: 0
+				}
 			},
 			grade: 0
 		};
@@ -544,16 +548,17 @@ factory('Transcript', function (
 					grade_denominator += counting_ects;
 				}
 			} else {
-				data.ects.enrolled += c.ects;
+				data.ects.enrolled[ type ] += c.ects;
 			}
 		}
 
-		data.ects.completed.sum = data.ects.completed.compulsory + data.ects.completed.optional
+		data.ects.completed.sum = data.ects.completed.compulsory + data.ects.completed.optional;
+		data.ects.enrolled.sum  = data.ects.enrolled.compulsory  + data.ects.enrolled.optional;
 
 		var maxEnrolled = ( available_ects.optional + available_ects.compulsory ) - data.ects.completed.sum;
-		if ( data.ects.enrolled > maxEnrolled ) {
-			data.ects.overhang = data.ects.enrolled - maxEnrolled;
-			data.ects.enrolled = maxEnrolled;
+		if ( data.ects.enrolled.sum > maxEnrolled ) {
+			data.ects.overhang = data.ects.enrolled.sum - maxEnrolled;
+			data.ects.enrolled.sum = maxEnrolled;
 		}
 
 		data.grade = _.formatGrade(data.grade / grade_denominator);
