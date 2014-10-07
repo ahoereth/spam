@@ -377,20 +377,22 @@ factory('Transcript', function (
 			facts.ects.completed.optional    += field.ects.completed.optional;
 			facts.ects.completed.compulsory  += field.ects.completed.compulsory;
 
-			facts.grade_overall              += grade;
-			helpers.grade_overall_denominator++;
+			if ( _.isNumeric(grade) ) {
+				facts.grade_overall              += grade
+				helpers.grade_overall_denominator++;
 
-			if ( field.bsc_relevant ) {
-				helpers.completed_bsc_relevant_optional += field.ects.completed.optional;
+				if ( field.bsc_relevant ) {
+					helpers.completed_bsc_relevant_optional += field.ects.completed.optional;
 
-				// fields count double
-				facts.grade_bachelor += grade;
-				helpers.grade_bachelor_denominator++;
-			}
+					// fields count double
+					facts.grade_bachelor += grade;
+					helpers.grade_bachelor_denominator++;
+				}
 
-			// oral module examinations give extra credits for the open studies field
-			if ( ! field.auto_grade ) {
-				helpers.oral_ects += 3;
+				// oral module examinations give extra credits for the open studies field
+				if ( ! field.auto_grade ) {
+					helpers.oral_ects += 3;
+				}
 			}
 		}
 
