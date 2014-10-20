@@ -596,6 +596,9 @@ factory('Transcript', function (
 	 * @return {term}   term object reference
 	 */
 	function get_term(year, term) {
+		term = term || $rootScope.meta.term;
+		year = year || $rootScope.meta.currentTermYear;
+
 		term = term.toUpperCase();
 
 		var t = terms[ term + year ];
