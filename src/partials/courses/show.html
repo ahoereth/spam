@@ -78,7 +78,7 @@
 
 		<a ng-click="guideModal()" class="btn btn-default" ng-if="user.rank>=16">Guide options</a>
 
-		<a class="btn btn-warning" ng-show="user.rank>=2" ng-href="courses/{{course.course_id}}/edit">Propose changes</a>
+		<a class="btn btn-warning" ng-show="user.rank>=2" ng-hide="true" ng-href="courses/{{course.course_id}}/edit">Propose changes</a>
 
 	</span>
 </div>
