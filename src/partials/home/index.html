@@ -21,7 +21,7 @@
 			All of them in the <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">current semester</abbr>.
 		</span>
 		<span ng-if="terms.currentTerm.ects.enrolled!=facts.ects.enrolled">
-			<abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.enrolled+terms.currentTerm.ects.completed.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
+			<abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.enrolled.sum+terms.currentTerm.ects.completed.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
 		</span>
 	</span>
 
