@@ -348,19 +348,27 @@ factory('Transcript', function (
 				sum: 0
 			},
 			grade_overall  : 0,
-			grade_bachelor : 0
+			grade_bachelor : 0,
+			relevant_fields: 0
 		});
 
 		var helpers = {
 			grade_overall_denominator: 0,
-			grade_bachelor_denominator: 0,
 			completed_bsc_relevant_optional: 0,
 			oral_ects: 0,
 			os_ects: 0
 		};
 
-		for ( var i = fields.length - 1; i >= 0; i-- ) {
-			var field = fields[i];
+		// In order to take the best grades into consideration for the bachelor
+		// grade we sort the fields by grade and start with the best-ranking
+		// field.
+		var field_ids = _.range(0, fields.length);
+		field_ids = _.sortBy(field_ids, function(field_id) {
+			return parseFloat(fields[field_id].grade);
+		});
+
+		for ( var i = 0; i < field_ids.length; i++ ) {
+			var field = fields[ field_ids[i] ];
 			var grade = parseFloat(field.grade);
 
 			facts.ects.enrolled              += field.ects.enrolled.sum;
@@ -371,12 +379,15 @@ factory('Transcript', function (
 				facts.grade_overall              += grade;
 				helpers.grade_overall_denominator++;
 
-				if ( field.bsc_relevant ) {
+				if ( field.bsc_relevant && facts.relevant_fields < 5 ) {
 					helpers.completed_bsc_relevant_optional += field.ects.completed.optional;
 
 					// fields count double
 					facts.grade_bachelor += grade;
-					helpers.grade_bachelor_denominator++;
+					facts.relevant_fields++;
+				} else {
+					// Set the BSC relevance to false so just 5 fields get 'star' icons.
+					field.bsc_relevant = false;
 				}
 
 				// oral module examinations give extra credits for the open studies field
@@ -408,7 +419,7 @@ factory('Transcript', function (
 
 		facts.ects.completed.sum += facts.ects.completed.optional + facts.ects.completed.compulsory;
 		facts.grade_overall  = _.formatGrade(facts.grade_overall / helpers.grade_overall_denominator);
-		facts.grade_bachelor = _.formatGrade(facts.grade_bachelor / helpers.grade_bachelor_denominator);
+		facts.grade_bachelor = _.formatGrade(facts.grade_bachelor / facts.relevant_fields);
 
 		// bsc grade = (fields*2 + thesis) / 3
 		if ( user.thesis_grade ) {
