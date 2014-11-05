@@ -218,16 +218,16 @@
 			<!-- required -->
 			<div
 				class="progress-bar progress-required"
-				style="width: {{field.ects.compulsory_percent}}%"
-				ng-hide="field.ects.compulsory_percent==0"
-				ng-bind="field.ects.compulsory-field.ects.completed.compulsory"></div>
+				style="width: {{field.ects.open_compulsory_percent}}%"
+				ng-hide="field.ects.open_compulsory_percent==0"
+				ng-bind="field.ects.open_compulsory"></div>
 
 			<!-- open -->
 			<div
 				class="progress-bar progress-background"
-				style="width: {{field.ects.rest_percent}}%"
-				ng-hide="field.ects.rest_percent==0"
-				ng-bind="field.ects.rest"></div>
+				style="width: {{field.ects.open_percent}}%"
+				ng-hide="field.ects.open_percent==0"
+				ng-bind="field.ects.open"></div>
 
 		</div>
 	</div><!-- /panel-footer -->

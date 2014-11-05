@@ -236,12 +236,13 @@ factory('Transcript', function (
 			}
 		}
 
-		f.ects.rest = f.ects.sum - f.ects.completed.sum - f.ects.enrolled.sum - f.ects.compulsory + f.ects.completed.compulsory;
+		f.ects.open_compulsory = f.ects.compulsory - (f.ects.completed.compulsory + f.ects.enrolled.compulsory);
+		f.ects.open = f.ects.sum - (f.ects.completed.sum + f.ects.enrolled.sum + f.ects.open_compulsory);
 
-		f.ects.completed.percent  = _.percent(f.ects.completed.sum, f.ects.sum);
-		f.ects.compulsory_percent = _.percent(f.ects.compulsory - f.ects.completed.compulsory - f.ects.enrolled.compulsory, f.ects.sum);
-		f.ects.enrolled_percent   = _.percent(f.ects.enrolled.sum, f.ects.sum);
-		f.ects.rest_percent       = _.percent(f.ects.rest, f.ects.sum);
+		f.ects.completed.percent       = _.percent(f.ects.completed.sum, f.ects.sum);
+		f.ects.enrolled_percent        = _.percent(f.ects.enrolled.sum, f.ects.sum);
+		f.ects.open_compulsory_percent = _.percent(f.ects.open_compulsory, f.ects.sum);
+		f.ects.open_percent            = _.percent(f.ects.open, f.ects.sum);
 
 		// Relevant for the bachelor grade?
 		// "open studies" "logic" and "statistics" are exceptions.
