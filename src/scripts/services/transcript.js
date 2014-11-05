@@ -187,17 +187,6 @@ factory('Transcript', function (
 		f.ects.compulsory = f.field_pm;
 		f.ects.optional   = f.field_wpm;
 		f.ects.sum = f.ects.compulsory + f.ects.optional;
-		f.ects.completed.overhang = 0;
-
-		if ( f.ects.completed_compulsory > f.ects.compulsory ) {
-			f.ects.completed.optional  += f.ects.completed.compulsory - f.ects.compulsory;
-			f.ects.completed.compulsory = f.ects.compulsory;
-		}
-
-		if ( f.ects.completed.optional > f.ects.optional ) {
-			f.ects.completed.overhang += f.ects.completed.optional - f.ects.optional;
-			f.ects.completed.optional  = f.ects.optional;
-		}
 
 		// module examinations give 3 additional credits
 		if ( ! f.auto_grade ) {
@@ -503,7 +492,8 @@ factory('Transcript', function (
 				enrolled: {
 					optional: 0,
 					compulsory: 0,
-					sum: 0
+					sum: 0,
+					overhang: 0
 				}
 			},
 			grade: 0
@@ -535,6 +525,7 @@ factory('Transcript', function (
 						counting_ects = c.ects - (completed_new - available);
 						data.ects.completed[ type ]  += counting_ects;
 						data.ects.completed.overhang += c.ects - counting_ects;
+						c.counts_partially = true;
 					} else { // if ( completed_new <= available )
 						data.ects.completed[ type ] = completed_new;
 					}
@@ -558,7 +549,7 @@ factory('Transcript', function (
 
 		var maxEnrolled = ( available_ects.optional + available_ects.compulsory ) - data.ects.completed.sum;
 		if ( data.ects.enrolled.sum > maxEnrolled ) {
-			data.ects.overhang = data.ects.enrolled.sum - maxEnrolled;
+			data.ects.enrolled.overhang = data.ects.enrolled.sum - maxEnrolled;
 			data.ects.enrolled.sum = maxEnrolled;
 		}
 

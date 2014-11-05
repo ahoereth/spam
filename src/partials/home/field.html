@@ -30,17 +30,17 @@
 					<button type="button"
 						class="btn btn-xs btn-block dropdown-toggle"
 						ng-class="{
-							'btn-success' : field.ects.compulsory_percent==0,
-							'btn-warning' : field.ects.compulsory_percent!=0}"
+							'btn-success' : field.ects.open_compulsory_percent==0,
+							'btn-warning' : field.ects.open_compulsory_percent!=0}"
 						style="height: 100%;">
 
 						<span
 							class="glyphicon"
 							ng-class="{
 								'glyphicon-star'   : field.bsc_relevant,
-								'glyphicon-ok'     : field.ects.compulsory_percent==0
+								'glyphicon-ok'     : field.ects.open_compulsory_percent==0
 								                  &&!field.bsc_relevant,
-								'glyphicon-pencil' : field.ects.compulsory_percent!=0
+								'glyphicon-pencil' : field.ects.open_compulsory_percent!=0
 								                  && field.ects.completed.percent<100
 								                  &&!field.bsc_relevant}">
 						</span>
