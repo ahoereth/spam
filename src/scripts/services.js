@@ -139,8 +139,8 @@ factory('_', function ($window) {
 
 		course = course || false;
 
-		// convert to string
-		g = g + '';
+		// convert to string while fixing JavaScript float problem
+		g = g.toPrecision(12);
 
 		// replace commas with periods
 		// remove everything but numbers and periods
