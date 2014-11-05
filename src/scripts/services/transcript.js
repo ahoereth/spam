@@ -28,7 +28,7 @@ factory('Transcript', function (
 				self.course_put(course, !first_init);
 				course.in_transcript = true;
 			}
-		};
+		}
 
 		if ( first_init ) {
 			init_fields();
@@ -285,7 +285,7 @@ factory('Transcript', function (
 		self.field_changed(1, false);
 
 		return fields;
-	};
+	}
 
 
 	/**
@@ -320,7 +320,7 @@ factory('Transcript', function (
 		terms.nextTerm    = get_term($rootScope.meta.nextTermYear,    $rootScope.meta.otherTerm);
 
 		return terms;
-	};
+	}
 
 
 	/**
@@ -368,7 +368,7 @@ factory('Transcript', function (
 			facts.ects.completed.compulsory  += field.ects.completed.compulsory;
 
 			if ( _.isNumeric(grade) ) {
-				facts.grade_overall              += grade
+				facts.grade_overall              += grade;
 				helpers.grade_overall_denominator++;
 
 				if ( field.bsc_relevant ) {
@@ -430,7 +430,7 @@ factory('Transcript', function (
 		facts.average_ects = (average_ects / average_ects_denominator).toFixed(1);
 
 		return facts;
-	};
+	}
 
 
 	/**
@@ -466,7 +466,7 @@ factory('Transcript', function (
 		}
 
 		return columns;
-	};
+	}
 
 
 	/**
@@ -556,7 +556,7 @@ factory('Transcript', function (
 		data.grade = _.formatGrade(data.grade / grade_denominator);
 
 		return data;
-	};
+	}
 
 
 	/**
@@ -606,7 +606,7 @@ factory('Transcript', function (
 		}
 
 		return t;
-	};
+	}
 
 	return self;
 });
