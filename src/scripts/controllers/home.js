@@ -271,7 +271,7 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 
 	$scope.course = {
 		field_id : parseInt( $routeParams.field_id, 10 ),
-		unofficial_year: $rootScope.meta.year,
+		unofficial_year: $rootScope.meta.currentTermYear,
 		unofficial_term: $rootScope.meta.term
 	};
 
@@ -287,12 +287,22 @@ angular.module(spamControllersHome).controller('Unofficial_edit', function(
 	$scope.submit = function() {
 		$scope.submitted = true;
 
-		var course = this.course;
+		var course = this.course || {};
 
-		if ( _.isUndefined(course) || _.isEmpty(course.unofficial_course) ) return;
+		// The course needs to be located in some semester. If none is defined
+		// add it to the current.
+		_.defaults(course, {
+			unofficial_year: $rootScope.meta.currentTermYear,
+			unofficial_term: $rootScope.meta.term
+		});
+
+		// Can't submit if the course has no title.
+		if (_.isEmpty(course.unofficial_course) )
+			return;
 
 		$scope.addCourse(course);
 
+		// When the course is added redirect to the course overview.
 		var added = $scope.$on( 'courseAdded', function(event, course) {
 			$scope.submitted = false;
 			$location.search({}).path('/~');

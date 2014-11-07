@@ -599,8 +599,10 @@ factory('Transcript', function (
 	 * @return {term}   term object reference
 	 */
 	function get_term(year, term) {
-		term = term || $rootScope.meta.term;
-		year = year || $rootScope.meta.currentTermYear;
+		// If a course somehow has not term/year add it to the users first year
+		// of matriculation or (if that is not defined) to the current term.
+		term = term || (user.mat_term || $rootScope.meta.term);
+		year = year || (user.mat_year || $rootScope.meta.currentTermYear);
 
 		term = term.toUpperCase();
 
