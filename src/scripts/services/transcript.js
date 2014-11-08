@@ -401,7 +401,7 @@ factory('Transcript', function (
 		// fields the student chose to complete.
 		// A student can have a maximum of 57 bachelor relevant "optional" credits.
 		var os = get_field(1);
-		helpers.os_ects = 57 - helpers.completed_bsc_relevant_optional;
+		helpers.os_ects = 60 - helpers.completed_bsc_relevant_optional;
 		helpers.os_ects = helpers.os_ects < 11 ? 22 + helpers.os_ects : 33;
 		if ( os.field_wpm != helpers.os_ects ) {
 			os.field_wpm = helpers.os_ects;
