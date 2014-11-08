@@ -30,7 +30,6 @@ angular.module(spamControllersGuide).controller('GuideCtrl', function(
 			_.each(tmp, function(v, k) {
 				$scope.guide[k] = _.groupBy(v, 'singleField');
 			});
-			console.log($scope.guide);
 		});
 	};
 	fetch(); // should depend on the dropdown select
