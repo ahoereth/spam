@@ -233,10 +233,11 @@ factory('Transcript', function (
 		f.ects.open_compulsory_percent = _.percent(f.ects.open_compulsory, f.ects.sum);
 		f.ects.open_percent            = _.percent(f.ects.open, f.ects.sum);
 
-		// Relevant for the bachelor grade?
+		// Can this field be or is it already relevant for the bachelor grade?
 		// "open studies" "logic" and "statistics" are exceptions.
-		f.bsc_relevant = ( f.ects.completed.percent == 100 || ! f.auto_grade ) && f.field_id > 3 ? true : false;
-
+		if (f.field_examination_possible) {
+			f.bsc_relevant = f.ects.completed.percent == 100 || ! f.auto_grade ? true : false;
+		}
 
 		// https://github.com/mgonto/restangular/issues/378
 		Restangular.restangularizeElement( f.parentResource, f, f.route );
