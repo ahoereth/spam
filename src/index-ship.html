@@ -1,37 +1,27 @@
 <!doctype html>
-<html lang="en" data-ng-app="spam" data-ng-controller="Root">
+<html lang="en" data-ng-app="spam" data-ng-controller="Root" ng-strict-di>
 <head>
-
-	<base href="/~SPAM/">
-
-	<meta charset="utf-8">
-	<meta name="fragment" content="!">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-
-	<meta name="mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
-	<meta name="apple-mobile-web-app-title" content="SPAM">
-
-	<title data-ng-bind="title">Study Planning in Cognitive Science</title>
-
-	<link href="img/spam.png" rel="apple-touch-icon">
-	<link href="img/spam.ico" rel="shortcut icon">
-
-	<style>.ng-cloak { display: none !important; }</style>
-	<link href="app/css/spamin.css?v=VERSION" rel="stylesheet">
-	<script src="app/js/spamin.js?v=VERSION"></script>
-
+  <base href="/~SPAM/">
+  <title data-ng-bind="title">Study Planning in Cognitive Science</title>
+  <meta charset="utf-8">
+  <meta name="fragment" content="!">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
+  <meta name="apple-mobile-web-app-title" content="SPAM">
+  <link href="img/spam.png" rel="apple-touch-icon">
+  <link href="img/spam.ico" rel="shortcut icon">
+  <style>.ng-cloak { display: none !important; }</style>
+  <link href="app/css/spamin.css?v=VERSION" rel="stylesheet">
+  <script src="app/js/spamin.js?v=VERSION"></script>
 </head>
 <body class="ng-cloak">
-
-	<div class="content wrap">
-		<div data-ng-include="'partials/navbar.html'"></div>
-		<div class="container" data-ng-view></div>
-	</div>
-
-	<div class="footer wrap" data-ng-include="'partials/footer.html'"></div>
-
+  <div class="content wrap">
+    <div data-ng-include="'partials/navbar.html'"></div>
+    <div class="container" data-ng-view></div>
+  </div>
+  <div class="footer wrap" data-ng-include="'partials/footer.html'"></div>
 </body>
 </html>

@@ -1,40 +1,35 @@
 <!doctype html>
 <html lang="en" data-ng-app="spam" data-ng-controller="Root">
 <head>
+  <style>.ng-cloak { display: none !important; }</style>
 
-	<style>.ng-cloak { display: none !important; }</style>
+  <base href="/~SPAM/">
+  <meta charset="utf-8">
+  <meta name="fragment" content="!">
+  <meta http-equiv="expires" content="0">
+  <meta http-equiv="cache-control" content="no-store">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 
-	<base href="/~SPAM/">
-	<meta charset="utf-8">
-	<meta name="fragment" content="!">
-	<meta http-equiv="expires" content="0">
-	<meta http-equiv="cache-control" content="no-store">
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
+  <meta name="apple-mobile-web-app-title" content="SPAM">
 
-	<meta name="mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-capable" content="yes">
-	<meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
-	<meta name="apple-mobile-web-app-title" content="SPAM">
+  <title data-ng-bind="title">Study Planning in Cognitive Science</title>
 
-	<title data-ng-bind="title">Study Planning in Cognitive Science</title>
-
-	<link href="img/spam.png" rel="apple-touch-icon">
-	<link href="img/spam.ico" rel="shortcut icon">
-	<link href="styles/app.css" rel="stylesheet">
-
-	<style>
-	</style>
-
+  <link href="img/spam.png" rel="apple-touch-icon">
+  <link href="img/spam.ico" rel="shortcut icon">
+  <link href="styles/app.css" rel="stylesheet">
 </head>
 <body class="ng-cloak">
 
-	<div class="content wrap">
-		<div data-ng-include="'partials/navbar.html'"></div>
-		<section class="container ng-view" autoscroll="true"></section>
-	</div>
+  <div class="content wrap">
+    <div data-ng-include="'partials/navbar.html'"></div>
+    <section class="container ng-view" autoscroll="true"></section>
+  </div>
 
-	<div class="footer wrap" data-ng-include="'partials/footer.html'"></div>
+  <div class="footer wrap" data-ng-include="'partials/footer.html'"></div>
 
 
 <script src="lib/fastclick/lib/fastclick.js"></script>
@@ -44,32 +39,64 @@
 <script src="lib/angular/angular.js"></script>
 <script src="lib/angular-route/angular-route.js"></script>
 <script src="lib/angular-sanitize/angular-sanitize.js"></script>
+<script src="lib/angular-utf8-base64/angular-utf8-base64.js"></script>
 
 <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="lib/restangular/dist/restangular.js"></script>
 
-<script src="scripts/services.js"></script>
-<script src="scripts/services/courses.js"></script>
-<script src="scripts/services/dataHandler.js"></script>
-<script src="scripts/services/httpIntercept.js"></script>
-<script src="scripts/services/transcript.js"></script>
-
-<script src="scripts/filters.js"></script>
-
-<script src="scripts/directives.js"></script>
-<script src="scripts/directives/infinite-scroll.js"></script>
-<script src="scripts/directives/help-fragment.js"></script>
-
-<script src="scripts/controllers.js"></script>
-<script src="scripts/controllers/admin.js"></script>
-<script src="scripts/controllers/courses.js"></script>
-<script src="scripts/controllers/guide.js"></script>
-<script src="scripts/controllers/home.js"></script>
-<script src="scripts/controllers/navbar.js"></script>
-<script src="scripts/controllers/http.js"></script>
-<script src="scripts/controllers/help.js"></script>
 
 <script src="scripts/app.js"></script>
+<script src="scripts/app.config.js"></script>
+<script src="scripts/app.run.js"></script>
+
+<script src="scripts/services/_module.js"></script>
+<script src="scripts/services/auth.js"></script>
+<script src="scripts/services/courses.js"></script>
+<script src="scripts/services/data-handler.js"></script>
+<script src="scripts/services/fastclick.js"></script>
+<script src="scripts/services/http-intercept.js"></script>
+<script src="scripts/services/lodash.js"></script>
+<script src="scripts/services/transcript.js"></script>
+<script src="scripts/services/user.js"></script>
+
+<script src="scripts/filters/_module.js"></script>
+<script src="scripts/filters/course-filter.js"></script>
+<script src="scripts/filters/highlight.js"></script>
+<script src="scripts/filters/iif.js"></script>
+<script src="scripts/filters/multiplicity.js"></script>
+<script src="scripts/filters/nl2br.js"></script>
+<script src="scripts/filters/prerequisites.js"></script>
+<script src="scripts/filters/spelled-out-to.js"></script>
+<script src="scripts/filters/urlencode.js"></script>
+<script src="scripts/filters/year.js"></script>
+
+<script src="scripts/directives/_module.js"></script>
+<script src="scripts/directives/infinite-scroll.js"></script>
+<script src="scripts/directives/add-remove-course.js"></script>
+<script src="scripts/directives/help-fragment.js"></script>
+
+<script src="scripts/controllers/courses._module.js"></script>
+<script src="scripts/controllers/courses.js"></script>
+<script src="scripts/controllers/courses.proposals.js"></script>
+<script src="scripts/controllers/courses.single.js"></script>
+<script src="scripts/controllers/courses.single.edit.js"></script>
+
+<script src="scripts/controllers/user._module.js"></script>
+<script src="scripts/controllers/user.course.js"></script>
+<script src="scripts/controllers/user.logout.js"></script>
+<script src="scripts/controllers/user.matriculation.js"></script>
+<script src="scripts/controllers/user.overview.js"></script>
+<script src="scripts/controllers/user.settings.js"></script>
+
+<script src="scripts/controllers/_module.js"></script>
+<script src="scripts/controllers/alert.js"></script>
+<script src="scripts/controllers/guide.js"></script>
+<script src="scripts/controllers/help.js"></script>
+<script src="scripts/controllers/http.js"></script>
+<script src="scripts/controllers/login.js"></script>
+<script src="scripts/controllers/loginform.js"></script>
+<script src="scripts/controllers/navbar.js"></script>
+<script src="scripts/controllers/root.js"></script>
 
 </body>
 </html>

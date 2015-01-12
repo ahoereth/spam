@@ -1,0 +1,86 @@
+(function() {
+  'use strict';
+
+  /**
+   * User functionality factory. All functionality provided by this factory is
+   * injected into the global ($rootScope) user object.
+   */
+  angular
+    .module('spam.services')
+    .factory('User', userFactory);
+
+
+  /* @ngInject */
+  function userFactory(
+    $rootScope,
+    $log,
+    Restangular,
+    _
+  ) {
+    var methods = {};
+
+    methods.updateUser = function(data) {
+      var put = {};
+      angular.forEach(data, function(value, key) {
+        if ( ! angular.equals($rootScope.user[key], value) ) {
+          put[key] = value;
+        }
+      });
+
+      put.username = $rootScope.user.username;
+      put = Restangular.restangularizeElement(null, put, 'users');
+
+      put.put().then( function(user) {
+        $rootScope.$broadcast('userUpdated', user);
+        $log.info('User data saved.');
+      });
+    };
+
+    methods.destroy = function() {
+      $log.info('Destroying local user data.');
+      $rootScope.$broadcast('userDestroy');
+    };
+
+    methods.deleteUser = function() {
+      $log.info('Deleting global user data.');
+      //$rootScope.$broadcast('userDelete');
+      if ($rootScope.user) {
+        $rootScope.user.remove().then(function() {
+          // notify client that deletion was successful
+          $log.info('Global user data deleted.');
+        }, function() {
+          // do something when removing fails
+          $log.info('Error while deleting global user data.');
+        });
+
+        // handle local and global user data deletion asynchronously
+        methods.destroy();
+      }
+    };
+
+    methods.getRegulation = function(reg) {
+      return this.regulation_id || (reg || null);
+    };
+
+    methods.getUsername = function() {
+      return this.username || null;
+    };
+
+
+    return function(data) {
+      if (angular.isDefined(data)) {
+        if (angular.isDefined(data.courses)) {
+          Restangular.restangularizeCollection(data, data.courses, 'courses');
+        }
+
+        if (angular.isDefined(data.fields)) {
+          Restangular.restangularizeCollection(data, data.fields, 'fields');
+        }
+
+        data.thesis_grade = _.formatGrade(data.thesis_grade);
+      }
+
+      return angular.extend(methods, data, {loggedin : !_.isEmpty(data)});
+    };
+  }
+})();

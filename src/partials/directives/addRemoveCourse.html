@@ -1,0 +1,43 @@
+<div>
+  <div
+    dropdown
+    class="btn-group dropdown"
+    ng-class="{open : course.open}"
+    style="width: 100%"
+    ng-if="! course.singleField &&
+           ! course.student_in_course_id &&
+           ! course.enrolled">
+    <a dropdown-toggle class="btn btn-success dropdown-toggle {{btnClass}}">
+      <span class="glyphicon glyphicon-plus"></span>
+    </a>
+    <ul class="dropdown-menu pull-right">
+      <li
+        ng-repeat="field in course.fields"
+        ng-class="{active : course.li==$index}">
+        <a
+          style="cursor: pointer;"
+          ng-click="addCourse(course.course_id, field.field_id)">
+          {{::field.field}}
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <a
+    class="btn btn-success {{btnClass}}"
+    ng-disabled="course.enrolled"
+    ng-class="{disabled : course.enrolled}"
+    ng-click="addCourse(course.course_id, course.singleField)"
+    ng-if="( course.singleField || course.enrolled ) &&
+           ! course.student_in_course_id">
+    <span class="glyphicon glyphicon-plus"></span>
+  </a>
+  <a
+    class="btn btn-danger {{btnClass}}"
+    ng-show="course.student_in_course_id"
+    ng-disabled="!course.enrolled"
+    ng-class="{disabled : !course.enrolled}"
+    ng-click="removeCourse(course)">
+    <span class="glyphicon glyphicon-minus"></span>
+  </a>
+</div>
