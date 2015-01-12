@@ -3,7 +3,6 @@
 <head>
   <style>.ng-cloak { display: none !important; }</style>
 
-  <base href="/~SPAM/">
   <meta charset="utf-8">
   <meta name="fragment" content="!">
   <meta http-equiv="expires" content="0">
@@ -17,6 +16,16 @@
   <meta name="apple-mobile-web-app-title" content="SPAM">
 
   <title data-ng-bind="title">Study Planning in Cognitive Science</title>
+
+  <base href="/~SPAM">
+  <script type="text/javascript">
+  // Handle local servers running with or without /~SPAM base.
+  /* global window, document */
+  (function() { 'use strict';
+    var base=(window.location.pathname||'').substr(0,6)=== '/~SPAM'?'/~SPAM':'';
+    document.getElementsByTagName('base')[0].href = base + '/';
+  })();
+  </script>
 
   <link href="img/spam.png" rel="apple-touch-icon">
   <link href="img/spam.ico" rel="shortcut icon">
@@ -39,13 +48,13 @@
 <script src="lib/angular/angular.js"></script>
 <script src="lib/angular-route/angular-route.js"></script>
 <script src="lib/angular-sanitize/angular-sanitize.js"></script>
-<script src="lib/angular-utf8-base64/angular-utf8-base64.js"></script>
 
 <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 <script src="lib/restangular/dist/restangular.js"></script>
+<script src="lib/angular-utf8-base64/angular-utf8-base64.js"></script>
 
 
-<script src="scripts/app.js"></script>
+<script src="scripts/app._module.js"></script>
 <script src="scripts/app.config.js"></script>
 <script src="scripts/app.routes.js"></script>
 <script src="scripts/app.run.js"></script>

@@ -1,4 +1,11 @@
+/* global module, require, console */
 module.exports = function(grunt) {
+  'use strict';
+
+  var modRewrite = require('connect-modrewrite');
+  var mountFolder = function(connect, dir) {
+    return connect.static(require('path').resolve(dir));
+  };
 
   var pkg = grunt.file.readJSON('package.json');
 
@@ -10,20 +17,22 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-ng-annotate');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-angular-templates');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
 
   grunt.initConfig({
     pkg: pkg,
 
+    // **********
+    // remove unneeded files
     clean: {
       dev: ['src/fonts'],
-
       before: ['app/**/**'],
-
       after: ['app/js/tmp.*.js']
     },
 
-
+    // **********
+    // copy fonts and images
     copy: {
       dev: {
         expand: true,
@@ -50,25 +59,29 @@ module.exports = function(grunt) {
     },
 
 
+    // **********
+    // compile styles
     less: {
-      dev: {
+      dev: { // non minified for development
         files: {
-          "src/styles/app.css": "src/styles/app.less"
+          'src/styles/app.css': 'src/styles/app.less'
         }
       },
 
-      build: {
+      build: { // minified for production
         options: {
           cleancss: true,
           compress: true
         },
         files: {
-          "app/css/spamin.css": "src/styles/app.less"
+          'app/css/spamin.css': 'src/styles/app.less'
         }
       }
     },
 
 
+    // **********
+    // minify html templates
     ngtemplates: {
       spam: {
         cwd: 'src',
@@ -94,25 +107,17 @@ module.exports = function(grunt) {
     },
 
 
+    // **********
+    // Prepare dependency injection for minification
     ngAnnotate: {
-      // requires uglify task afterwards for merging this with bower_components
       build: {
         files: {
           'app/js/tmp.app.js': [
-            'src/scripts/controllers.js',
             'src/scripts/controllers/*.js',
-
-            'src/scripts/services.js',
-            'src/scripts/services/*.js',
-
-            'src/scripts/filters.js',
-            'src/scripts/filters/*.js',
-
-            'src/scripts/directives.js',
             'src/scripts/directives/*.js',
-
-            'src/scripts/app.js',
-
+            'src/scripts/filters/*.js',
+            'src/scripts/services/*.js',
+            'src/scripts/*.js',
             'app/js/tmp.templates.js'
           ]
         }
@@ -120,6 +125,8 @@ module.exports = function(grunt) {
     },
 
 
+    // **********
+    // Minify
     uglify: {
       // requires ngAnnotate task to be run first for dependency injection
       options: {
@@ -162,6 +169,7 @@ module.exports = function(grunt) {
 
             'src/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
             'src/lib/restangular/dist/restangular.min.js',
+            'src/lib/angular-utf8-base64/angular-utf8-base64.min.js',
 
             'app/js/tmp.app.js' // contains src/scripts/** and src/partials/**
           ]
@@ -170,20 +178,24 @@ module.exports = function(grunt) {
     },
 
 
+    // **********
+    // Watch files for livereloading and auto compiling during development.
     watch: {
+      options: {
+        livereload: true,
+      },
+
       styles_dev: {
         files: [ 'src/styles/**/*.less' ],
         tasks: [ 'less:dev' ]
       },
 
-      styles_build: {
-        files: [ 'src/styles/**/*.less' ],
-        tasks: [ 'less:build' ]
+      scripts: {
+        files: [ 'src/scripts/**.js' ]
       },
 
-      scripts_build: {
-        files: [ 'src/scripts/**/*.js' ],
-        tasks: [ 'scripts' ]
+      html: {
+        files: [ 'src/**.html' ]
       },
 
       copy_dev: {
@@ -193,33 +205,49 @@ module.exports = function(grunt) {
         ],
         tasks: [ 'copy:dev' ]
       },
-
-      copy_build: {
-        files: [
-          'src/partials/**',
-          'src/fonts/**',
-          'src/robots.txt'
-        ],
-        tasks: [ 'copy:build' ]
-      },
-
-      index: {
-        files: [ 'src/index-ship.html' ],
-        tasks: [ 'index' ]
-      },
-
-      htaccess: {
-        files: [ 'src/.htaccess' ],
-        tasks: [ 'htaccess' ]
-      }
     },
 
+
+    // **********
+    // Bump version numbers on release.
     bump: {
       options: {
         pushTo: 'origin'
       }
-    }
+    },
 
+
+    // **********
+    // Local development server
+    connect: {
+      options: {
+        port: 8000,
+        hostname: 'localhost'
+      },
+      dev: {
+        options: {
+          base: 'src',
+          livereload: true,
+          middleware: function(connect) {
+            return [
+              modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf$ /index.html [L]']),
+              mountFolder(connect, 'src')
+            ];
+          }
+        }
+      },
+      demo: {
+        options: {
+          base: 'app',
+          middleware: function(connect) {
+            return [
+              modRewrite(['!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf$ /index.html [L]']),
+              mountFolder(connect, 'app')
+            ];
+          }
+        }
+      }
+    }
   });
 
 
@@ -228,11 +256,11 @@ module.exports = function(grunt) {
   grunt.registerTask('index', 'Create new index.', function() {
     var fs = require('fs');
     fs.readFile('src/index-ship.html', 'utf8', function (err,data) {
-      if (err) return console.log(err);
+      if (err) { return console.log(err); }
       var result = data.replace( /VERSION/g, pkg.version + '-' + Date.now() );
 
       fs.writeFile('app/index.html', result, 'utf8', function (err) {
-        if (err) return console.log(err);
+        if (err) { return console.log(err); }
       });
     });
   });
@@ -241,22 +269,14 @@ module.exports = function(grunt) {
   grunt.registerTask('htaccess', 'Deploy htaccess.', function() {
     var fs = require('fs');
     fs.readFile('src/.htaccess', 'utf8', function (err,data) {
-      if (err) return console.log(err);
+      if (err) { return console.log(err); }
       var result = data.replace( /###/g, '' );
 
       fs.writeFile('app/.htaccess', result, 'utf8', function (err) {
-        if (err) return console.log(err);
+        if (err) { return console.log(err); }
       });
     });
   });
-
-
-  // used for lesser processor load when developing
-  grunt.registerTask(
-    'devWatch',
-    'Watches for less and font changes and builds them to the src directory.',
-    ['watch:styles_dev', 'watch:copy_dev']
-  );
 
   // only required for production
   grunt.registerTask(
@@ -265,18 +285,16 @@ module.exports = function(grunt) {
     ['ngtemplates', 'ngAnnotate', 'uglify']
   );
 
-
+  // build everything ready for deployment
   grunt.registerTask(
     'build',
     'Runs all tasks so the app can be run from /app or /src.',
     ['clean', 'copy', 'index', 'htaccess', 'less', 'scripts', 'clean:after']
   );
 
+  // start local server for demoing the compiled code
+  grunt.registerTask('demo', ['build', 'connect:demo']);
 
-  grunt.registerTask(
-    'default',
-    'Builds from source and watches for new changes to write to the src directory.',
-    ['build', 'devWatch']
-  );
-
+  // start local server for development
+  grunt.registerTask('server', ['connect:dev', 'watch']);
 };

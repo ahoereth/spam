@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en" data-ng-app="spam" data-ng-controller="Root" ng-strict-di>
 <head>
-  <base href="/~SPAM/">
+  <base href="/~SPAM">
   <title data-ng-bind="title">Study Planning in Cognitive Science</title>
   <meta charset="utf-8">
   <meta name="fragment" content="!">
@@ -11,11 +11,12 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
   <meta name="apple-mobile-web-app-title" content="SPAM">
+  <script>document.getElementsByTagName('base')[0].href=(window.location.pathname||'').substr(0,6)==='/~SPAM'?'/~SPAM/':'/';</script>
+  <style>.ng-cloak { display: none !important; }</style>
   <link href="img/spam.png" rel="apple-touch-icon">
   <link href="img/spam.ico" rel="shortcut icon">
-  <style>.ng-cloak { display: none !important; }</style>
-  <link href="app/css/spamin.css?v=VERSION" rel="stylesheet">
-  <script src="app/js/spamin.js?v=VERSION"></script>
+  <link href="css/spamin.css?v=VERSION" rel="stylesheet">
+  <script src="js/spamin.js?v=VERSION"></script>
 </head>
 <body class="ng-cloak">
   <div class="content wrap">
