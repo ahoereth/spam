@@ -16,5 +16,4 @@
     'spam.controllers.user',
     'spam.controllers.courses'
   ]);
-
 })();
