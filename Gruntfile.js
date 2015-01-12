@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         expand: true,
         flatten: true,
         filter: 'isFile',
-        cwd: 'bower_components',
+        cwd: 'src/lib',
         src: [
           'bootstrap/dist/fonts/*',
           'open-sans-fontface/fonts/**'
@@ -152,16 +152,16 @@ module.exports = function(grunt) {
       build: {
         files: {
           'app/js/spamin.js': [
-            'bower_components/fastclick/lib/fastclick.js',
-            'bower_components/lodash/dist/lodash.min.js',
-            'bower_components/underscore.string/dist/underscore.string.min.js',
+            'src/lib/fastclick/lib/fastclick.js',
+            'src/lib/lodash/dist/lodash.min.js',
+            'src/lib/underscore.string/dist/underscore.string.min.js',
 
-            'bower_components/angular/angular.min.js',
-            'bower_components/angular-route/angular-route.min.js',
-            'bower_components/angular-sanitize/angular-sanitize.min.js',
+            'src/lib/angular/angular.min.js',
+            'src/lib/angular-route/angular-route.min.js',
+            'src/lib/angular-sanitize/angular-sanitize.min.js',
 
-            'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
-            'bower_components/restangular/dist/restangular.min.js',
+            'src/lib/angular-bootstrap/ui-bootstrap-tpls.min.js',
+            'src/lib/restangular/dist/restangular.min.js',
 
             'app/js/tmp.app.js' // contains src/scripts/** and src/partials/**
           ]
@@ -188,8 +188,8 @@ module.exports = function(grunt) {
 
       copy_dev: {
         files: [
-          'bower_components/bootstrap/dist/fonts/*',
-          'bower_components/open-sans-fontface/fonts/**'
+          'src/lib/bootstrap/dist/fonts/*',
+          'src/lib/open-sans-fontface/fonts/**'
         ],
         tasks: [ 'copy:dev' ]
       },
