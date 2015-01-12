@@ -25,9 +25,11 @@
 
 			<!-- field button + dropdown -->
 			<div class="col-xs-1">
-				<div class="btn-group dropdown" style="width: 100%;">
+				<div class="btn-group dropdown" dropdown style="width: 100%;">
 
-					<button type="button"
+					<button
+						type="button"
+						dropdown-toggle
 						class="btn btn-xs btn-block dropdown-toggle"
 						ng-class="{
 							'btn-success' : field.ects.open_compulsory_percent==0,
@@ -119,9 +121,10 @@
 				<!-- dropdown button -->
 				<div class="col-xs-1">
 
-					<div class="btn-group dropdown" style="width: 100%;">
+					<div class="btn-group dropdown" dropdown style="width: 100%;">
 						<button
 							type="button"
+							dropdown-toggle
 							class="btn btn-xs btn-block dropdown-toggle"
 							ng-class="{
 								'btn-info'        : !course.passed&&!course.muted,
