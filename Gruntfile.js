@@ -191,11 +191,11 @@ module.exports = function(grunt) {
       },
 
       scripts: {
-        files: [ 'src/scripts/**.js' ]
+        files: [ 'src/scripts/**/*.js' ]
       },
 
       html: {
-        files: [ 'src/**.html' ]
+        files: [ 'src/**/*.html' ]
       },
 
       copy_dev: {
