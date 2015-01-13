@@ -222,7 +222,8 @@ module.exports = function(grunt) {
     connect: {
       options: {
         port: 8000,
-        hostname: 'localhost'
+        hostname: 'localhost',
+        open: true
       },
       dev: {
         options: {
@@ -296,5 +297,5 @@ module.exports = function(grunt) {
   grunt.registerTask('demo', ['build', 'connect:demo']);
 
   // start local server for development
-  grunt.registerTask('server', ['connect:dev', 'watch']);
+  grunt.registerTask('server', ['clean:dev', 'less:dev', 'copy:dev', 'connect:dev', 'watch']);
 };
