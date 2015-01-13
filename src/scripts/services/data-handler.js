@@ -14,6 +14,7 @@
     $rootScope,
     $cacheFactory,
     $document,
+    $http,
     $log,
     Transcript,
     Courses,
@@ -33,12 +34,12 @@
 
     self.updateLogininfo = function(username, authdata, useLocalStorage) {
       logininfo = {
-        username : username,
-        authdata : authdata
+        username: username,
+        authdata: authdata
       };
 
-      if ( webstorage ) {
-        if ( useLocalStorage ) {
+      if (webstorage) {
+        if (useLocalStorage) {
           localStorage.setItem('authdata', authdata);
           localStorage.setItem('username', username);
         } else {
@@ -50,8 +51,12 @@
 
     self.removeLogininfo = function() {
       logininfo = {};
-      $document.execCommand('ClearAuthenticationCache');
-      if ( webstorage ) {
+      $http.defaults.headers.common.Authorization = undefined;
+      if (angular.isDefined($document.execCommand)) {
+        $document.execCommand('ClearAuthenticationCache');
+      }
+
+      if (webstorage) {
         sessionStorage.removeItem('authdata');
         sessionStorage.removeItem('username');
         localStorage.removeItem('authdata');
@@ -68,7 +73,7 @@
       self.resetGuide();
       Courses.reset();
       Transcript.reset();
-      $rootScope.loginform = { username : '' };
+      $rootScope.loginform = { username: '' };
     };
 
     self.removeAll = function() {
