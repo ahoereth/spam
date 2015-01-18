@@ -1,6 +1,9 @@
-<h1>Authorization error</h1>
-<p class="lead">You are currently not authorized to view the page you have requested: <code>{{requested_route}}</code></p>
-<p><span ng-show="!user||demo">Use the login form on the left and try again.</span> On the right you find a (maybe incomplete) list of routes available to you at the moment.</p>
+<div>
+  <unicorn style='float:right'></unicorn>
+  <h1>Authorization error</h1>
+  <p class="lead">Our security unicorn says you are currently not authorized to view the page you have requested: <code>{{requested_route}}</code></p>
+  <p><span ng-show="!user.loggedin"><b>You're not logged in!</b><br>Use the login form on the left and try again.</span> {{(user.loggedin)?"Below":"On the right"}} you find a (maybe incomplete) list of routes available to you at the moment.</p>
+</div>
 
 <hr>
 
