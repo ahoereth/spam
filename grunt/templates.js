@@ -7,27 +7,24 @@ module.exports = function(grunt) {
   'use strict';
   var ngtemplates = grunt.config('ngtemplates') ||  {};
 
-
-  // **********
-  // minify html templates
   ngtemplates.spam = {
     cwd: 'src',
     src: 'partials/**/**.html',
     dest: 'app/js/tmp.templates.js',
     options: {
       htmlmin: {
-        collapseBooleanAttributes     : true,
-        collapseWhitespace            : true,
-        removeAttributeQuotes         : true,
-        removeEmptyAttributes         : true,
-        removeRedundantAttributes     : true,
-        removeScriptTypeAttributes    : true,
-        removeStyleLinkTypeAttributes : true,
-        // beware of comment directives!
-        removeComments                : true
+        collapseBooleanAttributes: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        removeComments: true,
+        customAttrCollapse: /.+/,
       },
       bootstrap: function(module, script) {
-        return "angular.module('"+module+"').run(function($templateCache) {\n"+script+" });";
+        return 'angular.module("'+module+'").run(function($templateCache){"'+script+'"});';
       }
     }
   };

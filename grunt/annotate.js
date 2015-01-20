@@ -1,9 +1,7 @@
 // annotate.js - grunt task
 // Annotate AngularJS code for dependency injection save minification.
-//   ngannotate
-//   ngannotate:dev
-//   clean:before
-//   clean:after
+//   ngAnnotate
+//   ngAnnotate:dev
 
 /* global module */
 module.exports = function(grunt) {
@@ -13,12 +11,12 @@ module.exports = function(grunt) {
   ngAnnotate.build = {
     files: {
       'app/js/tmp.app.js': [
-      'src/scripts/controllers/*.js',
-      'src/scripts/directives/*.js',
-      'src/scripts/filters/*.js',
-      'src/scripts/services/*.js',
-      'src/scripts/*.js',
-      'app/js/tmp.templates.js'
+        'src/scripts/controllers/*.js',
+        'src/scripts/directives/*.js',
+        'src/scripts/filters/*.js',
+        'src/scripts/services/*.js',
+        'src/scripts/*.js',
+        'app/js/tmp.templates.js'
       ]
     }
   };
