@@ -27,14 +27,29 @@
       var username = DataHandler.getLogininfo('username');
       $http.defaults.headers.common.Authorization = 'Basic ' + DataHandler.getLogininfo('authdata');
 
-      if (!_.isEmpty(username)) {
-        Restangular.one('users', username).get().then(function(user) {
-          DataHandler.userInit(user);
-          deferredLogin.resolve($rootScope.user);
-        }, function() {
-          $rootScope.user.destroy();
-          deferredLogin.reject();
-        });
+      if (! _.isEmpty(username)) {
+        // Visualize the login process.
+        $rootScope.loginform = _.extend(
+          $rootScope.loginform || {},
+          {loading: true}
+        );
+
+        // Server login request.
+        Restangular
+          .one('users', username)
+          .get()
+          .then(
+            function(user) {
+              DataHandler.userInit(user);
+              deferredLogin.resolve($rootScope.user);
+            }, function() {
+              $rootScope.user.destroy();
+              deferredLogin.reject();
+            }
+          )
+          .finally(function() {
+            $rootScope.loginform.loading = false;
+          });
       } else {
         deferredLogin.reject();
       }

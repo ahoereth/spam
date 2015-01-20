@@ -1,34 +1,48 @@
 <div class="jumbotron">
-	<h1>Welcome<span ng-show="loginform.username||user.loggedin">, {{user.loggedin | iif:user.username:loginform.username}}</span>!</h1>
-	<p>This is your personal <span class="text-success">study planning machine</span>. It will help you to keep track of your courses, grades and credits throughout your course of study; Not only of the stuff you already accomplished but also which fields still might need some work. Find new interesting courses for the next semesters and generate your transcript of records with ease when applying for your semester abroad.</p>
+  <h1>Welcome<span ng-show="loginform.username||user.loggedin">, {{user.loggedin | iif:user.username:loginform.username}}</span>!</h1>
+  <p>
+    This is your personal <span class="text-success">study planning machine</span>.
+    It will help you to keep track of your courses, grades and credits throughout your course of study;
+    Not only of the stuff you already accomplished but also which fields still might need some work.
+    Find new interesting courses for the next semesters and generate your transcript of records with ease when applying for your semester abroad.
+  </p>
 </div>
 
 <div class="col-md-4">
-	<h2>Work in progress</h2>
-	<p>The study planning machine is a living project. You can follow the progress and contribute to it yourself on <a href="https://github.com/ahoereth/spam">GitHub</a>. For the time being I also take bug reports directly per mail at <a href="mailto:ahoereth@uos.de">ahoereth@uos.de</a>.</p>
+  <h2>Work in progress</h2>
+  <p>
+    The study planning machine is a living project.
+    You can follow the progress and contribute to it yourself on <a href="https://github.com/ahoereth/spam">GitHub</a>.
+    For the time being I also take bug reports directly per mail at <a href="mailto:ahoereth@uos.de">ahoereth@uos.de</a>.
+  </p>
 </div>
 
-<div class="col-md-4" id="landing_login" ng-hide="user.loggedin">
-	<h2>Get started: Login!</h2>
-	<ng-include src="'partials/loginform.html'"></ng-include>
+<div class="col-md-4" ng-hide="user.loggedin">
+  <h2 ng-class="{'inactive': loginform.loading}">Get started: Login!</h2>
+  <loginform>
 </div>
 
 <div class="col-md-4" ng-if="user.loggedin">
-	<h2>You are logged in!</h2>
-	<p>Click on your username in the top navigation and enroll in some courses using the quick search in the top right. Add your grades and check out what your expected bachelor grade is.</p>
+  <h2>You are logged in!</h2>
+  <p>
+    Click on your username in the top navigation and enroll in some courses using the quick search in the top right.
+    Add your grades and check out what your expected bachelor grade is.
+  </p>
 </div>
 
 <div class="col-md-4" ng-if="!user.loggedin">
-	<h2>Demo</h2>
-	<p>
-		Do not want to login using your sacred university credentials before you know it is actually worth it? Take a look inside using the live demo using the username <em>demo</em> and password <em>studyplanning</em>.
-	</p>
+  <h2>Demo</h2>
+  <p>
+    Do not want to login using your sacred university credentials before you know it is actually worth it?
+    Take a look inside using the live demo using the username <em>demo</em> and password <em>studyplanning</em>.
+  </p>
 </div>
 
 <!-- hard coded for now to fill up the third column when logged in -->
 <div class="col-md-4" ng-if="user.loggedin">
-	<h2>Meta</h2>
-	<p>
-		The app currently has over 300 users with about 5000 individual course enrollments. The course database contains 2340 distinct listings with a total of 274 teachers.
-	</p>
+  <h2>Meta</h2>
+  <p>
+    The app currently has over 450 users with about 7000 individual course enrollments.
+    The course database contains 2350 distinct listings with a total of 276 teachers.
+  </p>
 </div>
