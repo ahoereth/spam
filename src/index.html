@@ -29,7 +29,10 @@
 
   <link href="img/spam.png" rel="apple-touch-icon">
   <link href="img/spam.ico" rel="shortcut icon">
-  <link href="styles/app.css" rel="stylesheet">
+
+  <!-- injector:css -->
+  <link rel="stylesheet" href="styles/app.css">
+  <!-- endinjector -->
 </head>
 <body class="ng-cloak">
 
@@ -40,73 +43,66 @@
 
   <div class="footer wrap" data-ng-include="'partials/footer.html'"></div>
 
+  <!-- bower:js -->
+  <script src="lib/fastclick/lib/fastclick.js"></script>
+  <script src="lib/lodash/dist/lodash.compat.js"></script>
+  <script src="lib/underscore.string/lib/underscore.string.js"></script>
+  <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular-route/angular-route.js"></script>
+  <script src="lib/angular-sanitize/angular-sanitize.js"></script>
+  <script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="lib/angular-utf8-base64/angular-utf8-base64.js"></script>
+  <script src="lib/restangular/dist/restangular.js"></script>
+  <!-- endbower -->
 
-<script src="lib/fastclick/lib/fastclick.js"></script>
-<script src="lib/lodash/dist/lodash.js"></script>
-<script src="lib/underscore.string/lib/underscore.string.js"></script>
-
-<script src="lib/angular/angular.js"></script>
-<script src="lib/angular-route/angular-route.js"></script>
-<script src="lib/angular-sanitize/angular-sanitize.js"></script>
-
-<script src="lib/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<script src="lib/restangular/dist/restangular.js"></script>
-<script src="lib/angular-utf8-base64/angular-utf8-base64.js"></script>
-
-
-<script src="scripts/app._module.js"></script>
-<script src="scripts/app.config.js"></script>
-<script src="scripts/app.routes.js"></script>
-<script src="scripts/app.run.js"></script>
-
-<script src="scripts/services/_module.js"></script>
-<script src="scripts/services/auth.js"></script>
-<script src="scripts/services/courses.js"></script>
-<script src="scripts/services/data-handler.js"></script>
-<script src="scripts/services/fastclick.js"></script>
-<script src="scripts/services/http-intercept.js"></script>
-<script src="scripts/services/lodash.js"></script>
-<script src="scripts/services/transcript.js"></script>
-<script src="scripts/services/user.js"></script>
-
-<script src="scripts/filters/_module.js"></script>
-<script src="scripts/filters/course-filter.js"></script>
-<script src="scripts/filters/highlight.js"></script>
-<script src="scripts/filters/iif.js"></script>
-<script src="scripts/filters/multiplicity.js"></script>
-<script src="scripts/filters/nl2br.js"></script>
-<script src="scripts/filters/prerequisites.js"></script>
-<script src="scripts/filters/spelled-out-to.js"></script>
-<script src="scripts/filters/urlencode.js"></script>
-<script src="scripts/filters/year.js"></script>
-
-<script src="scripts/directives/_module.js"></script>
-<script src="scripts/directives/infinite-scroll.js"></script>
-<script src="scripts/directives/add-remove-course.js"></script>
-<script src="scripts/directives/help-fragment.js"></script>
-
-<script src="scripts/controllers/courses._module.js"></script>
-<script src="scripts/controllers/courses.js"></script>
-<script src="scripts/controllers/courses.proposals.js"></script>
-<script src="scripts/controllers/courses.single.js"></script>
-<script src="scripts/controllers/courses.single.edit.js"></script>
-
-<script src="scripts/controllers/user._module.js"></script>
-<script src="scripts/controllers/user.course.js"></script>
-<script src="scripts/controllers/user.logout.js"></script>
-<script src="scripts/controllers/user.matriculation.js"></script>
-<script src="scripts/controllers/user.overview.js"></script>
-<script src="scripts/controllers/user.settings.js"></script>
-
-<script src="scripts/controllers/_module.js"></script>
-<script src="scripts/controllers/alert.js"></script>
-<script src="scripts/controllers/guide.js"></script>
-<script src="scripts/controllers/help.js"></script>
-<script src="scripts/controllers/http.js"></script>
-<script src="scripts/controllers/login.js"></script>
-<script src="scripts/controllers/loginform.js"></script>
-<script src="scripts/controllers/navbar.js"></script>
-<script src="scripts/controllers/root.js"></script>
-
+  <!-- injector:js -->
+  <script src="scripts/app._module.js"></script>
+  <script src="scripts/app.config.js"></script>
+  <script src="scripts/app.routes.js"></script>
+  <script src="scripts/app.run.js"></script>
+  <script src="scripts/controllers/_module.js"></script>
+  <script src="scripts/controllers/alert.js"></script>
+  <script src="scripts/controllers/courses._module.js"></script>
+  <script src="scripts/controllers/courses.js"></script>
+  <script src="scripts/controllers/courses.proposals.js"></script>
+  <script src="scripts/controllers/courses.single.edit.js"></script>
+  <script src="scripts/controllers/courses.single.js"></script>
+  <script src="scripts/controllers/guide.js"></script>
+  <script src="scripts/controllers/help.js"></script>
+  <script src="scripts/controllers/http.js"></script>
+  <script src="scripts/controllers/login.js"></script>
+  <script src="scripts/controllers/loginform.js"></script>
+  <script src="scripts/controllers/navbar.js"></script>
+  <script src="scripts/controllers/root.js"></script>
+  <script src="scripts/controllers/user._module.js"></script>
+  <script src="scripts/controllers/user.course.js"></script>
+  <script src="scripts/controllers/user.logout.js"></script>
+  <script src="scripts/controllers/user.matriculation.js"></script>
+  <script src="scripts/controllers/user.overview.js"></script>
+  <script src="scripts/controllers/user.settings.js"></script>
+  <script src="scripts/directives/_module.js"></script>
+  <script src="scripts/directives/add-remove-course.js"></script>
+  <script src="scripts/directives/help-fragment.js"></script>
+  <script src="scripts/directives/infinite-scroll.js"></script>
+  <script src="scripts/filters/_module.js"></script>
+  <script src="scripts/filters/course-filter.js"></script>
+  <script src="scripts/filters/highlight.js"></script>
+  <script src="scripts/filters/iif.js"></script>
+  <script src="scripts/filters/multiplicity.js"></script>
+  <script src="scripts/filters/nl2br.js"></script>
+  <script src="scripts/filters/prerequisites.js"></script>
+  <script src="scripts/filters/spelled-out-to.js"></script>
+  <script src="scripts/filters/urlencode.js"></script>
+  <script src="scripts/filters/year.js"></script>
+  <script src="scripts/services/_module.js"></script>
+  <script src="scripts/services/auth.js"></script>
+  <script src="scripts/services/courses.js"></script>
+  <script src="scripts/services/data-handler.js"></script>
+  <script src="scripts/services/fastclick.js"></script>
+  <script src="scripts/services/http-intercept.js"></script>
+  <script src="scripts/services/lodash.js"></script>
+  <script src="scripts/services/transcript.js"></script>
+  <script src="scripts/services/user.js"></script>
+  <!-- endinjector -->
 </body>
 </html>
