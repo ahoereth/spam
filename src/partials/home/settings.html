@@ -4,71 +4,59 @@
 
 <form class="form-horizontal" ng-submit="updateUser()">
 
-	<div class="form-group">
-		<label class="control-label col-md-2" for="firstname">Name</label>
-		<div class="col-md-5">
-			<input
-				type="text"
-				id="firstname"
-				class="form-control"
-				placeholder="Firstname"
-				ng-model="user.firstname">
-		</div>
-		<div class="col-md-5">
-			<input
-				type="text"
-				id="lastname"
-				class="form-control"
-				placeholder="Lastname"
-				ng-model="user.lastname">
-		</div>
-	</div>
+  <!-- student's name -->
+  <div class="form-group">
+    <label class="control-label col-md-2" for="firstname">Name</label>
+    <div class="col-md-5">
+      <!-- first name input -->
+      <input
+        type="text"
+        id="firstname"
+        class="form-control"
+        placeholder="Firstname"
+        ng-model="user.firstname"
+        ng-model-options="{debounce: 500}">
+    </div>
+    <div class="col-md-5">
+      <!-- last name input -->
+      <input
+        type="text"
+        id="lastname"
+        class="form-control"
+        placeholder="Lastname"
+        ng-model="user.lastname"
+        ng-model-options="{debounce: 500}">
+    </div>
+  </div>
 
-	<div class="form-group">
-		<label class="control-label col-md-2" for="year">CogSci since</label>
-		<div class="col-md-5">
-			<input
-				type="number"
-				min="2000"
-				max="2030"
-				id="year"
-				class="form-control"
-				placeholder="Year"
-				ng-model="user.mat_year">
-		</div>
-		<div class="col-md-2 radio">
-			<label style="margin-left: 6px;">
-				<input type="radio" ng-model="user.mat_term" value="S">
-				Summer
-			</label>
-		</div>
-		<div class="col-md-2 radio">
-			<label>
-				<input type="radio" ng-model="user.mat_term" value="W">
-				Winter
-			</label>
-		</div>
-	</div>
+  <!-- student's immatriculation -->
+  <div class="form-group">
+    <label class="control-label col-md-2">CogSci since</label>
+    <matriculation-setter class="col-md-10">
+  </div>
 
-
-	<div class="form-group">
-		<label class="control-label col-md-2" for="regulation">Regulation</label>
-		<div class="col-md-10">
-			<!--<select class="form-control" ng-model="constraint.field" id="regulation" ng-required="true" ng-options="f as f.title for f in fields"></select>-->
-			<select class="form-control" ng-model="user.regulation_abbr" id="regulation" disabled="disabled">
-				<option selected="selected">{{user.regulation_abbr}}</option>
-			</select>
-			<p class="help-block">Changes are automatically saved as soon as you apply them.</p>
-		</div>
-	</div>
+  <!-- student's study regulation -->
+  <div class="form-group">
+    <label class="control-label col-md-2" for="regulation">Regulation</label>
+    <div class="col-md-10">
+      <!--<select class="form-control" ng-model="constraint.field" id="regulation" ng-required="true" ng-options="f as f.title for f in fields"></select>-->
+      <select class="form-control" ng-model="user.regulation_abbr" id="regulation" disabled="disabled">
+        <option selected="selected">{{user.regulation_abbr}}</option>
+      </select>
+      <p class="help-block">Changes are automatically saved as soon as you apply them.</p>
+    </div>
+  </div>
 
 </form>
 
 <hr>
 
 <div class="btn-group btn-group-justified">
-	<a class="btn btn-default" ng-click="showDelete=true" ng-hide="showDelete">Delete all my data</a>
-	<a class="btn btn-warning" ng-click="showDelete2=true" ng-show="showDelete&&!showDelete2">Delete all my data, for sure!</a>
-	<a class="btn btn-danger" ng-click="deleteUser()" ng-show="showDelete2">Delete all my data, for really sure!</a>
-	<a class="btn btn-success" ng-click="exportData()" disabled="disabled">Export data (coming soon)</a>
+  <!-- delete account -->
+  <a class="btn btn-default" ng-click="showDelete=true" ng-hide="showDelete">Delete all my data</a>
+  <a class="btn btn-warning" ng-click="showDelete2=true" ng-show="showDelete&&!showDelete2">Delete all my data, for sure!</a>
+  <a class="btn btn-danger" ng-click="deleteUser()" ng-show="showDelete2">Delete all my data, for really sure!</a>
+
+  <!-- export data -->
+  <a class="btn btn-success" ng-click="exportData()" disabled="disabled">Export data (coming soon)</a>
 </div>

@@ -1,0 +1,55 @@
+<div class="matriculation-setter">
+  <form class="form-group" name="matriculationSetter">
+    <!-- summer/winter term selection -->
+    <div ng-class="{'col-md-3': verifyButton, 'col-md-4': ! verifyButton}">
+      <div class="btn-group btn-group-justified">
+        <label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'S'">
+          Summer
+        </label>
+        <label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'W'">
+          Winter
+        </label>
+      </div>
+    </div>
+
+    <!-- year selection -->
+    <div ng-class="{'col-md-6': verifyButton, 'col-md-8': ! verifyButton}">
+      <div
+        class="input-group"
+        style="width: 100%"
+        ng-class="{'has-error': matriculationSetter.year.$invalid}">
+
+        <!-- the three most recent years as buttons -->
+        <div class="input-group-btn" style="width: 25%" ng-repeat="year in years">
+          <label class="btn btn-block btn-primary" ng-model="user.mat_year" btn-radio="year">
+            {{year}}
+          </label>
+        </div>
+
+        <!-- input for all other years -->
+        <input
+          min="2000"
+          max="2020"
+          type="number"
+          class="form-control centering"
+          ng-model="user.mat_year"
+          ng-model-options="{debounce: 500}"
+          ng-class="{'has-error': matriculationSetter.year.$invalid}"
+          placeholder="Year"
+          name="year"
+          required>
+      </div>
+    </div>
+
+    <!-- explicit confirmation -->
+    <div class="col-md-3" ng-if="verifyButton">
+      <button
+        class="btn btn-block btn-success"
+        ng-disabled="matriculationSetter.$invalid"
+        ng-click="verify()">
+        Verify&nbsp;
+        <span class="glyphicon glyphicon-ok"></span>
+      </button>
+    </div>
+  </form>
+</div>

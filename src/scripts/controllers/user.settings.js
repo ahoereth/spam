@@ -11,44 +11,18 @@
 
 
   /* @ngInject */
-  function userSettingsCtrl(
-    $rootScope,
-    $scope,
-    $location,
-    $timeout
-  ) {
-    var timer = null, lastState;
+  function userSettingsCtrl($scope) {
+    $scope.$watchGroup(['user.firstname', 'user.lastname'], function(n, o) {
+      if (n === o) { return; }
 
-    $scope.user = {
-      firstname      : $rootScope.user.firstname,
-      lastname       : $rootScope.user.lastname,
-      mat_year       : $rootScope.user.mat_year,
-      mat_term       : $rootScope.user.mat_term,
-      regulation_abbr: $rootScope.user.regulation_abbr
-    };
-
-    lastState = angular.copy($scope.user);
-
-    $scope.$watch('user', function(next, current) {
-      if (angular.equals(next, current)) {
-        return;
-      }
-
-      $timeout.cancel(timer);
-      timer = $timeout($scope.updateUser, 250);
-    }, true);
-
-    $scope.updateUser = function() {
-      if (angular.equals($scope.user, lastState)) {
-        return;
-      }
-
-      lastState = angular.copy($scope.user);
-      $rootScope.user.updateUser($scope.user);
-    };
+      $scope.user.updateUser({
+        firstname: n[0],
+        lastname:  n[1]
+      }, true);
+    });
 
     $scope.deleteUser = function() {
-      $rootScope.user.deleteUser();
+      $scope.user.deleteUser();
     };
   }
 

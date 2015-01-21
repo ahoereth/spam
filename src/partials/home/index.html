@@ -1,6 +1,6 @@
 <!-- demo warning -->
 <div class="alert alert-warning" ng-if="user.username=='demo'">
-	You are currently viewing the live demo. To make sustaining changes please log in with your own credentials!
+  You are currently viewing the live demo. To make sustaining changes please log in with your own credentials!
 </div>
 
 <h1>{{user.username}}'s overview</h1>
@@ -8,207 +8,166 @@
 
 <!-- already enrolled in some courses -->
 <p class="lead" ng-if="user.courses.length">
-	<span ng-show="facts.grade_overall">
-		You earned a total of <strong>{{facts.ects.completed.sum}}</strong> credits with an average grade of <strong>{{facts.grade_overall}}</strong>.<!--, module examination [3C] -->
-	</span>
+  <span ng-show="facts.grade_overall">
+    You earned a total of <strong>{{facts.ects.completed.sum}}</strong> credits with an average grade of <strong>{{facts.grade_overall}}</strong>.
+  </span>
 
-	<!-- enrolled ects -->
-	<span ng-show="facts.ects.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.ects.enrolled}} credits.</span>
+  <!-- enrolled ects -->
+  <span ng-show="facts.ects.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.ects.enrolled}} credits.</span>
 
-	<!-- current semester -->
-	<span ng-if="terms.currentTerm.courses.length">
-		<span ng-if="terms.currentTerm.ects.enrolled==facts.ects.enrolled">
-			All of them in the <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">current semester</abbr>.
-		</span>
-		<span ng-if="terms.currentTerm.ects.enrolled!=facts.ects.enrolled">
-			<abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.enrolled.sum+terms.currentTerm.ects.completed.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
-		</span>
-	</span>
+  <!-- current semester -->
+  <span ng-if="terms.currentTerm.courses.length">
+    <span ng-if="terms.currentTerm.ects.enrolled==facts.ects.enrolled">
+      All of them in the <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">current semester</abbr>.
+    </span>
+    <span ng-if="terms.currentTerm.ects.enrolled!=facts.ects.enrolled">
+      <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
+    </span>
+  </span>
 
-	<!-- last semester -->
-	<span ng-if="terms.lastTerm.courses.length">
-		{{terms.currentTerm.courses.length | iif : 'i' : 'I'}}n your <abbr tooltip-html-unsafe="{{terms.lastTerm.abbr}}">last semester</abbr> you earned a total of {{terms.lastTerm.ects.completed.sum}} credits with an average grade of <strong>{{terms.lastTerm.grade}}</strong>.
-	</span>
+  <!-- last semester -->
+  <span ng-if="terms.lastTerm.courses.length">
+    {{terms.currentTerm.courses.length | iif : 'i' : 'I'}}n your <abbr tooltip-html-unsafe="{{terms.lastTerm.abbr}}">last semester</abbr> you earned a total of {{terms.lastTerm.ects.completed.sum}} credits with an average grade of <strong>{{terms.lastTerm.grade}}</strong>.
+  </span>
 
-	<!-- semester average -->
-	<span ng-if="facts.average_ects>0&&terms.lastTerm.grade">
-		Considering all the terms in which you have completed courses, you collected an average of <strong>{{facts.average_ects}}</strong> credits/term.
-	</span>
+  <!-- semester average -->
+  <span ng-if="facts.average_ects>0&&terms.lastTerm.grade">
+    Considering all the terms in which you have completed courses, you collected an average of <strong>{{facts.average_ects}}</strong> credits/term.
+  </span>
 
-	<!-- next semester -->
-	<span ng-if="terms.nextTerm.courses.length">
-		Lastly, for the <abbr tooltip-html-unsafe="{{terms.nextTerm.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{terms.nextTerm.ects.enrolled+terms.nextTerm.ects.completed.sum}} credits.
-	</span>
+  <!-- next semester -->
+  <span ng-if="terms.nextTerm.courses.length">
+    Lastly, for the <abbr tooltip-html-unsafe="{{terms.nextTerm.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{terms.nextTerm.ects.enrolled+terms.nextTerm.ects.completed.sum}} credits.
+  </span>
 
-	<span ng-if="facts.ects.completed.overhang">
-		There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
-	</span>
+  <span ng-if="facts.ects.completed.overhang">
+    There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
+  </span>
 
-	<span ng-if="false">
-		By the end of the second semester you are required to have completed a total of XX credits. XX2 to go!
-	</span>
+  <span ng-if="false">
+    By the end of the second semester you are required to have completed a total of XX credits. XX2 to go!
+  </span>
 
-	<!-- bachelor grade -->
-	<span ng-if="facts.grade_bachelor" ng-switch="facts.ects.completed.sum">
-		<span ng-switch-default>
-			Your bachelor grade presumably will be around <strong>{{facts.grade_bachelor}}</strong>.
-		</span>
-		<span ng-switch-when="180">
-			Your bachelor grade is <strong>{{facts.grade_bachelor}}</strong>.
-		</span>
-	</span>
+  <!-- bachelor grade -->
+  <span ng-if="facts.grade_bachelor" ng-switch="facts.ects.completed.sum">
+    <span ng-switch-default>
+      Your bachelor grade presumably will be around <strong>{{facts.grade_bachelor}}</strong>.
+    </span>
+    <span ng-switch-when="180">
+      Your bachelor grade is <strong>{{facts.grade_bachelor}}</strong>.
+    </span>
+  </span>
 
-	<span ng-if="!user.thesis_title&&!user.thesis_grade">
-		<span class="undercover" ng-click="user.thesis_active=!user.thesis_active">You did not yet write your bachelor thesis</span>{{5>facts.relevant_fields | iif : ' and ' : '.'}}
-	</span>
+  <span ng-if="!user.thesis_title&&!user.thesis_grade">
+    <span class="undercover" ng-click="user.thesis_active=!user.thesis_active">You did not yet write your bachelor thesis</span>{{5>facts.relevant_fields | iif : ' and ' : '.'}}
+  </span>
 
-	<span ng-if="facts.relevant_fields<5">
-		{{user.thesis_title||user.thesis_grade | iif : 'You ' : ''}}by now completed {{facts.relevant_fields}} of 5 <abbr tooltip="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
-	</span>
+  <span ng-if="facts.relevant_fields<5">
+    {{user.thesis_title||user.thesis_grade | iif : 'You ' : ''}}by now completed {{facts.relevant_fields}} of 5 <abbr tooltip="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
+  </span>
 </p>
 
 
 <!-- no courses yet -->
 <p class="lead" ng-if="user.mat_verify&&user.courses.length==0">
-	You have not yet added any courses.
-
-	To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
-
-	Alternatively I can also give you a head start by adding the typical courses for your first	semester: <button class="btn btn-primary" ng-click="headstart()">Initialize</button>
+  You have not yet added any courses.
+  To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
+  Alternatively I can also give you a head start by adding the typical courses for your first  semester: <button class="btn btn-primary" ng-click="headstart()">Initialize</button>
 </p>
 
 
 <!-- verify enrollment semester -->
 <div ng-if="!user.mat_verify">
 	<hr ng-if="user.courses.length">
-
-	<p class="lead">
-		Please verify your matriculation semester:
-	</p>
-
-	<form class="form-group row" name="UserMatVerify" ng-controller="UserMatVerify">
-		<div class="col-md-3">
-			<div class="btn-group btn-group-justified">
-				<label class="btn btn-primary" ng-model="verify.mat_term" btn-radio="'S'">Summer</label>
-				<label class="btn btn-primary" ng-model="verify.mat_term" btn-radio="'W'">Winter</label>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="input-group" ng-class="{'has-error': UserMatVerify.year.$invalid}">
-				<div class="input-group-btn" style="width: 25%" ng-repeat="year in years">
-					<label class="btn btn-block btn-primary" ng-model="verify.mat_year" btn-radio="year">
-						{{year}}
-					</label>
-				</div>
-				<input
-					type="number"
-					class="form-control centering"
-					ng-model="verify.mat_year"
-					placeholder="Year"
-					name="year"
-					required>
-			</div>
-		</div>
-		<div class="col-md-3">
-			<button
-				class="btn btn-block btn-success"
-				ng-click="doVerify()"
-				ng-disabled="UserMatVerify.$invalid">
-				Submit
-				<span class="glyphicon glyphicon-ok"></span>
-			</button>
-		</div>
-	</form>
-
-	<p>
-		This can be changed anytime in the <a href="~/settings">settings</a>.
-	</p>
+	<p class="lead">Please verify your matriculation semester:</p>
+	<matriculation-setter verify>
+	<p>This can be changed anytime in the <a href="~/settings">settings</a>.</p>
 </div>
 
 
 <!-- bachelor thesis row -->
 <div ng-if="user.thesis_active||user.thesis_title||user.thesis_grade">
-	<hr>
+  <hr>
 
-	<form class="inline-form row" ng-init="user.thesis_grade=user.thesis_grade">
-		<div class="form-group col-lg-10 col-sm-9 col-xs-8">
-			<input
-				type="text"
-				class="form-control"
-				placeholder="Bachelor thesis title"
-				ng-model="user.thesis_title"
-				ng-blur="updateThesis()"
-				ng-keydown="blurOnEnter($event)"
-				ng-init="user.thesis_title_old=user.thesis_title">
-		</div>
+  <form class="inline-form row" ng-init="user.thesis_grade=user.thesis_grade">
+    <div class="form-group col-lg-10 col-sm-9 col-xs-8">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Bachelor thesis title"
+        ng-model="user.thesis_title"
+        ng-blur="updateThesis()"
+        ng-keydown="blurOnEnter($event)"
+        ng-init="user.thesis_title_old=user.thesis_title">
+    </div>
 
-		<div class="form-group col-lg-2 col-sm-3 col-xs-4">
-			<input
-				type="text"
-				class="form-control form-control-tight"
-				placeholder="Grade"
-				onclick="select()"
-				ng-model="user.thesis_grade"
-				ng-blur="updateThesis()"
-				ng-keydown="blurOnEnter($event)"
-				ng-init="user.thesis_grade_old=user.thesis_grade">
-		</div>
-	</form>
+    <div class="form-group col-lg-2 col-sm-3 col-xs-4">
+      <input
+        type="text"
+        class="form-control form-control-tight"
+        placeholder="Grade"
+        onclick="select()"
+        ng-model="user.thesis_grade"
+        ng-blur="updateThesis()"
+        ng-keydown="blurOnEnter($event)"
+        ng-init="user.thesis_grade_old=user.thesis_grade">
+    </div>
+  </form>
 </div>
 
 
 <!-- the fields -->
 <div class="overview-container row" ng-if="user.courses.length">
-	<hr style="margin-top: 0">
+  <hr style="margin-top: 0">
 
-	<div
-		ng-repeat="(idx, column) in columns track by idx"
-		ng-init="outerIndex = $index"
-		class="col-lg-4 col-sm-6"
-		ng-class="{'hidden-sm hidden-md' : $index==2}">
+  <div
+    ng-repeat="(idx, column) in columns track by idx"
+    ng-init="outerIndex = $index"
+    class="col-lg-4 col-sm-6"
+    ng-class="{'hidden-sm hidden-md' : $index==2}">
 
-		<ng-include
-			src="'partials/home/field.html'"
-			ng-repeat="field in column">
-		</ng-include>
+    <ng-include
+      src="'partials/home/field.html'"
+      ng-repeat="field in column">
+    </ng-include>
 
-		<!-- add one half of the third column below the first column for 'sm'
-		sized screens -->
-		<div ng-if="outerIndex==0">
-			<ng-include
-				src="'partials/home/field.html'"
-				ng-repeat="field in columns[2]"
-				ng-init="visibilityIndex = outerIndex"
-				class="visible-sm visible-md">
-			</ng-include>
-		</div>
+    <!-- add one half of the third column below the first column for 'sm'
+    sized screens -->
+    <div ng-if="outerIndex==0">
+      <ng-include
+        src="'partials/home/field.html'"
+        ng-repeat="field in columns[2]"
+        ng-init="visibilityIndex = outerIndex"
+        class="visible-sm visible-md">
+      </ng-include>
+    </div>
 
-		<!-- add the other half of the third column below the second column for
-		'sm' sized screens -->
-		<div ng-if="outerIndex==1">
-			<ng-include
-				src="'partials/home/field.html'"
-				ng-repeat="field in columns[2]"
-				ng-init="visibilityIndex = outerIndex"
-				class="visible-sm visible-md">
-			</ng-include>
-		</div>
-	</div>
+    <!-- add the other half of the third column below the second column for
+    'sm' sized screens -->
+    <div ng-if="outerIndex==1">
+      <ng-include
+        src="'partials/home/field.html'"
+        ng-repeat="field in columns[2]"
+        ng-init="visibilityIndex = outerIndex"
+        class="visible-sm visible-md">
+      </ng-include>
+    </div>
+  </div>
 </div>
 
 <hr>
 
 <!-- legend -->
 <p class="pull-right">
-	<small>
-		<span class="text-primary glyphicon glyphicon-pencil"></span> Current,&nbsp;
-		<span class="text-success glyphicon glyphicon-ok"></span> Completed,&nbsp;
-		<span class="text-success glyphicon glyphicon-star"></span> Bsc. relevant,&nbsp;
-		<span class="text-danger glyphicon glyphicon-remove"></span> Failed
-	</small>
+  <small>
+    <span class="text-primary glyphicon glyphicon-pencil"></span> Current,&nbsp;
+    <span class="text-success glyphicon glyphicon-ok"></span> Completed,&nbsp;
+    <span class="text-success glyphicon glyphicon-star"></span> Bsc. relevant,&nbsp;
+    <span class="text-danger glyphicon glyphicon-remove"></span> Failed
+  </small>
 </p>
 <p class="hidden-xs hidden-sm">
-	<small>
-		{{user.regulation}}
-	</small>
+  <small>
+    {{user.regulation}}
+  </small>
 </p>

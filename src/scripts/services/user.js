@@ -19,18 +19,26 @@
   ) {
     var methods = {};
 
-    methods.updateUser = function(data) {
-      var put = {};
+    /**
+     * Save userdata to server.
+     *
+     * @param {object} data  [description]
+     * @param {bool}   force Force the update even if the data seems to be
+     *                       unchanged.
+     */
+    methods.updateUser = function(data, force) {
+      var putData = {};
       angular.forEach(data, function(value, key) {
-        if ( ! angular.equals($rootScope.user[key], value) ) {
-          put[key] = value;
+        if (! angular.equals($rootScope.user[key], value) || force) {
+          putData[key] = value;
+          $rootScope.user[key] = value;
         }
       });
 
-      put.username = $rootScope.user.username;
-      put = Restangular.restangularizeElement(null, put, 'users');
+      putData.username = $rootScope.user.username;
+      putData = Restangular.restangularizeElement(null, putData, 'users');
 
-      put.put().then( function(user) {
+      putData.put().then(function(user) {
         $rootScope.$broadcast('userUpdated', user);
         $log.info('User data saved.');
       });
@@ -80,7 +88,7 @@
         data.thesis_grade = _.formatGrade(data.thesis_grade);
       }
 
-      return angular.extend(methods, data, {loggedin : !_.isEmpty(data)});
+      return angular.extend(methods, data, {loggedin: ! _.isEmpty(data)});
     };
   }
 })();

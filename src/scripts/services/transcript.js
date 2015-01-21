@@ -517,7 +517,8 @@
             compulsory: 0,
             sum: 0,
             overhang: 0
-          }
+          },
+          sum: 0
         },
         grade: 0
       };
@@ -570,6 +571,7 @@
 
       data.ects.completed.sum = data.ects.completed.compulsory + data.ects.completed.optional;
       data.ects.enrolled.sum  = data.ects.enrolled.compulsory  + data.ects.enrolled.optional;
+      data.ects.sum = data.ects.completed.sum + data.ects.enrolled.sum;
 
       var maxEnrolled = (available_ects.optional + available_ects.compulsory) - data.ects.completed.sum;
       if (data.ects.enrolled.sum > maxEnrolled) {
