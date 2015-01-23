@@ -1,0 +1,9 @@
+<div class="panel panel-default">
+  <!-- directives/help-fragment -->
+  <div class="panel-heading" ng-click="open(slug)">
+    <h2 class="panel-title">{{::title}}</h2>
+  </div>
+  <div class="panel-body" ng-show="opened==slug">
+    <ng-transclude></ng-transclude>
+  </div>
+</div>
