@@ -8,7 +8,7 @@
 <hr>
 
 <div class="row">
-  <div class="col-md-4"  ng-show="!user||demo">
+  <div class="col-md-4"  ng-show="!user.loggedin">
     <h2>Fix this: Login!</h2>
     <loginform>
   </div>
@@ -21,7 +21,7 @@
       <li><a href="help/">/help</a></li>
     </ul>
   </div>
-  <div class="col-md-4" ng-show="user">
+  <div class="col-md-4" ng-show="user.loggedin">
     <h2>Your routes</h2>
     <ul>
       <li><a href="~">/~</a></li>
@@ -29,7 +29,7 @@
       <li><a href="~/logout">/~/logout</a></li>
     </ul>
   </div>
-  <div class="col-md-4" ng-show="user&&user.rank>=16">
+  <div class="col-md-4" ng-show="user.rank>=16">
     <h2>Admin routes</h2>
     <ul>
       <li><a href="admin">/admin</a></li>
