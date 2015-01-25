@@ -24,7 +24,7 @@ module.exports = function(grunt) {
         customAttrCollapse: /.+/,
       },
       bootstrap: function(module, script) {
-        return 'angular.module("'+module+'").run(function($templateCache){"'+script+'"});';
+        return 'angular.module("'+module+'").run(function($templateCache){'+script+'});';
       }
     }
   };
