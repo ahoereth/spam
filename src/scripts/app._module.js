@@ -8,6 +8,7 @@
     'restangular',
     'ui.bootstrap',
     'ab-base64',
+    'unicorn-directive',
 
     'spam.filters',
     'spam.services',
