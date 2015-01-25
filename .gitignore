@@ -1,0 +1,7 @@
+api/lib/
+app/
+assets/
+node_modules/
+src/fonts/
+src/lib/
+src/styles/*.css
