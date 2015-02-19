@@ -8,8 +8,7 @@ Requirements: node >= 0.10 & git
 
     $ git clone https://github.com/ahoereth/spam.git
     $ npm install
-    $ grunt start
-    OR $ grunt start:demo
+    $ npm start
 
 **Note**: Remote access to the API (e.g. from you local development install) requires prior manual authentication. Contact me. Alternatively it is also possible to run your own local API server with mock data - contact me as well for now.
 

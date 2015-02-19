@@ -9,8 +9,8 @@
   },
   "bugs": "http://github.com/ahoereth/spam/issues",
   "scripts": {
-    "start": "grunt start",
-    "postinstall": "bower install"
+    "start": "./node_modules/grunt-cli/bin/grunt start",
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
@@ -18,6 +18,7 @@
     "connect-livereload": "0.5.x",
     "connect-modrewrite": "0.7.x",
     "grunt": "0.4.x",
+    "grunt-cli": "0.1.x",
     "grunt-angular-templates": "0.5.x",
     "grunt-bump": "0.0.x",
     "grunt-contrib-clean": "0.6.x",
