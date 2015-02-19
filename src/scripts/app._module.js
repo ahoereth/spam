@@ -7,7 +7,6 @@
 
     'restangular',
     'ui.bootstrap',
-    'ab-base64',
 
     'spam.filters',
     'spam.services',
