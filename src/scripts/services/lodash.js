@@ -91,9 +91,6 @@
       return parseFloat(a + '.' + b).toFixed(1);
     };
 
-    // we make use of underscore.string
-    $window._.mixin($window._.string.exports());
-
     $window._.mixin({
 
       /**
