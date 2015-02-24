@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
- /**
+  /**
    * CONTROLLER: Home
    * ROUTE: /~
    *
@@ -123,17 +123,6 @@
       });
       target.enrolled_field_id = (! _.isNull(newFieldId)) ? newFieldId : 1;
       $scope.editProp(target);
-    };
-
-
-    /**
-     * Blur the grade input field when the user presses the enter key.
-     */
-    $scope.blurOnEnter = function($event) {
-      if ($event.keyCode !== 13) { return; }
-      $timeout(function () { // timeout hack..
-        $event.target.blur();
-      }, 0, false);
     };
 
 

@@ -1,0 +1,111 @@
+<div
+  class="row course"
+  ng-class="{overflowing: course.doesnt_count||course.muted||course.grade==5}">
+  <!-- Directive: course -->
+
+  <!-- title + ects -->
+  <div class="col-xs-9">
+    <span ng-switch="::course.course_id">
+      <a
+        ng-switch-default
+        ng-href="courses/{{::course.course_id}}"
+        tooltip="{{::course.term_abbr}}"
+        ng-bind="::course.course"></a>
+      <span
+        ng-switch-when="0"
+        tooltip="{{::course.term_abbr}}"
+        ng-bind="::course.course"></span>
+    </span>
+    <small ng-show="course.ects" class="text-info">
+      [{{::course.ects}}]
+    </small>
+  </div>
+
+  <!-- grade -->
+  <div class="col-xs-2">
+    <input
+      type="text"
+      class="input-tiny"
+      ng-class="{'no-grade-passed': course.passed && !course.grade}"
+      ng-model="course.grade"
+      onclick="select()"
+      ng-keydown="blurOnEnter($event)"
+      ng-blur="changeGrade()">
+  </div>
+
+  <!-- dropdown button -->
+  <div class="col-xs-1">
+
+    <div class="btn-group dropdown" dropdown style="width: 100%;">
+      <button
+        type="button"
+        dropdown-toggle
+        class="btn btn-xs btn-block dropdown-toggle"
+        ng-class="{
+          'btn-info'   : !course.passed && !course.muted,
+          'btn-success':  course.passed && !course.muted,
+          'btn-default': !course.passed ||  course.muted}">
+        <!-- TODO: Those following ng-class rules need some cleanup. -->
+        <span
+          class="glyphicon"
+          ng-class="{
+            'glyphicon-pencil': !course.passed,
+            'glyphicon-star'  :((course.grade>=1&&course.grade<=4)|| course.passed)&&
+                               (!course.muted&& field.bsc_relevant)&&
+                                (field.auto_grade),
+            'glyphicon-ok'    :((course.grade>=1&&course.grade<=4)||course.passed)&&
+                                (!course.muted&&(!field.bsc_relevant||!field.auto_grade)),
+            'glyphicon-remove':   course.grade>4||course.muted}">
+        </span>
+      </button>
+
+      <ul class="dropdown-menu">
+
+        <li ng-hide="course.grade">
+          <label class="dropdown-checkbox">
+            Passed
+            <input type="checkbox"
+              class="pull-right"
+              ng-model="course.passed"
+              ng-change="editProp(course)"
+              ng-checked="course.passed"
+              style="margin-top: 3px;">
+          </label>
+        </li>
+
+        <li>
+          <label class="dropdown-checkbox">
+            Muted
+            <input type="checkbox"
+              class="pull-right"
+              ng-model="course.muted"
+              ng-change="changePassed()"
+              ng-checked="course.muted"
+              style="margin-top: 3px;">
+          </label>
+        </li>
+
+        <li><a class="pointer" ng-click="remove()">Remove</a></li>
+
+        <li class="dropdown-header" ng-hide="course.fields.length==0&&course.enrolled_field_id==1">
+          Change field
+        </li>
+
+        <!-- move to other fields -->
+        <li ng-repeat="field in course.fields" ng-hide="field.field_id==course.enrolled_field_id">
+          <a class="pointer" ng-click="moveCourse(field.field_id)">
+            {{::field.field}}
+          </a>
+        </li>
+
+        <!-- move to open studies -->
+        <li ng-hide="course.enrolled_field_id==1">
+          <a class="pointer" ng-click="moveCourse(null)">Open Studies</a>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+
+</div>

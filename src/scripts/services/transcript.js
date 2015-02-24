@@ -78,7 +78,7 @@
       if (_.isUndefined(c)) {
         return false;
       }
-
+/*
       c.grade = _.formatGrade(c.grade, true);
       c.term_abbr = c.term + c.year;
 
@@ -87,7 +87,7 @@
       } else {
         c.passed = (c.passed || (c.grade >= 1 && c.grade <= 4)) ? true : false;
       }
-
+*/
       var f = get_field(c.enrolled_field_id);
 
       // did the course's field change?
@@ -137,7 +137,7 @@
       }
 
       // remember old grade
-      c.old_grade = c.grade;
+      //c.old_grade = c.grade;
 
       return {course: c, field: f, term: t};
     };

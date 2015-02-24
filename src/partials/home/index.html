@@ -67,6 +67,9 @@
   </span>
 </p>
 
+<p>
+  <a href="~/transcript">Go to your transcript.</a>
+</p>
 
 <!-- no courses yet -->
 <p class="lead" ng-if="user.mat_verify&&user.courses.length==0">
@@ -126,10 +129,10 @@
     class="col-lg-4 col-sm-6"
     ng-class="{'hidden-sm hidden-md' : $index==2}">
 
-    <ng-include
-      src="'partials/home/field.html'"
-      ng-repeat="field in column">
-    </ng-include>
+    <field
+      ng-repeat="field in column"
+      field="field">
+    </field>
 
     <!-- add one half of the third column below the first column for 'sm'
     sized screens -->
