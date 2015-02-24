@@ -123,7 +123,7 @@
     // courses - single view
     '/courses/:courseId': {
       templateUrl: 'courses/show.html',
-      controller: 'CourseCtrl',
+      controller: 'Course',
       title: ':course',
       access: 0
     },
