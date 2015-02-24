@@ -80,13 +80,10 @@
       }
 
       c.grade = _.formatGrade(c.grade, true);
+      c.old_grade = c.old_grade || null;
       c.term_abbr = c.term + c.year;
-
-      if (c.grade !== c.old_grade && (c.grade < 1 || c.grade > 4)) {
-        c.passed = false;
-      } else {
-        c.passed = (c.passed || (c.grade >= 1 && c.grade <= 4)) ? true : false;
-      }
+      c.passed = c.passed || ((c.grade >= 1 && c.grade <= 4) ||
+                              c.grade !== c.old_grade);
 
       var f = get_field(c.enrolled_field_id);
 
