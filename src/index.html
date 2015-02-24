@@ -17,13 +17,14 @@
 
   <title data-ng-bind="title">Study Planning in Cognitive Science</title>
 
-  <base href="/~SPAM">
+  <base href="/">
   <script type="text/javascript">
   // Handle local servers running with or without /~SPAM base.
   /* global window, document */
   (function() { 'use strict';
-    var base=(window.location.pathname||'').substr(0,6)=== '/~SPAM'?'/~SPAM':'';
-    document.getElementsByTagName('base')[0].href = base + '/';
+    var base = (window.location.pathname || '').substr(0,6);
+    base = (base === '/~SPAM') ? '/~SPAM/' : '/';
+    document.getElementsByTagName('base')[0].href = base;
   })();
   </script>
 
@@ -45,8 +46,7 @@
 
   <!-- bower:js -->
   <script src="lib/fastclick/lib/fastclick.js"></script>
-  <script src="lib/lodash/dist/lodash.compat.js"></script>
-  <script src="lib/underscore.string/lib/underscore.string.js"></script>
+  <script src="lib/lodash/lodash.js"></script>
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular-route/angular-route.js"></script>
   <script src="lib/angular-sanitize/angular-sanitize.js"></script>

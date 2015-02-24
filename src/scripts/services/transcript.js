@@ -479,14 +479,12 @@
         return field.bsc_relevant ? field.courses.length * 10 : field.courses.length;
       });
 
-      for (var i = sorted.length - 1; i >= 0; i--) {
-        var field = sorted[i];
-
+      _.forEachRight(sorted, function(field) {
         columns[ order[0].idx ].push(field);
         order[0].courses += field.courses.length;
         order[0].fields++;
-        order = _.sortBy(order, ['fields', 'courses']);
-      }
+        order = _.sortByAll(order, ['fields', 'courses']);
+      });
 
       return columns;
     }
