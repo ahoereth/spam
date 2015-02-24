@@ -9,6 +9,7 @@
     "angular-route": "1.3.x",
     "angular-sanitize": "1.3.x",
     "angular-bootstrap": "0.12.x",
+    "angular-unicorn-directive": "0.0.x",
     "angular-utf8-base64": "0.0.x",
     "restangular": "1.4.x"
   },
