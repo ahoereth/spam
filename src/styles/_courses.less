@@ -1,0 +1,25 @@
+/* *****************************************************************************
+ * Courses index
+ *
+ * TEMPLATE: /src/partials/courses/index.html
+ * ROUTE: /courses
+ */
+
+.courses-rowpair .row { margin-bottom: 0; padding: 10px 0; }
+.courses-rowpair:nth-child(odd)  .row { background-color:#f9f9f9; }
+.courses-rowpair:nth-child(even) .row { background-color:#fff; }
+
+.courses-row {
+  border-bottom: 1px solid #ccc;
+}
+.courses-row.expanded {
+  border-bottom-width: 0px;
+}
+
+.courses-row code {
+  padding: 2px 0;
+  display: block;
+  min-width: 100%;
+  text-align: center;
+  min-height: 1.4em;
+}
