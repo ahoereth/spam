@@ -11,6 +11,7 @@
 
   /* @ngInject */
   function lodashFactory($window) {
+    var _ = $window._;
 
     /**
      * Format a given string to a grade.
@@ -27,7 +28,7 @@
      */
     var formatGrade = function(g, course) {
       // null and NaN can be directly ignored
-      if ($window._.isNull(g) || $window._.isNaN(g)) {
+      if (_.isNull(g) || _.isNaN(g)) {
         return null;
       }
 
@@ -50,7 +51,7 @@
 
       // The result should be a number. If its not or if its smaller than 1 we
       // resolve to null.
-      if (! $window._.isNumber(g) || $window._.isNaN(g) || g < 1) {
+      if (! _.isNumber(g) || _.isNaN(g) || g < 1) {
         return null;
       }
 
@@ -91,52 +92,50 @@
       return parseFloat(a + '.' + b).toFixed(1);
     };
 
-    $window._.mixin({
 
-      /**
-      * Creates an object with all falsey key/value pairs removed. The values
-      * false, null, 0, "", undefined, and NaN are all falsey.
-      *
-      * @param object: The object to compact.
-      */
-      compactObject: function(toClean) {
-        if ($window._.isArray(toClean)) {
-          return $window._.compact(toClean);
-        }
+    /**
+     * Adds two numbers together. E.g. for shorthand use in reduce functions.
+     */
+    var sum = _.partialRight(_.reduce, function(a, b) { return a + b; });
 
-        $window._.map(toClean, function(value, key, toClean) {
-          if ( !!!value || ($window._.isString(value) && $window._.trim(value).length === 0)) {
-            delete toClean[key];
-          }
-        });
-        return toClean;
-      },
 
-      /**
-      * Format a given string to a grade.
-      *
-      * @see formatGrade in this factories scope.
-      */
+    /**
+     * Creates an object with all falsey key/value pairs removed. The values
+     * false, null, 0, "", undefined, and NaN are all falsey.
+     *
+     * @see _.compact
+     * @param object: The object to compact.
+     */
+    var compactObject = _.partialRight(_.pick, _.identity);
+
+
+    /**
+     * Calculates the percentage ratio of two given numbers.
+     */
+    var percent = function(a, b) {
+      return a / b * 100;
+    };
+
+
+    /**
+     * Checks if a given variable contains a number - lodash's similar functions
+     * don't handle strings etc.
+     *
+     * @see  http://stackoverflow.com/a/1830844/1447384
+     * @param  {any}     n variable to check
+     * @return {Boolean}
+     */
+    var isNumeric = function(n) {
+      return ! isNaN(parseFloat(n)) && isFinite(n);
+    };
+
+
+    _.mixin({
+      sum: sum,
+      compactObject: compactObject,
       formatGrade: formatGrade,
-
-      /**
-      * Calculates the percentage ratio of two given numbers.
-      */
-      percent: function(a, b) {
-        return a / b * 100;
-      },
-
-      /**
-      * Checks if a given variable contains a number - lodash's similar functions
-      * don't handle strings etc.
-      *
-      * @see  http://stackoverflow.com/a/1830844/1447384
-      * @param  {any}     n variable to check
-      * @return {Boolean}
-      */
-      isNumeric: function(n) {
-        return ! isNaN(parseFloat(n)) && isFinite(n);
-      }
+      percent: percent,
+      isNumeric: isNumeric
     });
 
     return $window._;

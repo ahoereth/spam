@@ -86,7 +86,7 @@
 			<div
 				ng-repeat="course in field.courses track by course.student_in_course_id"
 				class="row course"
-				ng-class="{overflowing : course.doesnt_count||course.muted||course.grade==5}">
+				ng-class="{overflowing : course.muted||course.grade==5}">
 
 				<!-- title + ects -->
 				<div class="col-xs-9">

@@ -7,6 +7,7 @@
 
     'restangular',
     'ui.bootstrap',
+    'unicorn-directive',
 
     'spam.filters',
     'spam.services',

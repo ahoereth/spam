@@ -80,14 +80,13 @@
       }
 /*
       c.grade = _.formatGrade(c.grade, true);
+      c.old_grade = c.old_grade || null;
       c.term_abbr = c.term + c.year;
 
-      if (c.grade !== c.old_grade && (c.grade < 1 || c.grade > 4)) {
-        c.passed = false;
-      } else {
-        c.passed = (c.passed || (c.grade >= 1 && c.grade <= 4)) ? true : false;
-      }
+      c.passed = c.passed || ((c.grade >= 1 && c.grade <= 4) ||
+                               c.grade !== c.old_grade);
 */
+
       var f = get_field(c.enrolled_field_id);
 
       // did the course's field change?
@@ -231,8 +230,10 @@
         }
       }
 
-      f.ects.open_compulsory = f.ects.compulsory - (f.ects.completed.compulsory + f.ects.enrolled.compulsory);
-      f.ects.open = f.ects.sum - (f.ects.completed.sum + f.ects.enrolled.sum + f.ects.open_compulsory);
+      f.ects.open_compulsory = f.ects.compulsory -
+        (f.ects.completed.compulsory + f.ects.enrolled.compulsory);
+      f.ects.open = f.ects.sum -
+        (f.ects.completed.sum + f.ects.enrolled.sum + f.ects.open_compulsory);
 
       f.ects.completed.percent       = _.percent(f.ects.completed.sum, f.ects.sum);
       f.ects.enrolled_percent        = _.percent(f.ects.enrolled.sum, f.ects.sum);
@@ -479,14 +480,12 @@
         return field.bsc_relevant ? field.courses.length * 10 : field.courses.length;
       });
 
-      for (var i = sorted.length - 1; i >= 0; i--) {
-        var field = sorted[i];
-
+      _.forEachRight(sorted, function(field) {
         columns[ order[0].idx ].push(field);
         order[0].courses += field.courses.length;
         order[0].fields++;
-        order = _.sortBy(order, ['fields', 'courses']);
-      }
+        order = _.sortByAll(order, ['fields', 'courses']);
+      });
 
       return columns;
     }

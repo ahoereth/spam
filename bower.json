@@ -2,13 +2,14 @@
   "name": "cogsci-spam",
   "dependencies": {
     "fastclick": "1.0.x",
-    "lodash": "3.2.x",
+    "lodash": "3.3.x",
     "bootstrap": "3.3.x",
     "open-sans-fontface": "1.2.x",
     "angular": "1.3.x",
     "angular-route": "1.3.x",
     "angular-sanitize": "1.3.x",
     "angular-bootstrap": "0.12.x",
+    "angular-unicorn-directive": "0.0.x",
     "angular-utf8-base64": "0.0.x",
     "restangular": "1.4.x"
   },
@@ -23,6 +24,6 @@
   ],
   "resolutions": {
     "angular": "1.3.x",
-    "lodash": "3.2.x"
+    "lodash": "3.3.x"
   }
 }
