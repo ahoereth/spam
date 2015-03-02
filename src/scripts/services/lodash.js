@@ -94,9 +94,35 @@
 
 
     /**
-     * Adds two numbers together. E.g. for shorthand use in reduce functions.
+     * Adds two numbers together.
+     *
+     * @param {Number} a
+     * @param {Number} b
      */
-    var sum = _.partialRight(_.reduce, function(a, b) { return a + b; });
+    var add = function(a, b) { return a + b; };
+
+
+    /**
+     * Sums up all elements of an array/object. Useful
+     * for shorthand use in reduce functions.
+     */
+    var sum = _.partialRight(_.reduce, add);
+
+
+    /**
+     * Multiplies two numbers with each other.
+     *
+     * @param {Number} a
+     * @param {Number} b
+     */
+    var multiply = function(a, b) { return a * b; };
+
+
+    /**
+     * Sums up all elements of an array/object. Useful
+     * for shorthand use in reduce functions.
+     */
+    var product = _.partialRight(_.reduce, multiply);
 
 
     /**
@@ -107,6 +133,13 @@
      * @param object: The object to compact.
      */
     var compactObject = _.partialRight(_.pick, _.identity);
+
+
+    var mapOnto = function(arrA, arrB, func) {
+      return _.mapValues(arrA, function(val, key) {
+        return func(val, arrB[key]);
+      });
+    };
 
 
     /**
@@ -131,11 +164,15 @@
 
 
     _.mixin({
+      add: add,
       sum: sum,
+      multiply: multiply,
+      product: product,
       compactObject: compactObject,
       formatGrade: formatGrade,
       percent: percent,
-      isNumeric: isNumeric
+      isNumeric: isNumeric,
+      mapOnto: mapOnto
     });
 
     return $window._;
