@@ -17,7 +17,48 @@
     Restangular,
     _
   ) {
-    var methods = {};
+    var self = {
+      facts   : {},
+      fields  : {},
+      courses : {},
+      watchers: []
+    };
+
+
+    var fieldData = {};
+
+
+    function callWatchers() {
+      _.forEach(self.watchers, _.attempt);
+    }
+
+
+    function calculateGrade(data) {
+      var passedCredits = data.pluck('passedCredits');
+
+      var gradeSum = data.pluck('grade')
+                         .mapOnto(passedCredits.value(), _.multiply)
+                         .sum();
+
+      return _.formatGrade(gradeSum.value() / passedCredits.sum().value());
+    }
+
+
+    var factsCalculation = _.debounce(function() {
+      var fields = _.chain(fieldData).sortByAll('grade');
+
+      self.facts.grades = {
+        overall: calculateGrade(fields),
+        bachelor: calculateGrade(fields.where({
+            examinationPossible: true,
+            completed: true
+          }).take(5)
+        )
+      };
+
+      callWatchers();
+    }, 200);
+
 
     /**
      * Save userdata to server.
@@ -26,7 +67,7 @@
      * @param {bool}   force Force the update even if the data seems to be
      *                       unchanged.
      */
-    methods.updateUser = function(data, force) {
+    self.updateUser = function(data, force) {
       var putData = {};
       angular.forEach(data, function(value, key) {
         if (! angular.equals($rootScope.user[key], value) || force) {
@@ -44,12 +85,14 @@
       });
     };
 
-    methods.destroy = function() {
+
+    self.destroy = function() {
       $log.info('Destroying local user data.');
       $rootScope.$broadcast('userDestroy');
     };
 
-    methods.deleteUser = function() {
+
+    self.deleteUser = function() {
       $log.info('Deleting global user data.');
       //$rootScope.$broadcast('userDelete');
       if ($rootScope.user) {
@@ -62,20 +105,49 @@
         });
 
         // handle local and global user data deletion asynchronously
-        methods.destroy();
+        self.destroy();
       }
     };
 
-    methods.getRegulation = function(reg) {
+
+    self.getRegulation = function(reg) {
       return this.regulation_id || (reg || null);
     };
 
-    methods.getUsername = function() {
+
+    self.getUsername = function() {
       return this.username || null;
     };
 
 
-    return function(data) {
+    /**
+     * TODO: Not functional.
+     * TODO: handle course_id and/or student_in_course_id as argument
+     */
+    self.removeCourse = function(course) {
+      console.log('Remove course from user transcript:', course, self.courses);
+
+      if (_.isNumber(course)) {} // student_in_course_id
+
+      console.log(course);
+
+      self.courses = _.without(self.courses, course);
+    };
+
+
+    self.updateFieldData = function(id, data) {
+      fieldData[id] = data;
+      factsCalculation();
+    };
+
+
+    self.addWatcher = function(func) {
+      self.watchers.push(func);
+      return self.watchers.length - 1;
+    };
+
+
+    self.construct = function(data) {
       if (angular.isDefined(data)) {
         if (angular.isDefined(data.courses)) {
           Restangular.restangularizeCollection(data, data.courses, 'courses');
@@ -88,7 +160,11 @@
         data.thesis_grade = _.formatGrade(data.thesis_grade);
       }
 
-      return angular.extend(methods, data, {loggedin: ! _.isEmpty(data)});
+      self = _.extend(self, data, {loggedin: ! _.isEmpty(data)});
+
+      return self;
     };
+
+    return self;
   }
 })();

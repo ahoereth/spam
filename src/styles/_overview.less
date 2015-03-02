@@ -50,16 +50,6 @@
     color: @gray-light;
   }
 
-  .overview-container.floating-columns {
-    -webkit-column-gap: 20px;
-       -moz-column-gap: 20px;
-            column-gap: 20px;
-
-    -webkit-column-width: auto;
-       -moz-column-width: auto;
-            column-width: auto;
-  }
-
   h4 {
     margin-top: 0; margin-bottom: 0;
   }
@@ -100,6 +90,33 @@
     text-align: center;
   }
 }
+
+
+.overview-container.floating-columns {
+  -webkit-column-gap: 20px;
+     -moz-column-gap: 20px;
+          column-gap: 20px;
+
+  -webkit-column-width: auto;
+     -moz-column-width: auto;
+          column-width: auto;
+
+  padding-bottom: 3em;
+
+  .panel {
+    // Different methods to avoid brokes items follow.
+    //display: inline-block;
+    page-break-inside: avoid;
+  //  overflow: hidden;
+    break-inside: avoid-column;
+    -webkit-column-break-inside: avoid;
+       -moz-column-break-inside: avoid;
+         -o-column-break-inside: avoid;
+        -ms-column-break-inside: avoid;
+            column-break-inside: avoid;
+  }
+}
+
 
 @media (max-width: 767px) {
   .overview-container.floating-columns {

@@ -1,61 +1,30 @@
 <!-- demo warning -->
-<div class="alert alert-warning" ng-if="user.username=='demo'">
+<div class="alert alert-warning" ng-if="username=='demo'">
   You are currently viewing the live demo. To make sustaining changes please log in with your own credentials!
 </div>
 
-<h1>{{user.username}}'s overview</h1>
-
+<h1>{{username}}'s overview</h1>
 
 <!-- already enrolled in some courses -->
-<p class="lead" ng-if="user.courses.length">
-  <span ng-show="facts.grade_overall">
-    You earned a total of <strong>{{facts.ects.completed.sum}}</strong> credits with an average grade of <strong>{{facts.grade_overall}}</strong>.
+<p class="lead" ng-if="courses.length">
+  <span ng-show="facts.grades.overall">
+    You earned a total of <strong>{{facts.credits.completed}}</strong> credits with an average grade of <strong>{{facts.grades.overall}}</strong>.
   </span>
 
   <!-- enrolled ects -->
-  <span ng-show="facts.ects.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.ects.enrolled}} credits.</span>
+  <span ng-show="facts.credits.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.credits.enrolled}} credits.</span>
 
-  <!-- current semester -->
-  <span ng-if="terms.currentTerm.courses.length">
-    <span ng-if="terms.currentTerm.ects.enrolled==facts.ects.enrolled">
-      All of them in the <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">current semester</abbr>.
-    </span>
-    <span ng-if="terms.currentTerm.ects.enrolled!=facts.ects.enrolled">
-      <abbr tooltip-html-unsafe="{{terms.currentTerm.abbr}}">This semester</abbr> you are pursuing a total of {{terms.currentTerm.ects.sum}} credits{{terms.lastTerm.courses.length | iif : ' and ' : '.'}}
-    </span>
-  </span>
-
-  <!-- last semester -->
-  <span ng-if="terms.lastTerm.courses.length">
-    {{terms.currentTerm.courses.length | iif : 'i' : 'I'}}n your <abbr tooltip-html-unsafe="{{terms.lastTerm.abbr}}">last semester</abbr> you earned a total of {{terms.lastTerm.ects.completed.sum}} credits with an average grade of <strong>{{terms.lastTerm.grade}}</strong>.
-  </span>
-
-  <!-- semester average -->
-  <span ng-if="facts.average_ects>0&&terms.lastTerm.grade">
-    Considering all the terms in which you have completed courses, you collected an average of <strong>{{facts.average_ects}}</strong> credits/term.
-  </span>
-
-  <!-- next semester -->
-  <span ng-if="terms.nextTerm.courses.length">
-    Lastly, for the <abbr tooltip-html-unsafe="{{terms.nextTerm.abbr}}">next semester</abbr> you have by now scheduled courses to earn {{terms.nextTerm.ects.enrolled+terms.nextTerm.ects.completed.sum}} credits.
-  </span>
-
-  <span ng-if="facts.ects.completed.overhang">
+  <!--<span ng-if="facts.ects.completed.overhang">
     There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
-  </span>
+  </span>-->
 
   <span ng-if="false">
     By the end of the second semester you are required to have completed a total of XX credits. XX2 to go!
   </span>
 
   <!-- bachelor grade -->
-  <span ng-if="facts.grade_bachelor" ng-switch="facts.ects.completed.sum">
-    <span ng-switch-default>
-      Your bachelor grade presumably will be around <strong>{{facts.grade_bachelor}}</strong>.
-    </span>
-    <span ng-switch-when="180">
-      Your bachelor grade is <strong>{{facts.grade_bachelor}}</strong>.
-    </span>
+  <span ng-if="facts.grades.bachelor">
+    Your bachelor grade presumably will be around <strong>{{facts.grades.bachelor}}</strong>.
   </span>
 
   <span ng-if="!user.thesis_title&&!user.thesis_grade">
@@ -120,42 +89,16 @@
 
 
 <!-- the fields -->
-<div class="overview-container row" ng-if="user.courses.length">
-  <hr style="margin-top: 0">
+<div class="overview-container row floating-columns" ng-if="user.courses.length">
 
-  <div
-    ng-repeat="(idx, column) in columns track by idx"
-    ng-init="outerIndex = $index"
-    class="col-lg-4 col-sm-6"
-    ng-class="{'hidden-sm hidden-md' : $index==2}">
-
-    <field
-      ng-repeat="field in column"
-      field="field">
-    </field>
-
-    <!-- add one half of the third column below the first column for 'sm'
-    sized screens -->
-    <div ng-if="outerIndex==0">
-      <ng-include
-        src="'partials/home/field.html'"
-        ng-repeat="field in columns[2]"
-        ng-init="visibilityIndex = outerIndex"
-        class="visible-sm visible-md">
-      </ng-include>
-    </div>
-
-    <!-- add the other half of the third column below the second column for
-    'sm' sized screens -->
-    <div ng-if="outerIndex==1">
-      <ng-include
-        src="'partials/home/field.html'"
-        ng-repeat="field in columns[2]"
-        ng-init="visibilityIndex = outerIndex"
-        class="visible-sm visible-md">
-      </ng-include>
-    </div>
-  </div>
+  <field
+    ng-repeat="field in fields"
+    field="field">
+    <course
+      ng-repeat="course in courses | filter:{enrolled_field_id: field.field_id}:true"
+      course="course">
+    </course>
+  </field>
 </div>
 
 <hr>

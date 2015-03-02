@@ -1,11 +1,16 @@
 <div
   class="panel"
   ng-class="{
-    'panel-success': field.ects.completed.percent>=100,
-    'panel-default': field.ects.completed.percent< 100,
-    'hidden-sm hidden-md': (visibilityIndex==0&&$odd) ||
-                           (visibilityIndex==1&&$even)
-  }">
+    'panel-success': field.credits.available.sum == 0
+                  && field.field_examination_possible,
+    'panel-warning':(field.credits.available.sum != 0
+                  || field.field_examination_possible)
+                  && field.credits.available.compulsory != 0,
+    'panel-default':(field.credits.available.sum != 0
+                  || field.field_examination_possible)
+                  && field.credits.available.compulsory == 0
+  }"
+>
   <!-- Directives: field -->
 
   <div class="panel-heading">
@@ -17,13 +22,14 @@
       <div class="col-xs-2">
         <input
           type="text"
+          blur-on-enter
           class="input-tiny"
           ng-class="{'no-grade-passed': field.auto_grade}"
           ng-model="grade"
-          ng-blur="editFieldGrade()"
-          ng-keydown="blurOnEnter($event)"
+          ng-blur="gradeChange()"
           ng-disabled="field.auto_grade"
-          onclick="select()">
+          onclick="select()"
+        />
       </div>
 
       <!-- field button + dropdown -->
@@ -34,21 +40,17 @@
             type="button"
             dropdown-toggle
             class="btn btn-xs btn-block dropdown-toggle"
-            ng-class="{
-              'btn-success': field.ects.open_compulsory_percent==0,
-              'btn-warning': field.ects.open_compulsory_percent!=0}"
+            ng-class="{'btn-success': field.credits.available.compulsory == 0,
+                       'btn-warning': field.credits.available.compulsory != 0}"
             style="height: 100%;">
 
             <span
               class="glyphicon"
               ng-class="{
-                'glyphicon-star'  :  field.bsc_relevant,
-                'glyphicon-ok'    :  field.ects.open_compulsory_percent==0 &&
-                                    !field.bsc_relevant,
-                'glyphicon-pencil':  field.ects.open_compulsory_percent!=0 &&
-                                     field.ects.completed.percent<100 &&
-                                    !field.bsc_relevant}">
-            </span>
+                'glyphicon-ok'    : field.credits.available.compulsory == 0,
+                'glyphicon-pencil': field.credits.available.compulsory != 0
+              }"
+            ></span>
 
           </button>
 
@@ -69,11 +71,13 @@
             <li ng-if="field.field_examination_possible">
               <label class="dropdown-checkbox">
                 Examination
-                <input type="checkbox"
+                <input
+                  type="checkbox"
                   class="pull-right"
                   ng-checked="!field.auto_grade"
                   ng-click="fieldGradeInit()"
-                  style="margin-top: 3px;">
+                  style="margin-top: 3px;"
+                />
               </label>
             </li>
 
@@ -86,10 +90,7 @@
 
   <div class="panel-body">
 
-    <course
-      ng-repeat="course in field.courses track by course.student_in_course_id"
-      course="course">
-    </course>
+    <ng-transclude></ng-transclude>
 
     <div ng-if="field.field_id == 1 && facts.ects.completed.floated">
       Floated credits from other fields: {{facts.ects.completed.floated}}<br>
@@ -100,33 +101,37 @@
   <div class="panel-footer">
     <div class="progress" style="margin-bottom: 0">
 
-      <!-- completed -->
+      <!-- passed -->
       <div
         class="progress-bar progress-bar-success"
-        style="width: {{field.ects.completed.percent}}%"
-        ng-hide="field.ects.completed.percent==0"
-        ng-bind="field.ects.completed.sum"></div>
+        style="width: {{field.credits.passed.percentage}}%"
+        ng-hide="field.credits.passed.percentage==0"
+        ng-bind="field.credits.passed.sum"
+      ></div>
 
       <!-- enrolled -->
       <div
         class="progress-bar progress-bar-info"
-        style="width: {{field.ects.enrolled_percent}}%"
-        ng-hide="field.ects.enrolled_percent==0"
-        ng-bind="field.ects.enrolled.sum"></div>
+        style="width: {{field.credits.enrolled.percentage}}%"
+        ng-hide="field.credits.enrolled.percentage==0"
+        ng-bind="field.credits.enrolled.sum"
+      ></div>
 
-      <!-- required -->
+      <!-- available compulsory -->
       <div
         class="progress-bar progress-required"
-        style="width: {{field.ects.open_compulsory_percent}}%"
-        ng-hide="field.ects.open_compulsory_percent==0"
-        ng-bind="field.ects.open_compulsory"></div>
+        style="width: {{field.credits.available.percentage_compulsory}}%"
+        ng-hide="field.credits.available.percentage_compulsory==0"
+        ng-bind="field.credits.available.compulsory"
+      ></div>
 
-      <!-- open -->
+      <!-- available optional -->
       <div
         class="progress-bar progress-background"
-        style="width: {{field.ects.open_percent}}%"
-        ng-hide="field.ects.open_percent==0"
-        ng-bind="field.ects.open"></div>
+        style="width: {{field.credits.available.percentage_optional}}%"
+        ng-hide="field.credits.available.percentage_optional==0"
+        ng-bind="field.credits.available.optional"
+      ></div>
 
     </div>
   </div><!-- /panel-footer -->

@@ -24,52 +24,22 @@
     $q,
     _,
     Restangular,
-    Transcript
+    Transcript,
+    User
   ) {
-    $scope.fieldGradeInit = function() {
-      var field = this.field;
-
-      field.auto_grade = ! field.auto_grade;
-      field.grade = null;
-
-      if (field.auto_grade) {
-        field.put();
-        Transcript.field_changed( field );
-      }
+    var scopeApply = function() {
+      $scope.$apply();
     };
+
+    User.addWatcher(scopeApply);
+    $scope.facts    = User.facts;
+    $scope.fields   = User.fields;
+    $scope.courses  = User.courses;
+    $scope.username = User.username;
 
 
     /**
-     * Student in field grade edited. Redo some calculations and save the
-     * changes to the server.
-     */
-    $scope.editFieldGrade = function(field) {
-      field = this.field || field;
-      field.grade = _.formatGrade( field.grade );
-
-      if (field.grade === field.old_grade) {
-        return;
-      }
-
-      field.put();
-      field.old_grade = field.grade;
-      Transcript.field_changed( field );
-    };
-
-
-    /**
-     * Called when some student in course property changed.
-     *
-     * @param course course the course which properties has changed
-     */
-    $scope.editProp = function(course) {
-      course = course || this.course;
-      Transcript.course_put(course);
-    };
-
-
-    /**
-     * TODO
+     * TODO: needs to be refactored
      */
     $scope.updateThesis = function() {
       var user = $scope.user;
@@ -115,50 +85,17 @@
 
     /**
      * Moves a specific course to a different field. Student in course data.
+     *
+     * TODO: move to course directive
      */
-    $scope.moveCourse = function(newFieldId) {
+  /*  $scope.moveCourse = function(newFieldId) {
       var c = this.course;
       var target = _.findWhere($scope.user.courses, {
         student_in_course_id: c.student_in_course_id
       });
       target.enrolled_field_id = (! _.isNull(newFieldId)) ? newFieldId : 1;
       $scope.editProp(target);
-    };
-
-
-    /**
-     * Get a specific field by its field_id
-     * @param  {int} i field_id
-     * @return {field} field
-     */
-    $scope.getFieldById = function(i) {
-      return _.find($rootScope.fields, {
-        field_id: parseInt(i, 10)
-      });
-    };
-
-
-    /**
-     * Listen for the courseAdded event. If it occurs add the course to
-     * the user's course array.
-     */
-    $scope.$on('courseAdded', function(event, course) {
-      Transcript.course_put(course);
-    });
-
-
-    /**
-     * Listen for the courseRemoved event.
-     */
-    $scope.$on('courseRemoved', function(event, course) {
-      Transcript.course_removed(course);
-    });
-
-    var pointers = Transcript.init($scope.user);
-    $scope.fields  = pointers.fields;
-    $scope.terms   = pointers.terms;
-    $scope.facts   = pointers.facts;
-    $scope.columns = pointers.columns;
+    };*/
   }
 
 })();

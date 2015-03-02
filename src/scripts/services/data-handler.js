@@ -83,7 +83,7 @@
 
     self.userInit = function(data) {
       self.removeUserDependent();
-      $rootScope.user = User(data);
+      $rootScope.user = User.construct(data);
     };
 
     return self;
