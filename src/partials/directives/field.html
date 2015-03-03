@@ -1,22 +1,20 @@
 <div
   class="panel"
-  ng-class="{
-    'panel-success': field.credits.available.sum == 0
-                  && field.field_examination_possible,
-    'panel-warning':(field.credits.available.sum != 0
-                  || field.field_examination_possible)
-                  && field.credits.available.compulsory != 0,
-    'panel-default':(field.credits.available.sum != 0
-                  || field.field_examination_possible)
-                  && field.credits.available.compulsory == 0
-  }"
+  ng-class="{'panel-success': field.credits.available.sum == 0 &&
+                              field.field_examination_possible,
+             'panel-warning':(field.credits.available.sum != 0 ||
+                              field.field_examination_possible) &&
+                              field.credits.available.compulsory != 0,
+             'panel-default':(field.credits.available.sum != 0 ||
+                              field.field_examination_possible) &&
+                              field.credits.available.compulsory == 0}"
 >
   <!-- Directives: field -->
 
   <div class="panel-heading">
     <div class="row">
 
-      <h4 class="col-xs-9" ng-bind="::field.field"></h4>
+      <h4 class="col-xs-9">{{::field.field}}</h4>
 
       <!-- field grade input -->
       <div class="col-xs-2">
@@ -24,25 +22,24 @@
           type="text"
           blur-on-enter
           class="input-tiny"
-          ng-class="{'no-grade-passed': field.auto_grade}"
+          ng-class="{'no-grade-passed': !examination}"
           ng-model="grade"
           ng-blur="gradeChange()"
-          ng-disabled="field.auto_grade"
+          ng-disabled="!examination"
           onclick="select()"
         />
       </div>
 
       <!-- field button + dropdown -->
       <div class="col-xs-1">
-        <div class="btn-group dropdown" dropdown style="width: 100%;">
+        <div class="btn-group dropdown" dropdown>
 
           <button
             type="button"
             dropdown-toggle
             class="btn btn-xs btn-block dropdown-toggle"
             ng-class="{'btn-success': field.credits.available.compulsory == 0,
-                       'btn-warning': field.credits.available.compulsory != 0}"
-            style="height: 100%;">
+                       'btn-warning': field.credits.available.compulsory != 0}">
 
             <span
               class="glyphicon"
@@ -56,10 +53,11 @@
 
           <ul class="dropdown-menu">
 
-            <li>
-              <a ng-href="courses?regulation={{::user.regulation_id}}&field={{::field.field}}">
-                Find courses
-              </a>
+            <!-- trigger field examination -->
+            <li ng-if="field.field_examination_possible">
+              <dropdown-checkbox ng-model="examination" ng-change="examine()">
+                Examination
+              </dropdown-checkbox>
             </li>
 
             <li>
@@ -68,17 +66,10 @@
               </a>
             </li>
 
-            <li ng-if="field.field_examination_possible">
-              <label class="dropdown-checkbox">
-                Examination
-                <input
-                  type="checkbox"
-                  class="pull-right"
-                  ng-checked="!field.auto_grade"
-                  ng-click="fieldGradeInit()"
-                  style="margin-top: 3px;"
-                />
-              </label>
+            <li>
+              <a ng-href="courses?regulation={{::user.regulation_id}}&field={{::field.field}}">
+                Find courses
+              </a>
             </li>
 
           </ul>
@@ -89,23 +80,19 @@
   </div><!--/panel-heading-->
 
   <div class="panel-body">
-
+    <!-- most likely only 'course' directives here -->
     <ng-transclude></ng-transclude>
-
-    <div ng-if="field.field_id == 1 && facts.ects.completed.floated">
-      Floated credits from other fields: {{facts.ects.completed.floated}}<br>
-    </div>
   </div>
 
   <!-- progress bar panel footer -->
   <div class="panel-footer">
-    <div class="progress" style="margin-bottom: 0">
+    <div class="progress">
 
       <!-- passed -->
       <div
         class="progress-bar progress-bar-success"
         style="width: {{field.credits.passed.percentage}}%"
-        ng-hide="field.credits.passed.percentage==0"
+        ng-hide="field.credits.passed.percentage == 0"
         ng-bind="field.credits.passed.sum"
       ></div>
 
@@ -113,7 +100,7 @@
       <div
         class="progress-bar progress-bar-info"
         style="width: {{field.credits.enrolled.percentage}}%"
-        ng-hide="field.credits.enrolled.percentage==0"
+        ng-hide="field.credits.enrolled.percentage == 0"
         ng-bind="field.credits.enrolled.sum"
       ></div>
 

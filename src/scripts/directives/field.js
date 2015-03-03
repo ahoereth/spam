@@ -7,7 +7,7 @@
 
 
   /* @ngInject */
-  function fieldDirective() {
+  function fieldDirective(_) {
     return {
       restrict: 'E',
       replace: true,
@@ -18,7 +18,11 @@
       templateUrl: 'partials/directives/field.html',
       /* @ngInject */
       controller: fieldCtrl,
-      link: fieldLink
+      link: function(scope/*, elem, attrs*/) {
+        var field = scope.field;
+        field.old_grade = field.grade = _.formatGrade(field.grade);
+        scope.examination = !! scope.field.grade;
+      }
     };
   }
 
@@ -127,28 +131,30 @@
      * changes to the server.
      */
     $scope.gradeChange = function() {
-      this.grade = _.formatGrade(this.grade);
+      $scope.grade = _.formatGrade($scope.grade);
 
       if ( // grade can't change if no module examination is possible.
            (! field.field_examination_possible) ||
            // Field was not passed so a module examination is not possible.
            (100 !== field.credits.passed.percentage) ||
            // Nothing to do if the grade did not actually change.
-           (this.grade === field.old_grade)
+           ($scope.grade === field.old_grade)
       ) {
-        this.grade = field.old_grade;
+        $scope.grade = field.old_grade;
       }
 
-      field.grade = field.old_grade = this.grade;
+      field.grade = field.old_grade = $scope.grade;
       field.put();
       doAnalysis();
     };
+
+
+    $scope.examine = function() {
+      $scope.examination = ! $scope.examination;
+      if (! $scope.examination) {
+        $scope.grade = null;
+        $scope.gradeChange();
+      }
+    };
   }
-
-
-  function fieldLink(scope/*, elem, attrs*/) {
-    var field = scope.field;
-    field.old_grade = field.grade = _.formatGrade(field.grade);
-  }
-
 }());

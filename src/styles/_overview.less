@@ -6,6 +6,37 @@
  */
 
 .overview-container {
+  -webkit-column-gap: 20px;
+     -moz-column-gap: 20px;
+          column-gap: 20px;
+
+  -webkit-column-width: auto;
+     -moz-column-width: auto;
+          column-width: auto;
+
+  // required for overflowing dropdowns to not be cut off
+  margin-bottom: -6em;
+  padding-bottom: 6em;
+
+  @media (max-width: 767px) {
+    -webkit-column-count: 1;
+       -moz-column-count: 1;
+        -ms-column-count: 1;
+            column-count: 1;
+  }
+
+  @media (min-width: 768px) and (max-width: 1199px) {
+    -webkit-column-count: 2;
+       -moz-column-count: 2;
+            column-count: 2;
+  }
+
+  @media (min-width: 1200px) {
+    -webkit-column-count: 3;
+       -moz-column-count: 3;
+            column-count: 3;
+  }
+
   table tr td {
     padding-left: 4px;
     padding-right: 4px;
@@ -51,10 +82,14 @@
   }
 
   h4 {
-    margin-top: 0; margin-bottom: 0;
+    margin-top: 0;
+    margin-bottom: 0;
   }
+
   .panel-heading {
-    padding-top: 20px !important; padding-bottom: 20px !important;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    color: #333333;
   }
 
   .row {
@@ -69,8 +104,22 @@
     padding-left: 5px; padding-right: 5px;
   }
 
-  .panel .panel-body .row {
-    padding-top: 5px; padding-bottom: 5px;
+  .panel {
+    // Different methods to avoid brokes items follow.
+    display: inline-block;
+    page-break-inside: avoid;
+    break-inside: avoid-column;
+    -webkit-column-break-inside: avoid;
+       -moz-column-break-inside: avoid;
+         -o-column-break-inside: avoid;
+        -ms-column-break-inside: avoid;
+            column-break-inside: avoid;
+
+    .glyphicon {
+      // workaround to prevent flickering on hover in css3 columns
+      position: static;
+      vertical-align: sub;
+    }
   }
 
   .panel-heading,
@@ -82,6 +131,10 @@
 
   .panel-body {
     border-top: 1px solid #ccc;
+
+    .row {
+      padding-top: 5px; padding-bottom: 5px;
+    }
   }
 
   .panel .btn-xs {
@@ -91,54 +144,33 @@
   }
 }
 
-
-.overview-container.floating-columns {
-  -webkit-column-gap: 20px;
-     -moz-column-gap: 20px;
-          column-gap: 20px;
-
-  -webkit-column-width: auto;
-     -moz-column-width: auto;
-          column-width: auto;
-
-  padding-bottom: 3em;
-
-  .panel {
-    // Different methods to avoid brokes items follow.
-    //display: inline-block;
-    page-break-inside: avoid;
-  //  overflow: hidden;
-    break-inside: avoid-column;
-    -webkit-column-break-inside: avoid;
-       -moz-column-break-inside: avoid;
-         -o-column-break-inside: avoid;
-        -ms-column-break-inside: avoid;
-            column-break-inside: avoid;
-  }
+.btn-group.dropdown {
+  width: 100%;
 }
 
-
-@media (max-width: 767px) {
-  .overview-container.floating-columns {
-    -webkit-column-count: 1;
-       -moz-column-count: 1;
-        -ms-column-count: 1;
-            column-count: 1;
-  }
+.progress {
+  margin-bottom: 0;
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
-  .overview-container.floating-columns {
-    -webkit-column-count: 2;
-       -moz-column-count: 2;
-            column-count: 2;
-  }
+.progress-required {
+  float: left;
+  width: 0%;
+  height: 100%;
+  font-size: @font-size-small;
+  color: @progress-bar-color;
+  text-align: center;
+  background-color: fade( @progress-bar-warning-bg, 50% );
+  .box-shadow(inset 0 0px 2px rgba(0,0,0,.1));
+  .transition(width .6s ease);
 }
 
-@media (min-width: 1200px) {
-  .overview-container.floating-columns {
-    -webkit-column-count: 3;
-       -moz-column-count: 3;
-            column-count: 3;
-  }
+.progress-background {
+  float: left;
+  width: 0%;
+  height: 100%;
+  font-size: @font-size-small;
+  color: #000;
+  text-align: center;
+  background-color: transparent;
+  .box-shadow(none);
 }

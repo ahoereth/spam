@@ -1,10 +1,8 @@
 <div
   class="row course"
-  ng-class="{
-       overflowing: course.overflowing
-    || course.grade == 5
-    || course.muted
-  }"
+  ng-class="{overflowing: course.overflowing ||
+             course.grade == 5 ||
+             course.muted}"
 >
   <!-- Directive: course -->
 
@@ -44,76 +42,51 @@
   <!-- dropdown button -->
   <div class="col-xs-1">
 
-    <div class="btn-group dropdown" dropdown style="width: 100%;">
+    <div class="btn-group dropdown" dropdown>
       <button
         type="button"
         dropdown-toggle
         class="btn btn-xs btn-block dropdown-toggle"
-        ng-class="{
-          'btn-info'   : !course.passed && !course.muted,
-          'btn-success':  course.passed && !course.muted,
-          'btn-default': !course.passed ||  course.muted
-        }"
+        ng-class="{'btn-info'   : !course.passed,
+                   'btn-success':  course.passed,
+                   'btn-default':  course.grade > 4}"
       >
-        <!-- TODO: Those following ng-class rules need some cleanup. -->
         <span
           class="glyphicon"
-          ng-class="{
-            'glyphicon-pencil': !course.passed,
-            'glyphicon-star'  :((course.grade>=1&&course.grade<=4)|| course.passed)&&
-                               (!course.muted&& field.bsc_relevant)&&
-                                (field.auto_grade),
-            'glyphicon-ok'    :((course.grade>=1&&course.grade<=4)||course.passed)&&
-                                (!course.muted&&(!field.bsc_relevant||!field.auto_grade)),
-            'glyphicon-remove':   course.grade>4||course.muted
-          }"
+          ng-class="{'glyphicon-pencil': !course.passed,
+                     'glyphicon-ok'    :  course.passed,
+                     'glyphicon-remove':  course.grade > 4}"
         ></span>
       </button>
 
       <ul class="dropdown-menu">
 
-        <li ng-hide="course.grade">
-          <label class="dropdown-checkbox">
-            Passed
-            <input
-              type="checkbox"
-              class="pull-right"
-              ng-model="course.passed"
-              ng-change="changeGrade()"
-              ng-checked="course.passed"
-              style="margin-top: 3px;"
-            />
-          </label>
-        </li>
-
+        <!-- force pass or un-pass course -->
         <li>
-          <label class="dropdown-checkbox">
-            Muted
-            <input
-              type="checkbox"
-              class="pull-right"
-              ng-model="course.muted"
-              ng-change="changeMuted()"
-              ng-checked="course.muted"
-              style="margin-top: 3px;"
-            />
-          </label>
+          <dropdown-checkbox ng-model="course.passed" ng-change="pass()">
+            Passed
+          </dropdown-checkbox>
         </li>
 
+        <!-- mute course -->
+        <li>
+          <dropdown-checkbox ng-model="course.muted" ng-change="mute()">
+            Muted
+          </dropdown-checkbox>
+        </li>
+
+        <!-- un-enroll from course -->
         <li><a class="pointer" ng-click="remove()">Remove</a></li>
 
-        <li
-          class="dropdown-header"
-          ng-hide="course.fields.length == 0 && course.enrolled_field_id == 1"
-        >
+        <!-- move to other fields headline -->
+        <li ng-hide="course.fields.length == 0 && course.enrolled_field_id == 1"
+            class="dropdown-header">
           Change field
         </li>
 
         <!-- move to other fields -->
-        <li
-          ng-repeat="field in course.fields"
-          ng-hide="field.field_id == course.enrolled_field_id"
-        >
+        <li ng-repeat="field in course.fields"
+            ng-hide="field.field_id == course.enrolled_field_id">
           <a class="pointer" ng-click="moveCourse(field.field_id)">
             {{::field.field}}
           </a>

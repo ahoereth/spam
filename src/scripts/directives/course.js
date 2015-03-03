@@ -16,7 +16,6 @@
         'course': '='
       },
       templateUrl: 'partials/directives/course.html',
-      controller: courseCtrl,
       link: function(scope, elem, attrs, fieldCtrl) {
         var course = scope.course;
 
@@ -30,7 +29,11 @@
           fieldCtrl.courseGradeChange(this.course);
         };
 
-        scope.changeMuted = function() {
+        scope.mute = function() {};
+
+        scope.pass = function() {
+          course.grade = ! course.grade ? course.grade : null;
+          scope.changeGrade();
         };
 
         scope.remove = function() {
@@ -42,10 +45,5 @@
         scope.changeGrade();
       }
     };
-  }
-
-
-  /* @ngInject */
-  function courseCtrl($scope, $timeout) {
   }
 }());
