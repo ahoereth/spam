@@ -63,16 +63,16 @@
 
         <!-- force pass or un-pass course -->
         <li>
-          <dropdown-checkbox ng-model="course.passed" ng-change="pass()">
+          <tickable ng-model="course.passed" ng-change="pass()">
             Passed
-          </dropdown-checkbox>
+          </tickable>
         </li>
 
         <!-- mute course -->
         <li>
-          <dropdown-checkbox ng-model="course.muted" ng-change="mute()">
+          <tickable ng-model="course.muted" ng-change="mute()">
             Muted
-          </dropdown-checkbox>
+          </tickable>
         </li>
 
         <!-- un-enroll from course -->

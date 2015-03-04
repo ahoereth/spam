@@ -3,11 +3,11 @@
 
   angular
     .module('spam.directives')
-    .directive('dropdownCheckbox', dropdownCheckboxDirective);
+    .directive('tickable', tickableDirective);
 
 
   /* @ngInject */
-  function dropdownCheckboxDirective() {
+  function tickableDirective() {
     return {
       restrict: 'E',
       replace: true,
@@ -16,7 +16,7 @@
         model: '=ngModel',
         change: '&ngChange'
       },
-      templateUrl: 'partials/directives/dropdown-checkbox.html'
+      templateUrl: 'partials/directives/tickable.html'
     };
   }
 }());
