@@ -7,16 +7,26 @@
 
 
   /* @ngInject */
-  function tickableDirective() {
+  function tickableDirective($timeout) {
     return {
       restrict: 'E',
       replace: true,
       transclude: true,
       scope: {
         model: '=ngModel',
-        change: '&ngChange'
+        changeTarget: '&ngChange'
       },
-      templateUrl: 'partials/directives/tickable.html'
+      templateUrl: 'partials/directives/tickable.html',
+      link: function(scope) {
+        // Calling the ngChange function directly in the template resulted in it
+        // being called before the value actually changed.
+        scope.change = function() {
+          var self = this;
+          $timeout(function() {
+            scope.changeTarget(self);
+          }, 0);
+        };
+      }
     };
   }
 }());
