@@ -37,4 +37,4 @@ RewriteRule ^.*$ - [NC,L]
 
 # otherwise forward it to index.html
 ###RewriteRule ^(.*) /~SPAM/app/#!/$1 [NC,L]
-RewriteRule ^(.*) /~SPAM/src/#!/$1 [NC,L]
+RewriteRule ^(.*) /src/#!/$1 [NC,L]
