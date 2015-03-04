@@ -5,14 +5,11 @@
 
 @import "__variables.less";
 
-@import "_courses.less";
 @import "_guide.less";
 @import "_helper.less";
-@import "_layout.less";
 @import "_loader.less";
 @import "_navbar.less";
 @import "_overview.less";
-@import "_spin.less";
 
 /*
 @media (max-width: 767px) {
@@ -55,50 +52,32 @@ h6,
   font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.dropdown ul {
-  min-width: 20px;
-}
+.dropdown-menu {
+  &::after {
+    position: absolute;
+    top: -6px;
+    left: 4px;
+    display: inline-block;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid white;
+    border-left: 6px solid transparent;
+    content: '';
+  }
 
-.dropdown-menu::after {
-  position: absolute;
-  top: -6px;
-  left: 4px;
-  display: inline-block;
-  border-right: 6px solid transparent;
-  border-bottom: 6px solid white;
-  border-left: 6px solid transparent;
-  content: '';
-}
+  li {
+    min-width: 120px;
 
-.dropdown-menu li {
-  min-width: 120px;
-}
-
-.dropdown-checkbox {
-  width: 100%;
-  margin: 0;
-  padding: 3px 20px;
-  font-weight: normal;
-
-  &:hover {
-    color: @dropdown-link-hover-color;
-    background-color: @dropdown-link-hover-bg;
-
-    span.glyphicon {
-      display: inline-block;
-      opacity: .5;
+    > * {
+      width: 100%;
     }
   }
 
-  input[type="checkbox"],
-  span.glyphicon {
-    display: none;
+  > li > *:hover,
+  > li > *:focus, {
+    text-decoration: none;
+    color: #262626;
+    background-color: #f5f5f5;
   }
-
-  input[type="checkbox"]:checked + span.glyphicon {
-    display: inline-block;
-  }
-
 }
 
 .faq .panel-heading {

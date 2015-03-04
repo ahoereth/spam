@@ -5,22 +5,22 @@
 .loader {
   height: 2px;
   background-color: @uos-red;
-}
 
-.loader .container {
-  height: 100%;
-  position: relative;
-}
+  .container {
+    height: 100%;
+    position: relative;
+  }
 
-.loader .loadingbar {
-  height: 100%;
-  width: 20%;
-  background-color: @uos-highlight;
-  -webkit-animation: loading 3s linear infinite;
-          animation: loading 3s linear infinite;
-  position: absolute;
-  top: 0;
-  left: 0;
+  .loadingbar {
+    height: 100%;
+    width: 20%;
+    background-color: @uos-highlight;
+    -webkit-animation: loading 3s linear infinite;
+            animation: loading 3s linear infinite;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
 }
 
 @keyframes loading {
