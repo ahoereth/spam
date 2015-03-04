@@ -9,11 +9,17 @@ module.exports = function(grunt) {
   'use strict';
   var less = grunt.config('less') ||  {};
 
+  var glob = [
+    'src/styles/**/*.less',
+    '!src/styles/**/*.ignore.less',
+    '!src/styles/**/_*.less',
+  ];
+
   // **********
   // compile styles
   less.dev = { // non minified for development
     files: {
-      'src/styles/app.css': 'src/styles/app.less'
+      'src/styles/app.css': glob
     }
   };
 
@@ -23,7 +29,7 @@ module.exports = function(grunt) {
       compress: true
     },
     files: {
-      'app/css/spamin.css': 'src/styles/app.less'
+      'app/css/spamin.css': glob
     }
   };
 
