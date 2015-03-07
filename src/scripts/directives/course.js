@@ -19,30 +19,38 @@
       link: function(scope, elem, attrs, fieldCtrl) {
         var course = scope.course;
 
-        scope.changeGrade = function() {
-          this.course.grade = _.formatGrade(this.course.grade);
+        scope.grade = function(force) {
+          course.grade = _.formatGrade(course.grade);
+
           course.passed = (
             (course.grade >= 1 && course.grade <= 4) ||
-            (course.passed && course.grade === course.old_grade)
+            (course.passed && course.grade === course.oldGrade)
           );
-          course.old_grade = course.grade;
           fieldCtrl.courseGradeChange(this.course);
+
+          if (course.grade === course.oldGrade && !force) { return; }
+          course.oldGrade = course.grade;
+          course.put();
         };
 
         scope.mute = function() {};
 
         scope.pass = function() {
           course.grade = ! course.grade ? course.grade : null;
-          scope.changeGrade();
+          scope.grade(true);
         };
 
         scope.remove = function() {
           User.removeCourse(this.course);
         };
 
-        course.old_grade = course.grade || null;
+        scope.move = function(fieldId) {
+          User.moveCourse(course.student_in_course_id, fieldId);
+        };
+
+        course.grade = course.oldGrade = _.formatGrade(course.grade);
         course.term_abbr = course.term + course.year;
-        scope.changeGrade();
+        scope.grade();
       }
     };
   }

@@ -35,7 +35,7 @@
       ng-class="{'no-grade-passed': course.passed && !course.grade}"
       ng-model="course.grade"
       onclick="select()"
-      ng-blur="changeGrade()"
+      ng-blur="grade()"
     />
   </div>
 
@@ -87,14 +87,14 @@
         <!-- move to other fields -->
         <li ng-repeat="field in course.fields"
             ng-hide="field.field_id == course.enrolled_field_id">
-          <a class="pointer" ng-click="moveCourse(field.field_id)">
+          <a class="pointer" ng-click="move(field.field_id)">
             {{::field.field}}
           </a>
         </li>
 
         <!-- move to open studies -->
         <li ng-hide="course.enrolled_field_id == 1">
-          <a class="pointer" ng-click="moveCourse(null)">Open Studies</a>
+          <a class="pointer" ng-click="move(null)">Open Studies</a>
         </li>
 
       </ul>

@@ -3,99 +3,108 @@
   You are currently viewing the live demo. To make sustaining changes please log in with your own credentials!
 </div>
 
-<h1>{{username}}'s overview</h1>
-
-<!-- already enrolled in some courses -->
-<p class="lead" ng-if="courses.length">
-  <span ng-show="facts.grades.overall">
-    You earned a total of <strong>{{facts.credits.completed}}</strong> credits with an average grade of <strong>{{facts.grades.overall}}</strong>.
-  </span>
-
-  <!-- enrolled ects -->
-  <span ng-show="facts.credits.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.credits.enrolled}} credits.</span>
-
-  <!--<span ng-if="facts.ects.completed.overhang">
-    There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
-  </span>-->
-
-  <span ng-if="false">
-    By the end of the second semester you are required to have completed a total of XX credits. XX2 to go!
-  </span>
-
-  <!-- bachelor grade -->
-  <span ng-if="facts.grades.bachelor">
-    Your bachelor grade presumably will be around <strong>{{facts.grades.bachelor}}</strong>.
-  </span>
-
-  <span ng-if="!user.thesis_title&&!user.thesis_grade">
-    <span class="undercover" ng-click="user.thesis_active=!user.thesis_active">You did not yet write your bachelor thesis</span>{{5>facts.relevant_fields | iif : ' and ' : '.'}}
-  </span>
-
-  <span ng-if="facts.relevant_fields<5">
-    {{user.thesis_title||user.thesis_grade | iif : 'You ' : ''}}by now completed {{facts.relevant_fields}} of 5 <abbr tooltip="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
-  </span>
-</p>
-
-<p>
-  <a href="~/transcript">Go to your transcript.</a>
-</p>
-
-<!-- no courses yet -->
-<p class="lead" ng-if="user.mat_verify&&user.courses.length==0">
-  You have not yet added any courses.
-  To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation_id={{user.regulation_id}}">course index</a> or take a look at the <a href="guide">study guide</a>.
-  Alternatively I can also give you a head start by adding the typical courses for your first  semester: <button class="btn btn-primary" ng-click="headstart()">Initialize</button>
-</p>
+<h1>
+  {{user.username}}'s overview
+  <span
+    class="glyphicon lead"
+    ng-class="{'glyphicon-heart': facts.bscFieldsCount,
+               'glyphicon-refresh spin': !facts.bscFieldsCount}"
+  ></span>
+</h1>
 
 
-<!-- verify enrollment semester -->
-<div ng-if="!user.mat_verify">
-	<hr ng-if="user.courses.length">
-	<p class="lead">Please verify your matriculation semester:</p>
-	<matriculation-setter verify>
-	<p>This can be changed anytime in the <a href="~/settings">settings</a>.</p>
+<div ng-show="facts.bscFieldsCount">
+  <!-- already enrolled in some courses -->
+  <p class="lead" ng-if="courses.length">
+    <span ng-show="facts.grades.overall && facts.credits.passed">
+      You earned a total of <strong>{{facts.credits.passed}} credits</strong> with the <strong>average grade {{facts.grades.overall}}</strong>.
+    </span>
+
+    <!-- enrolled ects -->
+    <span ng-show="facts.credits.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.credits.enrolled}} credits.</span>
+
+    <!--<span ng-if="facts.ects.completed.overhang">
+      There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
+    </span>-->
+
+    <span ng-if="false">
+      By the end of the second semester you are required to have completed a total of XX credits. XX2 to go!
+    </span>
+
+    <!-- bachelor grade -->
+    <span ng-if="facts.grades.bachelor">
+      Your bachelor grade presumably will be around {{facts.grades.bachelor}}.
+    </span>
+
+    <span ng-if="!thesis.active">
+      <abbr class="undercover" ng-click="thesis.active=!thesis.active">You did not yet write your bachelor thesis</abbr>{{5>facts.bscFieldsCompletedCount | iif : ' and ' : '.'}}
+    </span>
+
+    <span ng-if="5>facts.bscFieldsCompletedCount">
+      {{user.thesis_title||user.thesis_grade | iif : 'You ' : ''}}by now completed {{facts.bscFieldsCompletedCount}} of {{facts.bscFieldsCount}} <abbr tooltip="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
+    </span>
+  </p>
+
+  <!-- no courses yet -->
+  <p class="lead" ng-if="user.mat_verify&&user.courses.length==0">
+    You have not yet added any courses.
+    To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation={{user.regulation_id}}&timeframe=11%2B}">course index</a> or take a look at the <a href="guide">study guide</a>.
+    Alternatively I can also give you a head start by adding the typical courses for your first semester: <button class="btn btn-primary" ng-click="headstart()">Initialize</button>
+  </p>
+
+  <!-- verify enrollment semester -->
+  <div ng-if="!user.mat_verify">
+    <hr ng-if="courses.length">
+    <p class="lead">Please verify your matriculation semester:</p>
+    <matriculation-setter verify>
+    <p>This can be changed anytime in the <a href="~/settings">settings</a>.</p>
+  </div>
 </div>
 
-
 <!-- bachelor thesis row -->
-<div ng-if="user.thesis_active||user.thesis_title||user.thesis_grade">
+<div ng-show="facts.bscFieldsCount && thesis.active">
   <hr>
 
-  <form class="inline-form row" ng-init="user.thesis_grade=user.thesis_grade">
+  <form class="inline-form row">
     <div class="form-group col-lg-10 col-sm-9 col-xs-8">
       <input
         type="text"
         class="form-control"
+        blur-on-enter
         placeholder="Bachelor thesis title"
-        ng-model="user.thesis_title"
-        ng-blur="updateThesis()"
-        ng-keydown="blurOnEnter($event)"
-        ng-init="user.thesis_title_old=user.thesis_title">
+        ng-model="thesis.title"
+        ng-blur="thesisChange()"
+      />
     </div>
 
     <div class="form-group col-lg-2 col-sm-3 col-xs-4">
       <input
         type="text"
         class="form-control form-control-tight"
+        blur-on-enter
         placeholder="Grade"
         onclick="select()"
-        ng-model="user.thesis_grade"
-        ng-blur="updateThesis()"
-        ng-keydown="blurOnEnter($event)"
-        ng-init="user.thesis_grade_old=user.thesis_grade">
+        ng-model="thesis.grade"
+        ng-blur="thesisChange()"
+      />
     </div>
   </form>
 </div>
 
+<hr>
 
 <!-- the fields -->
-<div class="overview-container row floating-columns" ng-if="user.courses.length">
+<div
+  class="overview-container row"
+  ng-show="facts.bscFieldsCount && courses.length"
+>
 
   <field
     ng-repeat="field in fields"
     field="field">
     <course
-      ng-repeat="course in courses | filter:{enrolled_field_id: field.field_id}:true"
+      ng-repeat="course in courses
+                  | filter:{enrolled_field_id: field.field_id}:true"
       course="course">
     </course>
   </field>
@@ -108,7 +117,6 @@
   <small>
     <span class="text-primary glyphicon glyphicon-pencil"></span> Current,&nbsp;
     <span class="text-success glyphicon glyphicon-ok"></span> Completed,&nbsp;
-    <span class="text-success glyphicon glyphicon-star"></span> Bsc. relevant,&nbsp;
     <span class="text-danger glyphicon glyphicon-remove"></span> Failed
   </small>
 </p>

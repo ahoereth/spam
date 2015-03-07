@@ -88,17 +88,17 @@
       _.forEach(['passed', 'enrolled', 'available'], function(group) {
         this[group].sum = this[group].compulsory + this[group].optional;
         this[group].percentage = percentage(this[group].sum);
+        this[group].percentage_compulsory = percentage(this[group].compulsory);
+        this[group].percentage_optional = percentage(this[group].optional);
       }, credits);
-
-      available.percentage_compulsory = percentage(available.compulsory);
-      available.percentage_optional = percentage(available.optional);
 
       var grade = calculateGrade();
 
       User.updateFieldData(field.field_id, {
         grade: grade,
         passedCredits: credits.passed.sum,
-        completed: 0 === credits.available.sum,
+        enrolledCredits: credits.enrolled.sum,
+        completed: 100 === credits.passed.percentage,
         examinationPossible: !! field.field_examination_possible
       });
 
@@ -113,7 +113,7 @@
      */
     self.courseGradeChange = function(course) {
       // Courses without credits are of no interest.
-      if (! course.ects) { return; }
+      if (! course.ects || course.muted) { return; }
 
       courses[ course.student_in_course_id ] = {
         grade: _.isNumeric(course.grade) ? parseFloat(course.grade) : null,

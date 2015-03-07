@@ -14,56 +14,34 @@
 
   /* @ngInject */
   function userOverviewCtrl(
-    $rootScope,
     $scope,
-    $timeout,
-    $route,
-    $cacheFactory,
-    $location,
-    $log,
-    $q,
-    _,
     Restangular,
-    Transcript,
-    User
+    User,
+    $timeout
   ) {
-    var scopeApply = function() {
-      $scope.$apply();
-    };
-
+    function scopeApply() { $scope.$apply(); }
     User.addWatcher(scopeApply);
-    $scope.facts    = User.facts;
-    $scope.fields   = User.fields;
-    $scope.courses  = User.courses;
-    $scope.username = User.username;
 
+    $scope.facts   = User.facts;
+    $scope.fields  = User.fields;
+    $scope.courses = User.courses;
 
-    /**
-     * TODO: needs to be refactored
-     */
-    $scope.updateThesis = function() {
-      var user = $scope.user;
-      user.thesis_grade = _.formatGrade(user.thesis_grade);
-
-      if (user.thesis_title_old === user.thesis_title &&
-          user.thesis_grade_old === user.thesis_grade) {
-        return;
-      }
-
-      Transcript.facts_changed();
-
-      // remember old stuff
-      user.thesis_title_old = user.thesis_title;
-      user.thesis_grade_old = user.thesis_grade;
-
-      $scope.user.one('regulations', user.regulation_id).customPUT({
-        title: user.thesis_title,
-        grade: user.thesis_grade
-      }).then(function() {
-        $log.info('Student thesis updated: ' + user.thesis_title + ' - ' + user.thesis_grade);
-      });
+    $scope.thesis = {
+      title: User.details.thesis.title,
+      grade: User.details.thesis.grade,
+      active: !! (User.details.thesis_title || User.details.thesis_grade)
     };
-    $scope.thesis_active = $scope.user.thesis_title || $scope.user.thesis_grade ? true : false;
+
+    $scope.thesisChange = function() {
+      if (User.details.thesis.title === $scope.thesis.title &&
+          User.details.thesis.grade === $scope.thesis.grade
+      ) { return; }
+
+      $scope.thesis = angular.extend(
+        $scope.thesis,
+        User.updateThesis($scope.thesis.title, $scope.thesis.grade)
+      );
+    };
 
 
     /**
@@ -76,26 +54,11 @@
         year    : $scope.user.mat_year,
         term    : $scope.user.mat_term
       }).then(function(guide) {
-        _.each(guide, function(course) {
+        angular.forEach(guide, function(course) {
           $scope.addCourse(course.course_id, course.fields[0].field_id);
         });
       });
     };
-
-
-    /**
-     * Moves a specific course to a different field. Student in course data.
-     *
-     * TODO: move to course directive
-     */
-  /*  $scope.moveCourse = function(newFieldId) {
-      var c = this.course;
-      var target = _.findWhere($scope.user.courses, {
-        student_in_course_id: c.student_in_course_id
-      });
-      target.enrolled_field_id = (! _.isNull(newFieldId)) ? newFieldId : 1;
-      $scope.editProp(target);
-    };*/
   }
 
 })();

@@ -1,13 +1,11 @@
 <div
   class="panel"
-  ng-class="{'panel-success': field.credits.available.sum == 0 &&
+  ng-class="{'panel-success': field.credits.passed.percentage    === 100 &&
                               field.field_examination_possible,
-             'panel-warning':(field.credits.available.sum != 0 ||
-                              field.field_examination_possible) &&
-                              field.credits.available.compulsory != 0,
-             'panel-default':(field.credits.available.sum != 0 ||
-                              field.field_examination_possible) &&
-                              field.credits.available.compulsory == 0}"
+             'panel-warning': field.credits.available.compulsory !== 0 ||
+                              field.credits.enrolled.compulsory  !== 0,
+             'panel-default': field.credits.available.compulsory === 0 &&
+                             !field.field_examination_possible}"
 >
   <!-- Directives: field -->
 
