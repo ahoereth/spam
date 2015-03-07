@@ -14,10 +14,6 @@
      -moz-column-width: auto;
           column-width: auto;
 
-  // required for overflowing dropdowns to not be cut off
-  margin-bottom: -6em;
-  padding-bottom: 6em;
-
   @media (max-width: 767px) {
     -webkit-column-count: 1;
        -moz-column-count: 1;
@@ -105,6 +101,14 @@
   }
 
   .panel {
+    width: 100%;
+
+    // required for overflowing dropdowns to not be cut off
+    margin: -5em 0 7em;
+    &:first-child {
+      margin-top: 0;
+    }
+
     // Different methods to avoid brokes items follow.
     display: inline-block;
     page-break-inside: avoid;
