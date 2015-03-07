@@ -10,26 +10,37 @@
 
 
   /* @ngInject */
-  function addRemoveCourseDirective(_) {
+  function addRemoveCourseDirective(User, _) {
     return {
       restrict: 'E',
       replace: true,
       scope: {
         course: '=course',
-        btnClass: '@',
-        addCourse: '=',
-        removeCourse: '='
+        btnClass: '@'
       },
       templateUrl: 'partials/directives/add-remove-course.html',
-      /* @ngInject */
-      controller: function($rootScope, $scope) {
-        var course = $scope.course;
+      link: function(scope) {
+        // Expose add and remove course functionality to scope.
+        scope.add = function(fieldId) {
+          scope.busy = true;
+          User.addCourse(scope.course.course_id, fieldId).then(
+            function() { scope.enrolled = true;  },
+            function() { scope.enrolled = false; }
+          ).finally(function() { scope.busy = false; });
+        };
+
+        scope.remove = function() {
+          scope.busy = true;
+          User.removeCourse(scope.course.course_id).then(
+            function() { scope.enrolled = false;  },
+            function() { scope.enrolled = true; }
+          ).finally(function() { scope.busy = false; });
+        };
 
         // check if user is enrolled in this course
-        if (! _.isEmpty($rootScope.user.courses) && _.isUndefined(course.enrolled)) {
-          var target = _.find($rootScope.user.courses, {course_id: course.course_id});
-          course.enrolled = target ? true : false;
-        }
+        scope.enrolled =
+          !  _.isEmpty(User.courses) &&
+          !! _.findWhere(User.courses, {course_id: scope.course.course_id});
       }
     };
   }

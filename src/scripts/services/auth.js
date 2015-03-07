@@ -17,6 +17,7 @@
     base64,
     Restangular,
     DataHandler,
+    User,
     _
   ) {
     var deferredLogin = 'not_initiated';
@@ -25,7 +26,8 @@
       deferredLogin = $q.defer();
 
       var username = DataHandler.getLogininfo('username');
-      $http.defaults.headers.common.Authorization = 'Basic ' + DataHandler.getLogininfo('authdata');
+      $http.defaults.headers.common.Authorization =
+        'Basic ' + DataHandler.getLogininfo('authdata');
 
       if (! _.isEmpty(username)) {
         // Visualize the login process.
@@ -41,9 +43,9 @@
           .then(
             function(user) {
               DataHandler.userInit(user);
-              deferredLogin.resolve($rootScope.user);
+              deferredLogin.resolve(User.details);
             }, function() {
-              $rootScope.user.destroy();
+              User.destroy();
               deferredLogin.reject();
             }
           )
@@ -84,7 +86,7 @@
 
         if (accessSet === 0) {
           // accessSet is 0, therefore everybody is legitimated to view this site
-          deferredAuthentication.resolve($rootScope.user);
+          deferredAuthentication.resolve(User.details);
 
         } else {
           // accessSet is something more specific, therefore we need to check
@@ -97,7 +99,7 @@
             if (
               // accessSet is a explicit user rank integer and the users rank is
               // equal or higher
-              (_.isNumber(accessSet) && accessSet <= $rootScope.user.rank) ||
+              (_.isNumber(accessSet) && accessSet <= User.details.rank) ||
 
               // The user himself is allowed to see this route, we will
               // only retrieve data related to him
@@ -105,9 +107,9 @@
 
               // The user is explicitly named in the accessSet, so he is allowed
               // to view this route as well
-              (!_.isUndefined(accessSet[$rootScope.user.getUsername()]))
+              (!_.isUndefined(accessSet[User.getUsername()]))
             ) {
-              deferredAuthentication.resolve($rootScope.user);
+              deferredAuthentication.resolve(User.details);
 
             } else {
               // Could not match the accessSet to the current user, reject

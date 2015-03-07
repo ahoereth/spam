@@ -38,7 +38,7 @@
 					<a href="guide">guide</a>
 				</li>
 
-				<li ng-class="getNavigationActiveClass('/~')" ng-hide="!user.loggedin||user.role!='student'">
+				<li ng-class="getNavigationActiveClass('/~')" ng-hide="!user||user.role!='student'">
 					<a href="~" ng-bind="user.username"></a>
 				</li>
 
@@ -88,11 +88,9 @@
 			<!-- add/remove + details buttons -->
 			<div class="col-sm-2 col-xs-4">
 				<add-remove-course
-					style="width: 50%; float: left;"
 					course="course"
+					style="width: 50%; float: left;"
 					btn-class="btn-block"
-					add-course="addCourse"
-					remove-course="removeCourse"
 					ng-show="user">
 				</add-remove-course>
 

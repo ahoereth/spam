@@ -14,6 +14,7 @@
     $route,
     Restangular,
     FastClick,
+    User,
     _
   ) {
     FastClick.attach($document.body);
@@ -80,7 +81,7 @@
 
       // handle the page title
       var title = { title: current.title };
-      var username = $rootScope.user.getUsername();
+      var username = User.getUsername();
       if (!_.isEmpty(username)) {
         title = angular.extend(title, { ':username' : username });
       }

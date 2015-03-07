@@ -45,15 +45,27 @@
 
 
     var factsCalculation = _.debounce(function() {
+      var facts = self.facts;
       var fields = _.chain(fieldData).sortByAll('grade');
 
-      self.facts.grades = {
+      // TODO: this '5' should be somehow dynamic
+      facts.bscFieldsCount = 5;
+      var bscFields = fields.where({
+                        examinationPossible: true,
+                        completed: true
+                      })
+                      .take(facts.bscFieldsCount);
+
+      facts.bscFieldsCompletedCount = bscFields.size().value();
+
+      facts.grades = {
         overall: calculateGrade(fields),
-        bachelor: calculateGrade(fields.where({
-            examinationPossible: true,
-            completed: true
-          }).take(5)
-        )
+        bachelor: calculateGrade(bscFields)
+      };
+
+      facts.credits = {
+        passed: fields.pluck('passedCredits').sum().value(),
+        enrolled: fields.pluck('enrolledCredits').sum().value()
       };
 
       callWatchers();
@@ -110,6 +122,23 @@
     };
 
 
+    self.updateThesis = function(title, grade) {
+      var details = self.details;
+      details.thesis = {
+        title: title,
+        grade: _.formatGrade(grade)
+      };
+/*
+      $scope.user.one('regulations', user.regulation_id).customPUT({
+        title: user.thesis_title,
+        grade: user.thesis_grade
+      }).then(function() {
+        $log.info('Student thesis updated: ' + user.thesis_title + ' - ' + user.thesis_grade);
+      });*/
+
+      return details.thesis;
+    };
+
     self.getRegulation = function(reg) {
       return this.regulation_id || (reg || null);
     };
@@ -121,17 +150,68 @@
 
 
     /**
-     * TODO: Not functional.
-     * TODO: handle course_id and/or student_in_course_id as argument
+     * Removes a course from the current user's planner.
+     *
+     * @param {int}    courseId course_id database field
+     * @param {object} course   object used for broadcasting
      */
     self.removeCourse = function(course) {
-      console.log('Remove course from user transcript:', course, self.courses);
+      var courseId = _.isObject(course) ?
+        course.course_id : course;
 
-      if (_.isNumber(course)) {} // student_in_course_id
+      course = _.findWhere(self.courses, {
+        course_id: courseId
+      });
 
-      console.log(course);
+      var title = course.course;
+      var enrolledFieldId = course.enrolled_field_id;
+      var studentInCourseId = course.student_in_course_id;
 
-      self.courses = _.without(self.courses, course);
+      var promise = course.remove().then(function() {
+        $log.info('Removed: ' + title);
+      }, function() {
+        $log.info('Couldn\'t remove: ' + title);
+        course.enrolled_field_id = enrolledFieldId;
+        course.student_in_course_id = studentInCourseId;
+      });
+
+      course.enrolled_field_id = null;
+      course.student_in_course_id = null;
+      return promise;
+    };
+
+
+    /**
+     * Adds a course to the current user's planner.
+     *
+     * @param {int} courseId course_id database field
+     * @param {int} fieldId  field_id database field
+     */
+    self.addCourse = function(courseId, fieldId) {
+      if (_.isUndefined(courseId)) { return; }
+
+      fieldId = fieldId !== 'null' ? fieldId : null;
+
+      return self.courses.post({
+        course_id: courseId,
+        field_id : fieldId || null
+      }).then(function(course) {
+        self.courses.push(course);
+        $log.info('Added: ' + course.course);
+      });
+    };
+
+
+    self.moveCourse = function(studentInCourseId, fieldId) {
+      if (_.isUndefined(studentInCourseId)) { return; }
+
+      var course = _.findWhere(self.courses, {
+        student_in_course_id: studentInCourseId
+      });
+
+      course.enrolled_field_id = _.isNumeric(fieldId) ? parseInt(fieldId, 10) : 1;
+
+      return course.put();
     };
 
 
@@ -148,7 +228,7 @@
 
 
     self.construct = function(data) {
-      if (angular.isDefined(data)) {
+      if (! _.isUndefined(data)) {
         if (angular.isDefined(data.courses)) {
           Restangular.restangularizeCollection(data, data.courses, 'courses');
         }
@@ -157,10 +237,12 @@
           Restangular.restangularizeCollection(data, data.fields, 'fields');
         }
 
-        data.thesis_grade = _.formatGrade(data.thesis_grade);
+        self.fields  = data.fields;
+        self.courses = data.courses;
+        $rootScope.user = self.details = _.omit(data, ['fields', 'courses']);
       }
 
-      self = _.extend(self, data, {loggedin: ! _.isEmpty(data)});
+      self.loggedin = ! _.isUndefined(data);
 
       return self;
     };

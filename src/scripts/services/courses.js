@@ -33,15 +33,17 @@
      * @param  {int} regulation regulation_id
      * @param  {int} lower      lower end of the year range to get courses for
      * @param  {int} upper      upper end of "
-     * @return {promise}        promise which will contain the whole ranch of courses when resolved
+     * @return {promise}        promise which will contain the whole ranch of
+     *                          courses when resolved
      */
     self.fetch = function(regulation, lower, upper, student) {
       var reg = regulation === '' ? 0 : regulation;
 
-      var deferred = $q.defer(), deferred2 = $q.defer();
+      var deferred  = $q.defer();
+      var deferred2 = $q.defer();
       promises.push(deferred.promise);
 
-      lower = _.isUndefined(lower) ? lowestYear : lower;
+      lower = _.isUndefined(lower) ? lowestYear  : lower;
       upper = _.isUndefined(upper) ? currentYear : upper;
 
       if (_.isUndefined(fetchedYears[reg])) {
@@ -55,7 +57,7 @@
       var upperDb = range[range.length-1];
       var lowerDb = range[0];
 
-      if ( ! _.isEmpty( range ) ) {
+      if (! _.isEmpty(range)) {
         fetchedYears[reg] = _.union(fetchedYears[reg], range);
 
         // replace with getList() aso soon as we fixed the sql speed on this one problems...
@@ -63,11 +65,8 @@
           regulation_id: regulation,
           lower: lowerDb,
           upper: upperDb,
-          limit: 2000,
-          // Student will be NULL in most cases. Matching the enrolled courses
-          // on the client side for speedier server requests.
-          student: student
-        }).then( function(newCourses) {
+          limit: 2000
+        }).then(function(newCourses) {
           courses[reg] = _.union(courses[reg], newCourses.data);
           deferred.resolve();
         });
@@ -89,7 +88,7 @@
 
 
     /**
-     * Deletes all course data.
+     * Reset the complete local course data cache.
      */
     self.reset = function() {
       fetchedYears = {};
@@ -109,42 +108,6 @@
       return _.findWhere(courses[regulation], {course_id: courseId});
     };
 
-
-    /**
-     * Enroll student in the course provided by regulation_id and course_id
-     *
-     * @param  {int} regulation        student's regulation_id
-     * @param  {int} courseId          course_id to enroll student in
-     * @param  {int} studentInCourseId student_in_course_id which was returned by the server
-     * @return {boolean}               success/failure
-     */
-    self.enroll = function(regulation, courseId, studentInCourseId) {
-      var target = self.get(regulation, courseId);
-      if (_.isUndefined(target)) { return false; }
-
-      target.enrolled = true;
-      target.student_in_course_id = studentInCourseId;
-
-      return true;
-    };
-
-
-    /**
-     * Unroll student from the course provided by regulation_id and course_id.
-     *
-     * @param  {int} regulation student's regulation_id
-     * @param  {int} courseId   course_id to enroll student in
-     * @return {boolean}        success/failure
-     */
-    self.unroll = function(regulation, courseId) {
-      var target = self.get(regulation, courseId);
-      if (_.isUndefined(target)) { return false; }
-
-      target.enrolled = false;
-      target.student_in_course_id = null;
-
-      return true;
-    };
 
     return self;
   }

@@ -24,8 +24,12 @@
     var self = {};
 
     var logininfo = {
-      username: webstorage ? sessionStorage.getItem('username') || localStorage.getItem('username') : null,
-      authdata: webstorage ? sessionStorage.getItem('authdata') || localStorage.getItem('authdata') : null
+      username: webstorage ?
+        sessionStorage.getItem('username') || localStorage.getItem('username') :
+        null,
+      authdata: webstorage ?
+        sessionStorage.getItem('authdata') || localStorage.getItem('authdata') :
+        null
     };
 
     self.getLogininfo = function(key) {
@@ -83,7 +87,7 @@
 
     self.userInit = function(data) {
       self.removeUserDependent();
-      $rootScope.user = User.construct(data);
+      $rootScope.user = User.construct(data).details;
     };
 
     return self;

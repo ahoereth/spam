@@ -14,6 +14,7 @@
     $filter,
     $timeout,
     _,
+    User,
     Courses
   ) {
     var courses = [],
@@ -33,9 +34,8 @@
         selected : null,
         placeholder : 'Quick search'
       },
-      navExpanded : false
+      navExpanded : false,
     });
-
 
     /**
      * Close dropdown navigation on mobile devices when changing route.
@@ -112,7 +112,7 @@
       if ($scope.search.limit > $scope.search.filtered.length) {
         fetching = true;
         Courses
-          .fetch($scope.user.getRegulation(1), lowerYear, upperYear, null)
+          .fetch(User.getRegulation(1), lowerYear, upperYear, null)
           .then(function(newCourses) {
             courses = newCourses;
             fetching = false;
