@@ -1,13 +1,11 @@
 <div>
   <!-- directives/add-remove-course -->
 
-  <!-- TODO: move dropdown handling into this directive -->
-
   <!-- add course to one of multiple fields -->
   <div
     dropdown
     class="btn-group dropdown"
-    ng-class="{open: course.open, disabled: busy}"
+    ng-class="{disabled: busy}"
     ng-disabled="busy"
     ng-if="!course.singleField && !enrolled"
   >

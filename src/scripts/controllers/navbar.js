@@ -37,6 +37,7 @@
       navExpanded : false,
     });
 
+
     /**
      * Close dropdown navigation on mobile devices when changing route.
      */
@@ -72,7 +73,7 @@
       if (match) {
         $scope.search.filter = {
           'term'   : _.isEmpty(match[1]) ? '' : match[1].toUpperCase(),
-          'year'   : _.isEmpty(match[2]) ? '' : ('20' + match[2]).slice( -4 ),
+          'year'   : _.isEmpty(match[2]) ? '' : ('20' + match[2]).slice(-4),
           'course' : _.trim(match[3])
         };
         _.compactObject($scope.search.filter);
@@ -95,10 +96,11 @@
         return;
       }
 
-      $scope.search.filtered = $filter('courseFilter')(courses, $scope.search.filter)
+      $scope.search.filtered = $filter('courseFilter')
+        (courses, $scope.search.filter)
         .splice(0, $scope.search.limit);
 
-      resetKeyboardNavigation();
+//      resetKeyboardNavigation();
       fetch();
     };
 
@@ -148,12 +150,12 @@
      * also often triggers this event.
      */
     $scope.$watch('search.hover', function(hovering) {
-      $timeout.cancel( mouseTimeout );
-      mouseTimeout = $timeout( function() {
+      $timeout.cancel(mouseTimeout);
+      mouseTimeout = $timeout(function() {
         if (hovering === false) { searchBoxToggle('mouseout' ); }
         else if (hovering)      { searchBoxToggle('mouseover'); }
-      }, 200 );
-    }, true );
+      }, 200);
+    }, true);
     var mouseTimeout;
 
 
@@ -211,198 +213,13 @@
 
 
     /**
-     * Triggered when a user adds a course from the quick search results;
-     * either by using the button or pressing enter.
-     *
-     * @param int courseId course_id to add
-     * @paraim int fieldId field_id to add the course to
-     */
-    $scope.addCourse = function(courseId, fieldId) {
-      // Note: fieldId can be 'null' (String)!!
-      if (courseId === null || fieldId === null) { return; }
-
-      filteredIds = _.without(filteredIds, courseId);
-
-      // no +1 because we removed a key from the array
-      filteredSelectedKey = filteredSelectedKey % filteredIds.length;
-      $scope.search.selected = filteredIds[filteredSelectedKey];
-
-      // located in js/app.js
-      $scope.$parent.addCourse(courseId, fieldId);
-    };
-
-
-    /**
-     * Removes the user from a course when he clicks the remove button in the list
-     * of quick search results.
-     *
-     * @param course course
-     */
-    $scope.removeCourse = function(course) {
-      // wait for the courseRemoved event to reset the keyboard navigation handles
-      var courseRemovedListener = $scope.$on('courseRemoved_' + course.course_id, function() {
-        resetKeyboardNavigation();
-        courseRemovedListener();
-      });
-
-      // located in js/app.js
-      $scope.$parent.removeCourse(course);
-    };
-
-
-    /**
-     * Resets the keyboard navigation handles. Generates a list of courseIds to
-     * navigate through (not enrolled courses) and resets all handles to the first one.
-     */
-    var resetKeyboardNavigation = function() {
-      filteredIds = [];
-      filteredSelectedKey = 0;
-
-      if ($scope.user.username) { // logged in?
-        _.each($scope.search.filtered, function(course) {
-          // check if user is enrolled in this course
-          if (! _.isEmpty($rootScope.user.courses) && _.isUndefined(course.enrolled)) {
-            var target = _.find($rootScope.user.courses, {course_id: course.course_id});
-            course.enrolled = target ? true : false;
-          }
-
-          if (! course.enrolled) {
-            filteredIds.push( course.course_id );
-          }
-        });
-      }
-
-      $scope.search.selected = filteredIds.length > 0 ? filteredIds[filteredSelectedKey] : 0;
-    };
-
-
-    /**
-     * Keyboard navigation for the quick search input. Called when the quick search
-     * input is focused and the user presses a key. Only reacts to the up and down
-     * arrows as well as enter and esc.
-     *
-     * @param angularEvent $event contains information about the keypress
-     */
-    $scope.keyboardNavigation = function($event) {
-      // down, up, enter, esc, not logged in?
-      if (! _.contains([40, 38, 13, 27], $event.keyCode) || ! $scope.user.loggedin) {
-        return;
-      }
-
-      $event.preventDefault();
-
-      // get the currently selected course
-      var t  = _.findWhere(this.search.filtered, {course_id: this.search.selected});
-      if (_.isUndefined(t)) { return; }
-
-      // react differently for different key presses
-      switch ($event.keyCode) {
-        case 40: courseListMove(t, 'down');     break; // arrow down
-        case 38: courseListMove(t, 'up'  );     break; // arrow up
-        case 13: courseSubmit(t);               break; // enter key
-        case 27: $scope.leaveSearch(t, $event); break; // esc key
-      }
-    };
-
-
-    /**
-     * Triggered when the user presses arrow up or arrow down on a selected
-     * course in the result list of the quick search. This either moves the
-     * course selection or the field dropdown selection up/down.
-     *
-     * @param angular.element e button group which contains all available
-     *                          fields (if multiple)
-     * @param course t currently selected course
-     * @param string d 'up'/'down': movement direction
-     */
-    var courseListMove = function(t, d) {
-      // don't do anything if there are no courses to move through
-      if(! filteredIds.length) { return; }
-
-      // navigate search result list when the dropdown is not open
-      if (! t.open) {
-        filteredSelectedKey = ((d === 'up') ? filteredSelectedKey + filteredIds.length - 1 : filteredSelectedKey + 1) % filteredIds.length;
-        $scope.search.selected = filteredIds[filteredSelectedKey];
-
-      // navigate a dropdown menu if it is open
-      } else {
-        t.li = (t.li + 1) % t.fields.length;
-      }
-    };
-
-
-    /**
-     * Triggered when user presses enter on a selected course in the result
-     * list of the quick search. This either adds the course (if only 1 field)
-     * or opens the dropdown menu if the course has multiple fields.
-     *
-     * @param angular.element e button group which contains all available
-     *                          fields (if multiple)
-     * @param course t currently selected courseD
-     */
-    var courseSubmit = function(t) {
-      // if trying to enroll in an course the student already is enrolled in
-      if (t.enrolled) {
-        courseListMove(t, 'down');
-        return;
-      }
-
-      // if course has only one field add it directly
-      if (t.singleField) {
-        $scope.addCourse(t.course_id, t.singleField);
-
-      // if dropdown menu is closed, open it
-      } else if (! t.open) {
-        t.open = true;
-        t.li = 0;
-
-      // otherwise add the course to the field which is selected in the dropdown menu
-      } else {
-        $scope.addCourse(t.course_id, t.fields[ t.li ].field_id);
-        $scope.leaveSearch(t);
-      }
-    };
-
-
-    /**
-     * Closes the search or the currently opened add course to one of multiple
-     * fields dropdown. This function is called when the quick search input is
-     * focused and the user presses the 'esc' key on his keyboard.
-     *
-     * @param angular.element e button group which contains all available
-     *                          fields (if multiple)
-     */
-    $scope.leaveSearch = function(t, $event) {
-      // leave search
-      if (_.isUndefined(t) || ! t.open) {
-        $scope.search.active = false;
-        if (states.input) {
-          $scope.search.results = [];
-          $scope.search.quick = '';
-        }
-
-        // blur input field
-        $timeout(function() {
-          $event.target.blur();
-        }, 0);
-
-      // exit dropdown menu
-      } else {
-        t.open = false;
-      }
-    };
-
-
-    /**
-     * Checks if the given path is a substring of the beginning of the current route and
-     * returns the css class 'active' for highlighting.
-     *
-     * TODO: Why is this rootscope?
+     * Checks if the given path is a substring of the beginning of the current
+     * route and returns the css class 'active' for highlighting.
      *
      * @param string path the string to look for in the route
      * @return string 'active':''
      */
-    $rootScope.getNavigationActiveClass = function(path) {
+    $scope.getNavigationActiveClass = function(path) {
       return ($location.path().substr(0, path.length) === path) ? 'active' : '';
     };
   }
