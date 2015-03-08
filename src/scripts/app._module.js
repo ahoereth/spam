@@ -6,9 +6,11 @@
     'ngSanitize',
 
     'restangular',
-    'dropdown',
     '720kb.tooltips',
     'unicorn-directive',
+
+    'dropdown',
+    'progressbar',
 
     'spam.filters',
     'spam.services',

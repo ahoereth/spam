@@ -84,40 +84,30 @@
 
   <!-- progress bar panel footer -->
   <div class="panel-footer">
-    <div class="progress">
+    <progressbar>
+      <progress
+        type="'success'"
+        value="field.credits.passed.percentage"
+        content="field.credits.passed.sum"
+      ></progress>
 
-      <!-- passed -->
-      <div
-        class="progress-bar progress-bar-success"
-        style="width: {{field.credits.passed.percentage}}%"
-        ng-hide="field.credits.passed.percentage == 0"
-        ng-bind="field.credits.passed.sum"
-      ></div>
+      <progress
+        type="'info'"
+        value="field.credits.enrolled.percentage"
+        content="field.credits.enrolled.sum"
+      ></progress>
 
-      <!-- enrolled -->
-      <div
-        class="progress-bar progress-bar-info"
-        style="width: {{field.credits.enrolled.percentage}}%"
-        ng-hide="field.credits.enrolled.percentage == 0"
-        ng-bind="field.credits.enrolled.sum"
-      ></div>
+      <progress
+        type="'required'"
+        value="field.credits.available.percentage_compulsory"
+        content="field.credits.available.compulsory"
+      ></progress>
 
-      <!-- available compulsory -->
-      <div
-        class="progress-bar progress-required"
-        style="width: {{field.credits.available.percentage_compulsory}}%"
-        ng-hide="field.credits.available.percentage_compulsory==0"
-        ng-bind="field.credits.available.compulsory"
-      ></div>
-
-      <!-- available optional -->
-      <div
-        class="progress-bar progress-background"
-        style="width: {{field.credits.available.percentage_optional}}%"
-        ng-hide="field.credits.available.percentage_optional==0"
-        ng-bind="field.credits.available.optional"
-      ></div>
-
-    </div>
+      <progress
+        type="'background'"
+        value="field.credits.available.percentage_optional"
+        content="field.credits.available.optional"
+      ></progress>
+    </progressbar>
   </div><!-- /panel-footer -->
 </div>
