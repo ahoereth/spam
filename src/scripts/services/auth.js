@@ -16,7 +16,6 @@
     $q,
     base64,
     Restangular,
-    DataHandler,
     User,
     _
   ) {
@@ -25,9 +24,10 @@
     var login = function () {
       deferredLogin = $q.defer();
 
-      var username = DataHandler.getLogininfo('username');
+      var username = User.logininfo.username;
+
       $http.defaults.headers.common.Authorization =
-        'Basic ' + DataHandler.getLogininfo('authdata');
+        'Basic ' + User.logininfo.authdata;
 
       if (! _.isEmpty(username)) {
         // Visualize the login process.
@@ -41,16 +41,16 @@
           .one('users', username)
           .get()
           .then(
-            function(user) {
-              DataHandler.userInit(user);
+            function(data) {
+              User.construct(data);
               deferredLogin.resolve(User.details);
             }, function() {
-              User.destroy();
+              User.logout();
               deferredLogin.reject();
             }
           )
           .finally(function() {
-            $rootScope.loginform.loading = false;
+            $rootScope.loginform = { loading: false };
           });
       } else {
         deferredLogin.reject();
@@ -65,9 +65,9 @@
     login();
 
     return {
-      init: function (nick, password, useLocalStorage) {
-        var encoded = base64.encode(nick + ':' + password);
-        DataHandler.updateLogininfo(nick, encoded, useLocalStorage);
+      init: function (username, password, useLocalStorage) {
+        var authdata = base64.encode(username + ':' + password);
+        User.setLogininfo(username, authdata, useLocalStorage);
         return login();
       },
 

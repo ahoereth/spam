@@ -12,18 +12,25 @@
 
   /* @ngInject */
   function userFactory(
+    $cacheFactory,
     $rootScope,
+    $http,
     $log,
     Restangular,
     _
   ) {
+    var webstorage = angular.isDefined(Storage) ? true : false;
+
     var self = {
       facts   : {},
       fields  : {},
       courses : {},
-      watchers: []
+      watchers: [],
+      logininfo: {
+        username: null,
+        authdata: null
+      }
     };
-
 
     var fieldData = {};
 
@@ -72,6 +79,21 @@
     }, 200);
 
 
+    // TODO: required?
+    self.setLogininfo = function(username, authdata, trust) {
+      self.logininfo = {
+        username: username,
+        authdata: authdata
+      };
+
+      if (webstorage) {
+        var storage = trust ? localStorage : sessionStorage;
+        storage.setItem('authdata', authdata);
+        storage.setItem('username', username);
+      }
+    };
+
+
     /**
      * Save userdata to server.
      *
@@ -98,9 +120,25 @@
     };
 
 
-    self.destroy = function() {
+    self.logout = function() {
       $log.info('Destroying local user data.');
-      $rootScope.$broadcast('userDestroy');
+
+      // Reset login information.
+      self.logininfo = {username: null, authdata: null};
+      $http.defaults.headers.common.Authorization = undefined;
+      if (webstorage) {
+        sessionStorage.removeItem('authdata');
+        sessionStorage.removeItem('username');
+        localStorage.removeItem('authdata');
+        localStorage.removeItem('username');
+      }
+
+      // Reset guide.
+      var guide = $cacheFactory.get('guide');
+      if (guide) { guide.removeAll(); }
+
+      // Reconstruct user with empty dataset.
+      self.construct();
     };
 
 
@@ -228,24 +266,42 @@
 
 
     self.construct = function(data) {
-      if (! _.isUndefined(data)) {
-        if (angular.isDefined(data.courses)) {
+      // Reset data.
+      self.fields   = undefined;
+      self.courses  = undefined;
+      self.details  = undefined;
+
+      if (data) {
+        if (! _.isUndefined(data.courses)) {
           Restangular.restangularizeCollection(data, data.courses, 'courses');
+          self.courses = data.courses;
         }
 
-        if (angular.isDefined(data.fields)) {
+        if (! _.isUndefined(data.fields)) {
           Restangular.restangularizeCollection(data, data.fields, 'fields');
+          self.fields  = data.fields;
         }
 
-        self.fields  = data.fields;
-        self.courses = data.courses;
-        $rootScope.user = self.details = _.omit(data, ['fields', 'courses']);
+        self.details = _.omit(data, ['fields', 'courses']);
       }
 
-      self.loggedin = ! _.isUndefined(data);
-
+      $rootScope.user = self.details;
       return self;
     };
+
+
+    // Initialize logininfo from session or localstorage.
+    self.logininfo = {
+      username: webstorage ?
+        sessionStorage.getItem('username') ||
+        localStorage.getItem('username') :
+        null,
+      authdata: webstorage ?
+        sessionStorage.getItem('authdata') ||
+        localStorage.getItem('authdata') :
+        null
+    };
+
 
     return self;
   }

@@ -4,34 +4,31 @@
   /**
    * CONTROLLER: Home
    * ROUTE: /~
-   *
-   * TODO: this needs massive cleanup and optimization
    */
   angular
     .module('spam.controllers.user')
-    .controller('Home', userOverviewCtrl);
+    .controller('HomeCtrl', userOverviewCtrl);
 
 
   /* @ngInject */
   function userOverviewCtrl(
     $scope,
     Restangular,
-    User,
-    $timeout
+    User
   ) {
-    function scopeApply() { $scope.$apply(); }
-    User.addWatcher(scopeApply);
+    /**
+     * Forces a local $scope.$apply - used in cases where changes occur out
+     * of the regular cycle.
+     */
+    function scopeApply() {
+      $scope.$apply();
+    }
 
-    $scope.facts   = User.facts;
-    $scope.fields  = User.fields;
-    $scope.courses = User.courses;
 
-    $scope.thesis = {
-      title: User.details.thesis.title,
-      grade: User.details.thesis.grade,
-      active: !! (User.details.thesis_title || User.details.thesis_grade)
-    };
-
+    /**
+     * Called when any of the thesis details (title or grade) change. Updates
+     * the User data.
+     */
     $scope.thesisChange = function() {
       if (User.details.thesis.title === $scope.thesis.title &&
           User.details.thesis.grade === $scope.thesis.grade
@@ -46,7 +43,7 @@
 
     /**
      * Function to give the user a headstart and add the guide courses for his
-     * first semester.
+     * first semester to his personal overview.
      */
     $scope.headstart = function() {
       Restangular.one('guides', 1).getList('courses', {
@@ -58,6 +55,21 @@
           $scope.addCourse(course.course_id, course.fields[0].field_id);
         });
       });
+    };
+
+
+    // Forces a $scope.$apply when relevant user data changes out-of-cycle.
+    User.addWatcher(scopeApply);
+
+    // Initialize local scope data.
+    $scope.facts   = User.facts;
+    $scope.fields  = User.fields;
+    $scope.courses = User.courses;
+    $scope.thesis  = {
+      title :     User.details.thesis.title,
+      grade :     User.details.thesis.grade,
+      active: !! (User.details.thesis.title ||
+                  User.details.thesis.grade)
     };
   }
 

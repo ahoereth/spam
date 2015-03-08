@@ -57,7 +57,7 @@
     // user - course overview
     '/~': {
       templateUrl: 'home/index.html',
-      controller: 'Home',
+      controller: 'HomeCtrl',
       title: ':username',
       reloadOnSearch: false,
       access: 1
@@ -76,7 +76,7 @@
     // user - logout
     '/~/logout': {
       templateUrl: 'landing.html',
-      controller: 'Logout',
+      controller: 'LogoutCtrl',
       title : 'Logout',
       access: 1
     },
