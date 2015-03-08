@@ -10,6 +10,8 @@ module.exports = function(grunt) {
   ngtemplates.spam = {
     cwd: 'src',
     src: [
+      'components/**/*.html',
+      '!components/**/*.ignore.html',
       'partials/**/*.html',
       '!partials/**/*.ignore.html'
     ],

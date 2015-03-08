@@ -10,6 +10,8 @@ module.exports = function(grunt) {
   var less = grunt.config('less') ||  {};
 
   var glob = [
+    'src/components/**/*.less',
+    '!src/components/**/*.ignore.less',
     'src/styles/**/*.less',
     '!src/styles/**/*.ignore.less',
     '!src/styles/**/_*.less',

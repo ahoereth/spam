@@ -17,6 +17,8 @@ module.exports = function(grunt) {
   injector.dev = {
     files: {
       'src/index.html': [
+        'src/components/**/*.js',
+        '!src/components/**/*.ignore.js',
         'src/scripts/**/*.js',
         '!src/scripts/**/*.ignore.js',
         'src/styles/**/*.css'

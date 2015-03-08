@@ -12,12 +12,14 @@
       <a
         ng-switch-default
         ng-href="courses/{{::course.course_id}}"
-        tooltip="{{::course.term_abbr}}"
+        tooltips
+        tooltip-title="{{::course.term_abbr}}"
         ng-bind="::course.course"
       ></a>
       <span
         ng-switch-when="0"
-        tooltip="{{::course.term_abbr}}"
+        tooltips
+        tooltip-title="{{::course.term_abbr}}"
         ng-bind="::course.course"
       ></span>
     </span>

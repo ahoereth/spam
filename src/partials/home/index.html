@@ -21,7 +21,7 @@
     </span>
 
     <!-- enrolled ects -->
-    <span ng-show="facts.credits.enrolled">The courses you are currently <abbr tooltip="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.credits.enrolled}} credits.</span>
+    <span ng-show="facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.credits.enrolled}} credits.</span>
 
     <!--<span ng-if="facts.ects.completed.overhang">
       There {{facts.ects.completed.floated | multiplicity : 'is' : 'are'}} {{facts.ects.completed.overhang | spelledOutTo : 9}} {{facts.ects.completed.floated | multiplicity : 'credit' : 'credits'}} which, in the current setup, cannot be accounted for your bachelor grade.
@@ -41,7 +41,7 @@
     </span>
 
     <span ng-if="5>facts.bscFieldsCompletedCount">
-      {{user.thesis_title||user.thesis_grade | iif : 'You ' : ''}}by now completed {{facts.bscFieldsCompletedCount}} of {{facts.bscFieldsCount}} <abbr tooltip="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
+      {{user.thesis_title||user.thesis_grade | iif : 'You ' : ''}}by now completed {{facts.bscFieldsCompletedCount}} of {{facts.bscFieldsCount}} <abbr tooltips tooltip-title="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
     </span>
   </p>
 
@@ -62,7 +62,7 @@
 </div>
 
 <!-- bachelor thesis row -->
-<div ng-show="facts.bscFieldsCount && thesis.active">
+<div ng-show="thesis.active">
   <hr>
 
   <form class="inline-form row">
@@ -96,7 +96,7 @@
 <!-- the fields -->
 <div
   class="overview-container row"
-  ng-show="facts.bscFieldsCount && courses.length"
+  ng-if="courses.length"
 >
 
   <field

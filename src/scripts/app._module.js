@@ -6,7 +6,8 @@
     'ngSanitize',
 
     'restangular',
-    'ui.bootstrap',
+    'dropdown',
+    '720kb.tooltips',
     'unicorn-directive',
 
     'spam.filters',
