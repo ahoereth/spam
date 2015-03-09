@@ -6,32 +6,6 @@
  */
 
 .overview-container {
-  margin-bottom: -7em;
-  -webkit-column-gap: 20px;
-     -moz-column-gap: 20px;
-          column-gap: 20px;
-  -webkit-column-width: auto;
-     -moz-column-width: auto;
-          column-width: auto;
-
-  @media (max-width: 767px) {
-    -webkit-column-count: 1;
-       -moz-column-count: 1;
-        -ms-column-count: 1;
-            column-count: 1;
-  }
-
-  @media (min-width: 768px) and (max-width: 1199px) {
-    -webkit-column-count: 2;
-       -moz-column-count: 2;
-            column-count: 2;
-  }
-
-  @media (min-width: 1200px) {
-    -webkit-column-count: 3;
-       -moz-column-count: 3;
-            column-count: 3;
-  }
 
   table tr td {
     padding-left: 4px;
@@ -47,6 +21,43 @@
   a:hover {
     color: @uos-red;
     text-decoration: none;
+  }
+
+  .panel {
+    width: 100%;
+
+    .glyphicon {
+      // workaround to prevent flickering on hover in css3 columns
+      position: static;
+      vertical-align: sub;
+    }
+
+    .btn-xs {
+      padding-left: 0;
+      padding-right: 0;
+      text-align: center;
+    }
+  }
+
+  .panel-heading,
+  .panel-footer,
+  .panel-body {
+    padding-left : 4px;
+    padding-right: 4px;
+  }
+
+  .panel-heading {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    color: #333333;
+  }
+
+  .panel-body {
+    border-top: 1px solid #ccc;
+
+    .row {
+      padding-top: 5px; padding-bottom: 5px;
+    }
   }
 
   .dropdown-menu, .dropdown-menu.pull-right {
@@ -82,12 +93,6 @@
     margin-bottom: 0;
   }
 
-  .panel-heading {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-    color: #333333;
-  }
-
   .row {
     margin-left: -5px; margin-right: -5px;
   }
@@ -97,54 +102,8 @@
   .row .col-xs-8,
   .row .col-xs-2,
   .row .col-xs-1 {
-    padding-left: 5px; padding-right: 5px;
-  }
-
-  .panel {
-    width: 100%;
-
-    // required for overflowing dropdowns to not be cut off
-    margin: -5em 0 7em;
-    &:first-child {
-      margin-top: 0;
-    }
-
-    // Different methods to avoid brokes items follow.
-    display: inline-block;
-    page-break-inside: avoid;
-    break-inside: avoid-column;
-    -webkit-column-break-inside: avoid;
-       -moz-column-break-inside: avoid;
-         -o-column-break-inside: avoid;
-        -ms-column-break-inside: avoid;
-            column-break-inside: avoid;
-
-    .glyphicon {
-      // workaround to prevent flickering on hover in css3 columns
-      position: static;
-      vertical-align: sub;
-    }
-  }
-
-  .panel-heading,
-  .panel-footer,
-  .panel-body {
-    padding-left : 4px;
-    padding-right: 4px;
-  }
-
-  .panel-body {
-    border-top: 1px solid #ccc;
-
-    .row {
-      padding-top: 5px; padding-bottom: 5px;
-    }
-  }
-
-  .panel .btn-xs {
-    padding-left: 0;
-    padding-right: 0;
-    text-align: center;
+    padding-left: 5px;
+    padding-right: 5px;
   }
 }
 
