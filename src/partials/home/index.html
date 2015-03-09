@@ -96,7 +96,7 @@
 <!-- the fields -->
 <div class="overview-container row" ng-if="courses.length">
 
-  <!-- left column -->
+  <!-- left column (lg/md/sm) -->
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <field
       ng-repeat="field in fields track by field.field_id"
@@ -109,9 +109,23 @@
         course="course"
       ></course>
     </field>
+
+    <!-- left column lower part (md/sm) -->
+    <field
+      class="hidden-lg"
+      ng-repeat="field in fields track by field.field_id"
+      ng-if="$index % 3 == 2 && $odd"
+      field="field"
+    >
+      <course
+        ng-repeat="course in courses |
+                   filter:{enrolled_field_id: field.field_id}:true"
+        course="course"
+      ></course>
+    </field>
   </div>
 
-  <!-- center or right column -->
+  <!-- center (lg) or right column (md/sm) -->
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <field
       ng-repeat="field in fields track by field.field_id"
@@ -124,10 +138,24 @@
         course="course"
       ></course>
     </field>
+
+    <!-- right column lower part (md/sm) -->
+    <field
+      class="hidden-lg"
+      ng-repeat="field in fields track by field.field_id"
+      ng-if="$index % 3 == 2 && $even"
+      field="field"
+    >
+      <course
+        ng-repeat="course in courses |
+                   filter:{enrolled_field_id: field.field_id}:true"
+        course="course"
+      ></course>
+    </field>
   </div>
 
-  <!-- right column or bottom row -->
-  <div class="col-lg-4 col-sm-6 col-xs-12">
+  <!-- right column (lg) -->
+  <div class="col-lg-4 visible-lg-block">
     <field
       ng-repeat="field in fields track by field.field_id"
       ng-if="$index % 3 == 2"
