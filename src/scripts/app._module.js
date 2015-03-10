@@ -9,8 +9,11 @@
     '720kb.tooltips',
     'unicorn-directive',
 
-    'dropdown',
     'progressbar',
+    'blurOnEnter',
+    'dropdown',
+    'infiniteScroll',
+    'tickable',
 
     'spam.filters',
     'spam.services',

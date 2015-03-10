@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('spam.directives')
+    .module('tickable', [])
     .directive('tickable', tickableDirective);
 
 

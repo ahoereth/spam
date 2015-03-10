@@ -3,10 +3,10 @@
 
   /**
    * DIRECTIVE: blurOnEnter
-   * Blur the grade input field when the user presses the enter key.
+   * Blur an input field on enter-keypress.
    */
   angular
-    .module('spam.directives')
+    .module('blurOnEnter', [])
     .directive('blurOnEnter', blurOnEnterDirective);
 
 
