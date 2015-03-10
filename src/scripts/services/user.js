@@ -164,15 +164,15 @@
       var details = self.details;
       details.thesis = {
         title: title,
-        grade: _.formatGrade(grade)
+        grade: grade = _.formatGrade(grade)
       };
-/*
-      $scope.user.one('regulations', user.regulation_id).customPUT({
-        title: user.thesis_title,
-        grade: user.thesis_grade
-      }).then(function() {
-        $log.info('Student thesis updated: ' + user.thesis_title + ' - ' + user.thesis_grade);
-      });*/
+
+      details
+        .one('regulations', details.regulation_id)
+        .customPUT(details.thesis)
+        .then(function() {
+          $log.info('Student thesis updated: ' + title + ' - ' + grade);
+        });
 
       return details.thesis;
     };
