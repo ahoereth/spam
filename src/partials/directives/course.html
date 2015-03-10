@@ -1,8 +1,8 @@
 <div
   class="row course"
   ng-class="{overflowing: course.overflowing ||
-             course.grade == 5 ||
-             course.muted}"
+                          course.grade == 5 ||
+                          course.muted}"
 >
   <!-- Directive: course -->
 
@@ -96,7 +96,7 @@
 
         <!-- move to open studies -->
         <li ng-hide="course.enrolled_field_id == 1">
-          <a class="pointer" ng-click="move(null)">Open Studies</a>
+          <a class="pointer" ng-click="move(1)">Open Studies</a>
         </li>
 
       </ul>

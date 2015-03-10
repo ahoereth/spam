@@ -26,14 +26,22 @@
             (course.grade >= 1 && course.grade <= 4) ||
             (course.passed && course.grade === course.oldGrade)
           );
-          fieldCtrl.courseGradeChange(this.course);
+          fieldCtrl.courseChange(course);
 
           if (course.grade === course.oldGrade && !force) { return; }
           course.oldGrade = course.grade;
-          course.put();
+          course.customPUT({
+            grade: course.grade,
+            passed: course.passed
+          });
         };
 
-        scope.mute = function() {};
+        scope.mute = function() {
+          fieldCtrl.courseChange(course);
+          course.customPUT({
+            muted: course.muted
+          });
+        };
 
         scope.pass = function() {
           course.grade = ! course.grade ? course.grade : null;
@@ -41,11 +49,15 @@
         };
 
         scope.remove = function() {
-          User.removeCourse(this.course);
+          course.muted = true;
+          fieldCtrl.courseChange(course);
+          User.removeCourse(course);
         };
 
         scope.move = function(fieldId) {
-          User.moveCourse(course.student_in_course_id, fieldId);
+          course.enrolled_field_id = fieldId;
+          course.customPUT(_.pick(course, 'enrolled_field_id'));
+          fieldCtrl.courseChange(course, true);
         };
 
         course.grade = course.oldGrade = _.formatGrade(course.grade);

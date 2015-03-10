@@ -49,7 +49,7 @@
       }
 
       var graded = _.chain(courses).pick(function(course) {
-        return _.isFinite(course.grade);
+        return ! _.isNull(course) && _.isFinite(course.grade);
       });
 
       var counts = graded.pluck('counts');
@@ -73,7 +73,7 @@
         optional: field.field_wpm
       };
 
-      _(courses).sortByAll('grade').forIn(function(course) {
+      _(courses).pick(_.isObject).sortByAll('grade').forIn(function(course) {
         var group = course.passed ? 'passed' : 'enrolled';
         var category = course.compulsory ? 'compulsory' : 'optional';
 
@@ -111,16 +111,18 @@
      *
      * Is loaded by all courses on pageload initially.
      */
-    self.courseGradeChange = function(course) {
+    self.courseChange = function(course, removed) {
       // Courses without credits are of no interest.
-      if (! course.ects || course.muted) { return; }
-
-      courses[ course.student_in_course_id ] = {
-        grade: _.isNumeric(course.grade) ? parseFloat(course.grade) : null,
-        passed: course.passed,
-        credits: course.ects,
-        compulsory: ('PM' === course.enrolled_course_in_field_type)
-      };
+      if (! course.ects || course.muted || removed) {
+        courses[ course.student_in_course_id ] = null;
+      } else {
+        courses[ course.student_in_course_id ] = {
+          grade: _.isNumeric(course.grade) ? parseFloat(course.grade) : null,
+          passed: course.passed,
+          credits: course.ects,
+          compulsory: ('PM' === course.enrolled_course_in_field_type)
+        };
+      }
 
       doAnalysis();
     };

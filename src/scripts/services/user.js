@@ -178,12 +178,12 @@
     };
 
     self.getRegulation = function(reg) {
-      return this.regulation_id || (reg || null);
+      return self.details.regulation_id || (reg || null);
     };
 
 
     self.getUsername = function() {
-      return this.username || null;
+      return self.details.username || null;
     };
 
 
@@ -237,19 +237,6 @@
         self.courses.push(course);
         $log.info('Added: ' + course.course);
       });
-    };
-
-
-    self.moveCourse = function(studentInCourseId, fieldId) {
-      if (_.isUndefined(studentInCourseId)) { return; }
-
-      var course = _.findWhere(self.courses, {
-        student_in_course_id: studentInCourseId
-      });
-
-      course.enrolled_field_id = _.isNumeric(fieldId) ? parseInt(fieldId, 10) : 1;
-
-      return course.put();
     };
 
 
