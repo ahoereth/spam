@@ -1,0 +1,9 @@
+{
+  "config": {
+    "vendor-dir": "api/lib"
+  },
+  "require": {
+    "slim/slim": "2.4.*",
+    "ircmaxell/password-compat": "dev-master#c91b1168bc53c26f56fc65f16958b5be45ca5dc9"
+  }
+}
