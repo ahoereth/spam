@@ -14,6 +14,7 @@
     'dropdown',
     'infiniteScroll',
     'tickable',
+    'instafocus',
 
     'spam.filters',
     'spam.services',

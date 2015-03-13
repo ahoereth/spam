@@ -70,6 +70,16 @@
         bachelor: calculateGrade(bscFields)
       };
 
+      // Take thesis grade into consideration.
+      // TODO: The weight relation should be information taken from the api.
+      var thesisGrade = self.details.thesis ?
+        parseFloat(self.details.thesis.grade) : false;
+      if (thesisGrade >= 1 && thesisGrade <= 4) {
+        facts.grades.bachelor = _.formatGrade(
+          (parseFloat(facts.grades.bachelor) * 2 + thesisGrade) / 3
+        );
+      }
+
       facts.credits = {
         passed: fields.pluck('passedCredits').sum().value(),
         enrolled: fields.pluck('enrolledCredits').sum().value()
@@ -174,6 +184,8 @@
           $log.info('Student thesis updated: ' + title + ' - ' + grade);
         });
 
+      factsCalculation();
+
       return details.thesis;
     };
 
@@ -222,18 +234,21 @@
     /**
      * Adds a course to the current user's planner.
      *
-     * @param {int} courseId course_id database field
-     * @param {int} fieldId  field_id database field
+     * @param {object/int} course  either a object containing course details
+     *                             or a integer courseId.
+     * @param {int}        fieldId field_id database field (optional).
      */
-    self.addCourse = function(courseId, fieldId) {
-      if (_.isUndefined(courseId)) { return; }
+    self.addCourse = function(course, fieldId) {
+      if (_.isUndefined(course)) { return; }
 
-      fieldId = fieldId !== 'null' ? fieldId : null;
+      if (_.isNumber(course)) {
+        course = {
+          course_id: course,
+          field_id : _.isNumber(fieldId) ? fieldId : null
+        };
+      }
 
-      return self.courses.post({
-        course_id: courseId,
-        field_id : fieldId || null
-      }).then(function(course) {
+      return self.courses.post(course).then(function(course) {
         self.courses.push(course);
         $log.info('Added: ' + course.course);
       });
@@ -269,6 +284,7 @@
           self.fields  = data.fields;
         }
 
+        data.thesis.grade = _.formatGrade(data.thesis.grade);
         self.details = _.omit(data, ['fields', 'courses']);
       }
 

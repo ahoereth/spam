@@ -22,9 +22,10 @@
       <div class="col-md-9">
         <input
           type="text"
-          class="form-control"
-          ng-model="course.unofficial_course"
           id="title"
+          class="form-control"
+          instafocus
+          ng-model="course.unofficial_course"
           placeholder="Full course name">
       </div>
     </div>
@@ -87,12 +88,18 @@
 
     <hr>
 
-    <div class="pull-right">
-      <a href="~" type="button" class="btn btn-warning">
+    <div class="btn-group pull-right" style="width: 50%">
+      <a href="~" type="button" class="btn btn-warning" style="width: 50%">
         <span class="glyphicon glyphicon-remove"></span>
       </a>
 
-      <button type="submit" class="btn btn-success" ng-class="{disabled : submitted}" ng-disabled="submitted">
+      <button
+        type="submit"
+        class="btn btn-success"
+        ng-class="{disabled : submitted}"
+        ng-disabled="submitted"
+        style="width: 50%"
+      >
         <span class="glyphicon glyphicon-plus"></span>
       </button>
     </div>

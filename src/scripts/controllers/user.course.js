@@ -3,16 +3,17 @@
 
   angular
     .module('spam.controllers.user')
-    .controller('Unofficial_edit', userCourseCtrl);
+    .controller('UnofficialCourseEditCtrl', nofficialCourseEditCtrl);
 
 
   /* @ngInject */
-  function userCourseCtrl(
+  function nofficialCourseEditCtrl(
     $rootScope,
     $scope,
     $location,
     $routeParams,
     Restangular,
+    User,
     _
   ) {
     $scope.fields = Restangular.all('fields').getList({
@@ -25,14 +26,9 @@
       unofficial_term: $rootScope.meta.term
     };
 
+
     /**
-     * Adds an unofficial course to the user's course collection.
-     *
-     * @param course object
-     *     unofficial_code
-     *     unofficial_course
-     *     unofficial_ects
-     *     unofficial_semester
+     * Adds the form data as unofficial course to the user's course collection.
      */
     $scope.submit = function() {
       $scope.submitted = true;
@@ -47,17 +43,14 @@
 
       // Can't submit if the course has no title.
       if (_.isEmpty(course.unofficial_course)) {
+        $scope.submitted = false;
         return;
       }
 
-      $scope.addCourse(course);
-
-      // When the course is added redirect to the course overview.
-      var added = $scope.$on('courseAdded', function() {
+      // Add and redirect.
+      User.addCourse(course).then(function() {
         $scope.submitted = false;
         $location.search({}).path('/~');
-
-        added();
       });
     };
   }

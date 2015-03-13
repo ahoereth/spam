@@ -85,7 +85,7 @@
     // user - add unofficial course
     '/~/courses/new': {
       templateUrl: 'courses/unofficial/edit.html',
-      controller: 'Unofficial_edit',
+      controller: 'UnofficialCourseEditCtrl',
       access: 1,
       title: 'Add unofficial Course'
     },
