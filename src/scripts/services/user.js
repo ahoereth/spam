@@ -207,20 +207,19 @@
      * @param {object} course   object used for broadcasting
      */
     self.removeCourse = function(course) {
-      var courseId = _.isObject(course) ?
-        course.course_id : course;
+      var studentInCourseId = _.isObject(course) ?
+        course.student_in_course_id : course;
 
       course = _.findWhere(self.courses, {
-        course_id: courseId
+        student_in_course_id: studentInCourseId
       });
 
-      if (! course || ! course.student_in_course_id) {
+      if (! course) {
         return $q.reject();
       }
 
       var title = course.course;
       var enrolledFieldId = course.enrolled_field_id;
-      var studentInCourseId = course.student_in_course_id;
 
       var promise = course.remove().then(
         function() {
@@ -258,7 +257,7 @@
       return self.courses.post(course).then(function(course) {
         var old = _.findWhere(self.courses, { course_id: course.course_id });
 
-        if (old) {
+        if (old && course.course_id) {
           old.enrolled_field_id = course.enrolled_field_id;
           old.student_in_course_id = course.student_in_course_id;
         } else {
