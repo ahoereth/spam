@@ -60,18 +60,27 @@
     }
   }
 
-  .dropdown-menu, .dropdown-menu.pull-right {
+  .dropdown-menu,
+  .dropdown-menu.pull-right {
     right: 0;
     left: auto;
   }
 
-  .dropdown-menu::after, .dropdown-menu.pull-right::after {
+  .dropdown-menu::after,
+  .dropdown-menu.pull-right::after {
     right: 4px;
     left: auto;
   }
 
-  .course.overflowing {
+  .course.overflowing div {
     opacity: .4;
+
+    &:last-child {
+      opacity: 1;
+      .dropdown-toggle {
+        opacity: .4;
+      }
+    }
   }
 
   h4 {

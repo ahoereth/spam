@@ -10,7 +10,7 @@
   function fieldDirective(_) {
     return {
       restrict: 'E',
-      replace: true,
+      replace: false,
       scope: {
         field: '='
       },

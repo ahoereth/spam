@@ -100,21 +100,8 @@
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <field
       ng-repeat="field in fields track by field.field_id"
-      ng-if="$index % 3 == 0"
-      field="field"
-    >
-      <course
-        ng-repeat="course in courses |
-                   filter:{enrolled_field_id: field.field_id}:true"
-        course="course"
-      ></course>
-    </field>
-
-    <!-- left column lower part (md/sm) -->
-    <field
-      class="hidden-lg"
-      ng-repeat="field in fields track by field.field_id"
-      ng-if="$index % 3 == 2 && $odd"
+      ng-if="($index % 3 == 0) || ($index % 3 == 2 && $odd)"
+      ng-class="{'hidden-lg': $index % 3 == 2 && $odd}"
       field="field"
     >
       <course
@@ -129,21 +116,8 @@
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <field
       ng-repeat="field in fields track by field.field_id"
-      ng-if="$index % 3 == 1"
-      field="field"
-    >
-      <course
-        ng-repeat="course in courses |
-                   filter:{enrolled_field_id: field.field_id}:true"
-        course="course"
-      ></course>
-    </field>
-
-    <!-- right column lower part (md/sm) -->
-    <field
-      class="hidden-lg"
-      ng-repeat="field in fields track by field.field_id"
-      ng-if="$index % 3 == 2 && $even"
+      ng-if="($index % 3 == 1) || ($index % 3 == 2 && $even)"
+      ng-class="{'hidden-lg': $index % 3 == 2 && $even}"
       field="field"
     >
       <course
