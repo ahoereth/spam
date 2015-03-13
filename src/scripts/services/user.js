@@ -16,6 +16,7 @@
     $rootScope,
     $http,
     $log,
+    $q,
     Restangular,
     _
   ) {
@@ -213,17 +214,23 @@
         course_id: courseId
       });
 
+      if (! course || ! course.student_in_course_id) {
+        return $q.reject();
+      }
+
       var title = course.course;
       var enrolledFieldId = course.enrolled_field_id;
       var studentInCourseId = course.student_in_course_id;
 
-      var promise = course.remove().then(function() {
-        $log.info('Removed: ' + title);
-      }, function() {
-        $log.info('Couldn\'t remove: ' + title);
-        course.enrolled_field_id = enrolledFieldId;
-        course.student_in_course_id = studentInCourseId;
-      });
+      var promise = course.remove().then(
+        function() {
+          $log.info('Removed: ' + title);
+        }, function() {
+          $log.info('Couldn\'t remove: ' + title);
+          course.enrolled_field_id = enrolledFieldId;
+          course.student_in_course_id = studentInCourseId;
+        }
+      );
 
       course.enrolled_field_id = null;
       course.student_in_course_id = null;
@@ -239,7 +246,7 @@
      * @param {int}        fieldId field_id database field (optional).
      */
     self.addCourse = function(course, fieldId) {
-      if (_.isUndefined(course)) { return; }
+      if (_.isUndefined(course)) { return $q.reject(); }
 
       if (_.isNumber(course)) {
         course = {
@@ -249,7 +256,15 @@
       }
 
       return self.courses.post(course).then(function(course) {
-        self.courses.push(course);
+        var old = _.findWhere(self.courses, { course_id: course.course_id });
+
+        if (old) {
+          old.enrolled_field_id = course.enrolled_field_id;
+          old.student_in_course_id = course.student_in_course_id;
+        } else {
+          self.courses.push(course);
+        }
+
         $log.info('Added: ' + course.course);
       });
     };
