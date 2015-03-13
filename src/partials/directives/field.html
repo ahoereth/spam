@@ -20,7 +20,7 @@
           type="text"
           blur-on-enter
           class="input-tiny"
-          ng-class="{'no-grade-passed': !examination}"
+          ng-class="{'disabled': !examination}"
           ng-model="grade"
           ng-blur="gradeChange()"
           ng-disabled="!examination"

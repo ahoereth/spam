@@ -34,7 +34,7 @@
       type="text"
       blur-on-enter
       class="input-tiny"
-      ng-class="{'no-grade-passed': course.passed && !course.grade}"
+      ng-class="{'disabled': course.passed && !course.grade}"
       ng-model="course.grade"
       onclick="select()"
       ng-blur="grade()"
