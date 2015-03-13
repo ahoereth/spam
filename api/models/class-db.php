@@ -179,35 +179,45 @@ class DB extends PDO {
    */
   public static function convertTypes(PDOStatement $statement, $assoc) {
     for ($i = 0; $meta = $statement->getColumnMeta($i); $i++) {
-      if (! isset($meta['native_type']) || ! isset($meta['name'])) {
+      if (! isset($meta['name']) || ! isset($assoc[ $meta['name'] ])) {
         continue;
       }
 
-      $type = $meta['native_type'];
       $name = $meta['name'];
 
-      if (! isset($assoc[ $name ])) {
-        continue;
+      if (isset($meta['native_type'])) {
+        switch ($meta['native_type']) {
+          case 'TINY':
+          case 'SHORT':
+          case 'LONG':
+          case 'LONGLONG':
+          case 'INT24':
+            $assoc[ $name ] = (int) $assoc[ $name ];
+            break;
+          case 'DECIMAL':
+          case 'NEWDECIMAL':
+            $assoc[ $name ] = (float) $assoc[ $name ];
+            break;
+          case 'DATETIME':
+          case 'DATE':
+          case 'TIMESTAMP':
+            $assoc[ $name ] = strtotime($assoc[ $name ]);
+            break;
+          // default: keep as string
+        }
       }
 
-      switch($type) {
-        case 'TINY':
-        case 'SHORT':
-        case 'LONG':
-        case 'LONGLONG':
-        case 'INT24':
-          $assoc[ $name ] = (int) $assoc[ $name ];
+      // Handle special tinyint(1) / bool cases.
+      // See: https://bugs.php.net/bug.php?id=48724
+      switch ($name) {
+        case 'passed':
+        case 'muted':
+        case 'preliminary':
+        case 'invisible':
+        case 'mat_verify':
+        case 'one_of_five':
+          $assoc[ $name ] = (bool) $assoc[ $name ];
           break;
-        case 'DECIMAL':
-        case 'NEWDECIMAL':
-          $assoc[ $name ] = (float) $assoc[ $name ];
-          break;
-        case 'DATETIME':
-        case 'DATE':
-        case 'TIMESTAMP':
-          $assoc[ $name ] = strtotime($assoc[ $name ]);
-          break;
-        // default: keep as string
       }
     }
 

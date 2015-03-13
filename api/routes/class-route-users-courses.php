@@ -126,10 +126,10 @@ class Route_Users_Courses extends Route {
       c.term ASC;
     ";
 
-    $stmt = self::$db->prepare( $select );
-    $stmt->execute( $args );
+    $stmt = self::$db->prepare($select);
+    $stmt->execute($args);
 
-    $courses = Course::aggregate_courses( $stmt );
+    $courses = Course::aggregate_courses($stmt);
 
     if (! empty($return) && $return) {
       return $courses;
