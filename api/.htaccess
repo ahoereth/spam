@@ -1,0 +1,7 @@
+php_flag safe_mode off
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+###RewriteRule ^ /~SPAM/api/index.php [QSA,L] # Production.
+RewriteRule ^ /api/index.php [QSA,L] # Development.

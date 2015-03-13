@@ -1,44 +1,49 @@
 <div>
   <!-- directives/add-remove-course -->
+
+  <!-- add course to one of multiple fields -->
   <div
     dropdown
     class="btn-group dropdown"
-    ng-class="{open : course.open}"
-    style="width: 100%"
-    ng-if="! course.singleField &&
-           ! course.student_in_course_id &&
-           ! course.enrolled">
+    ng-class="{disabled: busy}"
+    ng-disabled="busy"
+    ng-if="!course.singleField && !enrolled"
+  >
     <a dropdown-toggle class="btn btn-success dropdown-toggle {{btnClass}}">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
     <ul class="dropdown-menu pull-right">
       <li
         ng-repeat="field in course.fields"
-        ng-class="{active : course.li==$index}">
+        ng-class="{active: course.li==$index}">
         <a
           style="cursor: pointer;"
-          ng-click="addCourse(course.course_id, field.field_id)">
-          {{::field.field}}
-        </a>
+          ng-click="add(field.field_id)"
+          ng-bind="::field.field"
+        ></a>
       </li>
     </ul>
   </div>
 
+  <!-- add course to the only possible field -->
   <a
     class="btn btn-success {{btnClass}}"
-    ng-disabled="course.enrolled"
-    ng-class="{disabled : course.enrolled}"
-    ng-click="addCourse(course.course_id, course.singleField)"
-    ng-if="( course.singleField || course.enrolled ) &&
-           ! course.student_in_course_id">
+    ng-class="{disabled: busy}"
+    ng-disabled="busy"
+    ng-if="course.singleField && !enrolled"
+    ng-click="add(course.singleField)"
+  >
     <span class="glyphicon glyphicon-plus"></span>
   </a>
+
+  <!-- remove course -->
   <a
     class="btn btn-danger {{btnClass}}"
-    ng-show="course.student_in_course_id"
-    ng-disabled="!course.enrolled"
-    ng-class="{disabled : !course.enrolled}"
-    ng-click="removeCourse(course)">
+    ng-class="{disabled: busy}"
+    ng-disabled="busy"
+    ng-show="enrolled"
+    ng-click="remove()"
+  >
     <span class="glyphicon glyphicon-minus"></span>
   </a>
 </div>

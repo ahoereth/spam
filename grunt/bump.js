@@ -3,8 +3,8 @@
 // See https://github.com/vojtajina/grunt-bump
 //   bump - same as bump:patch
 //   bump:patch      - v#.#.#++
-//   bump:minor      - v#.#++.#
-//   bump:major      - v#++.#.#
+//   bump:minor      - v#.#++.0
+//   bump:major      - v#++.0.0
 //   bump:prerelease - v#.#.#-#++
 //   bump --setversion=#.#.#
 

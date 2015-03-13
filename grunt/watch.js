@@ -28,7 +28,7 @@ module.exports = function(grunt) {
   };
 
   watch.styles_dev = {
-    files: [ 'src/styles/**/*.less' ],
+    files: [ 'src/**/*.less' ],
     tasks: [ 'less:dev', 'injector' ]
   };
 

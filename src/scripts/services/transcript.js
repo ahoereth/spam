@@ -78,12 +78,14 @@
       if (_.isUndefined(c)) {
         return false;
       }
-
+/*
       c.grade = _.formatGrade(c.grade, true);
       c.old_grade = c.old_grade || null;
       c.term_abbr = c.term + c.year;
+
       c.passed = c.passed || ((c.grade >= 1 && c.grade <= 4) ||
-                              c.grade !== c.old_grade);
+                               c.grade !== c.old_grade);
+*/
 
       var f = get_field(c.enrolled_field_id);
 
@@ -134,7 +136,7 @@
       }
 
       // remember old grade
-      c.old_grade = c.grade;
+      //c.old_grade = c.grade;
 
       return {course: c, field: f, term: t};
     };
@@ -228,8 +230,10 @@
         }
       }
 
-      f.ects.open_compulsory = f.ects.compulsory - (f.ects.completed.compulsory + f.ects.enrolled.compulsory);
-      f.ects.open = f.ects.sum - (f.ects.completed.sum + f.ects.enrolled.sum + f.ects.open_compulsory);
+      f.ects.open_compulsory = f.ects.compulsory -
+        (f.ects.completed.compulsory + f.ects.enrolled.compulsory);
+      f.ects.open = f.ects.sum -
+        (f.ects.completed.sum + f.ects.enrolled.sum + f.ects.open_compulsory);
 
       f.ects.completed.percent       = _.percent(f.ects.completed.sum, f.ects.sum);
       f.ects.enrolled_percent        = _.percent(f.ects.enrolled.sum, f.ects.sum);

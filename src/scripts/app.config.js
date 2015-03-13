@@ -1,6 +1,5 @@
 (function() {
   'use strict';
-  /* global window */
 
   angular
     .module('spam')
@@ -10,7 +9,9 @@
   /* @ngInject */
   function configuration(
     $httpProvider,
-    RestangularProvider
+    RestangularProvider,
+    LOCALAPI,
+    APIURL
   ) {
     // intercept http requests for general error handling and loading animation
     $httpProvider.interceptors.push('httpIntercept');
@@ -20,8 +21,7 @@
     // on the same server (either in production or in development with local
     // dev API server), if the app runs on root / we utilize the remote
     // production API.
-    var api = ((window.location.pathname || '').substr(0, 6) !== '/~SPAM') ?
-      'https://cogsci.uni-osnabrueck.de/~SPAM/api' : '/~SPAM/api';
+    var api = LOCALAPI ? '/api' : APIURL;
     RestangularProvider.setBaseUrl(api);
   }
 })();

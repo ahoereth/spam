@@ -1,0 +1,46 @@
+/* *****************************************************************************
+ * Navbar
+ *
+ * TEMPLATE: /src/partials/navbar.html
+ */
+
+
+.navbar-inverse { z-index: 1031; }
+.popover-title { display: none; }
+
+.navbar-form {
+  padding: 0;
+  margin-right: -15px;
+  width: 40%;
+}
+
+.navbar-form .form-control {
+  width: 100% !important;
+}
+
+@media (max-width: 767px) {
+  .navbar-form {
+    width: auto;
+    padding: 10px 15px 4px 15px;
+  }
+
+  .navbar-form .form-group {
+    width: auto;
+  }
+}
+
+.quicksearch .row {
+  border-bottom: 1px solid #ccc;
+  padding: 5px 0;
+}
+
+.quicksearch .rows.success {
+  border-bottom: 1px solid #ccc;
+  padding: 5px 0;
+}
+
+.quicksearch .row:nth-child(odd)  { background-color: #f9f9f9; }
+.quicksearch .row:nth-child(even) { background-color: #fff;    }
+
+.quicksearch .row.warning { background-color: @state-warning-bg !important; }
+.quicksearch .row.success { background-color: @state-success-bg !important; }

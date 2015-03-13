@@ -6,8 +6,15 @@
     'ngSanitize',
 
     'restangular',
-    'ui.bootstrap',
+    '720kb.tooltips',
     'unicorn-directive',
+
+    'progressbar',
+    'blurOnEnter',
+    'dropdown',
+    'infiniteScroll',
+    'tickable',
+    'instafocus',
 
     'spam.filters',
     'spam.services',

@@ -8,14 +8,17 @@
     "angular": "1.3.x",
     "angular-route": "1.3.x",
     "angular-sanitize": "1.3.x",
-    "angular-bootstrap": "0.12.x",
-    "angular-unicorn-directive": "0.0.x",
+    "angular-tooltips": "0.1.x",
     "angular-utf8-base64": "0.0.x",
+    "angular-unicorn-directive": "0.0.x",
     "restangular": "1.4.x"
   },
   "overrides": {
     "open-sans-fontface": {
       "main": "open-sans.less"
+    },
+    "angular-tooltips": {
+      "main": "src/js/angular-tooltips.js"
     }
   },
   "exclude": [

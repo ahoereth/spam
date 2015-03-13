@@ -1,0 +1,113 @@
+<div
+  class="panel"
+  ng-class="{'panel-success': field.credits.passed.percentage    === 100 &&
+                              field.field_examination_possible,
+             'panel-warning': field.credits.available.compulsory !== 0 ||
+                              field.credits.enrolled.compulsory  !== 0,
+             'panel-default': field.credits.available.compulsory === 0 &&
+                             !field.field_examination_possible}"
+>
+  <!-- Directives: field -->
+
+  <div class="panel-heading">
+    <div class="row">
+
+      <h4 class="col-xs-9">{{::field.field}}</h4>
+
+      <!-- field grade input -->
+      <div class="col-xs-2">
+        <input
+          type="text"
+          blur-on-enter
+          class="input-tiny"
+          ng-class="{'disabled': !examination}"
+          ng-model="grade"
+          ng-blur="gradeChange()"
+          ng-disabled="!examination"
+          onclick="select()"
+        />
+      </div>
+
+      <!-- field button + dropdown -->
+      <div class="col-xs-1">
+        <div class="btn-group dropdown" dropdown>
+
+          <button
+            type="button"
+            dropdown-toggle
+            class="btn btn-xs btn-block dropdown-toggle"
+            ng-class="{'btn-success': field.credits.available.compulsory == 0,
+                       'btn-warning': field.credits.available.compulsory != 0}">
+
+            <span
+              class="glyphicon"
+              ng-class="{
+                'glyphicon-ok'    : field.credits.available.compulsory == 0,
+                'glyphicon-pencil': field.credits.available.compulsory != 0
+              }"
+            ></span>
+
+          </button>
+
+          <ul class="dropdown-menu">
+
+            <!-- trigger field examination -->
+            <li ng-if="field.field_examination_possible">
+              <tickable ng-model="examination" ng-change="examine()">
+                Examination
+              </tickable>
+            </li>
+
+            <li>
+              <a ng-href="~/courses/new?field_id={{::field.field_id}}">
+                Add unofficial course
+              </a>
+            </li>
+
+            <li>
+              <a ng-href="courses?regulation={{::user.regulation_id}}&field={{::field.field}}">
+                Find courses
+              </a>
+            </li>
+
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div><!--/panel-heading-->
+
+  <div class="panel-body">
+    <!-- most likely only 'course' directives here -->
+    <ng-transclude></ng-transclude>
+  </div>
+
+  <!-- progress bar panel footer -->
+  <div class="panel-footer">
+    <progressbar>
+      <progress
+        type="'success'"
+        value="field.credits.passed.percentage"
+        content="field.credits.passed.sum"
+      ></progress>
+
+      <progress
+        type="'info'"
+        value="field.credits.enrolled.percentage"
+        content="field.credits.enrolled.sum"
+      ></progress>
+
+      <progress
+        type="'required'"
+        value="field.credits.available.percentage_compulsory"
+        content="field.credits.available.compulsory"
+      ></progress>
+
+      <progress
+        type="'background'"
+        value="field.credits.available.percentage_optional"
+        content="field.credits.available.optional"
+      ></progress>
+    </progressbar>
+  </div><!-- /panel-footer -->
+</div>

@@ -8,4 +8,4 @@ RewriteCond %{REQUEST_URI} !^/~SPAM/bower_components
 RewriteCond %{REQUEST_URI} !^/~SPAM/phpmyadmin
 RewriteCond %{REQUEST_URI} !^/~SPAM/phppgadmin
 ###RewriteRule ^(.*) /~SPAM/app/$1 [L]
-RewriteRule ^(.*) /~SPAM/src/$1 [L]
+RewriteRule ^(.*) /src/$1 [L]

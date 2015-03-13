@@ -8,225 +8,225 @@
 
 <!-- regulation dropdown -->
 <div class="row form-horizontal" style="margin-bottom: 10px;">
-	<label class="col-md-1 col-sm-2 col-xs-3 control-label" for="regulation_id">Regulation:</label>
-	<div class="col-md-6 col-sm-10 col-xs-9">
-		<select class="form-control" ng-model="regulation_id" id="regulation_id" ng-options="r.regulation_id as r.regulation for r in regulations" ng-change="fetchCourses(1)"></select>
-	</div>
-	<div class="col-md-5 hidden-sm hidden-xs help-block">Specify a study regulation here.</div>
+  <label class="col-md-1 col-sm-2 col-xs-3 control-label" for="regulation_id">Regulation:</label>
+  <div class="col-md-6 col-sm-10 col-xs-9">
+    <select class="form-control" ng-model="regulation_id" id="regulation_id" ng-options="r.regulation_id as r.regulation for r in regulations" ng-change="fetchCourses(1)"></select>
+  </div>
+  <div class="col-md-5 hidden-sm hidden-xs help-block">Specify a study regulation here.</div>
 </div>
 
 <!-- field filter input for tiny devices -->
 <div class="row form-horizontal visible-xs" style="margin-bottom: 10px;">
-	<label class="col-xs-3 control-label" for="filter.fields_str">Field:</label>
-	<div class="col-xs-9 input-group" style="padding-left: 15px; padding-right: 15px;">
-		<input class="form-control" placeholder="Field of Study" type="text" ng-model="filter.fields_str">
-		<span class="input-group-btn">
-			<button type="button" class="btn btn-default" ng-model="filter.pm" btn-checkbox ng-change="fetchCourses(1)">PM</button>
-		</span>
-	</div>
+  <label class="col-xs-3 control-label" for="filter.fields_str">Field:</label>
+  <div class="col-xs-9 input-group" style="padding-left: 15px; padding-right: 15px;">
+    <input class="form-control" placeholder="Field of Study" type="text" ng-model="filter.fields_str">
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-model="filter.pm" btn-checkbox ng-change="fetchCourses(1)">PM</button>
+    </span>
+  </div>
 </div>
 
 <!-- teacher filter input for small devices -->
 <div class="row form-horizontal visible-sm visible-xs" style="margin-bottom: 10px;">
-	<label class="col-sm-2 col-xs-3 control-label" for="filter.teachers_str">Teacher:</label>
-	<div class="col-sm-5 col-xs-9">
-		<input class="form-control" placeholder="Teacher Name" type="text" ng-model="filter.teachers_str">
-	</div>
-	<div class="col-sm-5 hidden-xs help-block">Search for a specific teacher.</div>
+  <label class="col-sm-2 col-xs-3 control-label" for="filter.teachers_str">Teacher:</label>
+  <div class="col-sm-5 col-xs-9">
+    <input class="form-control" placeholder="Teacher Name" type="text" ng-model="filter.teachers_str">
+  </div>
+  <div class="col-sm-5 hidden-xs help-block">Search for a specific teacher.</div>
 </div>
 
 <!-- filter form -->
 <form ng-submit="fetchCourses(1)">
 
-	<!-- filter label row -->
-	<div class="row">
-		<!-- code label -->
-		<div class="col-md-1 hidden-sm hidden-xs">
-			<label for="filter.code" ng-click="orderBy('code')">Code</label>
-			<span ng-class="{caret: order==orderBys['-code'], 'caret up': order==orderBys['code']}"></span>
-		</div>
+  <!-- filter label row -->
+  <div class="row">
+    <!-- code label -->
+    <div class="col-md-1 hidden-sm hidden-xs">
+      <label for="filter.code" ng-click="orderBy('code')">Code</label>
+      <span ng-class="{caret: order==orderBys['-code'], 'caret up': order==orderBys['code']}"></span>
+    </div>
 
-		<!-- time label -->
-		<div class="col-sm-1 col-xs-2">
-			<label for="timeframe" ng-click="orderBy('time')">Time</label>
-			<span ng-class="{caret: order==orderBys['-time'], 'caret up': order==orderBys['time']}"></span>
-		</div>
+    <!-- time label -->
+    <div class="col-sm-1 col-xs-2">
+      <label for="timeframe" ng-click="orderBy('time')">Time</label>
+      <span ng-class="{caret: order==orderBys['-time'], 'caret up': order==orderBys['time']}"></span>
+    </div>
 
-		<!-- title label -->
-		<div class="col-md-4 col-sm-6 col-xs-8">
-			<label for="filter.course" ng-click="orderBy('course')">Title</label>
-			<span ng-class="{caret: order==orderBys['-course'], 'caret up': order==orderBys['course']}"></span>
-		</div>
+    <!-- title label -->
+    <div class="col-md-4 col-sm-6 col-xs-8">
+      <label for="filter.course" ng-click="orderBy('course')">Title</label>
+      <span ng-class="{caret: order==orderBys['-course'], 'caret up': order==orderBys['course']}"></span>
+    </div>
 
-		<!-- teachers label -->
-		<div class="col-md-2 hidden-sm hidden-xs">
-			<label for="filter.teachers_str" ng-click="orderBy('teachers')">Teachers</label>
-			<span ng-class="{caret: order==orderBys['-teachers'], 'caret up': order==orderBys['teachers']}"></span>
-		</div>
+    <!-- teachers label -->
+    <div class="col-md-2 hidden-sm hidden-xs">
+      <label for="filter.teachers_str" ng-click="orderBy('teachers')">Teachers</label>
+      <span ng-class="{caret: order==orderBys['-teachers'], 'caret up': order==orderBys['teachers']}"></span>
+    </div>
 
-		<!-- field of study label -->
-		<div class="col-md-3 col-sm-4 hidden-xs">
-			<label for="filter.fields_str" ng-click="orderBy('fields')">Field of Study</label>
-			<span ng-class="{caret: order==orderBys['-fields'], 'caret up': order==orderBys['fields']}"></span>
-		</div>
+    <!-- field of study label -->
+    <div class="col-md-3 col-sm-4 hidden-xs">
+      <label for="filter.fields_str" ng-click="orderBy('fields')">Field of Study</label>
+      <span ng-class="{caret: order==orderBys['-fields'], 'caret up': order==orderBys['fields']}"></span>
+    </div>
 
-		<!-- loading spinner and result counter label -->
-		<div class="col-sm-1 col-xs-2">
-			<label>Results</label>
-		</div>
-	</div>
+    <!-- loading spinner and result counter label -->
+    <div class="col-sm-1 col-xs-2">
+      <label>Results</label>
+    </div>
+  </div>
 
-	<!-- filter input row -->
-	<div class="row courses-row">
-		<!-- code filter -->
-		<div class="col-md-1 hidden-sm hidden-xs form-group">
-			<input class="form-control" type="text" id="filter.code" ng-model="filter.code">
-		</div>
+  <!-- filter input row -->
+  <div class="row courses-row">
+    <!-- code filter -->
+    <div class="col-md-1 hidden-sm hidden-xs form-group">
+      <input class="form-control" type="text" id="filter.code" ng-model="filter.code">
+    </div>
 
-		<!-- timeframe -->
-		<div class="col-sm-1 col-xs-2 form-group">
-			<input
-				type="text"
-				ng-model="timeframe"
-				class="form-control form-control-tight"
-				id="timeframe"
-				title='Use strings similar to any of those: "2010-2012", "2011+", "W:09-11" or "2004-"'>
-		</div>
+    <!-- timeframe -->
+    <div class="col-sm-1 col-xs-2 form-group">
+      <input
+        type="text"
+        ng-model="timeframe"
+        class="form-control form-control-tight"
+        id="timeframe"
+        title='Use strings similar to any of those: "2010-2012", "2011+", "W:09-11" or "2004-"'>
+    </div>
 
-		<!-- course title filter -->
-		<div class="col-md-4 col-sm-6 col-xs-8 form-group">
-			<input class="form-control" ng-model="filter.course" id="filter.course">
-		</div>
+    <!-- course title filter -->
+    <div class="col-md-4 col-sm-6 col-xs-8 form-group">
+      <input class="form-control" ng-model="filter.course" id="filter.course">
+    </div>
 
-		<!-- teachers filter -->
-		<div class="col-md-2 hidden-sm hidden-xs form-group">
-			<input class="form-control" ng-model="filter.teachers_str" id="filter.teachers_str">
-		</div>
+    <!-- teachers filter -->
+    <div class="col-md-2 hidden-sm hidden-xs form-group">
+      <input class="form-control" ng-model="filter.teachers_str" id="filter.teachers_str">
+    </div>
 
-		<!-- fields filter -->
-		<div class="col-md-3 col-sm-4 hidden-xs form-group">
-			<div class="input-group">
-				<input class="form-control" type="text" id="filter.fields_str" ng-model="filter.fields_str">
-				<span class="input-group-btn">
-					<button type="button" class="btn btn-default" ng-model="pm" btn-checkbox>PM</button>
-				</span>
-			</div>
-		</div>
+    <!-- fields filter -->
+    <div class="col-md-3 col-sm-4 hidden-xs form-group">
+      <div class="input-group">
+        <input class="form-control" type="text" id="filter.fields_str" ng-model="filter.fields_str">
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default" ng-model="pm" btn-checkbox>PM</button>
+        </span>
+      </div>
+    </div>
 
-		<!-- loading spinner and result counter -->
-		<div class="col-sm-1 col-xs-2">
-			<div class="form-control" style="border: none; text-align: center;">
-				<span class="glyphicon glyphicon-refresh spin" ng-show="loading"></span>
-				<span ng-hide="loading">{{displayLimit>filteredCourses.length | iif : filteredCourses.length : displayLimit + '+'}}
-			</div>
-		</div>
-	</div>
+    <!-- loading spinner and result counter -->
+    <div class="col-sm-1 col-xs-2">
+      <div class="form-control" style="border: none; text-align: center;">
+        <span class="glyphicon glyphicon-refresh spin" ng-show="loading"></span>
+        <span ng-hide="loading">{{displayLimit>filteredCourses.length | iif : filteredCourses.length : displayLimit + '+'}}
+      </div>
+    </div>
+  </div>
 </form>
 
 <!-- infinite scroll container -->
 <div
-	infinite-scroll="scrollOn()"
-	infinite-scroll-immediate-check="false"
-	infinite-scroll-distance="2">
+  infinite-scroll="scrollOn()"
+  infinite-scroll-immediate-check="false"
+  infinite-scroll-distance="2">
 
-	<!-- ngRepeat for the course list -->
-	<div
-		class="courses-rowpair"
-		ng-repeat="course in filteredCourses | orderBy:order | limitTo: displayLimit track by course.course_id">
+  <!-- ngRepeat for the course list -->
+  <div
+    class="courses-rowpair"
+    ng-repeat="course in filteredCourses | orderBy:order | limitTo: displayLimit track by course.course_id">
 
-		<!-- first row of course information -->
-		<div class="row courses-row" ng-class="{'expanded' : course.expanded}">
+    <!-- first row of course information -->
+    <div class="row courses-row" ng-class="{'expanded' : course.expanded}">
 
-			<div class="col-md-1 hidden-sm hidden-xs"><code>{{::course.code}}</code></div>
+      <div class="col-md-1 hidden-sm hidden-xs"><code>{{::course.code}}</code></div>
 
-			<div class="col-sm-1 col-xs-2 centering">{{::course.term}}{{::course.year | year}}</div>
+      <div class="col-sm-1 col-xs-2 centering">{{::course.term}}{{::course.year | year}}</div>
 
-			<div class="col-md-4 col-sm-6 col-xs-8" ng-bind="::course.course"></div>
+      <div class="col-md-4 col-sm-6 col-xs-8" ng-bind="::course.course"></div>
 
-			<div class="col-md-2 hidden-sm hidden-xs" ng-bind="::course.teachers_str"></div>
+      <div class="col-md-2 hidden-sm hidden-xs" ng-bind="::course.teachers_str"></div>
 
-			<div class="col-md-3 col-sm-4 hidden-xs" ng-bind="::course.fields_str"></div>
+      <div class="col-md-3 col-sm-4 hidden-xs" ng-bind="::course.fields_str"></div>
 
-			<div class="col-sm-1 col-xs-2">
-				<button
-					type="button"
-					ng-hide="filteredCourses.length==1"
-					ng-click="course.expanded=!course.expanded"
-					class="btn btn-info btn-block">
-						<span
-							class="glyphicon"
-							ng-class="{
-								'glyphicon-chevron-down' : !course.expanded,
-								'glyphicon-chevron-up' : course.expanded}">
-						</span>
-					</button>
-			</div>
+      <div class="col-sm-1 col-xs-2">
+        <button
+          type="button"
+          ng-hide="filteredCourses.length==1"
+          ng-click="course.expanded=!course.expanded"
+          class="btn btn-info btn-block">
+            <span
+              class="glyphicon"
+              ng-class="{
+                'glyphicon-chevron-down' : !course.expanded,
+                'glyphicon-chevron-up' : course.expanded}">
+            </span>
+          </button>
+      </div>
 
-		</div>
+    </div>
 
-		<!-- expandable row of course information -->
-		<div ng-if="course.expanded||filteredCourses.length==1">
+    <!-- expandable row of course information -->
+    <div ng-if="course.expanded||filteredCourses.length==1">
 
-			<!-- studip url input field -->
-			<div class="row form-horizontal" style="margin-bottom: 10px;" ng-if="filter.studip=='false'">
-				<label class="control-label col-xs-2">StudIP URL</label>
-				<div class="col-xs-10">
-					<input type="text" class="form-control" ng-model="course.studip_url" placeholder="https://" ng-blur="submitStudipUrl(course)" ng-init="course.studip_url_old = course.studip_url">
-				</div>
-			</div>
+      <!-- studip url input field -->
+      <div class="row form-horizontal" style="margin-bottom: 10px;" ng-if="filter.studip=='false'">
+        <label class="control-label col-xs-2">StudIP URL</label>
+        <div class="col-xs-10">
+          <input type="text" class="form-control" ng-model="course.studip_url" placeholder="https://" ng-blur="submitStudipUrl(course)" ng-init="course.studip_url_old = course.studip_url">
+        </div>
+      </div>
 
-			<div class="row courses-row">
-				<div class="col-sm-11 col-xs-10">
-					<p ng-if="course.course_comment">
-						<span class="bold">Notice:</span>&nbsp;{{::course.course_comment}}
-					</p>
+      <div class="row courses-row">
+        <div class="col-sm-11 col-xs-10">
+          <p ng-if="course.course_comment">
+            <span class="bold">Notice:</span>&nbsp;{{::course.course_comment}}
+          </p>
 
-					<p class="visible-sm visible-xs">
-						<span class="bold">Teachers:</span>&nbsp;{{::course.teachers_str}}
-					</p>
+          <p class="visible-sm visible-xs">
+            <span class="bold">Teachers:</span>&nbsp;{{::course.teachers_str}}
+          </p>
 
-					<p class="visible-xs">
-						<span class="bold">Fields:</span>&nbsp;{{::course.fields_str}}
-					</p>
+          <p class="visible-xs">
+            <span class="bold">Fields:</span>&nbsp;{{::course.fields_str}}
+          </p>
 
-					<p>
-						<span ng-if="course.ects">
-							<span class="bold">ECTS:</span>&nbsp;{{::course.ects}}
-							<span ng-if="course.language">,&nbsp;</span>
-						</span>
+          <p>
+            <span ng-if="course.ects">
+              <span class="bold">ECTS:</span>&nbsp;{{::course.ects}}
+              <span ng-if="course.language">,&nbsp;</span>
+            </span>
 
-						<span ng-if="course.language">
-							<span class="bold">Language:</span>&nbsp;{{::course.language}}
-							<span ng-if="course.type">,&nbsp;</span>
-						</span>
+            <span ng-if="course.language">
+              <span class="bold">Language:</span>&nbsp;{{::course.language}}
+              <span ng-if="course.type">,&nbsp;</span>
+            </span>
 
-						<span ng-if="course.type">
-							<span class="bold">Type:</span>&nbsp;{{::course.type}}
-						</span>
-					</p>
+            <span ng-if="course.type">
+              <span class="bold">Type:</span>&nbsp;{{::course.type}}
+            </span>
+          </p>
 
-					<p ng-if="course.course_desc" ng-bind-html="course.course_desc | prerequisites"></p>
-				</div>
+          <p ng-if="course.course_desc" ng-bind-html="course.course_desc | prerequisites"></p>
+        </div>
 
-				<!-- buttons on the right when expanded -->
-				<div class="col-sm-1 col-xs-2">
+        <!-- buttons on the right when expanded -->
+        <div class="col-sm-1 col-xs-2">
 
-					<!-- view course details link -->
-					<a class="btn btn-warning btn-block" ng-href="courses/{{course.course_id}}" style="margin-bottom: 5px;">
-						<span class="glyphicon glyphicon-share-alt"></span>
-					</a>
+          <!-- view course details link -->
+          <a class="btn btn-warning btn-block" ng-href="courses/{{course.course_id}}" style="margin-bottom: 5px;">
+            <span class="glyphicon glyphicon-share-alt"></span>
+          </a>
 
-					<add-remove-course course="course" btn-class="btn-block" add-course="addCourse" remove-course="removeCourse" ng-if="user&&regulation_id==user.regulation_id"></add-remove-course>
+          <add-remove-course course="course" btn-class="btn-block" add-course="addCourse" remove-course="removeCourse" ng-if="user&&regulation_id==user.regulation_id"></add-remove-course>
 
-				</div>
-			</div>
-		</div>
+        </div>
+      </div>
+    </div>
 
-	</div><!-- end of ngRepeat -->
+  </div><!-- end of ngRepeat -->
 
-	<div class="row" style="margin-top: 10px;">
-		<button ng-show="filteredCourses.length>displayLimit" type="button" class="btn btn-info btn-block" ng-click="scrollOn(50)">More...</button>
-		<button ng-hide="filteredCourses.length>displayLimit" type="button" class="btn btn-default btn-block" disabled="disabled">{{loading | iif : 'Loading...' : 'no more courses using the current filter'}}</button>
-	</div>
+  <div class="row" style="margin-top: 10px;">
+    <button ng-show="filteredCourses.length>displayLimit" type="button" class="btn btn-info btn-block" ng-click="scrollOn(50)">More...</button>
+    <button ng-hide="filteredCourses.length>displayLimit" type="button" class="btn btn-default btn-block" disabled="disabled">{{loading | iif : 'Loading...' : 'no more courses using the current filter'}}</button>
+  </div>
 
 </div>

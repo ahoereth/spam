@@ -14,9 +14,32 @@
     $route,
     Restangular,
     FastClick,
+    User,
+    TITLE,
     _
   ) {
-    FastClick.attach($document.body);
+    /**
+     * Construct the page title (<head><title>) from the TITLE constant, the
+     * route dependend prefix and optional contextual variables.
+     *
+     * @param {string} prefix
+     */
+    function constructTitle(prefix) {
+      var title = TITLE;
+
+      // Prefix.
+      if (prefix) {
+        title = prefix + ' :: ' + title;
+      }
+
+      // Inject username.
+      if ($rootScope.user) {
+        title = title.replace(':username', $rootScope.user.username);
+      }
+
+      return title;
+    }
+
 
     Restangular.configuration.getIdFromElem = function(elem) {
       if (elem.id) {
@@ -33,6 +56,8 @@
       }
     };
 
+
+    // Set $rootScope meta variables.
     var d = new Date(), m = d.getMonth(), y = d.getFullYear();
     $rootScope.meta = {
       'year'            : d.getFullYear(),
@@ -45,9 +70,6 @@
       'nextTermYear'    : (m < 3) ? y : y + 1,
       'webstorage'      : _.isUndefined(Storage) ? false : true
     };
-
-
-    $rootScope.title = 'Study Planning in Cognitive Science';
 
 
     /**
@@ -71,22 +93,19 @@
     $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
       if (_.isUndefined(current)) { return; }
 
-      // don't allow entering the page on /401
+      // Don't allow entering the page on /401
       if (current.originalPath === '/401' && _.isUndefined(previous)) {
         $location.path('/');
         return;
       }
 
-
-      // handle the page title
-      var title = { title: current.title };
-      var username = $rootScope.user.getUsername();
-      if (!_.isEmpty(username)) {
-        title = angular.extend(title, { ':username' : username });
-      }
-
-      $rootScope.$broadcast('title', title);
+      // Handle page title.
+      $rootScope.title = constructTitle(current.title);
     });
+
+
+    // Initialize FastClick for a more native mobile feeling.
+    FastClick.attach($document.body);
   }
 
 })();

@@ -11,11 +11,10 @@ module.exports = function(grunt) {
   ngAnnotate.build = {
     files: {
       'app/js/tmp.app.js': [
-        'src/scripts/controllers/*.js',
-        'src/scripts/directives/*.js',
-        'src/scripts/filters/*.js',
-        'src/scripts/services/*.js',
-        'src/scripts/*.js',
+        'src/components/**/*.js',
+        '!src/components/**/*.ignore.js',
+        'src/scripts/**/*.js',
+        '!src/scripts/**/*.ignore.js',
         'app/js/tmp.templates.js'
       ]
     }

@@ -1,0 +1,107 @@
+<div
+  class="row course"
+  ng-class="{overflowing: course.overflowing ||
+                          course.grade == 5 ||
+                          course.muted}"
+>
+  <!-- Directive: course -->
+
+  <!-- title + ects -->
+  <div class="col-xs-9">
+    <span ng-switch="::course.course_id">
+      <a
+        ng-switch-default
+        ng-href="courses/{{::course.course_id}}"
+        tooltips
+        tooltip-title="{{::course.term_abbr}}"
+        ng-bind="::course.course"
+      ></a>
+      <span
+        ng-switch-when="0"
+        tooltips
+        tooltip-title="{{::course.term_abbr}}"
+        ng-bind="::course.course"
+      ></span>
+    </span>
+    <small ng-show="course.ects" class="text-info">
+      [{{::course.ects}}]
+    </small>
+  </div>
+
+  <!-- grade -->
+  <div class="col-xs-2">
+    <input
+      type="text"
+      blur-on-enter
+      class="input-tiny"
+      ng-class="{'disabled': course.passed && !course.grade}"
+      ng-model="course.grade"
+      onclick="select()"
+      ng-blur="grade()"
+    />
+  </div>
+
+  <!-- dropdown button -->
+  <div class="col-xs-1">
+
+    <div class="btn-group dropdown" dropdown>
+      <button
+        type="button"
+        dropdown-toggle
+        class="btn btn-xs btn-block dropdown-toggle"
+        ng-class="{'btn-info'   : !course.passed,
+                   'btn-success':  course.passed,
+                   'btn-default':  course.grade > 4}"
+      >
+        <span
+          class="glyphicon"
+          ng-class="{'glyphicon-pencil': !course.passed,
+                     'glyphicon-ok'    :  course.passed,
+                     'glyphicon-remove':  course.grade > 4}"
+        ></span>
+      </button>
+
+      <ul class="dropdown-menu">
+
+        <!-- force pass or un-pass course -->
+        <li>
+          <tickable ng-model="course.passed" ng-change="pass()">
+            Passed
+          </tickable>
+        </li>
+
+        <!-- mute course -->
+        <li>
+          <tickable ng-model="course.muted" ng-change="mute()">
+            Muted
+          </tickable>
+        </li>
+
+        <!-- un-enroll from course -->
+        <li><a class="pointer" ng-click="remove()">Remove</a></li>
+
+        <!-- move to other fields headline -->
+        <li ng-hide="course.fields.length == 0 && course.enrolled_field_id == 1"
+            class="dropdown-header">
+          Change field
+        </li>
+
+        <!-- move to other fields -->
+        <li ng-repeat="field in course.fields"
+            ng-hide="field.field_id == course.enrolled_field_id">
+          <a class="pointer" ng-click="move(field.field_id)">
+            {{::field.field}}
+          </a>
+        </li>
+
+        <!-- move to open studies -->
+        <li ng-hide="course.enrolled_field_id == 1">
+          <a class="pointer" ng-click="move(1)">Open Studies</a>
+        </li>
+
+      </ul>
+
+    </div>
+  </div>
+
+</div>

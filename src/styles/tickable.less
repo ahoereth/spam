@@ -1,0 +1,20 @@
+.tickable {
+  margin: 0;
+  padding: 3px 20px;
+  font-weight: normal;
+  cursor: pointer;
+
+  &:hover span.glyphicon {
+    display: inline-block;
+    opacity: .5;
+  }
+
+  input[type="checkbox"],
+  span.glyphicon {
+    display: none;
+  }
+
+  input[type="checkbox"]:checked + span.glyphicon {
+    display: inline-block;
+  }
+}

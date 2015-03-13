@@ -1,0 +1,138 @@
+/* *****************************************************************************
+ * User Overview
+ *
+ * TEMPLATE: src/partials/home/index.html
+ * ROUTE: /~
+ */
+
+.overview-container {
+
+  table tr td {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  a,
+  a:active,
+  a:visited {
+    color: #333;
+  }
+
+  a:hover {
+    color: @uos-red;
+    text-decoration: none;
+  }
+
+  .panel {
+    width: 100%;
+
+    .glyphicon {
+      // workaround to prevent flickering on hover in css3 columns
+      position: static;
+      vertical-align: sub;
+    }
+
+    .btn-xs {
+      padding-left: 0;
+      padding-right: 0;
+      text-align: center;
+    }
+  }
+
+  .panel-heading,
+  .panel-footer,
+  .panel-body {
+    padding-left : 4px;
+    padding-right: 4px;
+  }
+
+  .panel-heading {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+    color: #333333;
+  }
+
+  .panel-body {
+    border-top: 1px solid #ccc;
+
+    .row {
+      padding-top: 5px; padding-bottom: 5px;
+    }
+  }
+
+  .dropdown-menu,
+  .dropdown-menu.pull-right {
+    right: 0;
+    left: auto;
+  }
+
+  .dropdown-menu::after,
+  .dropdown-menu.pull-right::after {
+    right: 4px;
+    left: auto;
+  }
+
+  .course.overflowing div {
+    opacity: .4;
+
+    &:last-child {
+      opacity: 1;
+      .dropdown-toggle {
+        opacity: .4;
+      }
+    }
+  }
+
+  h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .row {
+    margin-left: -5px; margin-right: -5px;
+  }
+
+  .row .col-xs-10,
+  .row .col-xs-9,
+  .row .col-xs-8,
+  .row .col-xs-2,
+  .row .col-xs-1 {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .input-tiny.disabled {
+    background-color: inherit;
+  }
+}
+
+.btn-group.dropdown {
+  width: 100%;
+}
+
+.progress {
+  margin-bottom: 0;
+}
+
+.progress-bar-required {
+  float: left;
+  width: 0%;
+  height: 100%;
+  font-size: @font-size-small;
+  color: @progress-bar-color;
+  text-align: center;
+  background-color: fade( @progress-bar-warning-bg, 50% );
+  .box-shadow(inset 0 0px 2px rgba(0,0,0,.1));
+  .transition(width .6s ease);
+}
+
+.progress-bar-background {
+  float: left;
+  width: 0%;
+  height: 100%;
+  font-size: @font-size-small;
+  color: #000;
+  text-align: center;
+  background-color: transparent;
+  .box-shadow(none);
+}

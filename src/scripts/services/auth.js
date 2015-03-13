@@ -16,7 +16,7 @@
     $q,
     base64,
     Restangular,
-    DataHandler,
+    User,
     _
   ) {
     var deferredLogin = 'not_initiated';
@@ -24,8 +24,10 @@
     var login = function () {
       deferredLogin = $q.defer();
 
-      var username = DataHandler.getLogininfo('username');
-      $http.defaults.headers.common.Authorization = 'Basic ' + DataHandler.getLogininfo('authdata');
+      var username = User.logininfo.username;
+
+      $http.defaults.headers.common.Authorization =
+        'Basic ' + User.logininfo.authdata;
 
       if (! _.isEmpty(username)) {
         // Visualize the login process.
@@ -39,16 +41,16 @@
           .one('users', username)
           .get()
           .then(
-            function(user) {
-              DataHandler.userInit(user);
-              deferredLogin.resolve($rootScope.user);
+            function(data) {
+              User.construct(data);
+              deferredLogin.resolve(User.details);
             }, function() {
-              $rootScope.user.destroy();
+              User.logout();
               deferredLogin.reject();
             }
           )
           .finally(function() {
-            $rootScope.loginform.loading = false;
+            $rootScope.loginform = { loading: false };
           });
       } else {
         deferredLogin.reject();
@@ -63,9 +65,9 @@
     login();
 
     return {
-      init: function (nick, password, useLocalStorage) {
-        var encoded = base64.encode(nick + ':' + password);
-        DataHandler.updateLogininfo(nick, encoded, useLocalStorage);
+      init: function (username, password, useLocalStorage) {
+        var authdata = base64.encode(username + ':' + password);
+        User.setLogininfo(username, authdata, useLocalStorage);
         return login();
       },
 
@@ -84,7 +86,7 @@
 
         if (accessSet === 0) {
           // accessSet is 0, therefore everybody is legitimated to view this site
-          deferredAuthentication.resolve($rootScope.user);
+          deferredAuthentication.resolve(User.details);
 
         } else {
           // accessSet is something more specific, therefore we need to check
@@ -97,7 +99,7 @@
             if (
               // accessSet is a explicit user rank integer and the users rank is
               // equal or higher
-              (_.isNumber(accessSet) && accessSet <= $rootScope.user.rank) ||
+              (_.isNumber(accessSet) && accessSet <= User.details.rank) ||
 
               // The user himself is allowed to see this route, we will
               // only retrieve data related to him
@@ -105,9 +107,9 @@
 
               // The user is explicitly named in the accessSet, so he is allowed
               // to view this route as well
-              (!_.isUndefined(accessSet[$rootScope.user.getUsername()]))
+              (!_.isUndefined(accessSet[User.getUsername()]))
             ) {
-              deferredAuthentication.resolve($rootScope.user);
+              deferredAuthentication.resolve(User.details);
 
             } else {
               // Could not match the accessSet to the current user, reject

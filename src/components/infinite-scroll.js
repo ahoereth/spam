@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('spam.directives')
+    .module('infiniteScroll', [])
     .directive('infiniteScroll', infiniteScrollDirective);
 
 

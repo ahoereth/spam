@@ -9,7 +9,12 @@ module.exports = function(grunt) {
 
   ngtemplates.spam = {
     cwd: 'src',
-    src: 'partials/**/**.html',
+    src: [
+      'components/**/*.html',
+      '!components/**/*.ignore.html',
+      'partials/**/*.html',
+      '!partials/**/*.ignore.html'
+    ],
     dest: 'app/js/tmp.templates.js',
     options: {
       htmlmin: {
