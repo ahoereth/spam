@@ -2,7 +2,7 @@
 
 <hr>
 
-<form class="form-horizontal" ng-submit="updateUser()">
+<form class="form-horizontal">
 
   <!-- student's name -->
   <div class="form-group">
@@ -14,8 +14,11 @@
         id="firstname"
         class="form-control"
         placeholder="Firstname"
+        blur-on-enter
+        instafocus
         ng-model="user.firstname"
-        ng-model-options="{debounce: 500}">
+        ng-model-options="{updateOn: 'blur'}"
+      />
     </div>
     <div class="col-md-5">
       <!-- last name input -->
@@ -24,8 +27,10 @@
         id="lastname"
         class="form-control"
         placeholder="Lastname"
+        blur-on-enter
         ng-model="user.lastname"
-        ng-model-options="{debounce: 500}">
+        ng-model-options="{updateOn: 'blur'}"
+      />
     </div>
   </div>
 
@@ -39,11 +44,9 @@
   <div class="form-group">
     <label class="control-label col-md-2" for="regulation">Regulation</label>
     <div class="col-md-10">
-      <!--<select class="form-control" ng-model="constraint.field" id="regulation" ng-required="true" ng-options="f as f.title for f in fields"></select>-->
-      <select class="form-control" ng-model="user.regulation_abbr" id="regulation" disabled="disabled">
-        <option selected="selected">{{user.regulation_abbr}}</option>
+      <select class="form-control" id="regulation" disabled="disabled">
+        <option selected="selected">{{::user.regulation}}</option>
       </select>
-      <p class="help-block">Changes are automatically saved as soon as you apply them.</p>
     </div>
   </div>
 
@@ -53,10 +56,26 @@
 
 <div class="btn-group btn-group-justified">
   <!-- delete account -->
-  <a class="btn btn-default" ng-click="showDelete=true" ng-hide="showDelete">Delete all my data</a>
-  <a class="btn btn-warning" ng-click="showDelete2=true" ng-show="showDelete&&!showDelete2">Delete all my data, for sure!</a>
-  <a class="btn btn-danger" ng-click="deleteUser()" ng-show="showDelete2">Delete all my data, for really sure!</a>
+  <a class="btn btn-default"
+     ng-click="showDelete = true"
+     ng-hide="showDelete">
+    Delete all my data
+  </a>
+  <a class="btn btn-warning"
+     ng-click="showDelete2 = true"
+     ng-show="showDelete && !showDelete2">
+    Delete all my data, for sure!
+  </a>
+  <a class="btn btn-danger"
+     ng-click="deleteUser()"
+     ng-show="showDelete2">
+    Delete all my data, for really sure!
+  </a>
 
   <!-- export data -->
-  <a class="btn btn-success" ng-click="exportData()" disabled="disabled">Export data (coming soon)</a>
+  <a class="btn btn-success"
+     ng-click="exportData()"
+     disabled="disabled">
+    Export data (coming soon)
+  </a>
 </div>

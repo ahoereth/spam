@@ -2,20 +2,20 @@
   'use strict';
 
   /**
-   * CONTROLLER: UserSettings
+   * CONTROLLER: UserSettingsController
    * ROUTE: /~/settings
    */
   angular
     .module('spam.controllers.user')
-    .controller('UserSettings', userSettingsCtrl);
+    .controller('UserSettingsController', userSettingsController);
 
 
   /* @ngInject */
-  function userSettingsCtrl($scope) {
+  function userSettingsController($scope, User) {
     $scope.$watchGroup(['user.firstname', 'user.lastname'], function(n, o) {
       if (n === o) { return; }
 
-      $scope.user.updateUser({
+      User.updateUser({
         firstname: n[0],
         lastname:  n[1]
       }, true);

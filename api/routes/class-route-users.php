@@ -76,7 +76,12 @@ class Route_Users extends Route {
       'return' => true
     ));
 
-    // get this users fields
+    // regulation
+    $user = array_merge($user, self::$db->sql_select_one('regulations', array(
+      'regulation_id' => $user['regulation_id'],
+    )));
+
+    // fields
     $user['fields'] = $this->get_fields($username, $user['regulation_id']);
 
     // thesis

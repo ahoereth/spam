@@ -1,41 +1,53 @@
 <div class="matriculation-setter">
   <form class="form-group" name="matriculationSetter">
     <!-- summer/winter term selection -->
-    <div ng-class="{'col-md-3': verifyButton, 'col-md-4': ! verifyButton}">
-      <div class="btn-group btn-group-justified">
-        <label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'S'">
+    <div ng-class="{'col-md-3': verifyButton, 'col-md-4': !verifyButton}">
+      <div
+        class="btn-group btn-group-justified"
+        ng-model="user.mat_term"
+        bs-radio-group
+      >
+        <label class="btn btn-primary">
+          <input type="radio" class="btn btn-default" value="S">
           Summer
         </label>
-        <label class="btn btn-primary" ng-model="user.mat_term" btn-radio="'W'">
+        <label class="btn btn-primary">
+          <input type="radio" class="btn btn-default" value="W">
           Winter
         </label>
       </div>
     </div>
 
     <!-- year selection -->
-    <div ng-class="{'col-md-6': verifyButton, 'col-md-8': ! verifyButton}">
-      <div
-        class="input-group"
-        style="width: 100%"
-        ng-class="{'has-error': matriculationSetter.year.$invalid}">
+    <div ng-class="{'col-md-6': verifyButton, 'col-md-8': !verifyButton}">
 
+      <div class="input-group" style="width: 100%">
         <!-- the three most recent years as buttons -->
-        <div class="input-group-btn" style="width: 25%" ng-repeat="year in years">
-          <label class="btn btn-block btn-primary" ng-model="user.mat_year" btn-radio="year">
-            {{year}}
-          </label>
+        <div
+          class="input-group-btn"
+          style="width: 25%"
+          ng-repeat="year in years"
+        >
+          <button
+            class="btn btn-block btn-primary"
+            ng-model="user.mat_year"
+            bs-radio
+            value="{{::year}}"
+            ng-bind="::year"
+          ></button>
         </div>
 
         <!-- input for all other years -->
         <input
+          blur-on-enter
           min="2000"
           max="2020"
           type="number"
           class="form-control centering"
           ng-model="user.mat_year"
-          ng-model-options="{debounce: 500}"
+          ng-model-options="{updateOn: 'blur'}"
           ng-class="{'has-error': matriculationSetter.year.$invalid}"
-          placeholder="Year"
+          placeholder="{{::years[2]-1}}"
           name="year"
           required>
       </div>

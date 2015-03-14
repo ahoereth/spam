@@ -114,7 +114,7 @@
      */
     self.updateUser = function(data, force) {
       var putData = {};
-      angular.forEach(data, function(value, key) {
+      _.forEach(data, function(value, key) {
         if (! angular.equals($rootScope.user[key], value) || force) {
           putData[key] = value;
           $rootScope.user[key] = value;
@@ -125,7 +125,6 @@
       putData = Restangular.restangularizeElement(null, putData, 'users');
 
       putData.put().then(function(user) {
-        $rootScope.$broadcast('userUpdated', user);
         $log.info('User data saved.');
       });
     };
