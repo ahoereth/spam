@@ -5,7 +5,7 @@
  * Checks if an array is an associative array.
  */
 function is_assoc($array) {
-  return (bool) count( array_filter( array_keys( $array ), 'is_string' ) );
+  return (bool) count(array_filter(array_keys($array), 'is_string'));
 }
 
 
@@ -18,8 +18,12 @@ function is_assoc($array) {
  * @param {string} $value
  */
 function array_2d_search($haystack, $key, $value) {
+  if (empty($haystack)) {
+    return -1;
+  }
+
   foreach ($haystack AS $index => $subarray) {
-    if (isset($subarray[ $key ]) && $subarray[ $key ] == $value) {
+    if (isset($subarray[$key]) && $subarray[$key] == $value) {
       return $index;
     }
   }
@@ -39,7 +43,7 @@ function array_pick_pairs($src, $keys) {
   $dst = array();
 
   foreach ($keys AS $key) {
-    if (empty($src[ $key ])) {
+    if (empty($src[$key])) {
       continue;
     }
 
@@ -64,19 +68,18 @@ function array_duplicate($array) {
 /**
 * Gets the current term.
 *
-* @param boolean $current if set to false returns the not current term
+* @param boolean $current if set to false returns the 'not current' term
 * @return S / W
 */
-function get_current_term( $current = true ) {
+function get_current_term($current = true) {
   $m = date('n');
-  return ( $m > 4 && $m < 10 && $current ) ? 'S' : 'W';
+  return ($m > 4 && $m < 10 && $current) ? 'S' : 'W';
 }
 
 
 /**
  * Gets the current term's year.
  *
- * @param  {bool} $current if set to false returns the not current term
  * @return {string} S / W
  */
 function get_current_term_year() {
@@ -124,4 +127,23 @@ function multi_implode($glue, $array) {
   }
 
   return rtrim($result, $glue);
+}
+
+
+/**
+ * Creates an object composed of the picked object properties.
+ *
+ * @param  {assoc} $assoc
+ * @param  {array} $keys
+ * @return {assoc}
+ */
+function array_pick($assoc, $keys) {
+  $result = array();
+  foreach ($keys AS $key) {
+    if (isset($assoc[$key])) {
+      $result[$key] = $assoc[$key];
+    }
+  }
+
+  return $result;
 }

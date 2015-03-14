@@ -152,18 +152,20 @@ class Course extends Model {
       $idkey = ! empty($c['student_in_course_id']) ?
         'student_in_course_id' : 'course_id';
 
-      if ($c[$idkey] != $id) {
-        if (0 != $id) {
-          $courses[] = $course;
-          $course = array();
-        }
-
-        $id = $c[$idkey];
+      // If id changed a new course is going to be aggregated.
+      if (0 !== $id && $c[$idkey] !== $id) {
+        $courses[] = $course; // Add last course to stack.
+        $course = array(); // Start new course.
       }
 
+      // Remember the id for the next iteration.
+      $id = $c[$idkey];
+
+      // Aggregate.
       $course = self::aggregate_course($course, $c, $regulation_id);
     }
 
+    // Put the last course from the aggregation on the stack.
     if (! empty($course)) {
       $courses[] = $course;
     }
@@ -189,59 +191,38 @@ class Course extends Model {
    * @param {int}   $regulation_id
    */
   public static function aggregate_course($course, $c, $regulation_id = null) {
+    // Initial aggregation run - copy over standard information.
     if (empty($course)) {
-      $course = array(
-        'course_id' => $c['course_id'],
-        'hours' => isset($c['hours']) ? $c['hours'] : null,
-        'course' => isset($c['unofficial_course']) ?
-          $c['unofficial_course'] : $c['course'],
-        'ects' => isset($c['unofficial_ects']) ?
-          $c['unofficial_ects'] : $c['ects'],
-        'term' => isset($c['unofficial_term']) ?
-          $c['unofficial_term'] : $c['term'],
-        'year' => isset($c['unofficial_year']) ?
-          $c['unofficial_year'] : $c['year'],
-        'code' => isset($c['unofficial_code']) ?
-          $c['unofficial_code'] : $c['code'],
-        'type' => isset($c['type']) ? $c['type'] : null,
-        'course_in_field_type' => isset($c['course_in_field_type']) ?
-          $c['course_in_field_type'] : null,
-      );
-
-      if (isset($c['enrolled'])) {
-        $course = array_merge($course, array(
-          'enrolled_field_id' => $c['enrolled_field_id'],
-          'enrolled' => $c['enrolled'],
-          'enrolled_course_in_field_type' => $c['enrolled_course_in_field_type']
-        ));
-      }
-
-      if (isset($c['student_in_course_id'])) {
-        $course = array_merge($course, array(
-          'student_in_course_id' => $c['student_in_course_id'],
-          'passed' => $c['passed'],
-          'muted'  => $c['muted'],
-          'grade'  => $c['grade'],
-        ));
-      }
-
-      if (isset($c['preliminary'])) {
-        $course['preliminary'] = $c['preliminary'];
-      }
+      $course = array_pick($c, array(
+        'course_id',
+        'hours',
+        'course',
+        'ects',
+        'term',
+        'year',
+        'code',
+        'type',
+        'course_in_field_type',
+        'enrolled_field_id',
+        'enrolled',
+        'enrolled_course_in_field_type',
+        'student_in_course_id',
+        'passed',
+        'muted',
+        'grade',
+        'preliminary',
+      ));
     }
 
     // Add teacher to course if not aggregated already.
     if (! empty($c['teacher_id'])) {
-      $teacher = array(
-        'teacher'    => $c['teacher'],
-        'teacher_id' => $c['teacher_id']
-      );
+      $teacher = array_pick($c, array(
+        'teacher_id',
+        'teacher'
+      ));
 
-      if (! isset($course['teachers']) || -1 === ($index = array_2d_search(
-          $course['teachers'],
-          'teacher_id',
-          $c['teacher_id']
-        ))
+      if (! isset($course['teachers']) || -1 === ($index =
+        array_2d_search($course['teachers'], 'teacher_id', $c['teacher_id']))
       ) {
         $course['teachers'][] = $teacher;
         $course['teachers_str'] = ! empty($course['teachers_str']) ?
@@ -251,43 +232,38 @@ class Course extends Model {
     }
 
 
+    // If course has no regulation or no specific regulation is requested or
+    // if the course has the specified regulation...
     if (empty($c['regulation_id']) ||
         (empty($regulation_id) || $regulation_id == $c['regulation_id'])
     ) {
       // Add field to course if not aggregated already.
       $field = null;
       if (! empty($c['field_id'])) {
-        $field = array(
-          'field'    => $c['field'],
-          'field_id' => $c['field_id'],
-          'course_in_field_type' => isset($c['course_in_field_type']) ?
-            $c['course_in_field_type'] : null,
-        );
+        $field = array_pick($c, array(
+          'field',
+          'field_id',
+          'course_in_field_type',
+        ));
 
         // Add regulation to field if required.
         if (! empty($c['regulation_id'])) {
-          $field['regulations'] = array(array(
-            'regulation_id'   => $c['regulation_id'],
-            'regulation'      => isset($c['regulation']) ?
-              $c['regulation'] : null,
-            'regulation_abbr' => isset($c['regulation_abbr']) ?
-              $c['regulation_abbr'] : null,
-          ));
+          $field['regulations'] = array(array_pick($c, array(
+            'regulation_id',
+            'regulation',
+            'regulation_abbr'
+          )));
         }
       }
 
-      if (! isset($course['fields']) || -1 === $index = array_2d_search(
-        $course['fields'], 'field_id', $c['field_id']
-      )) {
-        if (empty($course['fields'])) {
-          $course['fields'] = array();
-        }
-
+      // Add field if not added already.
+      if (! isset($course['fields']) || -1 === ($index =
+        array_2d_search($course['fields'], 'field_id', $c['field_id']))
+      ) {
         if (! empty($field)) {
-          $field_str = $field['field'];
-          if ($field['course_in_field_type'] == 'PM') {
-            $field_str .= ' (PM)';
-          }
+          $field_str = $field['field'] .
+            (isset($field['course_in_field_type']) &&
+             $field['course_in_field_type'] == 'PM' ? ' (PM)' : '');
 
           $course['fields'][] = $field;
           $course['fields_str'] = ! empty($course['fields_str']) ?
@@ -297,15 +273,16 @@ class Course extends Model {
       } elseif (! empty($field['regulations']) &&
         (! in_array(
           $field['regulations'][0],
-          $course['fields'][ $index ]['regulations']
+          $course['fields'][$index]['regulations']
         ))
       ) {
-        $course['fields'][ $index ]['regulations'][] = $field['regulations'][0];
+        $course['fields'][$index]['regulations'][] = $field['regulations'][0];
       }
     }
 
+    // Does the course only have one possible field?
     if (empty($course['fields'])) {
-      $course['singleField'] = 'null';
+      $course['singleField'] = 'null'; // 'no field' --> open studies
     } elseif (count($course['fields']) == 1) {
       $course['singleField'] = (int) $course['fields'][0]['field_id'];
     } else {

@@ -42,12 +42,7 @@ class Route_Users_Courses extends Route {
 
     $select = "SELECT
       -- courses
-      c.code,
       c.course_id,
-      c.course,
-      c.ects,
-      c.term,
-      c.year,
       c.hours,
       c.studip_url,
 
@@ -56,11 +51,26 @@ class Route_Users_Courses extends Route {
       sc.grade,
       sc.passed,
       sc.muted,
-      sc.unofficial_code,
-      sc.unofficial_course,
-      sc.unofficial_ects,
-      sc.unofficial_term,
-      sc.unofficial_year,
+
+      CASE WHEN sc.unofficial_code IS NOT NULL
+           THEN sc.unofficial_code ELSE c.code
+      END AS code,
+
+      CASE WHEN sc.unofficial_course IS NOT NULL
+           THEN sc.unofficial_course ELSE c.course
+      END AS course,
+
+      CASE WHEN sc.unofficial_ects IS NOT NULL
+           THEN sc.unofficial_ects ELSE c.ects
+      END AS ects,
+
+      CASE WHEN sc.unofficial_term IS NOT NULL
+           THEN sc.unofficial_term ELSE c.term
+      END AS term,
+
+      CASE WHEN sc.unofficial_year IS NOT NULL
+           THEN sc.unofficial_year ELSE c.year
+      END AS year,
 
       -- courses in fields in regulations
       cfr.field_id,
@@ -72,12 +82,11 @@ class Route_Users_Courses extends Route {
       1 AS enrolled,
 
       -- primary course_in_field_type
-      UPPER( pcf.course_in_field_type ) AS enrolled_course_in_field_type,
+      UPPER(pcf.course_in_field_type) AS enrolled_course_in_field_type,
 
       -- enrolled_field_id
       CASE WHEN sc.field_id IS NOT NULL
-        THEN sc.field_id
-        ELSE 1
+           THEN sc.field_id ELSE 1
       END AS enrolled_field_id
 
     FROM students_in_courses AS sc
@@ -120,10 +129,9 @@ class Route_Users_Courses extends Route {
       {$get_one}
 
     ORDER BY
-      c.course_id ASC,
-      sc.field_id ASC,
-      c.year ASC,
-      c.term ASC;
+      year ASC,
+      term ASC,
+      course ASC;
     ";
 
     $stmt = self::$db->prepare($select);
