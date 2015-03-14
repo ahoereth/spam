@@ -133,7 +133,8 @@ class User extends Model {
       'password' => false,
       'self' => false,
       'ldap' => false,
-      'rank' => false
+      'rank' => false,
+      'remote' => false,
     );
 
     $password = ! empty($_SERVER['PHP_AUTH_PW']) ?
@@ -166,8 +167,10 @@ class User extends Model {
 
       // How old is his ldap verification timestamp? ldap server does not like
       // to many requests, so we need to cache the verification.
-    } elseif ($data['uos_ldap'] < strtotime('-30 minutes')) {
-      $errors['ldap'] = true;
+    } elseif (! $data['special'] &&
+      $data['uos_ldap'] < strtotime('-30 minutes')
+    ) {
+      self::$authentication_errors['ldap'] = true;
     }
 
     // Special users like demo accounts do not need ldap authentication, just
@@ -214,7 +217,7 @@ class User extends Model {
     }
 
     // Update request count and timestamp.
-    $user->save( array(
+    $user->save(array(
       'request_count' => ++$data['request_count'],
       'last_login' => self::current_timestamp(),
     ));
@@ -230,6 +233,7 @@ class User extends Model {
       'ahoereth',
       'swenzel'
     ))) {
+      self::$authentication_errors['remote'] = true;
       return false;
     }
 

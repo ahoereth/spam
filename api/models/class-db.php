@@ -217,6 +217,7 @@ class DB extends PDO {
         case 'mat_verify':
         case 'one_of_five':
         case 'field_examination_possible':
+        case 'special':
           $assoc[ $name ] = (bool) $assoc[ $name ];
           break;
       }

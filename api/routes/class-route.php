@@ -105,10 +105,14 @@ abstract class Route {
     $required_rank = null,
     $send = true
   ) {
+    if (! self::$app->request()->headers('PHP_AUTH_USER')) {
+      self::not_authorized();
+    }
+
     self::$user = User::authorize($myname, $required_rank);
     if (! self::$user && $send) {
       $error = json_encode(User::$authentication_errors);
-      self::not_authorized($error);
+      self::forbidden($error);
       return;
     }
 
