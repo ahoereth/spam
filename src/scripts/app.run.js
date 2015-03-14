@@ -13,7 +13,6 @@
     $document,
     $route,
     Restangular,
-    FastClick,
     User,
     TITLE,
     _
@@ -102,10 +101,6 @@
       // Handle page title.
       $rootScope.title = constructTitle(current.title);
     });
-
-
-    // Initialize FastClick for a more native mobile feeling.
-    FastClick.attach($document.body);
   }
 
 })();

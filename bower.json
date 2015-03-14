@@ -1,7 +1,6 @@
 {
   "name": "cogsci-spam",
   "dependencies": {
-    "fastclick": "1.0.x",
     "lodash": "3.3.x",
     "bootstrap": "3.3.x",
     "open-sans-fontface": "1.2.x",
