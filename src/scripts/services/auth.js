@@ -85,8 +85,11 @@
         }
 
         if (accessSet === 0) {
-          // accessSet is 0, therefore everybody is legitimated to view this site
-          deferredAuthentication.resolve(User.details);
+          // accessSet is 0, therefore everybody is legitimated to view this
+          // site. We still wait for the server request to return.
+          loginPromise.finally(function() {
+            deferredAuthentication.resolve(User.details);
+          });
 
         } else {
           // accessSet is something more specific, therefore we need to check
