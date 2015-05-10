@@ -47,7 +47,10 @@
 
       if (elem.route === 'users') {
         return elem.username;
-      } else if (elem.route === 'courses' && elem.parentResource.route === 'users') {
+      } else if (
+        elem.route === 'courses' &&
+        elem.parentResource && elem.parentResource.route === 'users'
+      ) {
         return elem.student_in_course_id;
       } else {
         var e = elem[_.initial(elem.route).join('') + '_id'];

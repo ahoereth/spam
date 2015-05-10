@@ -1,0 +1,70 @@
+<h1>
+  IKW &rarr; SPAM migration
+</h1>
+
+<form class="form-inline" ng-submit="migrate.go()" ng-if="!migrate.selected">
+  <h2>Year/Term:</h2>
+  <input
+    ng-model="migrate.year"
+    type="number"
+    min="2000"
+    max="2030"
+    placeholder="####"
+    class="form-control input-lg"
+    instafocus
+  />
+
+  <div
+    class="btn-group btn-group-lg"
+    ng-model="migrate.term"
+    bs-radio-group
+  >
+    <label class="btn btn-primary">
+      <input type="radio" class="btn btn-default" value="S">
+      Summer
+    </label>
+    <label class="btn btn-primary">
+      <input type="radio" class="btn btn-default" value="W">
+      Winter
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary btn-lg">
+    <span class="glyphicon glyphicon-import"></span>
+  </button>
+</form>
+
+<span ng-if="migrate.selected">
+  <h2>
+    Year/Term: {{migrate.year}}{{migrate.term}}
+    <small
+      class="glyphicon glyphicon-pencil undercover"
+      ng-class="{'glyphicon-refresh spin':  migrate.fetching,
+                 'glyphicon-pencil'      : !migrate.fetching}"
+      ng-click="migrate.selected=false"
+    ></small>
+  </h2>
+
+  <p class="lead">{{migrate.courses.length}} courses grabbed</p>
+</span>
+
+<hr>
+
+<!-- filter label row -->
+<div class="row courserow-title">
+  <div class="col-md-1 hidden-sm hidden-xs">Code</div>
+  <div class="col-sm-1 col-xs-2">Time</div>
+  <div class="col-md-4 col-sm-6 col-xs-8">Title</div>
+  <div class="col-md-2 hidden-sm hidden-xs">Teachers</div>
+  <div class="col-md-3 col-sm-4 hidden-xs">Field of Study</div>
+  <div class="col-sm-1 col-xs-2">Results</div>
+</div>
+
+<!-- ngRepeat for the course list -->
+<courserow
+  ng-repeat="course in migrate.courses track by course.o3_id"
+  ng-if="!course.accepted"
+  course="course"
+  action="migrate.acceptCourse(course)"
+  expanded
+></courserow><!-- end of ngRepeat -->

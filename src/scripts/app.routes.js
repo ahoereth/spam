@@ -146,6 +146,16 @@
     },
 
     // **********
+    // admin task index
+    '/admin/migrate': {
+      templateUrl: 'admin/migrate.html',
+      title: 'Migration',
+      access: 32,
+      controller: 'AdminMigrateController',
+      controllerAs: 'migrate'
+    },
+
+    // **********
     // required for using relative root ('/') links
     '/.': {
       redirectTo: '/'

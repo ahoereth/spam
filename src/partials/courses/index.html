@@ -130,99 +130,15 @@
   infinite-scroll-distance="2">
 
   <!-- ngRepeat for the course list -->
-  <div
-    class="courses-rowpair"
-    ng-repeat="course in filteredCourses | orderBy:order | limitTo: displayLimit track by course.course_id">
+  <courserow
+    ng-repeat="course in filteredCourses
+      | orderBy:order
+      | limitTo: displayLimit
+      track by course.course_id"
+    course="course"
+    add-remove-course
+  ></courserow>
 
-    <!-- first row of course information -->
-    <div class="row courses-row" ng-class="{'expanded' : course.expanded}">
-
-      <div class="col-md-1 hidden-sm hidden-xs"><code>{{::course.code}}</code></div>
-
-      <div class="col-sm-1 col-xs-2 centering">{{::course.term}}{{::course.year | year}}</div>
-
-      <div class="col-md-4 col-sm-6 col-xs-8" ng-bind="::course.course"></div>
-
-      <div class="col-md-2 hidden-sm hidden-xs" ng-bind="::course.teachers_str"></div>
-
-      <div class="col-md-3 col-sm-4 hidden-xs" ng-bind="::course.fields_str"></div>
-
-      <div class="col-sm-1 col-xs-2">
-        <button
-          type="button"
-          ng-hide="filteredCourses.length==1"
-          ng-click="course.expanded=!course.expanded"
-          class="btn btn-info btn-block">
-            <span
-              class="glyphicon"
-              ng-class="{
-                'glyphicon-chevron-down' : !course.expanded,
-                'glyphicon-chevron-up' : course.expanded}">
-            </span>
-          </button>
-      </div>
-
-    </div>
-
-    <!-- expandable row of course information -->
-    <div ng-if="course.expanded||filteredCourses.length==1">
-
-      <!-- studip url input field -->
-      <div class="row form-horizontal" style="margin-bottom: 10px;" ng-if="filter.studip=='false'">
-        <label class="control-label col-xs-2">StudIP URL</label>
-        <div class="col-xs-10">
-          <input type="text" class="form-control" ng-model="course.studip_url" placeholder="https://" ng-blur="submitStudipUrl(course)" ng-init="course.studip_url_old = course.studip_url">
-        </div>
-      </div>
-
-      <div class="row courses-row">
-        <div class="col-sm-11 col-xs-10">
-          <p ng-if="course.course_comment">
-            <span class="bold">Notice:</span>&nbsp;{{::course.course_comment}}
-          </p>
-
-          <p class="visible-sm visible-xs">
-            <span class="bold">Teachers:</span>&nbsp;{{::course.teachers_str}}
-          </p>
-
-          <p class="visible-xs">
-            <span class="bold">Fields:</span>&nbsp;{{::course.fields_str}}
-          </p>
-
-          <p>
-            <span ng-if="course.ects">
-              <span class="bold">ECTS:</span>&nbsp;{{::course.ects}}
-              <span ng-if="course.language">,&nbsp;</span>
-            </span>
-
-            <span ng-if="course.language">
-              <span class="bold">Language:</span>&nbsp;{{::course.language}}
-              <span ng-if="course.type">,&nbsp;</span>
-            </span>
-
-            <span ng-if="course.type">
-              <span class="bold">Type:</span>&nbsp;{{::course.type}}
-            </span>
-          </p>
-
-          <p ng-if="course.course_desc" ng-bind-html="course.course_desc | prerequisites"></p>
-        </div>
-
-        <!-- buttons on the right when expanded -->
-        <div class="col-sm-1 col-xs-2">
-
-          <!-- view course details link -->
-          <a class="btn btn-warning btn-block" ng-href="courses/{{course.course_id}}" style="margin-bottom: 5px;">
-            <span class="glyphicon glyphicon-share-alt"></span>
-          </a>
-
-          <add-remove-course course="course" btn-class="btn-block" add-course="addCourse" remove-course="removeCourse" ng-if="user&&regulation_id==user.regulation_id"></add-remove-course>
-
-        </div>
-      </div>
-    </div>
-
-  </div><!-- end of ngRepeat -->
 
   <div class="row" style="margin-top: 10px;">
     <button ng-show="filteredCourses.length>displayLimit" type="button" class="btn btn-info btn-block" ng-click="scrollOn(50)">More...</button>

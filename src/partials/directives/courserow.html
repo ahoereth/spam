@@ -1,0 +1,135 @@
+<div class="courserow">
+
+  <!-- first row -->
+  <div class="titlerow row">
+    <div class="col-md-1 hidden-sm hidden-xs centering">
+      <code>{{::course.code}}</code>
+    </div>
+
+    <div class="col-sm-1 col-xs-2 centering">
+      {{::course.term}}{{::course.year | year}}
+    </div>
+
+    <div class="col-md-4 col-sm-6 col-xs-8">
+      <h3 ng-if="::course.course_id">
+        <a ng-href="courses/{{course.course_id}}">{{::course.course}}</a>
+      </h3>
+      <h3 ng-if="::(!course.course_id)">{{::course.course}}</h3>
+    </div>
+
+    <div class="col-md-2 hidden-sm hidden-xs">
+      <span ng-repeat="teacher in ::course.teachers track by teacher.teacher">
+        {{::teacher.teacher}}<span ng-hide="::$last">,</span>
+      </span>
+    </div>
+
+    <div class="col-md-3 col-sm-4 hidden-xs">
+      <courserow-fields fields="::course.fields"></courserow-fields>
+    </div>
+
+    <div class="col-sm-1 col-xs-2">
+      <!-- expand button -->
+      <button
+        type="button"
+        class="btn btn-info btn-block"
+        ng-click="opt.expanded=!opt.expanded"
+        ng-if="::(!opt.initiallyExpanded)"
+      >
+        <span
+          class="glyphicon"
+          ng-class="{
+            'glyphicon-chevron-right': !opt.expanded,
+            'glyphicon-chevron-down': opt.expanded
+          }"
+        ></span>
+      </button>
+
+      <!-- action button -->
+      <span ng-if="opt.initiallyExpanded">
+        <button
+          type="button"
+          class="btn btn-primary btn-block"
+          ng-click="action()"
+          ng-if="::(!opt.addRemoveCourse)"
+        >
+          <span class="glyphicon glyphicon-save"></span>
+        </button>
+        <add-remove-course
+          course="course"
+          btn-class="btn-block"
+          ng-if="opt.addRemoveCourse"
+        ></add-remove-course>
+      </span>
+    </div>
+
+  </div>
+
+  <!-- second row -->
+  <div class="inforow row" ng-if="opt.expanded">
+
+    <div class="col-sm-11 col-xs-10">
+      <div ng-if="::course.course_comment">
+        <h4>Notice:</h4>
+        <p>{{::course.course_comment}}</p>
+      </div>
+
+      <div class="visible-sm visible-xs">
+        <h4>Teachers:</h4>
+        <p>
+          <span ng-repeat="teacher in ::course.teachers track by teacher.teacher">
+            {{::teacher.teacher}}<span ng-hide="::$last">,</span>
+          </span>
+        </p>
+      </div>
+
+      <div class="visible-xs">
+        <h4>Fields:</h4>
+        <p>
+          <courserow-fields fields="::course.fields"></courserow-fields>
+        </p>
+      </div>
+
+      <div>
+        <span ng-if="::course.ects">
+          <h4>ECTS:</h4>
+          <p>{{::course.ects}}<span ng-if="::course.language">,</span></p>
+        </span>
+
+        <span ng-if="::course.language">
+          <h4>Language:</h4>
+          <p>{{::course.language}}<span ng-if="::course.type">,</span></p>
+        </span>
+
+        <span ng-if="::course.type">
+          <h4>Type:</h4>
+          <p>{{::course.type}}<span class="hidden-lg hidden-md">,</span></p>
+        </span>
+
+        <span class="hidden-lg hidden-md">
+          <h4>Code:</h4>
+          <code>{{::course.code}}</code>
+        </span>
+      </div>
+
+      <p ng-bind-html="::course.course_desc | nl2br"></p>
+    </div>
+
+    <!-- action button -->
+    <div class="col-sm-1 col-xs-2" ng-if="::(!opt.initiallyExpanded)">
+      <button
+        type="button"
+        class="btn btn-primary btn-block"
+        ng-click="action()"
+        ng-if="::(!opt.addRemoveCourse)"
+      >
+        <span class="glyphicon glyphicon-save"></span>
+      </button>
+
+      <add-remove-course
+        course="course"
+        btn-class="btn-block"
+        ng-if="opt.addRemoveCourse"
+      ></add-remove-course>
+    </div>
+  </div>
+</div>

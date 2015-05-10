@@ -15,15 +15,14 @@
   /* @ngInject */
   function courseCtrl(
     $scope,
-    $rootScope,
     $routeParams,
-    $modal,
     Restangular,
+    User,
     _
   ) {
     Restangular
       .one('courses', $routeParams.courseId)
-      .get({ user: $scope.user.getUsername() })
+      .get({ user: User.details.username })
       .then(function(course) {
         $scope.course = course;
         course.fields_by_regulations = {};
@@ -47,39 +46,5 @@
         // refresh page title
         $scope.$emit('title', {':course': course.course + ' ' + course.year});
       });
-
-    // edit guide options modal
-    $scope.guideModal = function() {
-      $modal.open({
-        templateUrl: 'partials/guide/modal.html',
-        /* @ngInject */
-        controller: function($scope, $modalInstance, Restangular) {
-          var course = $scope.$parent.course;
-          Restangular
-            .all('guides')
-            .one('courses', course.course_id)
-            .get()
-            .then(function(guide) {
-              guide.course_id = course.course_id;
-              $scope.guideInc = guide;
-              watch();
-            });
-
-          var watch = function() {
-            $scope.$watch( 'guideInc', function(obj, init) {
-              if (obj === init) { return; }
-
-              $scope.guideInc.put();
-            }, true );
-          };
-
-          $scope.close = function() {
-            $modalInstance.close();
-            watch();
-          };
-        },
-        scope: $scope
-      });
-    };
   }
 })();
