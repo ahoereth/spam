@@ -150,9 +150,9 @@ class Route_Courses extends Route {
       NATURAL LEFT JOIN teachers_in_courses tc
       NATURAL LEFT JOIN teachers t
       NATURAL LEFT JOIN courses_in_fields cf
-      NATURAL LEFT JOIN  fields f
-      NATURAL LEFT JOIN  fields_in_regulations fr
-      NATURAL LEFT JOIN  regulations r
+      NATURAL LEFT JOIN fields f
+      NATURAL LEFT JOIN fields_in_regulations fr
+      NATURAL LEFT JOIN regulations r
       WHERE
         c.course_id = :course_id AND
         r.invisible != 1
@@ -181,11 +181,10 @@ class Route_Courses extends Route {
   /**
    * PUT
    * /courses/:course_id
-   *
-   * TODO: Currently not in production and probably needs refactoring.
    */
   public function one_put($course_id) {
     $user = self::authorize(null, 4);
+    $userhash = md5($user['username']);
 
     $request = self::$params;
 
@@ -194,6 +193,8 @@ class Route_Courses extends Route {
       array('course_id' => $course_id)
     ));
 
+    $course->find_pk();
+
     if (! $course->is_deployable()) {
       return $this->bad_request('not enough data');
     }
@@ -201,89 +202,43 @@ class Route_Courses extends Route {
     // Only users with a rank higher than 16 are allowed to make direct course
     // edits. If the rank is lower we only insert a proposal to the database.
     if ($user['rank'] < 16) {
-
-      // if already editing a child course make the new child a child of the
-      // parent course so we do not end up in a huge hierarchy
+      // If already editing a child course make the new child a child of the
+      // parent course so we do not end up in a huge hierarchy.
       if ($parent_course_id = $course->get_parent_course_id()) {
         $course->set_pk_value($parent_course_id);
       }
 
-      // check if user already made a proposal related to this course
-      $proposal = User::sql_request( 'courses', array( 'course_id' ), array(
+      // Check if user already made a proposal related to this course.
+      $proposal_id = self::$db->sql_select_one('courses', array(
         'parent_course_id' => $course->get_pk_value(),
-        'modified_by'      => $user['username'],
-      ));
+        'modified_by'      => $userhash,
+      ), 'course_id');
 
-      // if we found a pending proposal update it instead of creating a
-      // second proposal
-      if ($proposal) {
-        $course->set_pk($proposal['course_id']);
-
-        // create new proposal
+      // If we found a pending proposal update it instead of creating a
+      // second proposal.
+      if ($proposal_id) {
+        $course->set_pk_value($proposal_id);
       } else {
+        // Create new proposal.
         $course->make_child();
       }
 
       // Users with rank lower than 16 are only allowed to insert or updated
       // proposals (child courses).
-      $course->data['preliminary'] = true;
+      $course->set('preliminary', true);
     }
 
-    // multiple database updates coming, lets use a transaction
+    // Multiple database updates coming, lets use a transaction.
     self::$db->beginTransaction();
 
-    // remember who is editing
-    $course->data['modified_by'] = $user['username'];
+    // Remember who is editing.
+    $course->set('modified_by', $userhash);
 
-    // updates existing or creates new course
-    $course = $course->save();
+    // Updates existing or creates new course.
+    $course->save();
+    $course->update_fields($request['fields']);
+    $course->update_teachers($request['teachers']);
 
-    // organize field data
-    if (! isset($request['fields']) || isset($request['fields'][0]['field'])) {
-      $fields = self::$db->prepare("SELECT
-          field_id,
-          course_in_field_type
-        FROM courses_in_fields
-        WHERE course_id = ?;"
-      );
-      $fields->execute(array($course_id));
-      $request['fields'] = array_flip($fields->fetchAll(PDO::FETCH_COLUMN, 0));
-      $request['fields_pm'] = $fields->fetchAll(PDO::FETCH_COLUMN, 1);
-
-      // fix first field key
-      $keys = array_keys($request['fields']);
-      $request['fields'][ array_shift($keys) ] = 1;
-    }
-
-    $fields = array();
-    foreach ($request['fields'] AS $field => $value) {
-      if (! $value) {
-        continue;
-      }
-
-      $fields[] = array(
-        'field_id'             => $field,
-        'course_in_field_type' => isset($request['fields_pm'][ $field ]) &&
-          $request['fields_pm'][ $field ] ?
-            'PM' : null,
-      );
-    };
-
-    add_course_to_fields($course->get_pk_value(), $fields);
-
-    // Organize teacher data.
-    if (isset($request['teacher_ids'])) {
-      $teachers = array();
-      foreach ($request['teacher_ids'] AS $teacher_id => $value) {
-        if (! $value) {
-          continue;
-        }
-
-        $teachers[] = $teacher_id;
-      }
-
-      add_teachers_to_course($teachers, $course->get_pk_value());
-    }
 
     // ok we are done, commit all database changes
     self::$db->commit();

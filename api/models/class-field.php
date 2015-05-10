@@ -23,32 +23,25 @@ class Field extends Model {
 
 
   /**
-   * Gets a field_id by field_abbr and regulation_abbr.
+   * Gets a field_id by field_abbr and regulation_id.
    *
-   * @param string $field_abbr field abbreviation
-   * @param string $regulation_abbr regulation abbreviation [optional]
+   * @param {string} $field_abbr    field abbreviation
+   * @param {string} $regulation_id regulation abbreviation [optional]
    */
-  public static function find_id_by_abbr($field_abbr, $regulation_abbr = null) {
-    $args = array($field_abbr);
+  public static function find_id_by_abbr($field_abbr, $regulation_id = null) {
+    $table = array('fields');
+    $selector = array('field_abbr' => $field_abbr);
 
     if ($regulation_id) {
-      $args[] = $regulation_abbr;
-      $stmt = $db->prepare("SELECT field_id
-        FROM fields NATURAL LEFT JOIN fields_in_regulations
-        WHERE field_abbr = ? AND regulation_id = ? LIMIT 1;");
-    } else {
-      $stmt = $db->prepare("SELECT field_id FROM fields
-        WHERE field_abbr = ? LIMIT 1;");
+      $table[] = 'fields_in_regulations';
+      $selector['regulation_id'] => $regulation_id;
     }
 
-    $stmt->execute($args);
-
-    if (! $stmt->rowCount()) {
-      return false;
-    }
-
-    $r = self::$db->fetchAllAssoc($stmt);
-    return $r['field_id'];
+    return self::$db->sql_select_one(
+      $table,
+      $selector,
+      'field_id'
+    );
   }
 
 

@@ -136,6 +136,188 @@ class Course extends Model {
 
 
   /**
+   * Function to update the fields a course is associated with. The method
+   * will remove the course from all fields which are not included in the passed
+   * object and add it to all which are included.
+   *
+   * Example of a field object:
+   * <code>
+   * fields = array(
+   *   LCL => MSC, // 'Linguistics and Computational Linguistics' im Master
+   *   PHD => PHD, // Doktorantenprogramm
+   *   KI  => PM, // 'Künstliche Intelligenz' im 'Pflichtmodul' Bachelor
+   *   NW  => WPM, // 'Neurowissenschaften' im 'Wahlpflichtmodul' Bachelor
+   * );
+   * </code>
+   *
+   * @param  {assoc} $fields Associated array of module/regulation pairs
+   * @return [type]         [description]
+   */
+  public function update_fields($fields) {
+    if (! $course_id = $this->get_pk_value()) {
+      return false;
+    }
+
+    // Current fields.
+    $current = self::$db->sql_select('courses_in_fields', array(
+      'course_id' => $course_id,
+    ), array(
+      'field_id',
+      'course_in_field_type'
+    ));
+
+    // Update current and insert into new fields.
+    $new = array();
+    foreach ($fields AS $field => $type) {
+      if (! ($field_id = Field::find_id_by_abbr($field))) {
+        continue;
+      }
+
+      $new[] = $field_id;
+      self::$db->sql_put('courses_in_fields', array(
+        'course_id' => $course_id,
+        'field_id' => $field_id
+      ), array(
+        'course_in_field_type' => $type,
+      ));
+    }
+
+    // Remove from not anymore relevant fields.
+    foreach ($current AS $field) {
+      $field_id = $field['field_id'];
+      if (! in_array($field_id, $new)) {
+        self::$db->sql_delete('courses_in_fields', array(
+          'course_id' => $course_id,
+          'field_id' => $field_id,
+        ));
+      }
+    }
+
+    return true;
+  }
+
+
+  /**
+   * Similar to the update_fields method above, just for teachers.
+   *
+   * Example of a given array:
+   * <code>
+   * teachers = array(
+   *   [0] => array(
+   *     [teacher] => Gunther Heidemann
+   *     [teacher_url] =>
+   *     [o3_id] => 6467
+   *   )
+   * )
+   * </code>
+   * @param  {array} $teachers Array of teacher info objects with obligatory
+   *                           teacher name ('teacher') and optional
+   *                           'teacher_url' and 'o3_id'.
+   */
+  public function update_teachers($teachers) {
+    if (! $course_id = $this->get_pk_value()) {
+      return false;
+    }
+
+    // Current teachers.
+    $current = self::$db->sql_select('teachers_in_courses', array(
+      'course_id' => $course_id,
+    ), 'teacher_id');
+
+    // Add new teachers.
+    foreach ($teachers AS $teacher) {
+      $teacher_id = Teacher::find_id_by_name($teacher['teacher']);
+      if (! $teacher_id) {
+        $teacher = new Teacher($teacher);
+        $teacher->save();
+        $teacher_id = $teacher->get_pk_value();
+      }
+
+      $index = array_search($teacher_id, $current);
+      if (false === $index) {
+        self::$db->sql_insert('teachers_in_courses', array(
+          'course_id' => $course_id,
+          'teacher_id' => $teacher_id,
+        ));
+      } else {
+        unset($current[$index]);
+      }
+    }
+
+    // Remove superfluous teachers.
+    foreach ($current AS $teacher_id) {
+      self::$db->sql_delete('teachers_in_courses', array(
+        'course_id' => $course_id,
+        'teacher_id' => $teacher_id,
+      ));
+    }
+
+
+    return true;
+  }
+
+
+  /**
+   * Try to associate the course instance with a course in the database by
+   * looking for courses in the same term with very similar info.
+   *
+   * @return {int} course_id
+   */
+  public function find_pk() {
+    if ($course_id = $this->get_pk_value()) {
+      return $course_id;
+    }
+
+    $select = array(
+      'year' => $this->data['year'],
+      'term' => $this->data['term'],
+    );
+
+    // Did only some details change but not the title?
+    // year+term+course
+    $check = self::$db->sql_select('courses', array_merge(
+      $select,
+      array('course' => $this->data['course'])
+    ), 'course_id');
+
+    if (1 == count($check)) {
+      $course_id = $check[0];
+    } elseif (! empty($this->data['code'])) {
+      // There are multiple courses in this semester with the same title or
+      // the title changed.
+      // year+term+code
+      $check = self::$db->sql_select('courses', array_merge(
+        $select,
+        array('code' => $this->data['code'])
+      ), 'course_id');
+
+      if (1 == count($check)) {
+        $course_id = $check[0];
+      } elseif (count($check) > 1) {
+        // This wasn't specific enough. Maybe only the name changed??
+        // year+term+code+ects+hours
+        $course_id = self::$db->sql_select_one('courses', array_merge(
+          $select, array(
+            'code'  => $this->data['code'],
+            'ects'  => $this->data['ects'],
+            'hours' => $this->data['hours'],
+          )
+        ), 'course_id');
+      }
+    }
+
+    // If not yet found, check if we find its o3_id.
+    if (! $course_id && $this->o3_id) {
+      $course_id = self::$db->sql_select_one('o3_relations', array(
+        'o3_id' => $this->o3_id
+      ), 'course_id');
+    }
+
+    return $this->set_pk_value($course_id);
+  }
+
+
+  /**
    * Wraps the aggregate_course function for use with multiple
    * courses which are available in a PDO results object.
    *
@@ -197,6 +379,8 @@ class Course extends Model {
         'course_id',
         'hours',
         'course',
+        'course_desc',
+        'course_comment',
         'ects',
         'term',
         'year',

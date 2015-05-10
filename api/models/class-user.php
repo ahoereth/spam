@@ -228,15 +228,6 @@ class User extends Model {
       return false;
     }
 
-    // Cross domain requests are only allowed by specific users.
-    if (REMOTE && ! in_array($username, array(
-      'ahoereth',
-      'swenzel'
-    ))) {
-      self::$authentication_errors['remote'] = true;
-      return false;
-    }
-
     // Remove password and username hash.
     unset($data['pass']);
     $data['username'] = $username;
