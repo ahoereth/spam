@@ -15,6 +15,7 @@
     'infiniteScroll',
     'tickable',
     'instafocus',
+    'contenteditable',
     'mgcrea.ngStrap.button',
 
     'spam.filters',
