@@ -27,6 +27,8 @@ abstract class Model {
 
   protected $data = array();
 
+  protected $o3_id;
+
 
   public static function init() {
     global $db;
@@ -36,6 +38,10 @@ abstract class Model {
 
   public function __construct($data = array()) {
     $this->set_data($data);
+
+    if (isset($data['o3_id'])) {
+      $o3_id = $data['o3_id'];
+    }
   }
 
 
@@ -203,6 +209,15 @@ abstract class Model {
   }
 
 
+  public function set($key, $value) {
+    if (isset(static::$table[$key])) {
+      $this->data[$key] = $value;
+    }
+
+    return $this->data;
+  }
+
+
   public function get_placeholders($data = null) {
     $data = $data || $this->data;
 
@@ -237,7 +252,7 @@ abstract class Model {
     static $check = null;
 
     if ($check == null) {
-      $check = ends_with('_id', static::$pk);
+      $check = ends_with(static::$pk, '_id');
     }
 
     return $check;
