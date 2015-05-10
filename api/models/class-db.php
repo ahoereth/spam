@@ -1,22 +1,53 @@
 <?php
 
-/**
- * TODO: Comments.
- */
 class DB extends PDO {
 
 
+  /**
+   * Select a single row or a single value (depending on the $columns argument)
+   * from the database. Wraps the sql_select() method.
+   *
+   * @param  {array/string} $tablename Array of tables to be joined
+   *                                   (NATURAL LEFT) or single table name
+   *                                   as string.
+   * @param  {assoc}        $selectors Object of column/value pairs for the
+   *                                   WHERE clause.
+   * @param  {array/string} $columns   Array of columns to select, a asterisk
+   *                                   as string to select all columns or a
+   *                                   column name as string to select a single
+   *                                   value and return it as string/number.
+   * @return {assoc/string} Result object of column/value pairs or single
+   *                        result value as string/number.
+   */
   public function sql_select_one($tablename, $selectors, $columns = '*') {
     $result = $this->sql_select($tablename, $selectors, $columns);
     return isset($result[0]) ? $result[0] : null;
   }
 
 
+  /**
+   * Select rows or a single column (depending on the $columns argument)
+   * from the database.
+   *
+   * @param  {array/string} $tablename Array of tables to be joined
+   *                                   (NATURAL LEFT) or single table name
+   *                                   as string.
+   * @param  {assoc}        $selectors Object of column/value pairs for the
+   *                                   WHERE clause.
+   * @param  {array/string} $columns   Array of columns to select, a asterisk
+   *                                   as string to select all columns or a
+   *                                   column name as string to select a single
+   *                                   column and return it as ENUMERATED
+   *                                   array.
+   * @return {array}       Array of column/value pair objects or of
+   *                       string/number values.
+   */
   public function sql_select($tablename, $selectors, $columns = '*') {
     $single = is_string($columns) && '*' != $columns ? $columns : false;
     $selects = '*' != $columns ? self::generate_selects((array) $columns) : '*';
     $where   = self::generate_selectors($selectors);
     $values  = array_values(array_filter($selectors, 'self::sql_null'));
+    $tablename = implode((array) $tablename, ' NATURAL LEFT JOIN ');
 
     $query = "SELECT {$selects} FROM {$tablename} WHERE {$where};";
 
@@ -37,8 +68,21 @@ class DB extends PDO {
   }
 
 
+  /**
+   * Wrapper for sql_update and sql_insert. Basically implements 'upsert'.
+   *
+   * @todo Should probably use 'ON DUPLICATE UPDATE' instead.
+   * @see http://dev.mysql.com/doc/refman/5.6/en/insert-on-duplicate.html
+   *
+   * @param  {string} $tablename [description]
+   * @param  {assoc}  $selectors Selector to detect a possible duplicate.
+   * @param  {assoc}  $data      Data to update if a duplicate is detected; if
+   *                             no duplicate is detected $selectors and $data
+   *                             will be merged for a fresh insert.
+   * @return {assoc}             Inserted/updated database entry.
+   */
   public function sql_put($tablename, $selectors, $data) {
-    if ($this->sql_select_one($tablename, $selectors)) {
+    if (1 === count($this->sql_select($tablename, $selectors))) {
       $this->sql_update($tablename, $selectors, $data);
     } else {
       $this->sql_insert($tablename, array_merge($data, $selectors));
@@ -48,6 +92,13 @@ class DB extends PDO {
   }
 
 
+  /**
+   * Inserts a new row into the specified database table.
+   *
+   * @param  {string} $tablename Target table.
+   * @param  {assoc}  $data      Data object in column/value pairs.
+   * @return {bool}   True/false on success/failure.
+   */
   public function sql_insert($tablename, $data) {
     if (empty($data)) {
       return false;
@@ -63,6 +114,14 @@ class DB extends PDO {
   }
 
 
+  /**
+   * Update a existing row in the specified database table.
+   *
+   * @param  {string} $tablename
+   * @param  {assoc}  $selectors
+   * @param  {assoc}  $data
+   * @return {bool}
+   */
   public function sql_update($tablename, $selectors, $data) {
     if (empty($data) || empty($selectors)) {
       return false;
@@ -81,6 +140,13 @@ class DB extends PDO {
   }
 
 
+  /**
+   * Wrapper for the SQL DELETE method.
+   *
+   * @param  {string} $tablename
+   * @param  {assoc}  $selectors
+   * @return {bool}
+   */
   public function sql_delete($tablename, $selectors) {
     if (empty($selectors)) {
       return false;
@@ -147,6 +213,12 @@ class DB extends PDO {
   }
 
 
+  /**
+   * Generate comma seperated column list for use in SQL SELECT clauses.
+   *
+   * @param  {array}  $data
+   * @return {string}
+   */
   protected static function generate_selects($data = array()) {
     if (! is_assoc($data)) {
       return implode(',', $data);
