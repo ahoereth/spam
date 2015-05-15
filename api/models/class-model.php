@@ -40,7 +40,7 @@ abstract class Model {
     $this->set_data($data);
 
     if (isset($data['o3_id'])) {
-      $o3_id = $data['o3_id'];
+      $this->o3_id = $data['o3_id'];
     }
   }
 

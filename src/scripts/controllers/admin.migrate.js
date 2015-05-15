@@ -13,41 +13,58 @@
 
   /* @ngInject */
   function adminMigrateController(
-    $http,
     $location,
     $routeParams,
     Restangular,
-    APIURL
+    APIURL,
+    _
   ) {
     var ctrl = this;
     var ikwProvider = APIURL + '/ikw.php';
-
     var params = $routeParams;
-    ctrl.year = parseInt(params.year, 10) || null;
-    ctrl.term = params.term || null;
 
-    ctrl.courses = [];
+    ctrl = _.extend(ctrl, {
+      year   : parseInt(params.year, 10) || null,
+      term   : params.term || null,
+      courses: [],
+      sieve  : {}
+    });
 
-    ctrl.go = function() {
+    function fetched(courses) {
+      var finders = _.map(courses, function(course, key) {
+        return _.extend(_.pick(course, [
+          'year',
+          'term',
+          'code',
+          'course',
+          'ects',
+          'hours',
+          'o3_id'
+        ]), {key: key});
+      });
+
+      Restangular.one('courses', 'find').customPOST(finders).then(function(ids) {
+        ctrl.courses = _.map(courses, function(course, key) {
+          if (! ids.hasOwnProperty(key)) { return course; }
+          return _.extend(course, {course_id: ids[key] });
+        });
+        ctrl.fetching = false;
+      });
+    }
+
+    ctrl.fetch = function() {
       ctrl.selected = true;
       ctrl.fetching = true;
+      ctrl.courses  = [];
 
       params.year = ctrl.year;
       params.term = ctrl.term;
       $location.search(params);
 
-      $http
-        .get(ikwProvider, {
-          params: {
-            year: ctrl.year,
-            term: ctrl.term
-          }
-        })
-        .then(function(result) {
-          ctrl.fetching = false;
-          ctrl.courses =
-            Restangular.restangularizeCollection(null, result.data, 'courses');
-        });
+      Restangular.allUrl('ikw', ikwProvider).getList({
+        year: ctrl.year,
+        term: ctrl.term
+      }).then(fetched);
     };
 
     ctrl.acceptCourse = function(course) {
@@ -57,7 +74,7 @@
 
     // init
     if (ctrl.year && ctrl.term) {
-      ctrl.go();
+      ctrl.fetch();
     }
   }
 })();

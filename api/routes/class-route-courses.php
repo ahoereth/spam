@@ -263,4 +263,30 @@ class Route_Courses extends Route {
   }
 
 
+  /**
+   * POST
+   * /courses/find
+   *
+   * Find course_ids by using some course data. Used when migrating courses
+   * from the IKW database to the SPAM database.
+   *
+   * This is a POST route because it transmits an amount of information to
+   * the server which cannot be handled by GET query parameters.
+   */
+  public function find_many() {
+    self::authorize(null, 32);
+
+    $many = self::$params;
+    $ids = array();
+    foreach ($many AS $data) {
+      $course = new Course($data);
+      if ($id = $course->find_pk()) {
+        $ids[$data['key']] = $course->find_pk();
+      }
+    }
+
+    $this->ok($ids);
+  }
+
+
 }

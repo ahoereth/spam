@@ -306,12 +306,18 @@ class Course extends Model {
       }
     }
 
+    /*
+    // Sadly the following was required to be dropped because o3_ids are not
+    // handled as supposed to in the ikw database. Sometimes o3_ids are
+    // repurposed for courses in the following year.
+    //
     // If not yet found, check if we find its o3_id.
     if (! $course_id && $this->o3_id) {
       $course_id = self::$db->sql_select_one('o3_relations', array(
         'o3_id' => $this->o3_id
       ), 'course_id');
     }
+    */
 
     return $this->set_pk_value($course_id);
   }

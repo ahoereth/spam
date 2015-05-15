@@ -2,7 +2,7 @@
   IKW &rarr; SPAM migration
 </h1>
 
-<form class="form-inline" ng-submit="migrate.go()" ng-if="!migrate.selected">
+<form class="form-inline" ng-submit="migrate.fetch()" ng-if="!migrate.selected">
   <h2>Year/Term:</h2>
   <input
     ng-model="migrate.year"
@@ -48,7 +48,18 @@
   <p class="lead">{{migrate.courses.length}} courses grabbed</p>
 </span>
 
+<p>
+  Showing
+  <inline-selectable-group ng-model="migrate.sieve.course_id">
+    <inline-selectable value="">all</inline-selectable>
+    <inline-selectable value="'!'">new</inline-selectable>
+    <inline-selectable value="'!!'">existing</inline-selectable>
+  </inline-selectable-group>
+  courses.
+</p>
+
 <hr>
+
 
 <!-- filter label row -->
 <div class="row courserow-title">
@@ -62,7 +73,7 @@
 
 <!-- ngRepeat for the course list -->
 <courserow
-  ng-repeat="course in migrate.courses track by course.o3_id"
+  ng-repeat="course in migrate.courses | filter:migrate.sieve track by course.o3_id"
   ng-if="!course.accepted"
   course="course"
   action="migrate.acceptCourse(course)"
