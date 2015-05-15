@@ -34,7 +34,7 @@ class Field extends Model {
 
     if ($regulation_id) {
       $table[] = 'fields_in_regulations';
-      $selector['regulation_id'] => $regulation_id;
+      $selector['regulation_id'] = $regulation_id;
     }
 
     return self::$db->sql_select_one(

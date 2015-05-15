@@ -16,7 +16,7 @@ require_once 'inc/autoload.php';
 require_once 'inc/utils.php';
 
 // DATABASE
-$config = 'local';
+$config = 'ikw';
 require_once 'inc/config_' . $config . '.php';
 
 // ROUTING

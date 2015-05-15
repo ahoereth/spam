@@ -44,11 +44,15 @@
       });
 
       Restangular.one('courses', 'find').customPOST(finders).then(function(ids) {
-        ctrl.courses = _.map(courses, function(course, key) {
+        courses = _.map(courses, function(course, key) {
           if (! ids.hasOwnProperty(key)) { return course; }
           return _.extend(course, {course_id: ids[key] });
         });
+
         ctrl.fetching = false;
+        ctrl.courses = Restangular.restangularizeCollection(
+          null, courses, 'courses'
+        );
       });
     }
 

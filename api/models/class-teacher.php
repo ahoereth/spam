@@ -33,7 +33,7 @@ class Teacher extends Model {
     // id
     if (is_int($data)) {
       $id = $data;
-    } elseif (! empty($data['teacher_id']) && is_int($t['teacher_id'])) {
+    } elseif (! empty($data['teacher_id']) && is_int($data['teacher_id'])) {
       $id = $data['teacher_id'];
     }
 
