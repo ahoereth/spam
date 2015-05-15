@@ -46,20 +46,19 @@
   </h2>
 
   <p class="lead">{{migrate.courses.length}} courses grabbed</p>
+
+  <p>
+    Showing
+    <inline-selectable-group ng-model="migrate.sieve.course_id">
+      <inline-selectable value="">all</inline-selectable>
+      <inline-selectable value="'!'">new</inline-selectable>
+      <inline-selectable value="'!!'">existing</inline-selectable>
+    </inline-selectable-group>
+    courses.
+  </p>
 </span>
 
-<p>
-  Showing
-  <inline-selectable-group ng-model="migrate.sieve.course_id">
-    <inline-selectable value="">all</inline-selectable>
-    <inline-selectable value="'!'">new</inline-selectable>
-    <inline-selectable value="'!!'">existing</inline-selectable>
-  </inline-selectable-group>
-  courses.
-</p>
-
 <hr>
-
 
 <!-- filter label row -->
 <div class="row courserow-title">

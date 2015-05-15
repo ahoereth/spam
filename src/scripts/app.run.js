@@ -78,7 +78,9 @@
     * Handle errors occurring on route changing. This is called when one of the
     * promises to be resolved before visiting the route is rejected.
     */
-    $rootScope.$on('$routeChangeError', function(event, current, previous, rejection) {
+    $rootScope.$on('$routeChangeError', function(
+      event, current, previous, rejection
+    ) {
       if ('not_authenticated' === rejection) {
         $rootScope.requested_route = $location.path();
         $location.path('/401');

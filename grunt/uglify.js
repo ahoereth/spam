@@ -12,11 +12,7 @@ module.exports = function(grunt) {
 
   uglify.options = {
     mangle: true,
-    compress: {
-      unsafe: true,
-      hoist_funs: false,
-      warnings: false,
-    },
+    compress: true,
     beautify: false
   };
 

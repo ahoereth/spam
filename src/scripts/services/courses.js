@@ -36,7 +36,7 @@
      * @return {promise}        promise which will contain the whole ranch of
      *                          courses when resolved
      */
-    self.fetch = function(regulation, lower, upper, student) {
+    self.fetch = function(regulation, lower, upper) {
       var reg = regulation === '' ? 0 : regulation;
 
       var deferred  = $q.defer();

@@ -124,7 +124,7 @@
       putData.username = $rootScope.user.username;
       putData = Restangular.restangularizeElement(null, putData, 'users');
 
-      putData.put().then(function(user) {
+      putData.put().then(function(/*user*/) {
         $log.info('User data saved.');
       });
     };
@@ -188,6 +188,7 @@
 
       return details.thesis;
     };
+
 
     self.getRegulation = function(reg) {
       return self.details.regulation_id || (reg || null);
