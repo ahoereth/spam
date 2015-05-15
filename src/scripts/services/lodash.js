@@ -94,22 +94,6 @@
 
 
     /**
-     * Adds two numbers together.
-     *
-     * @param {Number} a
-     * @param {Number} b
-     */
-    var add = function(a, b) { return a + b; };
-
-
-    /**
-     * Sums up all elements of an array/object. Useful
-     * for shorthand use in reduce functions.
-     */
-    var sum = _.partialRight(_.reduce, add);
-
-
-    /**
      * Multiplies two numbers with each other.
      *
      * @param {Number} a
@@ -164,8 +148,6 @@
 
 
     _.mixin({
-      add: add,
-      sum: sum,
       multiply: multiply,
       product: product,
       compactObject: compactObject,
