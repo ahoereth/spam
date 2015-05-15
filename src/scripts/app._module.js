@@ -16,6 +16,7 @@
     'tickable',
     'instafocus',
     'contenteditable',
+    'inlineSelectables',
     'mgcrea.ngStrap.button',
 
     'spam.filters',
