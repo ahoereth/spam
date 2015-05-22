@@ -3,7 +3,8 @@
 
   angular
     .module('spam.directives')
-    .directive('field', fieldDirective);
+    .directive('field', fieldDirective)
+    .controller('fieldController', fieldController);
 
 
   /* @ngInject */
@@ -16,8 +17,7 @@
       },
       transclude: true,
       templateUrl: 'partials/directives/field.html',
-      /* @ngInject */
-      controller: fieldCtrl,
+      controller: 'fieldController',
       link: function(scope/*, elem, attrs*/) {
         var field = scope.field;
         field.old_grade = field.grade = _.formatGrade(field.grade);
@@ -28,11 +28,10 @@
 
 
   /* @ngInject */
-  function fieldCtrl($scope, User, _) {
+  function fieldController($scope, User, _) {
     var self = this;
     var field = $scope.field;
     var courses = {};
-
     var defaultCreditSet = {
       overflowing: 0,
       percentage: 0,
@@ -41,8 +40,22 @@
       sum: 0
     };
 
+
+    /**
+     * Calculates the percantage of a number in relation the the total amount
+     * of credits available in this field.
+     *
+     * @param  {int}
+     * @return {int}
+     */
     var percentage = _.partialRight(_.percent, field.field_pm+field.field_wpm);
 
+
+    /**
+     * Calculate the field grade either by just using the fixed grade as
+     * manually defined by the user (module examination) or by calculating it
+     * from the legit courses as given by the courses variable.
+     */
     function calculateGrade() {
       if (field.grade) {
         return $scope.grade = field.grade;
@@ -61,6 +74,13 @@
       return $scope.grade = _.formatGrade(grade / counts.sum().value());
     }
 
+
+    /**
+     * Calculate the field data based on the courses associated with it.
+     *
+     * This function is debounced in order to handle multiple calls on
+     * the initial pageload smoothly.
+     */
     var doAnalysis = _.debounce(function() {
       var credits = field.credits = {
         passed: _.clone(defaultCreditSet),
@@ -73,6 +93,7 @@
         optional: field.field_wpm
       };
 
+      // Aggregate the credits from the individual courses.
       _(courses).pick(_.isObject).sortByAll('grade').forIn(function(course) {
         var group = course.passed ? 'passed' : 'enrolled';
         var category = course.compulsory ? 'compulsory' : 'optional';
@@ -85,6 +106,7 @@
         this[group].overflowing += course.credits - course.counts;
       }, credits).value();
 
+      // Calculated the different progress values.
       _.forEach(['passed', 'enrolled', 'available'], function(group) {
         this[group].sum = this[group].compulsory + this[group].optional;
         this[group].percentage = percentage(this[group].sum);
@@ -102,14 +124,19 @@
         examinationPossible: !! field.field_examination_possible
       });
 
-      $scope.$apply(); // required by debouncing
+      // A manual $apply call is required because of debouncing.
+      $scope.$apply();
     }, 200);
+
 
     /**
      * Updates the fields courses grade cache and, if appropriate, fires
      * the average grade recalculation.
      *
-     * Is loaded by all courses on pageload initially.
+     * Is loaded initially by all courses on pageload.
+     *
+     * @param {object}  course
+     * @param {boolean} removed
      */
     self.courseChange = function(course, removed) {
       // Courses without credits are of no interest.
@@ -151,6 +178,9 @@
     };
 
 
+    /**
+     * Method called by the UI when the 'examination' triggerable is triggered.
+     */
     $scope.examine = function() {
       $scope.examination = ! $scope.examination;
       if (! $scope.examination) {
@@ -158,5 +188,9 @@
         $scope.gradeChange();
       }
     };
+
+
+    // Initialize the field data even if there is no course.
+    doAnalysis();
   }
 }());

@@ -57,7 +57,8 @@
     // user - course overview
     '/~': {
       templateUrl: 'home/index.html',
-      controller: 'HomeCtrl',
+      controller: 'UserOverviewController',
+      controllerAs: 'overview',
       title: ':username',
       reloadOnSearch: false,
       access: 1

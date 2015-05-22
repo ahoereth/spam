@@ -2,20 +2,23 @@
   'use strict';
 
   /**
-   * CONTROLLER: Home
+   * CONTROLLER: UserOverviewController
    * ROUTE: /~
    */
   angular
     .module('spam.controllers.user')
-    .controller('HomeCtrl', userOverviewCtrl);
+    .controller('UserOverviewController', userOverviewController);
 
 
   /* @ngInject */
-  function userOverviewCtrl(
+  function userOverviewController(
     $scope,
     Restangular,
-    User
+    User,
+    _
   ) {
+    var ctrl = this;
+
     /**
      * Forces a local $scope.$apply - used in cases where changes occur out
      * of the regular cycle.
@@ -29,14 +32,14 @@
      * Called when any of the thesis details (title or grade) change. Updates
      * the User data.
      */
-    $scope.thesisChange = function() {
-      if (User.details.thesis.title === $scope.thesis.title &&
-          User.details.thesis.grade === $scope.thesis.grade
+     ctrl.thesisChange = function() {
+      if (User.details.thesis.title === ctrl.thesis.title &&
+          User.details.thesis.grade === ctrl.thesis.grade
       ) { return; }
 
-      $scope.thesis = angular.extend(
-        $scope.thesis,
-        User.updateThesis($scope.thesis.title, $scope.thesis.grade)
+      ctrl.thesis = _.extend(
+        ctrl.thesis,
+        User.updateThesis(ctrl.thesis.title, ctrl.thesis.grade)
       );
     };
 
@@ -45,14 +48,16 @@
      * Function to give the user a headstart and add the guide courses for his
      * first semester to his personal overview.
      */
-    $scope.headstart = function() {
+     ctrl.headstart = function() {
       Restangular.one('guides', 1).getList('courses', {
         semester: 1,
-        year    : $scope.user.mat_year,
-        term    : $scope.user.mat_term
+        year    : User.details.mat_year,
+        term    : User.details.mat_term
       }).then(function(guide) {
-        angular.forEach(guide, function(course) {
-          $scope.addCourse(course.course_id, course.fields[0].field_id);
+        _.forEach(guide, function(course) {
+          var field_id = !! course.singleField ? course.singleField :
+            _.get(course, 'fields[0].field_id', null);
+          User.addCourse(course, field_id);
         });
       });
     };
@@ -62,10 +67,11 @@
     User.addWatcher(scopeApply);
 
     // Initialize local scope data.
-    $scope.facts   = User.facts;
-    $scope.fields  = User.fields;
-    $scope.courses = User.courses;
-    $scope.thesis  = {
+    ctrl.user    = User.details;
+    ctrl.facts   = User.facts;
+    ctrl.fields  = User.fields;
+    ctrl.courses = User.courses;
+    ctrl.thesis  = {
       title :     User.details.thesis.title,
       grade :     User.details.thesis.grade,
       active: !! (User.details.thesis.title ||

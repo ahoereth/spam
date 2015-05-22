@@ -245,14 +245,20 @@
      * @param {int}        fieldId field_id database field (optional).
      */
     self.addCourse = function(course, fieldId) {
-      if (_.isUndefined(course)) { return $q.reject(); }
+      if (_.isUndefined(course)) {
+        return $q.reject();
+      }
 
+      // Create course object if required.
       if (_.isNumber(course)) {
         course = {
-          course_id: course,
-          field_id : _.isNumber(fieldId) ? fieldId : null
+          course_id: course
         };
       }
+
+      // Fill in field_id.
+      course.field_id = _.isNumber(fieldId) ? fieldId :
+        (course.field_id || null);
 
       return self.courses.post(course).then(function(course) {
         var old = _.findWhere(self.courses, { course_id: course.course_id });
