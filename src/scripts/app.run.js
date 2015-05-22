@@ -23,12 +23,10 @@
      *
      * @param {string} prefix
      */
-    function constructTitle(prefix) {
-      var title = TITLE;
-
-      // Prefix.
-      if (prefix) {
-        title = prefix + ' :: ' + title;
+    function constructTitle(data, clear) {
+      var title = clear ? TITLE : ($rootScope.title || TITLE);
+      if (_.isString(data) && ! _.isEmpty(data)) {
+        title = data + ' :: ' + title;
       }
 
       // Inject username.
@@ -36,7 +34,13 @@
         title = title.replace(':username', $rootScope.user.username);
       }
 
-      return title;
+      if (_.isObject(data)) {
+        _.forIn(data, function(val, key) {
+          title = title.replace(key, val);
+        });
+      }
+
+      $rootScope.title = title;
     }
 
 
@@ -104,7 +108,12 @@
       }
 
       // Handle page title.
-      $rootScope.title = constructTitle(current.title);
+      constructTitle(current.title, true);
+    });
+
+    // Listen for title data change event.
+    $rootScope.$on('title', function(event, data) {
+      constructTitle(data);
     });
   }
 
