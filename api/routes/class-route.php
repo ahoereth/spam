@@ -156,7 +156,7 @@ abstract class Route {
    *
    * @param {string} $message
    */
-  protected function not_authorized($message) {
+  protected function not_authorized($message = null) {
     //self::$app->response->setStatus(401);
     //self::$app->response->write($message);
     self::$app->halt(401, $message);
