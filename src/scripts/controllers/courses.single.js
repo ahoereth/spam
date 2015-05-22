@@ -22,7 +22,7 @@
   ) {
     Restangular
       .one('courses', $routeParams.courseId)
-      .get({ user: User.details.username })
+      .get({ user: _.get(User, 'details.username', undefined) })
       .then(function(course) {
         $scope.course = course;
         course.fields_by_regulations = {};

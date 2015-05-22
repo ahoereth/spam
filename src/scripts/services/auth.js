@@ -26,10 +26,10 @@
 
       var username = User.logininfo.username;
 
-      $http.defaults.headers.common.Authorization =
-        'Basic ' + User.logininfo.authdata;
-
       if (! _.isEmpty(username)) {
+        $http.defaults.headers.common.Authorization =
+          'Basic ' + User.logininfo.authdata;
+
         // Visualize the login process.
         $rootScope.loginform = _.extend(
           $rootScope.loginform || {},

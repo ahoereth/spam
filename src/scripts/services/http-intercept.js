@@ -129,7 +129,10 @@
         });
 
         if (rejection.status === 401 || rejection.status === 403) {
-          $location.path('/login');
+          // No redirection here because we might try to authenticate the user
+          // even for routes for which he does not necessarily needs to be
+          // authenticated.
+          //$location.path('/login');
 
           return $q.reject(rejection);
         } else if (rejection.status >= 404 ) {
