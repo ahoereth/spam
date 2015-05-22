@@ -16,11 +16,11 @@
   <!-- already enrolled in some courses -->
   <p class="lead" ng-if="overview.courses.length">
     <span ng-show="overview.facts.grades.overall && overview.facts.credits.passed">
-      You earned a total of <strong>{{facts.credits.passed}} credits</strong> with the <strong>average grade {{facts.grades.overall}}</strong>.
+      You earned a total of <strong>{{overview.facts.credits.passed}} credits</strong> with the <strong>average grade {{overview.facts.grades.overall}}</strong>.
     </span>
 
     <!-- enrolled ects -->
-    <span ng-show="overview.facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{facts.credits.enrolled}} credits.</span>
+    <span ng-show="overview.facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{overview.facts.credits.enrolled}} credits.</span>
 
     <!-- Add notice about overflowing credits. -->
 
@@ -28,13 +28,13 @@
 
     <!-- bachelor grade -->
     <span ng-if="overview.facts.grades.bachelor">
-      Presumably you will have something around a <strong>{{overview.facts.grades.bachelor}} bachelor grade</strong>.
+      Presumably you will have something around a <strong>{{overview.overview.facts.grades.bachelor}} bachelor grade</strong>.
     </span>
 
     <span ng-if="!overview.thesis.active">
       <abbr class="undercover" ng-click="overview.thesis.active=!overview.thesis.active">
         You did not yet write your bachelor thesis
-      </abbr>{{5>facts.bscFieldsCompletedCount | iif : ' and ' : '.'}}
+      </abbr>{{5>overview.facts.bscFieldsCompletedCount | iif : ' and ' : '.'}}
     </span>
 
     <span ng-if="5==overview.facts.bscFieldsCompletedCount">
