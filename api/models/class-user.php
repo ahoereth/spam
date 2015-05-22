@@ -24,13 +24,11 @@ class User extends Model {
   protected static $required = array();
 
   protected static $defaults  = array(
-    'rank'             => 2, // ldap users get rank 2 by default
-    'accepted_edits'   => 0,
-    'dissmissed_edits' => 0,
-    'uos_ldap'         => 'TIME',
-    'request_reset'    => 'TIME',
-    'registered'       => 'TIME',
-    'last_login'       => 'TIME',
+    'rank'             => 1,
+    'uos_ldap'         => '%TIME%',
+    'request_reset'    => '%TIME%',
+    'registered'       => '%TIME%',
+    'last_login'       => '%TIME%',
   );
 
   public static $authentication_errors = array();
@@ -180,22 +178,15 @@ class User extends Model {
         return false;
       }
 
-      // We cannot connect to ldap servers when on localhost, therefore a wrong
-      // username or password results in immediate errors.
-    } elseif (LOCAL) {
-      if (self::$authentication_errors['username'] ||
-          self::$authentication_errors['password']
-      ) {
-        return false;
-      }
-
-      // Either nonexistent, wrong password or bad ldap.
+    // Either nonexistent, wrong password or bad ldap.
     } elseif (self::$authentication_errors['username'] ||
               self::$authentication_errors['password'] ||
               self::$authentication_errors['ldap']
     ) {
-      // Check ldap again.
-      if (! self::ldap($username, $password)) {
+      // If its not the demo account check ldap again.
+      if (('demo' !== $username || 'studyplanning' !== $password) &&
+          (LOCAL || ! self::ldap($username, $password))
+      ) {
         return false;
       }
 
@@ -204,6 +195,8 @@ class User extends Model {
         'username' => $userhash,
         'password' => $password,
         'uos_ldap' => self::current_timestamp(),
+        'special'  => ('demo' === $username),
+        'rank'     => ('demo' === $username) ? 1 : 2, // LDAP users have rank 2
       ));
 
       // Check for loop.

@@ -12,6 +12,8 @@
 
   /* @ngInject */
   function userSettingsController($scope, User) {
+    this.user = User.details;
+
     $scope.$watchGroup(['user.firstname', 'user.lastname'], function(n, o) {
       if (n === o) { return; }
 
@@ -21,8 +23,8 @@
       }, true);
     });
 
-    $scope.deleteUser = function() {
-      $scope.user.deleteUser();
+    this.deleteUser = function() {
+      User.deleteUser();
     };
   }
 

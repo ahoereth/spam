@@ -69,6 +69,7 @@
     '/~/settings': {
       templateUrl: 'home/settings.html',
       controller: 'UserSettingsController',
+      controllerAs: 'settings',
       title: ':username\'s settings',
       access: 1
     },

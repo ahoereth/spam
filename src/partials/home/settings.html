@@ -16,7 +16,7 @@
         placeholder="Firstname"
         blur-on-enter
         instafocus
-        ng-model="user.firstname"
+        ng-model="settings.user.firstname"
         ng-model-options="{updateOn: 'blur'}"
       />
     </div>
@@ -28,7 +28,7 @@
         class="form-control"
         placeholder="Lastname"
         blur-on-enter
-        ng-model="user.lastname"
+        ng-model="settings.user.lastname"
         ng-model-options="{updateOn: 'blur'}"
       />
     </div>
@@ -45,7 +45,7 @@
     <label class="control-label col-md-2" for="regulation">Regulation</label>
     <div class="col-md-10">
       <select class="form-control" id="regulation" disabled="disabled">
-        <option selected="selected">{{::user.regulation}}</option>
+        <option selected="selected">{{::settings.user.regulation}}</option>
       </select>
     </div>
   </div>
@@ -57,24 +57,24 @@
 <div class="btn-group btn-group-justified">
   <!-- delete account -->
   <a class="btn btn-default"
-     ng-click="showDelete = true"
-     ng-hide="showDelete">
+     ng-click="settings.showDelete = true"
+     ng-hide="settings.showDelete">
     Delete all my data
   </a>
   <a class="btn btn-warning"
-     ng-click="showDelete2 = true"
-     ng-show="showDelete && !showDelete2">
+     ng-click="settings.showDelete2 = true"
+     ng-show="settings.showDelete && !settings.showDelete2">
     Delete all my data, for sure!
   </a>
   <a class="btn btn-danger"
-     ng-click="deleteUser()"
-     ng-show="showDelete2">
+     ng-click="settings.deleteUser()"
+     ng-show="settings.showDelete2">
     Delete all my data, for really sure!
   </a>
 
   <!-- export data -->
   <a class="btn btn-success"
-     ng-click="exportData()"
+     ng-click="settings.exportData()"
      disabled="disabled">
     Export data (coming soon)
   </a>

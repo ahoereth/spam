@@ -312,13 +312,13 @@ abstract class Model {
     if (! $defaults_parsed) {
       foreach (static::$defaults as $key => $value) {
         switch ($value) {
-          case 'TIME':
+          case '%TIME%':
             static::$defaults[ $key ] = self::current_timestamp('cache');
             break;
-          case 'YEAR':
+          case '%YEAR%':
             static::$defaults[ $key ] = idate('Y');
             break;
-          case 'LASTYEAR':
+          case '%LASTYEAR%':
             static::$defaults[ $key ] = idate('Y') - 1;
             break;
         }

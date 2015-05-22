@@ -14,6 +14,7 @@
   function userFactory(
     $cacheFactory,
     $rootScope,
+    $location,
     $http,
     $log,
     $q,
@@ -113,15 +114,19 @@
      *                       unchanged.
      */
     self.updateUser = function(data, force) {
+      if (! self.details) {
+        return false;
+      }
+
       var putData = {};
       _.forEach(data, function(value, key) {
-        if (! angular.equals($rootScope.user[key], value) || force) {
+        if (! angular.equals(self.details[key], value) || force) {
           putData[key] = value;
-          $rootScope.user[key] = value;
+          self.details[key] = value;
         }
       });
 
-      putData.username = $rootScope.user.username;
+      putData.username = self.details.username;
       putData = Restangular.restangularizeElement(null, putData, 'users');
 
       putData.put().then(function(/*user*/) {
@@ -154,19 +159,14 @@
 
     self.deleteUser = function() {
       $log.info('Deleting global user data.');
-      //$rootScope.$broadcast('userDelete');
-      if ($rootScope.user) {
-        $rootScope.user.remove().then(function() {
-          // notify client that deletion was successful
-          $log.info('Global user data deleted.');
-        }, function() {
-          // do something when removing fails
-          $log.info('Error while deleting global user data.');
-        });
 
-        // handle local and global user data deletion asynchronously
-        self.destroy();
-      }
+      self.details.remove().then(function() {
+        $log.info('Global user data deleted.');
+        $location.search({}).path('/');
+        self.logout();
+      }, function() {
+        $log.info('Error while deleting global user data.');
+      });
     };
 
 
