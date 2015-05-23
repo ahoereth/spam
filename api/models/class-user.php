@@ -171,10 +171,13 @@ class User extends Model {
       self::$authentication_errors['ldap'] = true;
     }
 
-    // Special users like demo accounts do not need ldap authentication, just
-    // a correct password.
-    if ($data['special']) {
-      if (self::$authentication_errors['password']) {
+    // When logging in special users like demo accounts or when using the site
+    // on a local installation we do not use ldap authentication, just
+    // username/password combinations.
+    if ($data['special'] || LOCAL) {
+      if (self::$authentication_errors['password'] ||
+          self::$authentication_errors['username']
+      ) {
         return false;
       }
 
@@ -185,7 +188,7 @@ class User extends Model {
     ) {
       // If its not the demo account check ldap again.
       if (('demo' !== $username || 'studyplanning' !== $password) &&
-          (LOCAL || ! self::ldap($username, $password))
+          (! self::ldap($username, $password))
       ) {
         return false;
       }
