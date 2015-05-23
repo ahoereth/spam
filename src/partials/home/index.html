@@ -28,17 +28,17 @@
 
     <!-- bachelor grade -->
     <span ng-if="overview.facts.grades.bachelor">
-      Presumably you will have something around a <strong>{{overview.overview.facts.grades.bachelor}} bachelor grade</strong>.
+      Presumably you will have something around a <strong>{{overview.facts.grades.bachelor}} bachelor grade</strong>.
     </span>
 
     <span ng-if="!overview.thesis.active">
       <abbr class="undercover" ng-click="overview.thesis.active=!overview.thesis.active">
         You did not yet write your bachelor thesis
-      </abbr>{{5>overview.facts.bscFieldsCompletedCount | iif : ' and ' : '.'}}
+      </abbr>{{overview.facts.bscFieldsCount>overview.facts.bscFieldsCompletedCount | iif : ' and ' : '.'}}
     </span>
 
-    <span ng-if="5==overview.facts.bscFieldsCompletedCount">
-      {{overview.thesis.active | iif:'B':'b'}}y now {{overview.thesis.active | iif : 'you ' : ''}}  completed {{overview.facts.bscFieldsCompletedCount}} of {{overview.facts.bscFieldsCount}} <abbr tooltips tooltip-title="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
+    <span ng-if="overview.facts.bscFieldsCount<overview.facts.bscFieldsCompletedCount">
+      {{overview.thesis.active | iif:'B':'b'}}y now {{overview.thesis.active | iif : 'you ' : ''}} completed {{overview.facts.bscFieldsCompletedCount}} of {{overview.facts.bscFieldsCount}} <abbr tooltips tooltip-title="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
     </span>
   </p>
 

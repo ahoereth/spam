@@ -14,7 +14,7 @@
       replace: true,
       scope: true,
       transclude: true,
-      templateUrl: 'components/progressbar/progressbar.html'
+      template: '<div class="progress"><ng-transclude></ng-transclude></div>'
     };
   }
 
@@ -30,7 +30,8 @@
         value: '=',
         content: '='
       },
-      templateUrl: 'components/progressbar/progress.html'
+      template: '<div class="progress-bar progress-bar-{{type}}" '+
+                     'style="width: {{value}}%" ng-bind="content"></div>'
     };
   }
 }());

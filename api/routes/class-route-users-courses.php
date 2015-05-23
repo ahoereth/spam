@@ -307,7 +307,7 @@ class Route_Users_Courses extends Route {
     $set = array();
 
     // grade
-    if (isset($put['grade'])) {
+    if (array_key_exists('grade', $put)) {
       $grade = (float) preg_replace(
         '/[^\\d.]+/', '', str_replace(',', '.', $put['grade'])
       );
