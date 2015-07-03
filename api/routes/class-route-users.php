@@ -64,9 +64,15 @@ class Route_Users extends Route {
    * GET
    * /users/:username
    *
-   * @param $username
+   * @param {string} $username
+   * @param {assoc}  $options
    */
   public function one_get($username) {
+    extract(self::args(func_get_args(), array(
+      'username',
+      'options'
+    )));
+
     $user = self::authorize($username);
 
     // get this users courses
@@ -86,6 +92,12 @@ class Route_Users extends Route {
 
     // thesis
     $user['thesis'] = $this->get_thesis($username, $user['regulation_id']);
+
+    // Function might be called from another api function, return result instead
+    // of sending it down the wire directly.
+    if (! empty($options['return']) && $options['return']) {
+      return $user;
+    }
 
     $this->ok($user);
   }
@@ -160,13 +172,13 @@ class Route_Users extends Route {
 
     $select = array(
       'username' => $userhash,
-      'field' => $field_id,
+      'field_id' => $field_id,
       'regulation_id' => $regulation_id
     );
 
     // delete
     if (empty($grade)) {
-      self::$db->sql_delete('student_in_fields', $select);
+      self::$db->sql_delete('students_in_fields', $select);
       $this->no_content();
       return;
     }
