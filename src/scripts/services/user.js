@@ -279,6 +279,22 @@
     };
 
 
+    /**
+     * Function to return all overflowing credits from the fields.
+     *
+     * @return {object}
+     */
+    self.getOverflowingCredits = function() {
+      return _.object(_.keys(fieldData), _.pluck(fieldData, 'overflowPassedCredits'));
+    };
+
+
+    /**
+     * Add a function which will be called whenever the facts update.
+     *
+     * @param  {function} func
+     * @return {int}      Index in the watchers array.
+     */
     self.addWatcher = function(func) {
       self.watchers.push(func);
       return self.watchers.length - 1;

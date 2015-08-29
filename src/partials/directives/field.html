@@ -80,6 +80,14 @@
   <div class="panel-body">
     <!-- most likely only 'course' directives here -->
     <ng-transclude></ng-transclude>
+    <div ng-if="field.credits.foreign" class="foreign-credits">
+      This field currently accounts for <ng-pluralize
+        count="field.credits.foreign"
+        when="{
+          '1': 'one credit',
+          'other': '{} credits'}"
+      ></ng-pluralize> which overflowed from another field.
+    </div>
   </div>
 
   <!-- progress bar panel footer -->

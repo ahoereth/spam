@@ -52,6 +52,18 @@
 
 
     /**
+     * Handler for credits which flow from other fields to this field. Only
+     * used by the open studies field which basically acts as a catch-all.
+     */
+    function handleOverflowingCredits() {
+      var newForeignCredits = User.getOverflowingCredits();
+
+      // Omit the open studies field.
+      doAnalysis(_.sum(_.omit(newForeignCredits, 1)));
+    }
+
+
+    /**
      * Calculate the field grade either by just using the fixed grade as
      * manually defined by the user (module examination) or by calculating it
      * from the legit courses as given by the courses variable.
@@ -79,7 +91,9 @@
      * This function is debounced in order to handle multiple calls on
      * the initial pageload smoothly.
      */
-    var doAnalysis = _.debounce(function() {
+    var doAnalysis = _.debounce(function(foreignCredits) {
+      foreignCredits = foreignCredits || 0;
+
       var credits = field.credits = {
         passed: _.clone(defaultCreditSet),
         enrolled: _.clone(defaultCreditSet),
@@ -104,6 +118,15 @@
         this[group].overflowing += course.credits - course.counts;
       }, credits).value();
 
+      // Account for foreign credits, if any.
+      if (foreignCredits && available.optional > 0) {
+        var availableNew = available.optional - foreignCredits;
+        var counts = foreignCredits + (availableNew < 0 ? availableNew : 0);
+        credits.foreign = counts;
+        available.optional      -= counts;
+        credits.passed.optional += counts;
+      }
+
       // Calculated the different progress values.
       _.forEach(['passed', 'enrolled', 'available'], function(group) {
         this[group].sum = this[group].compulsory + this[group].optional;
@@ -112,18 +135,23 @@
         this[group].percentage_optional = percentage(this[group].optional);
       }, credits);
 
-      $scope.grade = field.grade ? field.grade : calculateGrade();
+      // Only update the field's grade and update the user facts if the credits
+      // do not include foreign credits. Foreign credit updates are always
+      // called after the calculations already ran beforehand.
+      if (!foreignCredits) {
+        $scope.grade = field.grade ? field.grade : calculateGrade();
 
-      User.updateFieldData(field.field_id, {
-        grade: $scope.grade,
-        overallGrade: calculateGrade(true),
-        passedCredits: credits.passed.sum,
-        overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
-        overflowPassedCredits: credits.passed.overflowing,
-        enrolledCredits: credits.enrolled.sum,
-        completed: 100 === credits.passed.percentage,
-        examinationPossible: !! field.field_examination_possible
-      });
+        User.updateFieldData(field.field_id, {
+          grade: $scope.grade,
+          overallGrade: calculateGrade(true),
+          passedCredits: credits.passed.sum,
+          overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
+          overflowPassedCredits: credits.passed.overflowing,
+          enrolledCredits: credits.enrolled.sum,
+          completed: 100 === credits.passed.percentage,
+          examinationPossible: !! field.field_examination_possible
+        });
+      }
 
       // A manual $apply call is required because of debouncing.
       $scope.$apply();
@@ -190,6 +218,13 @@
       }
     };
 
+
+    // If this field is the open studies field add a watcher which is being
+    // called when the user facts have been updated in order to handle
+    // credits flowing from other fields to this field.
+    if (1 === field.field_id) {
+      User.addWatcher(handleOverflowingCredits);
+    }
 
     // Initialize the field data even if there is no course.
     doAnalysis();
