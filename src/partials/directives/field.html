@@ -86,6 +86,15 @@
   <div class="panel-footer">
     <progressbar>
       <progress
+        ng-if="field.credits.passed.overflowing"
+        type="'success'"
+        value="field.credits.passed.percentage"
+        content="(field.credits.passed.sum + field.credits.passed.overflowing) +
+                  ' / ' + field.credits.full"
+      ></progress>
+
+      <progress
+        ng-if="!field.credits.passed.overflowing"
         type="'success'"
         value="field.credits.passed.percentage"
         content="field.credits.passed.sum"

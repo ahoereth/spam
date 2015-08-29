@@ -56,22 +56,20 @@
      * manually defined by the user (module examination) or by calculating it
      * from the legit courses as given by the courses variable.
      */
-    function calculateGrade() {
-      if (field.grade) {
-        return $scope.grade = field.grade;
-      }
+    function calculateGrade(overall) {
+      overall = overall || false;
 
       var graded = _.chain(courses).pick(function(course) {
         return ! _.isNull(course) && _.isFinite(course.grade);
       });
 
-      var counts = graded.pluck('counts');
+      var credits = overall ? graded.pluck('credits') : graded.pluck('counts');
 
       var grade = graded.pluck('grade').mapOnto(
-        counts.value(), _.multiply
+        credits.value(), _.multiply
       ).sum().value();
 
-      return $scope.grade = _.formatGrade(grade / counts.sum().value());
+      return _.formatGrade(grade / credits.sum().value());
     }
 
 
@@ -114,11 +112,14 @@
         this[group].percentage_optional = percentage(this[group].optional);
       }, credits);
 
-      var grade = calculateGrade();
+      $scope.grade = field.grade ? field.grade : calculateGrade();
 
       User.updateFieldData(field.field_id, {
-        grade: grade,
+        grade: $scope.grade,
+        overallGrade: calculateGrade(true),
         passedCredits: credits.passed.sum,
+        overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
+        overflowPassedCredits: credits.passed.overflowing,
         enrolledCredits: credits.enrolled.sum,
         completed: 100 === credits.passed.percentage,
         examinationPossible: !! field.field_examination_possible

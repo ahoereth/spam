@@ -42,14 +42,9 @@
     }
 
 
-    function calculateGrade(data) {
-      var passedCredits = data.pluck('passedCredits');
-
-      var gradeSum = data.pluck('grade')
-                         .mapOnto(passedCredits.value(), _.multiply)
-                         .sum();
-
-      return _.formatGrade(gradeSum.value() / passedCredits.sum().value());
+    function calculateGrade(credits, grades) {
+      var grade = grades.mapOnto(credits.value(), _.multiply).sum();
+      return _.formatGrade(grade.value() / credits.sum().value());
     }
 
 
@@ -68,8 +63,10 @@
       facts.bscFieldsCompletedCount = bscFields.size().value();
 
       facts.grades = {
-        overall: calculateGrade(fields),
-        bachelor: calculateGrade(bscFields)
+        overall : calculateGrade(fields.pluck('overallPassedCredits'),
+                                 fields.pluck('overallGrade')),
+        bachelor: calculateGrade(bscFields.pluck('passedCredits'),
+                                 bscFields.pluck('grade'))
       };
 
       // Take thesis grade into consideration.
@@ -83,7 +80,8 @@
       }
 
       facts.credits = {
-        passed: fields.pluck('passedCredits').sum().value(),
+        passed  : fields.pluck('overallPassedCredits').sum().value(),
+        overflow: fields.pluck('overflowPassedCredits').sum().value(),
         enrolled: fields.pluck('enrolledCredits').sum().value()
       };
 
