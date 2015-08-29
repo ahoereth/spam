@@ -20,7 +20,12 @@
     </span>
 
     <!-- enrolled ects -->
-    <span ng-show="overview.facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise {{overview.facts.credits.enrolled}} credits.</span>
+    <span ng-show="overview.facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-title="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise&nbsp;
+    <ng-pluralize
+      count="overview.facts.credits.enrolled"
+      when="{'1': 'one credit',
+             'other': '{} credits'}"
+    ></ng-pluralize>.</span>
 
     <!-- Add notice about overflowing credits. -->
 

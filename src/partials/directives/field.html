@@ -81,12 +81,13 @@
     <!-- most likely only 'course' directives here -->
     <ng-transclude></ng-transclude>
     <div ng-if="field.credits.foreign" class="foreign-credits">
-      This field currently accounts for <ng-pluralize
+      This field currently accounts for&nbsp;
+      <ng-pluralize
         count="field.credits.foreign"
-        when="{
-          '1': 'one credit',
-          'other': '{} credits'}"
-      ></ng-pluralize> which overflowed from another field.
+        when="{'1': 'one credit',
+               'other': '{} credits'}"
+      ></ng-pluralize>
+      &nbsp;which overflowed from another field.
     </div>
   </div>
 
