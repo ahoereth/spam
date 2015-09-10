@@ -189,12 +189,12 @@
 
 
     self.getRegulation = function(reg) {
-      return self.details.regulation_id || (reg || null);
+      return _.get(self, 'details.regulation_id') || (reg || null);
     };
 
 
     self.getUsername = function() {
-      return self.details.username || null;
+      return _.get(self, 'details.username') || null;
     };
 
 

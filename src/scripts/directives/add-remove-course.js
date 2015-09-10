@@ -44,7 +44,7 @@
         // Expose relevant user variables to scope.
         scope.user = {
           loggedin: !! User.details,
-          regulation_id: User.details.regulation_id
+          regulation_id: User.getRegulation()
         };
 
         // Add remove buttons are not required for not loggedin users.
