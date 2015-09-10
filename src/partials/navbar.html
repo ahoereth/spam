@@ -73,7 +73,7 @@
   <!-- quick search section -->
   <div
     class="container quicksearch"
-    ng-show="search.active&&search.filtered.length > 0"
+    ng-if="search.active && 0 < search.filtered.length"
     style="background: #fff;">
 
 
