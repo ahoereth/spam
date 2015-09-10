@@ -169,7 +169,7 @@
      */
     self.courseChange = function(course, removed) {
       // Courses without credits are of no interest.
-      if (! course.ects || course.muted || removed) {
+      if (! course.ects || course.muted || course.failed || removed) {
         courses[ course.student_in_course_id ] = null;
       } else {
         courses[ course.student_in_course_id ] = {

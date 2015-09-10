@@ -1,7 +1,7 @@
 <div
   class="row course"
-  ng-class="{overflowing: course.overflowing ||
-                          course.grade == 5 ||
+  ng-class="{overflowing: 0 === course.counts ||
+                          course.failed ||
                           course.muted}"
 >
   <!-- Directive: course -->
@@ -49,13 +49,13 @@
         type="button"
         dropdown-toggle
         class="btn btn-xs btn-block dropdown-toggle"
-        ng-class="{'btn-info'   : !course.passed,
+        ng-class="{'btn-info'   : !course.passed && !course.grade,
                    'btn-success':  course.passed,
                    'btn-default':  course.grade > 4}"
       >
         <span
           class="glyphicon"
-          ng-class="{'glyphicon-pencil': !course.passed,
+          ng-class="{'glyphicon-pencil': !course.passed && !course.grade,
                      'glyphicon-ok'    :  course.passed,
                      'glyphicon-remove':  course.grade > 4}"
         ></span>

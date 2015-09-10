@@ -26,6 +26,7 @@
             (course.grade >= 1 && course.grade <= 4) ||
             (course.passed && course.grade === course.oldGrade)
           );
+          course.failed = !course.passed && 5 <= course.grade;
           fieldCtrl.courseChange(course);
 
           if (course.grade === course.oldGrade && !force) { return; }
