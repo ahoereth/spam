@@ -128,9 +128,14 @@
 
     /**
      * Calculates the percentage ratio of two given numbers.
+     *
+     * @param  {number} a
+     * @param  {number} b
+     * @param  {bool}   cap
+     * @return {number}
      */
-    var percent = function(a, b) {
-      return a / b * 100;
+    var percent = function(a, b, cap) {
+      return cap && (a / b) > 1 ? 100 : (a / b * 100);
     };
 
 

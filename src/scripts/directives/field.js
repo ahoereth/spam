@@ -42,13 +42,14 @@
 
 
     /**
-     * Calculates the percantage of a number in relation the the total amount
-     * of credits available in this field.
+     * Calculates the percantage of a number in relation to the total amount
+     * of credits available in this field. Capped at '100'.
      *
      * @param  {int}
      * @return {int}
      */
-    var percentage = _.partialRight(_.percent, field.field_pm+field.field_wpm);
+    var percentage = _.partialRight(_.percent,
+                                    field.field_pm+field.field_wpm, true);
 
 
     /**
@@ -106,16 +107,29 @@
       };
 
       // Aggregate the credits from the individual courses.
-      _(courses).pick(_.isObject).sortByAll('grade').forIn(function(course) {
-        var group = course.passed ? 'passed' : 'enrolled';
-        var category = course.compulsory ? 'compulsory' : 'optional';
+      _(courses).pick(_.isObject)
+        .sortByOrder(['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc'])
+        .forIn(function(course) {
+          var group = course.passed ? 'passed' : 'enrolled';
+          var category = course.compulsory ? 'compulsory' : 'optional';
 
-        var availableNew = available[category] - course.credits;
-        course.counts = course.credits + (availableNew < 0 ? availableNew : 0);
+          var freeCredits = available[category] - course.credits;
+          course.counts = course.credits + (freeCredits < 0 ? freeCredits : 0);
+          available[category]     -= course.counts;
+          this[group][category]   += course.counts;
 
-        available[category]     -= course.counts;
-        this[group][category]   += course.counts;
-        this[group].overflowing += course.credits - course.counts;
+          // If the compulsory part of the module is done, compulsory courses
+          // can also flow to the optional part.
+          if ('compulsory' === category && course.counts < course.credits) {
+            freeCredits = available.optional - course.counts;
+            var counts = course.counts + (freeCredits < 0 ? freeCredits : 0);
+            available.optional   -= counts;
+            this[group].optional += counts;
+            course.counts = course.counts + counts;
+          }
+
+          // Overflowing credits can flow to the open studies module.
+          this[group].overflowing += (course.credits - course.counts);
       }, credits).value();
 
       // Account for foreign credits, if any.
