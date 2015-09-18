@@ -24,19 +24,6 @@
     },
 
     // **********
-    // Help page
-    '/help/:subject*?': {
-      templateUrl: 'help.html',
-      controller: 'Help',
-      title: 'Help',
-      access: 0
-    },
-
-    '/help': {
-      redirectTo: '/help/remember'
-    },
-
-    // **********
     // Page not found error
     '/401': {
       templateUrl: '401.html',
