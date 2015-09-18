@@ -6,11 +6,11 @@
       'spam.services',
       'spam.filters'
     ])
-    .controller('Navbar', navbarCtrl);
+    .controller('NavbarController', navbarController);
 
 
   /* @ngInject */
-  function navbarCtrl(
+  function navbarController(
     $rootScope,
     $scope,
     $location,
@@ -20,6 +20,8 @@
     User,
     Courses
   ) {
+    var ctrl = this;
+
     var courses = [],
         hideLoader,
         lowerYear = $rootScope.meta.year-1,
@@ -28,7 +30,7 @@
         filteredIds = [],
         filteredSelectedKey = 0;
 
-    $scope = _.extend($scope, {
+    ctrl = _.extend(ctrl, {
       search : {
         query : '',
         filtered : [],
@@ -45,7 +47,7 @@
      * Close dropdown navigation on mobile devices when changing route.
      */
     $rootScope.$on('$routeChangeSuccess', function() {
-      $scope.navExpanded = false;
+      ctrl.navExpanded = false;
     });
 
 
@@ -55,12 +57,12 @@
     $rootScope.$watch('loading', function(n) {
       if (n > 0) {
         $timeout.cancel(hideLoader);
-        $scope.showLoader = true;
+        ctrl.showLoader = true;
       } else if (n < 0) {
         $rootScope.loading = 0;
       } else {
         hideLoader = $timeout(function() {
-          $scope.showLoader = false;
+          ctrl.showLoader = false;
         }, 1100);
       }
     });
@@ -69,19 +71,21 @@
     /**
      * Watch the quick search input field for changes.
      */
-    $scope.$watch('search.query', function(query, oldQuery) {
+    $scope.$watch(function () {
+       return ctrl.search.query;
+    }, function(query, oldQuery) {
       if (query === oldQuery) { return; }
 
       var match = query.match(/^([ws])?s?(\d{2,4})?:? (.*)$/i);
       if (match) {
-        $scope.search.filter = {
+        ctrl.search.filter = {
           'term'   : _.isEmpty(match[1]) ? '' : match[1].toUpperCase(),
           'year'   : _.isEmpty(match[2]) ? '' : ('20' + match[2]).slice(-4),
           'course' : _.trim(match[3])
         };
-        _.compactObject($scope.search.filter);
+        _.compactObject(ctrl.search.filter);
       } else { // this is just a backup if the regex above fails
-        $scope.search.filter = {
+        ctrl.search.filter = {
           course : query
         };
       }
@@ -94,16 +98,15 @@
      * TODO
      */
     var applyFilter = function() {
-      if ($scope.search.query.length === 0) {
-        $scope.search.filtered = [];
+      if (ctrl.search.query.length === 0) {
+        ctrl.search.filtered = [];
         return;
       }
 
-      $scope.search.filtered = $filter('courseFilter')
-        (courses, $scope.search.filter)
-        .splice(0, $scope.search.limit);
+      ctrl.search.filtered =
+        $filter('courseFilter')(courses, ctrl.search.filter)
+          .splice(0, ctrl.search.limit);
 
-//      resetKeyboardNavigation();
       fetch();
     };
 
@@ -114,7 +117,7 @@
     var fetch = function() {
       if (lowerYear < 1995 || fetching) { return; }
 
-      if ($scope.search.limit > $scope.search.filtered.length) {
+      if (ctrl.search.limit > ctrl.search.filtered.length) {
         fetching = true;
         Courses
           .fetch(User.getRegulation(1), lowerYear, upperYear, null)
@@ -131,14 +134,16 @@
     /**
      * Watch the focus property of the input field.
      */
-    $scope.$watch('search.focus', function(focused) {
-      if (focused === false) { searchBoxToggle('blur'); }
-      else if (focused) {
-
+    $scope.$watch(function() {
+      return ctrl.search.focus;
+    }, function(focused) {
+      if (focused === false) {
+        searchBoxToggle('blur');
+      } else if (focused) {
         filteredSelectedKey = 0;
-        $scope.search.selected = filteredIds[filteredSelectedKey];
+        ctrl.search.selected = filteredIds[filteredSelectedKey];
 
-        if (! $scope.search.active) {
+        if (!ctrl.search.active) {
           applyFilter();
         }
 
@@ -152,7 +157,9 @@
      * The timeout is required because moving the mouse inline the "area-to-be-hovered"
      * also often triggers this event.
      */
-    $scope.$watch('search.hover', function(hovering) {
+    $scope.$watch(function() {
+      return ctrl.search.hover;
+    }, function(hovering) {
       $timeout.cancel(mouseTimeout);
       mouseTimeout = $timeout(function() {
         if (hovering === false) { searchBoxToggle('mouseout' ); }
@@ -184,9 +191,9 @@
       }
 
       // if input is focused always show the results
-      if (states.input && ! $scope.search.active) {
-        $scope.search.active = true;
-        $scope.search.placeholder =
+      if (states.input && ! ctrl.search.active) {
+        ctrl.search.active = true;
+        ctrl.search.placeholder =
           prefix[prefix_i++ % prefix.length] +
           ': Try prepending a term and/or year';
 
@@ -195,9 +202,9 @@
 
         // dont hide it directly
         states.timer = $timeout(function() {
-          if (! _.isUndefined($scope.search)) {
-            $scope.search.active = false;
-            $scope.search.placeholder = 'Quick search';
+          if (! _.isUndefined(ctrl.search)) {
+            ctrl.search.active = false;
+            ctrl.search.placeholder = 'Quick search';
           }
         }, 300);
       }
@@ -222,7 +229,7 @@
      * @param string path the string to look for in the route
      * @return string 'active':''
      */
-    $scope.getNavigationActiveClass = function(path) {
+    ctrl.getNavigationActiveClass = function(path) {
       return ($location.path().substr(0, path.length) === path) ? 'active' : '';
     };
   }
