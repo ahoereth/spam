@@ -20,8 +20,8 @@ module.exports = function(grunt) {
 
   connect.options = {
     port: 8000,
-    hostname: 'localhost',
-    open: true
+    hostname: '0.0.0.0',
+    open: false
   };
 
   connect.dev = {

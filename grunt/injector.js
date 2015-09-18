@@ -18,10 +18,10 @@ module.exports = function(grunt) {
     files: {
       'src/index.html': [
         'src/components/**/*.js',
-        '!src/components/**/*.ignore.js',
         'src/scripts/**/*.js',
-        '!src/scripts/**/*.ignore.js',
-        'src/styles/**/*.css'
+        '!**/*.ignore.js',
+        'src/styles/**/*.css',
+        '!**/*.ignore.css'
       ]
     }
   };

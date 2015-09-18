@@ -53,45 +53,6 @@
       access: 0
     },
 
-    // **********
-    // user - course overview
-    '/~': {
-      templateUrl: 'home/index.html',
-      controller: 'UserOverviewController',
-      controllerAs: 'overview',
-      title: ':username',
-      reloadOnSearch: false,
-      access: 1
-    },
-
-    // *********
-    // user - settings
-    '/~/settings': {
-      templateUrl: 'home/settings.html',
-      controller: 'UserSettingsController',
-      controllerAs: 'settings',
-      title: ':username\'s settings',
-      access: 1
-    },
-
-    // *********
-    // user - logout
-    '/~/logout': {
-      templateUrl: 'landing.html',
-      controller: 'LogoutCtrl',
-      title : 'Logout',
-      access: 1
-    },
-
-    // *********
-    // user - add unofficial course
-    '/~/courses/new': {
-      templateUrl: 'courses/unofficial/edit.html',
-      controller: 'UnofficialCourseEditCtrl',
-      access: 1,
-      title: 'Add unofficial Course'
-    },
-
     // *********
     // courses - index
     '/courses': {

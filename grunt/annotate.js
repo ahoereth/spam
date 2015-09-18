@@ -12,10 +12,9 @@ module.exports = function(grunt) {
     files: {
       'app/js/tmp.app.js': [
         'src/components/**/*.js',
-        '!src/components/**/*.ignore.js',
         'src/scripts/**/*.js',
-        '!src/scripts/**/*.ignore.js',
-        'app/js/tmp.templates.js'
+        '!**/*.ignore.js',
+        'app/js/tmp.templates.js',
       ]
     }
   };

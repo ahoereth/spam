@@ -2,16 +2,51 @@
   'use strict';
 
   /**
-   * CONTROLLER: UserOverviewController
+   * CONTROLLER: UserIndexController
    * ROUTE: /~
    */
   angular
-    .module('spam.controllers.user')
-    .controller('UserOverviewController', userOverviewController);
+    .module('spam.components.user.index', [
+      'ngRoute',
+      'progressbar',
+      'blurOnEnter',
+      'dropdown',
+      'tickable',
+      'instafocus',
+      'spam.services',
+      'spam.directives'
+    ])
+    .config(userIndexRouting)
+    .controller('UserIndexController', userIndexController);
+
+
 
 
   /* @ngInject */
-  function userOverviewController(
+  function userIndexRouting($routeProvider) {
+    var auth = {
+      /* @ngInject */
+      authentication: function($route, Auth) {
+        return Auth.authenticate($route.current.access);
+      }
+    };
+
+    $routeProvider.when('/~', {
+      templateUrl: 'components/user/index/user.index.html',
+      controller: 'UserIndexController',
+      controllerAs: 'overview',
+      title: ':username',
+      reloadOnSearch: false,
+      access: 1,
+      resolve: auth
+    });
+  }
+
+
+
+
+  /* @ngInject */
+  function userIndexController(
     $scope,
     Restangular,
     User,

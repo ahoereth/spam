@@ -23,7 +23,8 @@
     'spam.services',
     'spam.directives',
     'spam.controllers',
-    'spam.controllers.user',
-    'spam.controllers.courses'
+    'spam.controllers.courses',
+
+    'spam.components.user'
   ]);
 })();

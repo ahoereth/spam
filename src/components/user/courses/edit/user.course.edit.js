@@ -2,12 +2,53 @@
   'use strict';
 
   angular
-    .module('spam.controllers.user')
-    .controller('UnofficialCourseEditCtrl', nofficialCourseEditCtrl);
+  .module('spam.components.user.course.edit', [
+    'ngRoute',
+    'progressbar',
+    'blurOnEnter',
+    'dropdown',
+    'tickable',
+    'instafocus',
+    'spam.services',
+    'spam.directives'
+  ])
+  .config(userCourseEditRouting)
+  .controller('UserCourseEditController', userCourseEditController);
+
+
 
 
   /* @ngInject */
-  function nofficialCourseEditCtrl(
+  function userCourseEditRouting($routeProvider) {
+    var auth = {
+      /* @ngInject */
+      authentication: function($route, Auth) {
+       return Auth.authenticate($route.current.access);
+      }
+    };
+
+    $routeProvider.when('/~/courses/new', {
+      templateUrl: 'components/user/courses/new/user.course.edit.html',
+      controller: 'UserCourseEditController',
+      access: 1,
+      title: 'Add unofficial Course',
+      resolve: auth
+    });
+
+    /*$routeProvider.when('/~/courses/edit/:course_id', {
+      templateUrl: 'components/user/courses/new/user.course.edit.html',
+      controller: 'UserCourseEditController',
+      access: 1,
+      title: 'Edit personal course',
+      resolve: auth
+    });*/
+  }
+
+
+
+
+  /* @ngInject */
+  function userCourseEditController(
     $rootScope,
     $scope,
     $location,

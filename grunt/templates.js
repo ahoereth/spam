@@ -11,9 +11,8 @@ module.exports = function(grunt) {
     cwd: 'src',
     src: [
       'components/**/*.html',
-      '!components/**/*.ignore.html',
       'partials/**/*.html',
-      '!partials/**/*.ignore.html'
+      '!**/*.ignore.html',
     ],
     dest: 'app/js/tmp.templates.js',
     options: {
