@@ -95,30 +95,30 @@
   <div class="panel-footer">
     <progressbar>
       <progress
-        type="'success'"
-        value="field.credits.passed.percentage"
-        content="field.credits.passed.overflowing | iif
+        data-type="'success'"
+        data-value="field.credits.passed.percentage"
+        data-text="field.credits.passed.overflowing | iif
           : (field.credits.passed.sum + field.credits.passed.overflowing) +
             ' / ' + field.credits.full
           : field.credits.passed.sum"
       ></progress>
 
       <progress
-        type="'info'"
-        value="field.credits.enrolled.percentage"
-        content="field.credits.enrolled.sum"
+        data-type="'info'"
+        data-value="field.credits.enrolled.percentage"
+        data-text="field.credits.enrolled.sum"
       ></progress>
 
       <progress
-        type="'required'"
-        value="field.credits.available.percentage_compulsory"
-        content="field.credits.available.compulsory"
+        data-type="'required'"
+        data-value="field.credits.available.percentage_compulsory"
+        data-text="field.credits.available.compulsory"
       ></progress>
 
       <progress
-        type="'background'"
-        value="field.credits.available.percentage_optional"
-        content="field.credits.available.optional"
+        data-type="'background'"
+        data-value="field.credits.available.percentage_optional"
+        data-text="field.credits.available.optional"
       ></progress>
     </progressbar>
   </div><!-- /panel-footer -->

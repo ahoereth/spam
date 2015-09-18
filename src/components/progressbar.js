@@ -14,7 +14,7 @@
       replace: true,
       scope: true,
       transclude: true,
-      template: '<div class="progress"><ng-transclude></ng-transclude></div>'
+      template: '<div class="progress" ng-transclude></div>'
     };
   }
 
@@ -28,10 +28,11 @@
       scope: {
         type: '=',
         value: '=',
-        content: '='
+        text: '='
       },
-      template: '<div class="progress-bar progress-bar-{{type}}" '+
-                     'style="width: {{value}}%" ng-bind="content"></div>'
+      template: '<div class="progress-bar progress-bar-{{type}}" ' +
+                     'ng-style="{width: value + \'%\'}" ng-bind="text"' +
+                '></div>'
     };
   }
 }());
