@@ -2,16 +2,17 @@
   'use strict';
 
   angular
-    .module('spam.directives')
-    .directive('matriculationSetter', matriculationSetterDirective);
+    .module('spam.components.user.common.matriculation-setter', [])
+    .directive('matriculationSetter', userMatriculationSetterDirective);
 
   /* @ngInject */
-  function matriculationSetterDirective(User, _) {
+  function userMatriculationSetterDirective(User, _) {
     return {
       restrict: 'E',
       replace: true,
       scope: true,
-      templateUrl: 'partials/directives/matriculation-setter.html',
+      templateUrl: 'components/user/common/matriculation-setter/' +
+                   'user.common.matriculation-setter.html',
       link: function(scope, elem, attrs) {
         var currentYear = scope.meta.currentTermYear;
         scope.verifyButton = ! _.isUndefined(attrs.verify);
