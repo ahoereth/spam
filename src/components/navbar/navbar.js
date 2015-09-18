@@ -2,7 +2,10 @@
   'use strict';
 
   angular
-    .module('spam.controllers')
+    .module('spam.components.navbar', [
+      'spam.services',
+      'spam.filters'
+    ])
     .controller('Navbar', navbarCtrl);
 
 
@@ -223,4 +226,5 @@
       return ($location.path().substr(0, path.length) === path) ? 'active' : '';
     };
   }
+
 })();

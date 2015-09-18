@@ -25,6 +25,7 @@
     'spam.controllers',
     'spam.controllers.courses',
 
+    'spam.components.navbar',
     'spam.components.user'
   ]);
 })();
