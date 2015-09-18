@@ -38,6 +38,7 @@
       displayLimit : 25,
       filter : {},
       filteredCourses : [],
+      textModelOptions: {updateOn: 'default blur', debounce: {'default': 200, 'blur': 0}},
       orderBys: {
         code:        ['code','-year','-term', 'course'],
         '-code':     ['-code','-year','-term', 'course'],

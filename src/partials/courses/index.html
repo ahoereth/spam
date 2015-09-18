@@ -4,13 +4,17 @@
 
 <hr>
 
-<div ng-show="filter.studip=='false'" class="alert alert-warning">You are currently only viewing courses with <span ng-show="filter.studip=='false'">no&nbsp;</span>studip link.</div>
-
 <!-- regulation dropdown -->
 <div class="row form-horizontal" style="margin-bottom: 10px;">
   <label class="col-md-1 col-sm-2 col-xs-3 control-label" for="regulation_id">Regulation:</label>
   <div class="col-md-6 col-sm-10 col-xs-9">
-    <select class="form-control" ng-model="regulation_id" id="regulation_id" ng-options="r.regulation_id as r.regulation for r in regulations" ng-change="fetchCourses(1)"></select>
+    <select
+      class="form-control"
+      id="regulation_id"
+      ng-options="r.regulation_id as r.regulation for r in regulations"
+      ng-model="regulation_id"
+      ng-change="fetchCourses(1)"
+    ></select>
   </div>
   <div class="col-md-5 hidden-sm hidden-xs help-block">Specify a study regulation here.</div>
 </div>
@@ -19,7 +23,13 @@
 <div class="row form-horizontal visible-xs" style="margin-bottom: 10px;">
   <label class="col-xs-3 control-label" for="filter.fields_str">Field:</label>
   <div class="col-xs-9 input-group" style="padding-left: 15px; padding-right: 15px;">
-    <input class="form-control" placeholder="Field of Study" type="text" ng-model="filter.fields_str">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Field of Study"
+      ng-model="filter.fields_str"
+      ng-model-options="textModelOptions"
+    >
     <span class="input-group-btn">
       <button type="button" class="btn btn-default" ng-model="pm" bs-checkbox>PM</button>
     </span>
@@ -30,7 +40,13 @@
 <div class="row form-horizontal visible-sm visible-xs" style="margin-bottom: 10px;">
   <label class="col-sm-2 col-xs-3 control-label" for="filter.teachers_str">Teacher:</label>
   <div class="col-sm-5 col-xs-9">
-    <input class="form-control" placeholder="Teacher Name" type="text" ng-model="filter.teachers_str">
+    <input
+      type="text"
+      class="form-control"
+      placeholder="Teacher Name"
+      ng-model="filter.teachers_str"
+      ng-model-options="textModelOptions"
+    >
   </div>
   <div class="col-sm-5 hidden-xs help-block">Search for a specific teacher.</div>
 </div>
@@ -43,31 +59,41 @@
     <!-- code label -->
     <div class="col-md-1 hidden-sm hidden-xs">
       <label for="filter.code" ng-click="orderBy('code')">Code</label>
-      <span ng-class="{caret: order==orderBys['-code'], 'caret up': order==orderBys['code']}"></span>
+      <span ng-class="{ caret    : order == orderBys['-code'],
+                       'caret up': order == orderBys['code']}"
+      ></span>
     </div>
 
     <!-- time label -->
     <div class="col-sm-1 col-xs-2">
       <label for="timeframe" ng-click="orderBy('time')">Time</label>
-      <span ng-class="{caret: order==orderBys['-time'], 'caret up': order==orderBys['time']}"></span>
+      <span ng-class="{ caret    : order == orderBys['-time'],
+                       'caret up': order == orderBys['time']}"
+      ></span>
     </div>
 
     <!-- title label -->
     <div class="col-md-4 col-sm-6 col-xs-8">
       <label for="filter.course" ng-click="orderBy('course')">Title</label>
-      <span ng-class="{caret: order==orderBys['-course'], 'caret up': order==orderBys['course']}"></span>
+      <span ng-class="{ caret    : order == orderBys['-course'],
+                       'caret up': order == orderBys['course']}"
+      ></span>
     </div>
 
     <!-- teachers label -->
     <div class="col-md-2 hidden-sm hidden-xs">
       <label for="filter.teachers_str" ng-click="orderBy('teachers')">Teachers</label>
-      <span ng-class="{caret: order==orderBys['-teachers'], 'caret up': order==orderBys['teachers']}"></span>
+      <span ng-class="{ caret    : order == orderBys['-teachers'],
+                       'caret up': order == orderBys['teachers']}"
+      ></span>
     </div>
 
     <!-- field of study label -->
     <div class="col-md-3 col-sm-4 hidden-xs">
       <label for="filter.fields_str" ng-click="orderBy('fields')">Field of Study</label>
-      <span ng-class="{caret: order==orderBys['-fields'], 'caret up': order==orderBys['fields']}"></span>
+      <span ng-class="{ caret    : order == orderBys['-fields'],
+                       'caret up': order == orderBys['fields']}"
+      ></span>
     </div>
 
     <!-- loading spinner and result counter label -->
@@ -80,33 +106,59 @@
   <div class="row courses-row">
     <!-- code filter -->
     <div class="col-md-1 hidden-sm hidden-xs form-group">
-      <input class="form-control" type="text" id="filter.code" ng-model="filter.code">
+      <input
+        type="text"
+        class="form-control"
+        id="filter.code"
+        ng-model="filter.code"
+        ng-model-options="textModelOptions"
+      >
     </div>
 
     <!-- timeframe -->
     <div class="col-sm-1 col-xs-2 form-group">
       <input
         type="text"
-        ng-model="timeframe"
         class="form-control form-control-tight"
         id="timeframe"
-        title='Use strings similar to any of those: "2010-2012", "2011+", "W:09-11" or "2004-"'>
+        title='Use strings similar to any of those: "2010-2012", "2011+", "W:09-11" or "2004-"'
+        ng-model="timeframe"
+        ng-model-options="textModelOptions"
+      >
     </div>
 
     <!-- course title filter -->
     <div class="col-md-4 col-sm-6 col-xs-8 form-group">
-      <input class="form-control" ng-model="filter.course" id="filter.course">
+      <input
+        type="text"
+        class="form-control"
+        id="filter.course"
+        ng-model="filter.course"
+        ng-model-options="textModelOptions"
+      >
     </div>
 
     <!-- teachers filter -->
     <div class="col-md-2 hidden-sm hidden-xs form-group">
-      <input class="form-control" ng-model="filter.teachers_str" id="filter.teachers_str">
+      <input
+        type="text"
+        class="form-control"
+        id="filter.teachers_str"
+        ng-model="filter.teachers_str"
+        ng-model-options="textModelOptions"
+      >
     </div>
 
     <!-- fields filter -->
     <div class="col-md-3 col-sm-4 hidden-xs form-group">
       <div class="input-group">
-        <input class="form-control" type="text" id="filter.fields_str" ng-model="filter.fields_str">
+        <input
+          type="text"
+          class="form-control"
+          id="filter.fields_str"
+          ng-model="filter.fields_str"
+          ng-model-options="textModelOptions"
+        >
         <span class="input-group-btn">
           <button type="button" class="btn btn-default" ng-model="pm" bs-checkbox>PM</button>
         </span>
@@ -116,8 +168,16 @@
     <!-- loading spinner and result counter -->
     <div class="col-sm-1 col-xs-2">
       <div class="form-control" style="border: none; text-align: center;">
+        <!-- Spinner -->
         <span class="glyphicon glyphicon-refresh spin" ng-show="loading"></span>
-        <span ng-hide="loading">{{displayLimit>filteredCourses.length | iif : filteredCourses.length : displayLimit + '+'}}
+        <!-- Result Counter -->
+        <span
+          ng-hide="loading"
+          ng-bind="displayLimit>filteredCourses.length | iif
+            : filteredCourses.length
+            : displayLimit + '+'
+          "
+        ></span>
       </div>
     </div>
   </div>
@@ -127,7 +187,8 @@
 <div
   infinite-scroll="scrollOn()"
   infinite-scroll-immediate-check="false"
-  infinite-scroll-distance="2">
+  infinite-scroll-distance="2"
+>
 
   <!-- ngRepeat for the course list -->
   <courserow
@@ -141,8 +202,26 @@
 
 
   <div class="row" style="margin-top: 10px;">
-    <button ng-show="filteredCourses.length>displayLimit" type="button" class="btn btn-info btn-block" ng-click="scrollOn(50)">More...</button>
-    <button ng-hide="filteredCourses.length>displayLimit" type="button" class="btn btn-default btn-block" disabled="disabled">{{loading | iif : 'Loading...' : 'no more courses using the current filter'}}</button>
+    <!-- Show More Courses Button -->
+    <button
+      type="button"
+      class="btn btn-info btn-block"
+      ng-show="filteredCourses.length > displayLimit"
+      ng-click="scrollOn(50)"
+    >
+      More...
+    </button>
+
+    <!-- Loading Notifier -->
+    <button
+      type="button"
+      class="btn btn-default btn-block"
+      disabled="disabled"
+      ng-hide="filteredCourses.length > displayLimit"
+      ng-bind="loading | iif
+        : 'Loading...'
+        : 'no more courses using the current filter'"
+    ></button>
   </div>
 
 </div>
