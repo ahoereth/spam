@@ -2,13 +2,17 @@
   'use strict';
 
   angular
-    .module('spam.directives')
-    .directive('field', fieldDirective)
-    .controller('fieldController', fieldController);
+    .module('spam.components.user.index.field', [
+      'progressbar',
+      'dropdown',
+      'tickable',
+    ])
+    .directive('field', userIndexFieldDirective)
+    .controller('UserIndexFieldController', userIndexFieldController);
 
 
   /* @ngInject */
-  function fieldDirective(_) {
+  function userIndexFieldDirective(_) {
     return {
       restrict: 'E',
       replace: false,
@@ -16,8 +20,8 @@
         field: '='
       },
       transclude: true,
-      templateUrl: 'partials/directives/field.html',
-      controller: 'fieldController',
+      templateUrl: 'components/user/index/field/user.index.field.html',
+      controller: 'UserIndexFieldController',
       link: function(scope/*, elem, attrs*/) {
         var field = scope.field;
         field.old_grade = field.grade = _.formatGrade(field.grade);
@@ -28,7 +32,7 @@
 
 
   /* @ngInject */
-  function fieldController($scope, User, _) {
+  function userIndexFieldController($scope, User, _) {
     var self = this;
     var field = $scope.field;
     var courses = {};

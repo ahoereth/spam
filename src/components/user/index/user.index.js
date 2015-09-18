@@ -8,13 +8,10 @@
   angular
     .module('spam.components.user.index', [
       'ngRoute',
-      'progressbar',
-      'blurOnEnter',
-      'dropdown',
-      'tickable',
-      'instafocus',
       'spam.services',
-      'spam.directives'
+      'spam.directives',
+      'spam.components.user.index.field',
+      'spam.components.user.index.course'
     ])
     .config(userIndexRouting)
     .controller('UserIndexController', userIndexController);

@@ -2,7 +2,12 @@
   'use strict';
 
   angular
-    .module('spam.directives')
+    .module('spam.components.user.index.course', [
+      'blurOnEnter',
+      'dropdown',
+      'tickable',
+      'spam.components.user.index.field'
+    ])
     .directive('course', courseDirective);
 
 
@@ -15,7 +20,7 @@
       scope: {
         'course': '='
       },
-      templateUrl: 'partials/directives/course.html',
+      templateUrl: 'components/user/index/course/user.index.course.html',
       link: function(scope, elem, attrs, fieldCtrl) {
         var course = scope.course;
 
@@ -67,4 +72,5 @@
       }
     };
   }
+
 }());
