@@ -9,7 +9,6 @@
     .module('spam.components.user.index', [
       'ngRoute',
       'spam.services',
-      'spam.directives',
       'spam.components.user.index.field',
       'spam.components.user.index.course'
     ])

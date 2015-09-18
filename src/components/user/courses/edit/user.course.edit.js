@@ -9,8 +9,7 @@
     'dropdown',
     'tickable',
     'instafocus',
-    'spam.services',
-    'spam.directives'
+    'spam.services'
   ])
   .config(userCourseEditRouting)
   .controller('UserCourseEditController', userCourseEditController);

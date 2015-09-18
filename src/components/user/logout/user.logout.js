@@ -13,8 +13,7 @@
       'dropdown',
       'tickable',
       'instafocus',
-      'spam.services',
-      'spam.directives'
+      'spam.services'
     ])
     .config(userLogoutRouting)
     .controller('UserLogoutCtrl', userLogoutCtrl);

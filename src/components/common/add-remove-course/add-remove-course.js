@@ -5,8 +5,10 @@
    * DIRECTIVE: addRemoveCourse
    */
   angular
-    .module('spam.directives')
+    .module('spam.components.common.add-remove-course', [])
     .directive('addRemoveCourse', addRemoveCourseDirective);
+
+
 
 
   /* @ngInject */
@@ -18,7 +20,7 @@
         course: '=course',
         btnClass: '@'
       },
-      templateUrl: 'partials/directives/add-remove-course.html',
+      templateUrl: 'components/common/add-remove-course/add-remove-course.html',
       link: function(scope) {
         var course = scope.course;
         var rel = {};

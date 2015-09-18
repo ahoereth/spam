@@ -21,13 +21,13 @@
 
     'spam.filters',
     'spam.services',
-    'spam.directives',
     'spam.controllers',
     'spam.controllers.courses',
 
     'spam.components.navbar',
     'spam.components.user',
     'spam.components.help',
-    'spam.components.notifications'
+    'spam.components.notifications',
+    'spam.components.common'
   ]);
 })();

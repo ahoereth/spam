@@ -2,9 +2,11 @@
   'use strict';
 
   angular
-    .module('spam.directives')
+    .module('spam.components.common.courserow', [])
     .directive('courserow', courserowDirective)
     .directive('courserowFields', courserowFieldsDirective);
+
+
 
 
   /* @ngInject */
@@ -16,7 +18,7 @@
         'course': '=',
         'action': '&action'
       },
-      templateUrl: 'partials/directives/courserow.html',
+      templateUrl: 'components/common/courserow/courserow.html',
       link: function(scope, elem, attrs) {
         var opt = scope.opt = {};
 
@@ -32,6 +34,9 @@
       controllerAs: 'courserow'
     };
   }
+
+
+
 
   /* @ngInject */
   function courserowFieldsDirective(_) {
