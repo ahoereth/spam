@@ -27,6 +27,7 @@
 
     'spam.components.navbar',
     'spam.components.user',
-    'spam.components.help'
+    'spam.components.help',
+    'spam.components.notifications'
   ]);
 })();

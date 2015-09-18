@@ -1,0 +1,10 @@
+<div class="container">
+  <div
+    class="alert alert-danger"
+    ng-show="notifications.http.error"
+  >
+    <button type="button" class="close" ng-click="notifications.close()">&times;</button>
+    <strong>Error!</strong>
+    The server responded with an error (Code: {{notifications.http.status}}). Check your network connection. The app&nbsp;<span ng-hide="notifications.http.permanentError">is retrying to reach the server...</span><span ng-show="notifications.http.permanentError">couldn't reestablish the connection. Changes might not be saved. Try to <a href=".">reload the app</a></span>.
+  </div>
+</div>

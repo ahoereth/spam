@@ -38,7 +38,8 @@
 <body class="ng-cloak">
 
   <div class="content wrap">
-    <div data-ng-include="'components/navbar/navbar.html'"></div>
+    <navbar></navbar>
+    <notifications></notifications>
     <section class="container ng-view" autoscroll="true"></section>
   </div>
 
@@ -68,6 +69,7 @@
   <script src="components/independent/progressbar.js"></script>
   <script src="components/independent/tickable.js"></script>
   <script src="components/navbar/navbar.js"></script>
+  <script src="components/notifications/notifications.js"></script>
   <script src="components/user/common/matriculation-setter/user.common.matriculation-setter.js"></script>
   <script src="components/user/common/user.common.js"></script>
   <script src="components/user/courses/edit/user.course.edit.js"></script>
@@ -92,7 +94,6 @@
   <script src="scripts/controllers/courses.single.edit.js"></script>
   <script src="scripts/controllers/courses.single.js"></script>
   <script src="scripts/controllers/guide.js"></script>
-  <script src="scripts/controllers/http.js"></script>
   <script src="scripts/controllers/login.js"></script>
   <script src="scripts/directives/_module.js"></script>
   <script src="scripts/directives/add-remove-course.js"></script>

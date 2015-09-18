@@ -6,7 +6,25 @@
       'spam.services',
       'spam.filters'
     ])
+    .directive('navbar', navbarDirective)
     .controller('NavbarController', navbarController);
+
+
+
+
+  /* @ngInject */
+  function navbarDirective() {
+    return {
+      restrict: 'E',
+      replace: true,
+      scope: true,
+      templateUrl: 'components/navbar/navbar.html',
+      controller: 'NavbarController',
+      controllerAs: 'navbar'
+    };
+  }
+
+
 
 
   /* @ngInject */
