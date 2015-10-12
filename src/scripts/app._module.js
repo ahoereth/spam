@@ -21,7 +21,6 @@
 
     'spam.filters',
     'spam.services',
-    'spam.controllers',
 
     'spam.components.navbar',
     'spam.components.landing',

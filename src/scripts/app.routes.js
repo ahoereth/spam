@@ -8,16 +8,6 @@
   var html5mode = true;
   var hashPrefix = '!';
   var routes = {
-
-    // **********
-    // Login
-    '/login': {
-      templateUrl: 'login.html',
-      controller: 'Login',
-      title: 'Login',
-      access: 0
-    },
-
     // **********
     // Page not found error
     '/401': {

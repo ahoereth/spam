@@ -1,18 +1,21 @@
 (function() {
   'use strict';
 
+  /**
+   * MODULE: spam.components.user.course.edit
+   * ROUTES:
+   *   /~/courses/new
+   *   /~/courses/:course_id (TODO)
+   * CONTROLLER: UserCourseEditController
+   */
   angular
-  .module('spam.components.user.course.edit', [
-    'ngRoute',
-    'progressbar',
-    'blurOnEnter',
-    'dropdown',
-    'tickable',
-    'instafocus',
-    'spam.services'
-  ])
-  .config(userCourseEditRouting)
-  .controller('UserCourseEditController', userCourseEditController);
+    .module('spam.components.user.course.edit', [
+      'ngRoute',
+      'instafocus',
+      'spam.services'
+    ])
+    .config(userCourseEditRouting)
+    .controller('UserCourseEditController', userCourseEditController);
 
 
 
