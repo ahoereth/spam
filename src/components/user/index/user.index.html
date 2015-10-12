@@ -16,7 +16,7 @@
   <!-- already enrolled in some courses -->
   <p class="lead" ng-if="overview.courses.length">
     <span ng-show="overview.facts.grades.overall && overview.facts.credits.passed">
-      You earned a total of <strong>{{overview.facts.credits.passed}} credits</strong> with the <strong>average grade {{overview.facts.grades.overall}}</strong>. <!--Of those a total of {{overview.facts.credits.overflow}} credits cannot be accounted for in your bachelor.-->
+      You earned a total of <strong>{{overview.facts.credits.passed}} credits</strong> with the <strong>average grade {{overview.facts.grades.overall}}</strong>.
     </span>
 
     <!-- enrolled ects -->
@@ -45,6 +45,11 @@
     <span ng-if="overview.facts.bscFieldsCount>overview.facts.bscFieldsCompletedCount">
       {{overview.thesis.active | iif:'B':'b'}}y now {{overview.thesis.active | iif : 'you ' : ''}} completed {{overview.facts.bscFieldsCompletedCount}} of {{overview.facts.bscFieldsCount}} <abbr tooltips tooltip-title="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
     </span>
+
+      <!-- Module Examinations -->
+      <span ng-if="!overview.facts.examinationCount">
+        Finally, you still need to pass an oral module examination.
+      </span>
   </p>
 
   <!-- no courses yet -->

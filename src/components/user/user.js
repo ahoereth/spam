@@ -9,4 +9,5 @@
       'spam.components.user.logout',
       'spam.components.user.courses'
     ]);
+
 })();

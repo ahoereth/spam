@@ -43,6 +43,7 @@
       optional: 0,
       sum: 0
     };
+    var foreignCreditsMem = 0;
 
 
     /**
@@ -61,10 +62,15 @@
      * used by the open studies field which basically acts as a catch-all.
      */
     function handleOverflowingCredits() {
-      var newForeignCredits = User.getOverflowingCredits();
+      // Omit the open studies field and sum up the credits.
+      var foreignPassedCredits = _(User.getOverflowingCredits()).omit(1).sum();
+      var examinationCredits = User.facts.examinationCredits;
 
-      // Omit the open studies field.
-      doAnalysis(_.sum(_.omit(newForeignCredits, 1)));
+      // Run the analysis again with those foreign credits.
+      if (foreignCreditsMem !== (examinationCredits + foreignPassedCredits)) {
+        foreignCreditsMem = examinationCredits + foreignPassedCredits;
+        doAnalysis(foreignCreditsMem);
+      }
     }
 
 
@@ -98,6 +104,9 @@
      */
     var doAnalysis = _.debounce(function(foreignCredits) {
       foreignCredits = foreignCredits || 0;
+      if (foreignCredits !== foreignCreditsMem) {
+        foreignCreditsMem = foreignCredits;
+      }
 
       var credits = field.credits = {
         passed: _.clone(defaultCreditSet),
@@ -137,12 +146,13 @@
       }, credits).value();
 
       // Account for foreign credits, if any.
-      if (foreignCredits && available.optional > 0) {
+      if (foreignCredits) {
         var availableNew = available.optional - foreignCredits;
         var counts = foreignCredits + (availableNew < 0 ? availableNew : 0);
-        credits.foreign = counts;
+        credits.foreign = foreignCredits;
         available.optional      -= counts;
         credits.passed.optional += counts;
+        credits.passed.overflowing += (foreignCredits - counts);
       }
 
       // Calculated the different progress values.
@@ -167,7 +177,8 @@
           overflowPassedCredits: credits.passed.overflowing,
           enrolledCredits: credits.enrolled.sum,
           completed: 100 === credits.passed.percentage,
-          examinationPossible: !! field.field_examination_possible
+          examinationPossible: !! field.field_examination_possible,
+          examination: $scope.examination
         });
       }
 

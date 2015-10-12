@@ -79,9 +79,14 @@
         );
       }
 
+      // TODO: `3` credits per examination should be a database option.
+      facts.examinationCount = fields.pluck('examination').sum().value();
+      facts.examinationCredits = 3 * (facts.examinationCount || 0);
+
       facts.credits = {
-        passed  : fields.pluck('overallPassedCredits').sum().value(),
-        overflow: fields.pluck('overflowPassedCredits').sum().value(),
+        passed  : fields.pluck('overallPassedCredits').sum().value() +
+                  facts.examinationCredits,
+        //overflow: fields.pluck('overflowPassedCredits').sum().value(),
         enrolled: fields.pluck('enrolledCredits').sum().value()
       };
 
