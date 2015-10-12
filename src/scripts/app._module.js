@@ -22,10 +22,10 @@
     'spam.filters',
     'spam.services',
     'spam.controllers',
-    'spam.controllers.courses',
 
     'spam.components.navbar',
     'spam.components.landing',
+    'spam.components.courses',
     'spam.components.user',
     'spam.components.help',
     'spam.components.notifications',

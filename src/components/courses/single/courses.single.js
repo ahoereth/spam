@@ -2,18 +2,42 @@
   'use strict';
 
   /**
-   * CONTROLLER: Course
+   * MODULE: spam.components.courses.single
+   * CONTROLLER: CoursesSingleController
    * ROUTE: /courses/:course_id
-   *
-   * Single course view.
    */
   angular
-    .module('spam.controllers.courses')
-    .controller('Course', courseCtrl);
+    .module('spam.components.courses.single', [])
+    .config(coursesSingleRouting)
+    .controller('CoursesSingleController', coursesSingleController);
+
+
 
 
   /* @ngInject */
-  function courseCtrl(
+  function coursesSingleRouting($routeProvider) {
+    var auth = {
+      /* @ngInject */
+      authentication: function($route, Auth) {
+        return Auth.authenticate($route.current.access);
+      }
+    };
+
+    $routeProvider.when('/courses/:courseId', {
+      templateUrl: 'components/courses/single/courses.single.html',
+      controller: 'CoursesSingleController',
+      //controllerAs: 'course',
+      title: ':course',
+      access: 0,
+      resolve: auth
+    });
+  }
+
+
+
+
+  /* @ngInject */
+  function coursesSingleController(
     $scope,
     $routeParams,
     Restangular,

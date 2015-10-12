@@ -35,53 +35,6 @@
       access: 0
     },
 
-    // *********
-    // courses - index
-    '/courses': {
-      templateUrl: 'courses/index.html',
-      controller: 'Courses',
-      title: 'Courses',
-      reloadOnSearch: false,
-      access: 0
-    },
-
-    // **********
-    // courses - create or edit course
-    '/courses/new': {
-      templateUrl: 'courses/edit.html',
-      controller: 'Course_edit',
-      title: 'New Course',
-      access: 32
-    },
-
-    // **********
-    // courses - proposals
-    // only visible to administrators/editors
-    '/courses/proposals': {
-      templateUrl: 'courses/proposals.html',
-      controller: 'Course_proposals',
-      title: 'Edit proposals',
-      access: 32
-    },
-
-    // **********
-    // courses - single view
-    '/courses/:courseId': {
-      templateUrl: 'courses/show.html',
-      controller: 'Course',
-      title: ':course',
-      access: 0
-    },
-
-    // **********
-    // courses - edit single course
-    '/courses/:courseId/edit': {
-      templateUrl: 'courses/edit.html',
-      controller: 'Course_edit',
-      title: ':course :: Edit',
-      access: 4
-    },
-
     // **********
     // admin task index
     '/admin': {

@@ -2,18 +2,45 @@
   'use strict';
 
   /**
-   * CONTROLLER: Courses
+   * MODULE: spam.components.courses.index
+   * CONTROLLER: CoursesIndexController
    * ROUTE: /courses
-   *
-   * Courses index.
    */
   angular
-    .module('spam.controllers.courses')
-    .controller('Courses', coursesCtrl);
+    .module('spam.components.courses.index', [
+      'spam.components.common.courserow'
+    ])
+    .config(coursesIndexRouting)
+    .controller('CoursesIndexController', coursesIndexController);
+
+
 
 
   /* @ngInject */
-  function coursesCtrl(
+  function coursesIndexRouting($routeProvider) {
+    var auth = {
+      /* @ngInject */
+      authentication: function($route, Auth) {
+        return Auth.authenticate($route.current.access);
+      }
+    };
+
+    $routeProvider.when('/courses', {
+      templateUrl: 'components/courses/index/courses.index.html',
+      controller: 'CoursesIndexController',
+      //controllerAs: 'index',
+      title: 'Courses',
+      reloadOnSearch: false,
+      access: 0,
+      resolve: auth
+    });
+  }
+
+
+
+
+  /* @ngInject */
+  function coursesIndexController(
     $rootScope,
     $scope,
     $location,
