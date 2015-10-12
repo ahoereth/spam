@@ -8,11 +8,6 @@
   var html5mode = true;
   var hashPrefix = '!';
   var routes = {
-    '/': {
-      templateUrl: 'landing.html',
-      title: '',
-      access: 0
-    },
 
     // **********
     // Login
