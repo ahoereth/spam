@@ -1,0 +1,25 @@
+<div class="app" ng-class="app.classnames">
+  <div class="content wrap">
+    <navbar></navbar>
+    <notifications></notifications>
+    <section class="container" autoscroll="true" ng-view></section>
+  </div>
+
+  <div class="footer wrap">
+    <div class="container">
+      <p>
+        <span class="hidden-xs pull-left">
+          Studentbody Cognitive Science @ University of Osnabr&uuml;ck
+        </span>
+
+        <span class="pull-right">
+          <a href="help/">help</a>
+          <span ng-show="app.user">&nbsp;|&nbsp;
+            <a href="~/settings">settings</a>&nbsp;|&nbsp;
+            <a href="~/logout">logout</a>
+          </span>
+        </span>
+      </p>
+    </div>
+  </div>
+</div>

@@ -330,7 +330,7 @@
         self.details = _.omit(data, ['fields', 'courses']);
       }
 
-      $rootScope.user = self.details;
+      $rootScope.$broadcast('user-construct', self.details);
       return self;
     };
 

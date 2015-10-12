@@ -22,6 +22,7 @@
     'spam.filters',
     'spam.services',
 
+    'spam.components.app',
     'spam.components.navbar',
     'spam.components.landing',
     'spam.components.courses',
