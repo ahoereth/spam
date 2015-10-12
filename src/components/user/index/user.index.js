@@ -2,8 +2,9 @@
   'use strict';
 
   /**
-   * CONTROLLER: UserIndexController
+   * MODULE: spam.components.user.index
    * ROUTE: /~
+   * CONTROLLER: UserIndexController
    */
   angular
     .module('spam.components.user.index', [

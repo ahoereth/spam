@@ -1,6 +1,10 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: spam.components.user.index.course
+   * DIRECTIVE: course
+   */
   angular
     .module('spam.components.user.index.course', [
       'blurOnEnter',
@@ -9,6 +13,8 @@
       'spam.components.user.index.field'
     ])
     .directive('course', courseDirective);
+
+
 
 
   /* @ngInject */

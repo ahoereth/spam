@@ -2,17 +2,14 @@
   'use strict';
 
   /**
-   * CONTROLLER: UserIndexController
-   * ROUTE: /~
+   * MODULE: spam.components.user.settings
+   * ROUTE: /~/settings
+   * CONTROLLER: UserSettingsController
    */
   angular
     .module('spam.components.user.settings', [
       'ngRoute',
-      'progressbar',
       'blurOnEnter',
-      'dropdown',
-      'tickable',
-      'instafocus',
       'spam.services'
     ])
     .config(userSettingsRouting)

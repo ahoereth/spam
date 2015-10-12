@@ -1,6 +1,11 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: spam.components.user.index.field
+   * DIRECTIVE: field
+   * CONTROLLER: UserIndexFieldController
+   */
   angular
     .module('spam.components.user.index.field', [
       'progressbar',
@@ -9,6 +14,8 @@
     ])
     .directive('field', userIndexFieldDirective)
     .controller('UserIndexFieldController', userIndexFieldController);
+
+
 
 
   /* @ngInject */
@@ -29,6 +36,8 @@
       }
     };
   }
+
+
 
 
   /* @ngInject */
@@ -258,4 +267,5 @@
     // Initialize the field data even if there is no course.
     doAnalysis();
   }
+
 }());

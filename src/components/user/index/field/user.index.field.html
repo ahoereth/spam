@@ -7,7 +7,6 @@
              'panel-default': field.credits.available.compulsory === 0 &&
                              !field.field_examination_possible}"
 >
-  <!-- Directives: field -->
 
   <div class="panel-heading">
     <div class="row">
@@ -25,7 +24,7 @@
           ng-blur="gradeChange()"
           ng-disabled="!examination"
           onclick="select()"
-        />
+        >
       </div>
 
       <!-- field button + dropdown -->
@@ -120,4 +119,5 @@
       ></progress>
     </progressbar>
   </div><!-- /panel-footer -->
+
 </div>

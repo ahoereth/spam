@@ -1,9 +1,16 @@
 (function() {
   'use strict';
 
+  /**
+   * MODULE: spam.components.user.common.matriculation-setter
+   * DIRECTIVE: matriculation-setter
+   */
   angular
     .module('spam.components.user.common.matriculation-setter', [])
     .directive('matriculationSetter', userMatriculationSetterDirective);
+
+
+
 
   /* @ngInject */
   function userMatriculationSetterDirective(User, _) {
@@ -39,4 +46,5 @@
       }
     };
   }
+
 })();

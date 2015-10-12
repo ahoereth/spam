@@ -4,7 +4,7 @@
 </div>
 
 <h1>
-  {{user.username}}'s overview
+  {{overview.user.username}}'s overview
   <span
     class="glyphicon lead"
     ng-class="{'glyphicon-heart'       :  overview.facts.bscFieldsCount,
@@ -81,7 +81,7 @@
         placeholder="Bachelor thesis title"
         ng-model="overview.thesis.title"
         ng-blur="overview.thesisChange()"
-      />
+      >
     </div>
 
     <div class="form-group col-lg-2 col-sm-3 col-xs-4">
@@ -93,7 +93,7 @@
         onclick="select()"
         ng-model="overview.thesis.grade"
         ng-blur="overview.thesisChange()"
-      />
+      >
     </div>
   </form>
 </div>

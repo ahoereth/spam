@@ -6,9 +6,6 @@
    * ROUTES:
    *   /login
    *   /~
-   *   /~/logout
-   *   /~/settings
-   *   /~/courses
    */
   angular
     .module('spam.components.user', [

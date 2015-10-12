@@ -3,8 +3,8 @@
 
   /**
    * MODULE: spam.components.user.login
-   * CONTROLLER: UserLoginController
    * ROUTE: /login
+   * CONTROLLER: UserLoginController
    */
   angular
     .module('spam.components.user.login', [
