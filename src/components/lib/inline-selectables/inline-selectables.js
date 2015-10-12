@@ -39,7 +39,7 @@
         value: '='
       },
       require: '^^inlineSelectableGroup',
-      templateUrl: 'components/inline-selectables/inline-selectable.html',
+      templateUrl: 'components/lib/inline-selectables/inline-selectable.html',
       link: function(scope, elem, attrs, groupCtrl) {
         scope.$watch(
           function(){ return groupCtrl.selected; },
