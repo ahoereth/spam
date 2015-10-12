@@ -8,15 +8,10 @@
   angular
     .module('spam.components.user.logout', [
       'ngRoute',
-      'progressbar',
-      'blurOnEnter',
-      'dropdown',
-      'tickable',
-      'instafocus',
       'spam.services'
     ])
     .config(userLogoutRouting)
-    .controller('UserLogoutCtrl', userLogoutCtrl);
+    .controller('UserLogoutController', userLogoutController);
 
 
 
@@ -31,7 +26,8 @@
     };
 
     $routeProvider.when('/~/logout', {
-      controller: 'UserLogoutCtrl',
+      template: '',
+      controller: 'UserLogoutController',
       title : 'Logout',
       access: 1,
       resolve: auth
@@ -42,19 +38,19 @@
 
 
   /* @ngInject */
-  function userLogoutCtrl(
+  function userLogoutController(
     $scope,
     $location,
     User
   ) {
     // 1. Logout.
-    User.logout();
-
-    // 2. Redirect.
-    $location
-      .path('/login')
-      .search({loggedout: true})
-      .replace();
+    User.logout().then(function() {
+      // 2. Redirect.
+      $location
+        .path('/login')
+        .search({loggedout: true})
+        .replace();
+    });
   }
 
 })();

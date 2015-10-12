@@ -157,6 +157,9 @@
 
       // Reconstruct user with empty dataset.
       self.construct();
+
+      // Just instantly resolve for now.
+      return $q.resolve();
     };
 
 
