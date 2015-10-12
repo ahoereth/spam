@@ -73,12 +73,4 @@
 <div class="pull-right">
   <a class="btn btn-info" ng-href="{{course.course_url}}" ng-if="course.course_url" target="_blank">External</a>
   <a class="btn btn-primary" ng-href="{{course.studip_url}}" ng-if="course.studip_url" target="_blank">StudIP</a>
-
-  <span ng-if="user">
-
-    <a ng-click="guideModal()" class="btn btn-default" ng-if="user.rank>=16">Guide options</a>
-
-    <a class="btn btn-warning" ng-show="user.rank>=2" ng-hide="true" ng-href="courses/{{course.course_id}}/edit">Propose changes</a>
-
-  </span>
 </div>

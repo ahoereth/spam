@@ -9,16 +9,8 @@
   To add or hide a course to/from the guide open it's individual page (e.g. find it using <a href="courses">/courses</a>) and use the appropriate button on the bottom there.
 </div>
 
-<!--<div class="row form-horizontal" style="margin-bottom: 10px;">
-  <label class="col-lg-1 col-sm-2 col-xs-3 control-label" for="regulationId">Regulation:</label>
-  <div class="col-lg-6 col-sm-5 col-xs-9">
-    <select class="form-control disabled" ng-model="regulationId" id="filter" ng-options="r.regulation_id as r.regulation for r in regulations" ng-change="fetch()" disabled="disabled"></select>
-  </div>
-  <div class="col-sm-5 hidden-xs help-block">Specify a study regulation here.</div>
-</div>-->
-
 <!-- guide table -->
-<div class="guide" ng-repeat="(semester, fields) in guide track by semester" bindonce style="margin: 40px 0;">
+<div class="guide" ng-repeat="(semester, fields) in guide.courses track by semester" style="margin: 40px 0;">
 
   <!-- guide table headline -->
   <div class="row head">

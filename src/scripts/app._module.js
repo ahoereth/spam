@@ -26,6 +26,7 @@
     'spam.components.navbar',
     'spam.components.landing',
     'spam.components.courses',
+    'spam.components.guide',
     'spam.components.user',
     'spam.components.help',
     'spam.components.notifications',

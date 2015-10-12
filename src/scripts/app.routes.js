@@ -27,15 +27,6 @@
     },
 
     // **********
-    // guide
-    '/guide': {
-      templateUrl: 'guide/index.html',
-      controller: 'GuideCtrl',
-      title: 'Guide',
-      access: 0
-    },
-
-    // **********
     // admin task index
     '/admin': {
       templateUrl: 'admin/index.html',
