@@ -2,13 +2,44 @@
   'use strict';
 
   /**
-  * CONTROLLER: Admin Migrate
-  *
-  * Course list migration ikw -> spam.
-  */
+   * MODULE: spam.components.admin.migrate
+   * ROUTE: /admin/migrate
+   * CONTROLLER: AdminMigrateController
+   */
   angular
-    .module('spam.controllers')
+    .module('spam.components.admin.migrate', [
+      'instafocus',
+      'inlineSelectables',
+      'mgcrea.ngStrap.button',
+      'spam.components.common.courserow'
+    ])
+    .config(adminMigrateRouting)
     .controller('AdminMigrateController', adminMigrateController);
+
+
+
+
+  /* @ngInject */
+  function adminMigrateRouting($routeProvider) {
+    var auth = {
+      /* @ngInject */
+      authentication: function($route, Auth) {
+        return Auth.authenticate($route.current.access);
+      }
+    };
+
+    $routeProvider.when('/admin/migrate', {
+      templateUrl: 'components/admin/migrate/admin.migrate.html',
+      controller: 'AdminMigrateController',
+      controllerAs: 'migrate',
+      title: 'IKW DB Migration',
+      reloadOnSearch: false,
+      access: 32,
+      resolve: auth
+    });
+  }
+
+
 
 
   /* @ngInject */
@@ -56,7 +87,7 @@
       });
     }
 
-    ctrl.fetch = function() {
+    ctrl.fetch = _.debounce(function() {
       ctrl.selected = true;
       ctrl.fetching = true;
       ctrl.courses  = [];
@@ -69,7 +100,7 @@
         year: ctrl.year,
         term: ctrl.term
       }).then(fetched);
-    };
+    }, 500);
 
     ctrl.acceptCourse = function(course) {
       course.accepted = true;
@@ -81,4 +112,5 @@
       ctrl.fetch();
     }
   }
+
 })();

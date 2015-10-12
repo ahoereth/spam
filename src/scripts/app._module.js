@@ -28,6 +28,7 @@
     'spam.components.courses',
     'spam.components.guide',
     'spam.components.user',
+    'spam.components.admin',
     'spam.components.help',
     'spam.components.notifications',
     'spam.components.common'
