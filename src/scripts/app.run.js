@@ -17,6 +17,8 @@
     TITLE,
     _
   ) {
+    var username;
+
     /**
      * Construct the page title (<head><title>) from the TITLE constant, the
      * route dependend prefix and optional contextual variables.
@@ -30,8 +32,8 @@
       }
 
       // Inject username.
-      if ($rootScope.user) {
-        title = title.replace(':username', $rootScope.user.username);
+      if (username) {
+        title = title.replace(':username', username);
       }
 
       if (_.isObject(data)) {
@@ -114,6 +116,14 @@
     // Listen for title data change event.
     $rootScope.$on('title', function(event, data) {
       constructTitle(data);
+    });
+
+
+    /**
+     * Save the current username when it changes.
+     */
+    $rootScope.$on('user-construct', function(event, user) {
+      username = _.get(user, 'username');
     });
   }
 
