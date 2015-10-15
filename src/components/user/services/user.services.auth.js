@@ -2,11 +2,19 @@
   'use strict';
 
   /**
-   * HTTP Authentication factory.
+   * MODULE: spam.components.user.services.auth
+   * SERVICE: Auth
    */
   angular
-    .module('spam.services')
+    .module('spam.components.user.services.auth', [
+      'ab-base64',
+      'lodash',
+      'restangular',
+      'spam.components.user.services.user'
+    ])
     .factory('Auth', authFactory);
+
+
 
 
   /* @ngInject */
@@ -134,4 +142,5 @@
       }
     };
   }
+
 })();

@@ -2,13 +2,17 @@
   'use strict';
 
   /**
-   * api/courses provider. Used in order to minimize api requests for pulling
-   * courses. This way we can quickly expose many courses to the application.
-   * Search and everything is done on the frontend! Makes the backend much leaner.
+   * MODULE: spam.components.courses.services.courses
+   * SERVICE: Courses
    */
   angular
-    .module('spam.services')
+    .module('spam.components.courses.services.courses', [
+      'restangular',
+      'lodash'
+    ])
     .factory('Courses', CoursesFactory);
+
+
 
 
   /* @ngInject */
@@ -111,4 +115,5 @@
 
     return self;
   }
+
 })();

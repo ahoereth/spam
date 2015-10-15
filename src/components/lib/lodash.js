@@ -2,11 +2,14 @@
   'use strict';
 
   /**
-   * LoDash / Underscore.js alternative
+   * MODULE: lodash
+   * SERVICE: _
    */
   angular
-    .module('spam.services')
+    .module('lodash', [])
     .factory('_', lodashFactory);
+
+
 
 
   /* @ngInject */

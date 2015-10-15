@@ -2,6 +2,9 @@
   'use strict';
 
   /**
+   * MODULE: spam.components.app.services.http-intercept
+   * SERVICE: httpIntercept
+   *
    * Used for intercepting all HTTP requests (using $http and $resource).
    *
    * On the one hand the interceptor updates the $rootScope.loading variable
@@ -16,8 +19,10 @@
    *                                  could be resolved now
    */
   angular
-    .module('spam.services')
+    .module('spam.components.app.services.http-intercept', [])
     .factory('httpIntercept', httpInterceptFactory);
+
+
 
 
   /* @ngInject */
@@ -25,8 +30,7 @@
     $injector,
     $rootScope,
     $q,
-    $timeout,
-    $location
+    $timeout
   ) {
     $rootScope.loading = 0;
 

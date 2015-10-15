@@ -1,10 +1,17 @@
 (function() {
   'use strict';
 
+  /**
+   * MODULE: spam.components.navbar
+   * DIRECTIVE: navbar
+   * CONTROLLER: NavbarController
+   */
   angular
     .module('spam.components.navbar', [
-      'spam.services',
-      'spam.filters'
+      'lodash',
+      'spam.filters',
+      'spam.components.user.services.user',
+      'spam.components.courses.services.courses'
     ])
     .directive('navbar', navbarDirective)
     .controller('NavbarController', navbarController);

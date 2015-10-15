@@ -10,9 +10,11 @@
    */
   angular
     .module('spam.components.user.course.edit', [
+      'restangular',
       'instafocus',
-      'spam.services',
-      'spam.components.app.services.routes'
+      'lodash',
+      'spam.components.app.services.routes',
+      'spam.components.user.services.user'
     ])
     .config(userCourseEditRouting)
     .controller('UserCourseEditController', userCourseEditController);

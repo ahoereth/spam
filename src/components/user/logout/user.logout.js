@@ -8,8 +8,8 @@
    */
   angular
     .module('spam.components.user.logout', [
-      'spam.services',
-      'spam.components.app.services.routes'
+      'spam.components.app.services.routes',
+      'spam.components.user.services.user'
     ])
     .config(userLogoutRouting)
     .controller('UserLogoutController', userLogoutController);

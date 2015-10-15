@@ -19,7 +19,6 @@
     'mgcrea.ngStrap.button',
 
     'spam.filters',
-    'spam.services',
 
     'spam.components.app',
     'spam.components.navbar',

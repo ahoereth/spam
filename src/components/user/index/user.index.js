@@ -8,8 +8,10 @@
    */
   angular
     .module('spam.components.user.index', [
-      'spam.services',
+      'restangular',
+      'lodash',
       'spam.components.app.services.routes',
+      'spam.components.user.services.user',
       'spam.components.user.index.field',
       'spam.components.user.index.course'
     ])

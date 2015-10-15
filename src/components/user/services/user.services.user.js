@@ -2,12 +2,16 @@
   'use strict';
 
   /**
-   * User functionality factory. All functionality provided by this factory is
-   * injected into the global ($rootScope) user object.
+   * MODULE: spam.components.services.user
+   * SERVICE: User
    */
   angular
-    .module('spam.services')
+    .module('spam.components.user.services.user', [
+      'restangular'
+    ])
     .factory('User', userFactory);
+
+
 
 
   /* @ngInject */
@@ -350,4 +354,5 @@
 
     return self;
   }
+
 })();

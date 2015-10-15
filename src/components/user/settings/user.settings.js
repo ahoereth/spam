@@ -9,8 +9,8 @@
   angular
     .module('spam.components.user.settings', [
       'blurOnEnter',
-      'spam.services',
-      'spam.components.app.services.routes'
+      'spam.components.app.services.routes',
+      'spam.components.user.services.user'
     ])
     .config(userSettingsRouting)
     .controller('UserSettingsController', userSettingsController);

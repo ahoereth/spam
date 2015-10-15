@@ -6,9 +6,13 @@
    * ROUTES:
    *   /login
    *   /~
+   * SERVICES:
+   *   User
+   *   Auth
    */
   angular
     .module('spam.components.user', [
+      'spam.components.user.services',
       'spam.components.user.common',
       'spam.components.user.index',
       'spam.components.user.settings',

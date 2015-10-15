@@ -2,13 +2,18 @@
   'use strict';
 
   /**
+   * MODULE: spam.components.notifications
+   * DIRECTIVE: notifications
+   * CONTROLLER: NotificationsController
+   *
    * Currently this is just a notification about HTTP request/connection
    * errors. Idea here is to expand this into a more general notification
    * system - if required.
    */
   angular
     .module('spam.components.notifications', [
-      'spam.services'
+      'lodash',
+      'spam.components.app.services.http-intercept'
     ])
     .directive('notifications', notificationsDirective)
     .controller('NotificationsController', notificationsController);

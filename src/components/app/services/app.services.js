@@ -6,7 +6,8 @@
    */
   angular
     .module('spam.components.app.services', [
-      'spam.components.app.services.routes'
+      'spam.components.app.services.routes',
+      'spam.components.app.services.http-intercept'
     ]);
 
 })();
