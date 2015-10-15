@@ -8,9 +8,9 @@
    */
   angular
     .module('spam.components.user.settings', [
-      'ngRoute',
       'blurOnEnter',
-      'spam.services'
+      'spam.services',
+      'spam.components.app.services.routes'
     ])
     .config(userSettingsRouting)
     .controller('UserSettingsController', userSettingsController);
@@ -19,21 +19,13 @@
 
 
   /* @ngInject */
-  function userSettingsRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/~/settings', {
-      templateUrl: 'components/user/settings/user.settings.html',
+  function userSettingsRouting(RoutesProvider) {
+    RoutesProvider.add('/~/settings', {
       controller: 'UserSettingsController',
       controllerAs: 'settings',
+      templateUrl: 'components/user/settings/user.settings.html',
       title: ':username\'s settings',
-      access: 1,
-      resolve: auth
+      access: 1
     });
   }
 

@@ -2,7 +2,6 @@
   'use strict';
 
   angular.module('spam', [
-    'ngRoute',
     'ngSanitize',
 
     'restangular',

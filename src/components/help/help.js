@@ -7,7 +7,7 @@
    */
   angular
     .module('spam.components.help', [
-      'ngRoute',
+      'spam.components.app.services.routes',
       'spam.components.help.help-fragment'
     ])
     .config(helpRouting)
@@ -17,23 +17,14 @@
 
 
   /* @ngInject */
-  function helpRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/help/:subject*?', {
-      templateUrl: 'components/help/help.html',
+  function helpRouting(RoutesProvider) {
+    RoutesProvider.add('/help/:subject*?', {
       controller: 'HelpController',
-      title: 'Help',
-      access: 0,
-      resolve: auth
+      templateUrl: 'components/help/help.html',
+      title: 'Help'
     });
 
-    $routeProvider.when('/help', {
+    RoutesProvider.add('/help', {
       redirectTo: '/help/remember'
     });
   }

@@ -6,26 +6,20 @@
    * ROUTE: /admin
    */
   angular
-    .module('spam.components.admin.index', [])
+    .module('spam.components.admin.index', [
+      'spam.components.app.services.routes'
+    ])
     .config(adminIndexRouting);
 
 
 
 
   /* @ngInject */
-  function adminIndexRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/admin', {
+  function adminIndexRouting(RoutesProvider) {
+    RoutesProvider.add('/admin', {
       templateUrl: 'components/admin/index/admin.index.html',
       title: 'Administration',
-      access: 32,
-      resolve: auth
+      access: 32
     });
   }
 

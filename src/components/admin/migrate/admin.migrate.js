@@ -11,7 +11,8 @@
       'instafocus',
       'inlineSelectables',
       'mgcrea.ngStrap.button',
-      'spam.components.common.courserow'
+      'spam.components.common.courserow',
+      'spam.components.app.services.routes'
     ])
     .config(adminMigrateRouting)
     .controller('AdminMigrateController', adminMigrateController);
@@ -20,22 +21,14 @@
 
 
   /* @ngInject */
-  function adminMigrateRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/admin/migrate', {
-      templateUrl: 'components/admin/migrate/admin.migrate.html',
+  function adminMigrateRouting(RoutesProvider) {
+    RoutesProvider.add('/admin/migrate', {
       controller: 'AdminMigrateController',
       controllerAs: 'migrate',
+      templateUrl: 'components/admin/migrate/admin.migrate.html',
       title: 'IKW DB Migration',
       reloadOnSearch: false,
-      access: 32,
-      resolve: auth
+      access: 32
     });
   }
 

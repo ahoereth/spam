@@ -8,8 +8,8 @@
    */
   angular
     .module('spam.components.user.login', [
-      'ngRoute',
-      'spam.components.common.loginform'
+      'spam.components.common.loginform',
+      'spam.components.app.services.routes'
     ])
     .config(userLoginRouting)
     .controller('UserLoginController', userLoginController);
@@ -18,21 +18,12 @@
 
 
   /* @ngInject */
-  function userLoginRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-       return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/login', {
-      templateUrl: 'components/user/login/user.login.html',
+  function userLoginRouting(RoutesProvider) {
+    RoutesProvider.add('/login', {
       controller: 'UserLoginController',
       controllerAs: 'login',
-      access: 0,
-      title: 'Login',
-      resolve: auth
+      templateUrl: 'components/user/login/user.login.html',
+      title: 'Login'
     });
   }
 

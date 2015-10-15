@@ -8,8 +8,8 @@
    */
   angular
     .module('spam.components.user.logout', [
-      'ngRoute',
-      'spam.services'
+      'spam.services',
+      'spam.components.app.services.routes'
     ])
     .config(userLogoutRouting)
     .controller('UserLogoutController', userLogoutController);
@@ -18,20 +18,12 @@
 
 
   /* @ngInject */
-  function userLogoutRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/~/logout', {
-      template: '',
+  function userLogoutRouting(RoutesProvider) {
+    RoutesProvider.add('/~/logout', {
       controller: 'UserLogoutController',
+      template: '',
       title : 'Logout',
-      access: 1,
-      resolve: auth
+      access: 1
     });
   }
 

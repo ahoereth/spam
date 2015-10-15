@@ -7,7 +7,9 @@
    * ROUTE: /guide
    */
   angular
-    .module('spam.components.guide', [])
+    .module('spam.components.guide', [
+      'spam.components.app.services.routes'
+    ])
     .config(guideRouting)
     .controller('GuideController', guideController);
 
@@ -15,21 +17,12 @@
 
 
   /* @ngInject */
-  function guideRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/guide', {
-      templateUrl: 'components/guide/guide.html',
+  function guideRouting(RoutesProvider) {
+    RoutesProvider.add('/guide', {
       controller: 'GuideController',
       controllerAs: 'guide',
-      title: 'Guide',
-      access: 0,
-      resolve: auth
+      templateUrl: 'components/guide/guide.html',
+      title: 'Guide'
     });
   }
 
@@ -51,7 +44,7 @@
         .each(function(course, k) {
           ctrl.courses[k] = _.groupBy(course, 'singleField');
         })
-        .value(); 
+        .value();
     });
   }
 

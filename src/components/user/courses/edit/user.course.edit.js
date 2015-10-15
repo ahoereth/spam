@@ -10,9 +10,9 @@
    */
   angular
     .module('spam.components.user.course.edit', [
-      'ngRoute',
       'instafocus',
-      'spam.services'
+      'spam.services',
+      'spam.components.app.services.routes'
     ])
     .config(userCourseEditRouting)
     .controller('UserCourseEditController', userCourseEditController);
@@ -21,28 +21,19 @@
 
 
   /* @ngInject */
-  function userCourseEditRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-       return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/~/courses/new', {
-      templateUrl: 'components/user/courses/new/user.course.edit.html',
+  function userCourseEditRouting(RoutesProvider) {
+    RoutesProvider.add('/~/courses/new', {
       controller: 'UserCourseEditController',
-      access: 1,
+      templateUrl: 'components/user/courses/new/user.course.edit.html',
       title: 'Add unofficial Course',
-      resolve: auth
+      access: 1
     });
 
-    /*$routeProvider.when('/~/courses/edit/:course_id', {
-      templateUrl: 'components/user/courses/new/user.course.edit.html',
+    /*RoutesProvider.add('/~/courses/edit/:course_id', {
       controller: 'UserCourseEditController',
-      access: 1,
+      templateUrl: 'components/user/courses/new/user.course.edit.html',
       title: 'Edit personal course',
-      resolve: auth
+      access: 1
     });*/
   }
 

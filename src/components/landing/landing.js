@@ -6,26 +6,18 @@
    * ROUTE: /
    */
   angular
-    .module('spam.components.landing', [])
+    .module('spam.components.landing', [
+      'spam.components.app.services.routes'
+    ])
     .config(landingRouting);
 
 
 
 
   /* @ngInject */
-  function landingRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/', {
-      templateUrl: '/components/landing/landing.html',
-      title: '',
-      access: 0,
-      resolve: auth
+  function landingRouting(RoutesProvider) {
+    RoutesProvider.add('/', {
+      templateUrl: '/components/landing/landing.html'
     });
   }
 

@@ -8,7 +8,8 @@
    */
   angular
     .module('spam.components.courses.index', [
-      'spam.components.common.courserow'
+      'spam.components.common.courserow',
+      'spam.components.app.services.routes'
     ])
     .config(coursesIndexRouting)
     .controller('CoursesIndexController', coursesIndexController);
@@ -17,22 +18,13 @@
 
 
   /* @ngInject */
-  function coursesIndexRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/courses', {
-      templateUrl: 'components/courses/index/courses.index.html',
+  function coursesIndexRouting(RoutesProvider) {
+    RoutesProvider.add('/courses', {
       controller: 'CoursesIndexController',
       //controllerAs: 'index',
+      templateUrl: 'components/courses/index/courses.index.html',
       title: 'Courses',
-      reloadOnSearch: false,
-      access: 0,
-      resolve: auth
+      reloadOnSearch: false
     });
   }
 

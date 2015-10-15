@@ -8,8 +8,8 @@
    */
   angular
     .module('spam.components.user.index', [
-      'ngRoute',
       'spam.services',
+      'spam.components.app.services.routes',
       'spam.components.user.index.field',
       'spam.components.user.index.course'
     ])
@@ -20,22 +20,14 @@
 
 
   /* @ngInject */
-  function userIndexRouting($routeProvider) {
-    var auth = {
-      /* @ngInject */
-      authentication: function($route, Auth) {
-        return Auth.authenticate($route.current.access);
-      }
-    };
-
-    $routeProvider.when('/~', {
-      templateUrl: 'components/user/index/user.index.html',
+  function userIndexRouting(RoutesProvider) {
+    RoutesProvider.add('/~', {
       controller: 'UserIndexController',
       controllerAs: 'overview',
+      templateUrl: 'components/user/index/user.index.html',
       title: ':username',
       reloadOnSearch: false,
-      access: 1,
-      resolve: auth
+      access: 1
     });
   }
 
