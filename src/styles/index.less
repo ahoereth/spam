@@ -3,16 +3,7 @@
 @import "../lib/open-sans-fontface/open-sans.less";
 // endbower
 
-// Does not have *.less - manual include.
-@import (less) "../lib/angular-tooltips/src/css/angular-tooltips.css";
-
-@import "__variables.less";
-
-@import "_guide.less";
-@import "_helper.less";
-@import "_loader.less";
-@import "_navbar.less";
-@import "_overview.less";
+@import "_variables.less";
 
 /*
 @media (max-width: 767px) {
@@ -21,16 +12,24 @@
 @media (min-width: 1200px) {
 */
 
-
 // remove webkit link active highlighting
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
-html {
-  -ms-touch-action: manipulation;
-      touch-action: manipulation;
+html,
+body {
+  height: 100%;
 }
+
+html {
+  touch-action: manipulation;
+}
+
+body {
+  overflow-y: scroll;
+}
+
 .jumbotron {
   border-left: 12px solid @uos-highlight;
 }
@@ -41,13 +40,6 @@ html {
 
 .label {
   border-radius: 0px;
-}
-
-// Fix for narrow spaces
-.btn-block {
-  padding-left: 0;
-  padding-right: 0;
-  text-align: center;
 }
 
 body,
@@ -66,6 +58,21 @@ h6,
   font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+a,
+a:active,
+a:visited {
+  color: #333;
+}
+
+a:hover {
+  color: @uos-red;
+}
+
+
+/// ****************************************************************************
+/// ****************************************************************************
+/// Dropdown menu
+
 .dropdown-menu {
   &::after {
     position: absolute;
@@ -76,6 +83,16 @@ h6,
     border-bottom: 6px solid white;
     border-left: 6px solid transparent;
     content: '';
+  }
+
+  &.pull-right {
+    right: 0;
+    left: auto;
+
+    &::after {
+      right: 4px;
+      left: auto;
+    }
   }
 
   li {
@@ -94,9 +111,10 @@ h6,
   }
 }
 
-.faq .panel-heading {
-  cursor: pointer;
-}
+
+/// ****************************************************************************
+/// ****************************************************************************
+/// Additional form classes
 
 .input-tiny {
   display: block;
@@ -112,35 +130,34 @@ h6,
 
 .form-control-tight {
   text-align: center;
-}
 
-@media (max-width: 530px) {
-  .form-control-tight {
+  @media (max-width: 530px) {
     padding-left: 1px;
     padding-right: 1px;
   }
-}
-@media (min-width: 531px) and (max-width: 991px) {
-  .form-control-tight {
+
+  @media (min-width: 531px) and (max-width: 991px) {
     padding-left: 1px;
     padding-right: 1px;
   }
-}
-@media (min-width: 992px) and (max-width: 1199px) {
-  .form-control-tight {
+
+  @media (min-width: 992px) and (max-width: 1199px) {
     padding-left: 6px;
     padding-right: 6px;
   }
 }
 
-
-/*********************************************************/
-/* GENERAL */
-
-
-abbr {
-  border-bottom: 1px dotted #999;
+// Fix for narrow spaces
+.btn-block {
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
 }
+
+/// ****************************************************************************
+/// ****************************************************************************
+/// General
+
 
 .caret.up {
   border-top: 0;

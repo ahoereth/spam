@@ -9,7 +9,7 @@
     '720kb.tooltips',
     'unicorn-directive',
 
-    'progressbar',
+    'progress',
     'blurOnEnter',
     'dropdown',
     'infiniteScroll',

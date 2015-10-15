@@ -48,7 +48,7 @@
 
           </button>
 
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu pull-right">
 
             <!-- trigger field examination -->
             <li ng-if="field.field_examination_possible">
@@ -90,34 +90,34 @@
 
   <!-- progress bar panel footer -->
   <div class="panel-footer">
-    <progressbar>
-      <progress
+    <progress>
+      <progressbar
         data-type="'success'"
         data-value="field.credits.passed.percentage"
         data-text="field.credits.passed.overflowing | iif
           : (field.credits.passed.sum + field.credits.passed.overflowing) +
             ' / ' + field.credits.full
           : field.credits.passed.sum"
-      ></progress>
+      ></progressbar>
 
-      <progress
+      <progressbar
         data-type="'info'"
         data-value="field.credits.enrolled.percentage"
         data-text="field.credits.enrolled.sum"
-      ></progress>
+      ></progressbar>
 
-      <progress
+      <progressbar
         data-type="'required'"
         data-value="field.credits.available.percentage_compulsory"
         data-text="field.credits.available.compulsory"
-      ></progress>
+      ></progressbar>
 
-      <progress
+      <progressbar
         data-type="'background'"
         data-value="field.credits.available.percentage_optional"
         data-text="field.credits.available.optional"
-      ></progress>
-    </progressbar>
+      ></progressbar>
+    </progress>
   </div><!-- /panel-footer -->
 
 </div>

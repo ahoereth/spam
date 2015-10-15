@@ -1,26 +1,13 @@
-/* *****************************************************************************
- * User Overview
- *
- * TEMPLATE: src/partials/home/index.html
- * ROUTE: /~
- */
+/// ROUTE: /~
 
-.overview-container {
+@progress-bar-color: #fff;
+@progress-bar-warning-bg: #f0ad4e;
+
+.user {
 
   table tr td {
     padding-left: 4px;
     padding-right: 4px;
-  }
-
-  a,
-  a:active,
-  a:visited {
-    color: #333;
-  }
-
-  a:hover {
-    color: @uos-red;
-    text-decoration: none;
   }
 
   .panel {
@@ -60,18 +47,6 @@
     }
   }
 
-  .dropdown-menu,
-  .dropdown-menu.pull-right {
-    right: 0;
-    left: auto;
-  }
-
-  .dropdown-menu::after,
-  .dropdown-menu.pull-right::after {
-    right: 4px;
-    left: auto;
-  }
-
   .course.overflowing div {
     opacity: .4;
 
@@ -109,26 +84,18 @@
   .input-tiny.disabled {
     background-color: inherit;
   }
-}
 
-.btn-group.dropdown {
-  width: 100%;
-}
+  .btn-group.dropdown {
+    width: 100%;
+  }
 
-.progress {
-  margin-bottom: 0;
+  .progress {
+    margin-bottom: 0;
+  }
 
-  .progress-bar {
-    &.progress-bar-required {
-      color: @progress-bar-color;
-      background-color: fade(@progress-bar-warning-bg, 50%);
-      .box-shadow(inset 0 0px 2px rgba(0, 0, 0, .1));
-    }
-
-    &.progress-bar-background {
-      color: #000;
-      background-color: transparent;
-      .box-shadow(none);
-    }
+  .progress-bar.progress-bar-required {
+    color: @progress-bar-color;
+    background-color: fade(@progress-bar-warning-bg, 50%);
+    box-shadow: inset 0 0px 2px rgba(0, 0, 0, .1);
   }
 }

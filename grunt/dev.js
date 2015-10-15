@@ -16,6 +16,7 @@ module.exports = function(grunt) {
     'copy:dev',
     'wiredep',
     'injector',
+    'connect:dev',
     'watch'
   ];
 

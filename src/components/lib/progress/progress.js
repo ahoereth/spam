@@ -1,14 +1,20 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: progress
+   * DIRECTIVES:
+   *   progress
+   *   progressbar
+   */
   angular
-    .module('progressbar', [])
-    .directive('progressbar', progressbarDirective)
-    .directive('progress', progressDirective);
+    .module('progress', [])
+    .directive('progress', progressDirective)
+    .directive('progressbar', progressbarDirective);
 
 
   /* @ngInject */
-  function progressbarDirective() {
+  function progressDirective() {
     return {
       restrict: 'E',
       replace: true,
@@ -20,11 +26,11 @@
 
 
   /* @ngInject */
-  function progressDirective() {
+  function progressbarDirective() {
     return {
       restrict: 'E',
       replace: true,
-      require: '^^progressbar',
+      require: '^^progress',
       scope: {
         type: '=',
         value: '=',

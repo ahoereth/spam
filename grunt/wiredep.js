@@ -14,6 +14,7 @@ module.exports = function(grunt) {
       'src/styles/app.less'
     ],
     options: {
+      devDependencies: true,
       exclude: grunt.config.get('bwr').exclude
     }
   };

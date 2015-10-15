@@ -13,15 +13,7 @@ module.exports = function(grunt) {
 
   var task = function(arg) {
     if (! arg || arg !== 'demo') {
-      grunt.task.run([
-        'clean:dev',
-        'less:dev',
-        'copy:dev',
-        'wiredep',
-        'injector',
-        'connect:dev',
-        'watch'
-      ]);
+      grunt.task.run('dev');
     } else {
       grunt.task.run([
         'build',

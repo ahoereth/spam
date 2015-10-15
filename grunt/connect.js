@@ -9,7 +9,7 @@ module.exports = function(grunt) {
   'use strict';
   var connect = grunt.config('connect') ||  {};
   var rewrite = [
-    '!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf$ ' +
+    '!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.less$ ' +
     '/index.html [L]'
   ];
 

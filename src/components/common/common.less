@@ -1,7 +1,3 @@
-/* *****************************************************************************
- * Helper
- */
-
 .bold {
   font-weight: bold;
 }
@@ -19,7 +15,7 @@
 }
 
 .undercover:hover {
-  color: @link-hover-color;
+  color: #AD1034;
 }
 
 .pointer {
@@ -28,4 +24,21 @@
 
 .inline {
   display: inline;
+}
+
+.spin {
+  animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+abbr {
+  border-bottom: 1px dotted #999;
 }

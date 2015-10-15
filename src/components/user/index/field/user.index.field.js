@@ -8,7 +8,7 @@
    */
   angular
     .module('spam.components.user.index.field', [
-      'progressbar',
+      'progress',
       'dropdown',
       'tickable',
     ])

@@ -1,0 +1,33 @@
+@uos-highlight: #fbb900;
+@uos-red:       #AD1034;
+
+.loader {
+  height: 2px;
+  background-color: @uos-red;
+
+  .container {
+    height: 100%;
+    position: relative;
+  }
+
+  .loadingbar {
+    height: 100%;
+    width: 20%;
+    background-color: @uos-highlight;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    animation: loading 3s linear infinite;
+    transition: opacity 500ms ease-out;
+    &.visible {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes loading {
+    0% { left:  50%; width:   0%; }
+   50% { left:   0%; width: 100%; }
+  100% { left:  50%; width:   0%; }
+}
