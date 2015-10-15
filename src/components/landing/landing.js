@@ -7,7 +7,8 @@
    */
   angular
     .module('spam.components.landing', [
-      'spam.components.app.services.routes'
+      'spam.components.app.services.routes',
+      'spam.components.user.login.form'
     ])
     .config(landingRouting);
 

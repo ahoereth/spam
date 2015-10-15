@@ -8,8 +8,8 @@
    */
   angular
     .module('spam.components.user.login', [
-      'spam.components.common.loginform',
-      'spam.components.app.services.routes'
+      'spam.components.app.services.routes',
+      'spam.components.user.login.form'
     ])
     .config(userLoginRouting)
     .controller('UserLoginController', userLoginController);

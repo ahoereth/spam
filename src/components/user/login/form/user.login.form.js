@@ -2,10 +2,15 @@
   'use strict';
 
   /**
-  * DIRECTIVE: loginform
-  */
+   * MODULE: spam.components.user.login.form
+   * DIRECTIVE: loginform
+   * CONTROLLER: LoginformController
+   */
   angular
-    .module('spam.components.common.loginform', [])
+    .module('spam.components.user.login.form', [
+      'lodash',
+      'spam.components.user.services.auth'
+    ])
     .directive('loginform', loginformDirective)
     .controller('LoginformController', loginformController);
 
@@ -18,7 +23,7 @@
       restrict: 'E',
       replace: true,
       scope: true,
-      templateUrl: 'components/common/loginform/loginform.html',
+      templateUrl: 'components/user/login/form/user.login.form.html',
       controller: 'LoginformController'
     };
   }
