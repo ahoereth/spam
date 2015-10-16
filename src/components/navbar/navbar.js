@@ -72,6 +72,18 @@
     });
 
 
+    $scope.$on('user-construct', function(event, user) {
+      if (!user) {
+        ctrl.user = false;
+      } else {
+        ctrl.user = {
+          username: user.username,
+          role: user.role
+        };
+      }
+    });
+
+
     /**
      * Close dropdown navigation on mobile devices when changing route.
      */

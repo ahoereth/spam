@@ -49,9 +49,9 @@
 
         <li
           ng-class="navbar.getNavigationActiveClass('/~')"
-          ng-hide="!user || user.role != 'student'"
+          ng-hide="!navbar.user || navbar.user.role != 'student'"
         >
-          <a href="~" ng-bind="user.username"></a>
+          <a href="~" ng-bind="navbar.user.username"></a>
         </li>
 
         <li
