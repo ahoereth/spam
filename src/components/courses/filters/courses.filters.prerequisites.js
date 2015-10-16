@@ -2,13 +2,16 @@
   'use strict';
 
   /**
+   * MODULE: spam.components.courses.filters.prerequisites
    * FILTER: prerequisites
    *
    * Parse a course's description text for prerequisits and make them hyperlinks.
    */
   angular
-    .module('spam.filters')
+    .module('spam.components.courses.filters.prerequisites', [])
     .filter('prerequisites', prerequisitesFilter);
+
+
 
 
   /* @ngInject */
@@ -54,4 +57,5 @@
       return trusted[output] || ( trusted[output] = $sce.trustAsHtml( output ) );
     };
   }
+
 })();

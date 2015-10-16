@@ -13,6 +13,7 @@
       'restangular',
       'instafocus',
       'lodash',
+      'iifFilter',
       'spam.components.app.services.routes',
       'spam.components.user.services.user'
     ])

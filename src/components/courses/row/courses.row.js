@@ -11,7 +11,9 @@
    */
   angular
     .module('spam.components.courses.row', [
-      'lodash'
+      'lodash',
+      'nl2brFilter',
+      'yearFilter'
     ])
     .directive('courserow', courserowDirective)
     .directive('courserowFields', courserowFieldsDirective);

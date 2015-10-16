@@ -10,6 +10,7 @@
     .module('spam.components.user.index', [
       'restangular',
       'lodash',
+      'iifFilter',
       'spam.components.app.services.routes',
       'spam.components.user.services.user',
       'spam.components.user.index.field',

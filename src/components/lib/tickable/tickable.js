@@ -1,9 +1,15 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: tickable
+   * DIRECTIVE: tickable
+   */
   angular
     .module('tickable', [])
     .directive('tickable', tickableDirective);
+
+
 
 
   /* @ngInject */
@@ -34,4 +40,5 @@
       }
     };
   }
+
 }());

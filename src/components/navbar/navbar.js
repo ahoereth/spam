@@ -9,7 +9,9 @@
   angular
     .module('spam.components.navbar', [
       'lodash',
-      'spam.filters',
+      'highlightFilter',
+      'iifFilter',
+      'yearFilter',
       'spam.components.user.services.user',
       'spam.components.courses.services.courses',
       'spam.components.courses.row'

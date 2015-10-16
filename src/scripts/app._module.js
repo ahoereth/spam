@@ -8,7 +8,6 @@
     '720kb.tooltips',
     'unicorn-directive',
 
-    'spam.filters',
     'spam.components.app',
     'spam.components.landing'
   ]);

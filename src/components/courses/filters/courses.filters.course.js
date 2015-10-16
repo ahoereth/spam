@@ -2,11 +2,14 @@
   'use strict';
 
   /**
+   * MODULE: spam.components.courses.filters.course
    * FILTER: courseFilter
    */
   angular
-    .module('spam.filters')
+    .module('spam.components.courses.filters.course', [])
     .filter('courseFilter', courseFilter);
+
+
 
 
   /* @ngInject */
@@ -94,4 +97,5 @@
       return filtered;
     };
   }
+
 })();

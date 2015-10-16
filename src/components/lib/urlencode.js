@@ -2,11 +2,14 @@
   'use strict';
 
   /**
+   * MODULE: urlencodeFilter
    * FILTER: urlencode
    */
   angular
-    .module('spam.filters')
+    .module('urlencodeFilter', [])
     .filter('urlencode', urlencodeFilter);
+
+
 
 
   /* @ngInject */
@@ -15,4 +18,5 @@
       return $window.encodeURIComponent(unencoded);
     };
   }
+
 })();

@@ -2,6 +2,7 @@
   'use strict';
 
   /**
+   * MODULE: instafocus
    * DIRECTIVE: instafocus
    *
    * Focuses the element on page load.
@@ -20,4 +21,5 @@
       }
     };
   }
+
 }());

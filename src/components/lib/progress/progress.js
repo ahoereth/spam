@@ -13,6 +13,8 @@
     .directive('progressbar', progressbarDirective);
 
 
+
+
   /* @ngInject */
   function progressDirective() {
     return {
@@ -41,4 +43,5 @@
                 '></div>'
     };
   }
+
 }());

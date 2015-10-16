@@ -11,6 +11,7 @@
       'ngRoute', // $routeParams
       'restangular',
       'lodash',
+      'urlencodeFilter',
       'spam.components.app.services.routes',
       'spam.components.user.services.user'
     ])

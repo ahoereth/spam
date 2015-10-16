@@ -9,6 +9,7 @@
   angular
     .module('spam.components.user.login.form', [
       'lodash',
+      'iifFilter',
       'spam.components.user.services.auth'
     ])
     .directive('loginform', loginformDirective)

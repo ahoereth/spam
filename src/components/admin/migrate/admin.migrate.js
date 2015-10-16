@@ -13,6 +13,7 @@
       'instafocus',
       'inlineSelectables',
       'mgcrea.ngStrap.button',
+      'yearFilter',
       'spam.components.courses.row',
       'spam.components.app.constants',
       'spam.components.app.services.routes'

@@ -8,9 +8,12 @@
    */
   angular
     .module('spam.components.user.index.field', [
+      'lodash',
       'progress',
       'dropdown',
       'tickable',
+      'iifFilter',
+      'spam.components.user.services.user'
     ])
     .directive('field', userIndexFieldDirective)
     .controller('UserIndexFieldController', userIndexFieldController);

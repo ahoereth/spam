@@ -2,7 +2,9 @@
   'use strict';
 
   /**
+   * MODULE: blurOnEnter
    * DIRECTIVE: blurOnEnter
+   *
    * Blur an input field on enter-keypress.
    */
   angular

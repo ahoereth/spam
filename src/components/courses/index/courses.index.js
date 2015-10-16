@@ -11,6 +11,7 @@
       'ngRoute', // $routeParams
       'restangular',
       'lodash',
+      'iifFilter',
       'spam.components.courses.services.courses',
       'spam.components.courses.row',
       'spam.components.app.services.routes'

@@ -1,10 +1,18 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: inlineSelectables
+   * DIRECTIVES:
+   *   inlineSelectableGroup
+   *   inlineSelectable
+   */
   angular
     .module('inlineSelectables', [])
     .directive('inlineSelectableGroup', inlineSelectableGroupDirective)
     .directive('inlineSelectable', inlineSelectableDirective);
+
+
 
 
   /* @ngInject */
@@ -27,6 +35,8 @@
       }
     };
   }
+
+
 
 
   /* @ngInject */
@@ -54,4 +64,5 @@
       }
     };
   }
+
 }());

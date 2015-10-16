@@ -1,9 +1,15 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: infiniteScroll
+   * DIRECTIVE: infiniteScroll
+   */
   angular
     .module('infiniteScroll', [])
     .directive('infiniteScroll', infiniteScrollDirective);
+
+
 
 
   /* @ngInject */

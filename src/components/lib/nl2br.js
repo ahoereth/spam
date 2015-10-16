@@ -2,13 +2,16 @@
   'use strict';
 
   /**
+   * MODULE: nl2brFilter
    * FILTER: nl2br
    *
-   * Converts all line breaks to actual html break line tags.
+   * Converts all line breaks to actual html break tags.
    */
   angular
-    .module('spam.filters')
+    .module('nl2brFilter', [])
     .filter('nl2br', nl2brFilter);
+
+
 
 
   /* @ngInject */
@@ -17,4 +20,5 @@
       return text.replace(/\n/g, '<br>');
     };
   }
+
 })();

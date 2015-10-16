@@ -7,6 +7,7 @@
    */
   angular
     .module('spam.components.landing', [
+      'iifFilter',
       'spam.components.app.services.routes',
       'spam.components.user.login.form'
     ])

@@ -2,13 +2,14 @@
   'use strict';
 
   /**
-   * DIRECTIVE: instafocus
-   *
-   * Focuses the element on page load.
+   * MODULE: contenteditable
+   * DIRECTIVE: contenteditable
    */
   angular
     .module('contenteditable', ['ngSanitize'])
     .directive('contenteditable', contenteditableDirective);
+
+
 
 
   /* @ngInject */
@@ -31,4 +32,5 @@
       }
     };
   }
+
 }());

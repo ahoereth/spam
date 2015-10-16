@@ -2,13 +2,22 @@
   'use strict';
 
   /**
+   * MODULE: dropdown
+   * DIRECTIVES:
+   *   dropdown
+   *   dropdownToggle
+   * SERVICE: DropdownService
+   * CONTROLLER: DropdownController
+   *
    * @see https://github.com/angular-ui/bootstrap
    */
   angular.module('dropdown', [])
     .service('DropdownService', dropdownService)
-    .controller('DropdownCtrl', dropdownCtrl)
+    .controller('DropdownController', dropdownController)
     .directive('dropdown', dropdownDirective)
     .directive('dropdownToggle', dropdownToggleDirective);
+
+
 
 
   /* @ngInject */
@@ -60,8 +69,10 @@
   }
 
 
+
+
   /* @ngInject */
-  function dropdownCtrl(
+  function dropdownController(
     $scope,
     $attrs,
     $parse,
@@ -133,28 +144,33 @@
   }
 
 
+
+
   function dropdownDirective() {
     return {
-      controller: 'DropdownCtrl',
-      link: function(scope, element, attrs, dropdownCtrl) {
-        dropdownCtrl.init(element);
+      controller: 'DropdownController',
+      link: function(scope, element, attrs, dropdownController) {
+        dropdownController.init(element);
       }
     };
   }
 
+
+
+
   function dropdownToggleDirective() {
     return {
       require: '^^dropdown',
-      link: function(scope, element, attrs, dropdownCtrl) {
-      //  if (! dropdownCtrl) { return; }
-        dropdownCtrl.toggleElement = element;
+      link: function(scope, element, attrs, dropdownController) {
+      //  if (! dropdownController) { return; }
+        dropdownController.toggleElement = element;
 
         var toggleDropdown = function(event) {
           event.preventDefault();
 
           if (! element.hasClass('disabled') && ! attrs.disabled) {
             scope.$apply(function() {
-              dropdownCtrl.toggle();
+              dropdownController.toggle();
             });
           }
         };

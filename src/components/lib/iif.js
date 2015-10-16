@@ -2,13 +2,16 @@
   'use strict';
 
   /**
+   * MODULE: iifFilter
    * FILTER: iif
    *
    * Inline conditionals from http://stackoverflow.com/a/14165488/1447384
    */
   angular
-    .module('spam.filters')
+    .module('iifFilter', [])
     .filter('iif', iifFilter);
+
+
 
 
   /* @ngInject */
@@ -17,4 +20,5 @@
       return input ? trueValue : falseValue;
     };
   }
+
 })();

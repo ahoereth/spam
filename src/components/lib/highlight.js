@@ -2,13 +2,16 @@
   'use strict';
 
   /**
+   * MODULE: highlightFilter
    * FILTER: highlight
    *
-   * Given a needle hightlights it (using <strong>) in the haystack.
+   * Hightlights the given needle (using <strong>) in the haystack.
    */
   angular
-    .module('spam.filters')
+    .module('highlightFilter', [])
     .filter('highlight', highlightFilter);
+
+
 
 
   /* @ngInject */
@@ -25,4 +28,5 @@
       return haystack.replace( new RegExp(needle, 'gi'), '<strong>$&</strong>' );
     };
   }
+
 })();
