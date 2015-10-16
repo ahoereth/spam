@@ -3,6 +3,7 @@
 
   /**
    * MODULE: spam.components.app.services.routes
+   * SERVICE: Routes
    *
    * Wrapper around the user router.
    */

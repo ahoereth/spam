@@ -7,7 +7,9 @@
    * CONTROLLER: AppController
    */
   angular
-    .module('spam.components.app', [
+    .module('spam.components.app.node', [
+      'ngRoute',
+      'lodash',
       'spam.components.navbar',
       'spam.components.notifications'
     ])

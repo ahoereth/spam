@@ -1,16 +1,25 @@
 (function() {
   'use strict';
 
+  /**
+   * MODULE: spam.components.app.config
+   */
   angular
-    .module('spam')
-    .config(configuration);
+    .module('spam.components.app.config', [
+      'restangular',
+      'spam.components.app.constants'
+    ])
+    .config(appConfigInit);
+
+
 
 
   /* @ngInject */
-  function configuration(
+  function appConfigInit(
     $httpProvider,
     RestangularProvider,
     LOCALAPI,
+    LOCALAPIURL,
     APIURL
   ) {
     // intercept http requests for general error handling and loading animation
@@ -21,7 +30,8 @@
     // on the same server (either in production or in development with local
     // dev API server), if the app runs on root / we utilize the remote
     // production API.
-    var api = LOCALAPI ? '/api' : APIURL;
+    var api = LOCALAPI ? LOCALAPIURL : APIURL;
     RestangularProvider.setBaseUrl(api);
   }
+
 })();
