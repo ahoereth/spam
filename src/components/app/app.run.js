@@ -1,9 +1,21 @@
 (function() {
   'use strict';
 
+  /**
+   * MODULE: spam.components.app.run
+   *
+   * TODO: Refactor this.
+   */
   angular
-    .module('spam')
+    .module('spam.components.app.run', [
+      'restangular',
+      'lodash',
+      'spam.components.user.services.user',
+      'spam.components.app.constants'
+    ])
     .run(appInitialization);
+
+
 
 
   /* @ngInject */

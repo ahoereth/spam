@@ -20,6 +20,14 @@
     RoutesProvider.add('/', {
       templateUrl: '/components/landing/landing.html'
     });
+
+    RoutesProvider.add('/.', {
+      redirectTo: '/'
+    });
+
+    RoutesProvider.add('*', {
+      redirectTo: '/'
+    });
   }
 
 })();

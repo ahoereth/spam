@@ -4,6 +4,9 @@
   /**
    * MODULE: spam.components.app.services.routes
    * SERVICE: Routes
+   * CONSTANTS:
+   *   HTML5MODE
+   *   HASHPREFIX
    *
    * Wrapper around the user router.
    */
@@ -12,7 +15,9 @@
       'ngRoute'
     ])
     .provider('Routes', routesProvider)
-    .config(routesProviderInit);
+    .config(routesProviderInit)
+    .constant('HTML5MODE', true)
+    .constant('HASHPREFIX', '!');
 
 
 
@@ -48,7 +53,12 @@
         options.title = options.title || '';
       }
 
-      $routeProvider.when(path, options);
+      if ('*' === path) {
+        $routeProvider.otherwise(options);
+      } else {
+        $routeProvider.when(path, options);
+      }
+
       return true;
     };
 
@@ -61,9 +71,19 @@
 
 
 
-  // Store `$routeProvider` during config phase for later use.
-  function routesProviderInit($routeProvider, RoutesProvider) {
+  // Store $routeProvider for later use and set $locationProvider options.
+  function routesProviderInit(
+    $routeProvider,
+    $locationProvider,
+    RoutesProvider,
+    HTML5MODE,
+    HASHPREFIX
+  ) {
     RoutesProvider.setRouteProvider($routeProvider);
+
+    $locationProvider
+      .html5Mode(HTML5MODE)
+      .hashPrefix(HASHPREFIX);
   }
 
 })();
