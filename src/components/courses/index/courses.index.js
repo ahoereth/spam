@@ -8,7 +8,11 @@
    */
   angular
     .module('spam.components.courses.index', [
-      'spam.components.common.courserow',
+      'ngRoute', // $routeParams
+      'restangular',
+      'lodash',
+      'spam.components.courses.services.courses',
+      'spam.components.courses.row',
       'spam.components.app.services.routes'
     ])
     .config(coursesIndexRouting)

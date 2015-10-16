@@ -10,7 +10,8 @@
     .module('spam.components.user.settings', [
       'blurOnEnter',
       'spam.components.app.services.routes',
-      'spam.components.user.services.user'
+      'spam.components.user.services.user',
+      'spam.components.user.settings.matriculation-setter',
     ])
     .config(userSettingsRouting)
     .controller('UserSettingsController', userSettingsController);

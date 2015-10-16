@@ -2,11 +2,14 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.common.matriculation-setter
+   * MODULE: spam.components.user.settings.matriculation-setter
    * DIRECTIVE: matriculation-setter
    */
   angular
-    .module('spam.components.user.common.matriculation-setter', [])
+    .module('spam.components.user.settings.matriculation-setter', [
+      'lodash',
+      'spam.components.user.services.user'
+    ])
     .directive('matriculationSetter', userMatriculationSetterDirective);
 
 
@@ -18,8 +21,8 @@
       restrict: 'E',
       replace: true,
       scope: true,
-      templateUrl: 'components/user/common/matriculation-setter/' +
-                   'user.common.matriculation-setter.html',
+      templateUrl: 'components/user/settings/matriculation-setter/' +
+                   'user.settings.matriculation-setter.html',
       link: function(scope, elem, attrs) {
         var currentYear = scope.meta.currentTermYear;
         scope.verifyButton = ! _.isUndefined(attrs.verify);

@@ -13,7 +13,8 @@
       'spam.components.app.services.routes',
       'spam.components.user.services.user',
       'spam.components.user.index.field',
-      'spam.components.user.index.course'
+      'spam.components.user.index.course',
+      'spam.components.user.settings.matriculation-setter'
     ])
     .config(userIndexRouting)
     .controller('UserIndexController', userIndexController);

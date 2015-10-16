@@ -8,7 +8,11 @@
    */
   angular
     .module('spam.components.courses.single', [
-      'spam.components.app.services.routes'
+      'ngRoute', // $routeParams
+      'restangular',
+      'lodash',
+      'spam.components.app.services.routes',
+      'spam.components.user.services.user'
     ])
     .config(coursesSingleRouting)
     .controller('CoursesSingleController', coursesSingleController);

@@ -2,10 +2,16 @@
   'use strict';
 
   /**
+   * MODULE: spam.components.courses.add-remove
    * DIRECTIVE: addRemoveCourse
+   *
+   * TODO: move to courses module
    */
   angular
-    .module('spam.components.common.add-remove-course', [])
+    .module('spam.components.courses.add-remove', [
+      'lodash',
+      'spam.components.user.services.user'
+    ])
     .directive('addRemoveCourse', addRemoveCourseDirective);
 
 
@@ -20,7 +26,7 @@
         course: '=course',
         btnClass: '@'
       },
-      templateUrl: 'components/common/add-remove-course/add-remove-course.html',
+      templateUrl: 'components/courses/add-remove/courses.add-remove.html',
       link: function(scope) {
         var course = scope.course;
         var rel = {};

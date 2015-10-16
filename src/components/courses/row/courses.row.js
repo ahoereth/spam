@@ -1,8 +1,18 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: spam.components.courses.row
+   * DIRECTIVES:
+   *   courserow
+   *   courserowFields
+   *
+   * TODO: controllerAs required?
+   */
   angular
-    .module('spam.components.common.courserow', [])
+    .module('spam.components.courses.row', [
+      'lodash'
+    ])
     .directive('courserow', courserowDirective)
     .directive('courserowFields', courserowFieldsDirective);
 
@@ -18,7 +28,7 @@
         'course': '=',
         'action': '&action'
       },
-      templateUrl: 'components/common/courserow/courserow.html',
+      templateUrl: 'components/courses/row/courses.row.html',
       link: function(scope, elem, attrs) {
         var opt = scope.opt = {};
 

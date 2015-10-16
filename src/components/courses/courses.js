@@ -1,6 +1,9 @@
 (function() {
   'use strict';
 
+  /**
+   * MODULE: spam.components.courses
+   */
   angular
     .module('spam.components.courses', [
       'spam.components.courses.services',

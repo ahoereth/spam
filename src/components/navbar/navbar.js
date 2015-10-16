@@ -11,7 +11,8 @@
       'lodash',
       'spam.filters',
       'spam.components.user.services.user',
-      'spam.components.courses.services.courses'
+      'spam.components.courses.services.courses',
+      'spam.components.courses.row'
     ])
     .directive('navbar', navbarDirective)
     .controller('NavbarController', navbarController);

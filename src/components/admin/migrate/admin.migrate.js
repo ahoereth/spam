@@ -8,10 +8,13 @@
    */
   angular
     .module('spam.components.admin.migrate', [
+      'restangular',
+      'lodash',
       'instafocus',
       'inlineSelectables',
       'mgcrea.ngStrap.button',
-      'spam.components.common.courserow',
+      'spam.components.courses.row',
+      'spam.components.app.constants',
       'spam.components.app.services.routes'
     ])
     .config(adminMigrateRouting)
@@ -40,8 +43,8 @@
     $location,
     $routeParams,
     Restangular,
-    APIURL,
-    _
+    _,
+    APIURL
   ) {
     var ctrl = this;
     var ikwProvider = APIURL + '/ikw.php';
