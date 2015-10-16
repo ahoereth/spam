@@ -1,8 +1,12 @@
 (function () {
   'use strict';
 
+  /**
+   * MODULE: spam.components.help.fragment
+   * DIRECTIVE: helpFragment
+   */
   angular
-    .module('spam.components.help.help-fragment', [])
+    .module('spam.components.help.fragment', [])
     .directive('helpFragment', helpFragmentDirective);
 
 

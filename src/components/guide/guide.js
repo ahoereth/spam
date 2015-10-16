@@ -8,7 +8,10 @@
    */
   angular
     .module('spam.components.guide', [
-      'spam.components.app.services.routes'
+      'lodash',
+      'restangular',
+      'spam.components.app.services.routes',
+      'spam.components.courses.single'
     ])
     .config(guideRouting)
     .controller('GuideController', guideController);

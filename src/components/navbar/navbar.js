@@ -12,9 +12,10 @@
       'highlightFilter',
       'iifFilter',
       'yearFilter',
-      'spam.components.user.services.user',
-      'spam.components.courses.services.courses',
-      'spam.components.courses.row'
+      'spam.components.landing',
+      'spam.components.courses',
+      'spam.components.guide',
+      'spam.components.user'
     ])
     .directive('navbar', navbarDirective)
     .controller('NavbarController', navbarController);

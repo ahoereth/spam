@@ -11,7 +11,10 @@
       'ngRoute',
       'lodash',
       'spam.components.navbar',
-      'spam.components.notifications'
+      'spam.components.notifications',
+      'spam.components.help',
+      'spam.components.user.settings',
+      'spam.components.user.logout'
     ])
     .directive('app', appDirective)
     .controller('AppController', appController);

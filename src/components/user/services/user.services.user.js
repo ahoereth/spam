@@ -7,7 +7,8 @@
    */
   angular
     .module('spam.components.user.services.user', [
-      'restangular'
+      'restangular',
+      'lodash'
     ])
     .factory('User', userFactory);
 

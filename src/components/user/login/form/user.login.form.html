@@ -1,9 +1,9 @@
 <div>
-  <!-- directives/loginform -->
   <form
     class="form-horizontal"
     ng-submit="login()"
-    ng-class="{'inactive': loginform.loading}">
+    ng-class="{'inactive': loginform.loading}"
+  >
 
     <!-- username input -->
     <div class="form-group">
@@ -14,7 +14,7 @@
           class="form-control"
           id="username"
           ng-model="loginform.username"
-          placeholder="wwacker" />
+          placeholder="wwacker">
         <span class="input-group-addon">@uos.de</span>
       </div>
     </div>
@@ -27,7 +27,7 @@
           class="form-control"
           type="password"
           id="password"
-          ng-model="loginform.password" />
+          ng-model="loginform.password">
         <!-- stay loggedin checkbox -->
         <div class="checkbox">
           <label>
@@ -46,7 +46,8 @@
           type="submit"
           class="btn btn-primary btn-large btn-block"
           ng-class="{disabled : loginform.loading}"
-          ng-disabled="loginform.loading">
+          ng-disabled="loginform.loading"
+        >
           {{loginform.loading | iif: 'Loading...' : 'Let\'s go!'}}
         </button>
       </div>

@@ -12,9 +12,11 @@
       'restangular',
       'lodash',
       'iifFilter',
+      'spam.components.app.services.routes',
       'spam.components.courses.services.courses',
-      'spam.components.courses.row',
-      'spam.components.app.services.routes'
+      'spam.components.courses.filters.course',
+      'spam.components.courses.single',
+      'spam.components.courses.row'
     ])
     .config(coursesIndexRouting)
     .controller('CoursesIndexController', coursesIndexController);

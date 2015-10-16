@@ -7,7 +7,9 @@
    */
   angular
     .module('spam.components.401', [
-      'spam.components.app.services.routes'
+      'unicorn-directive',
+      'spam.components.app.services.routes',
+      'spam.components.user.login.form'
     ])
     .config(notauthorizedRouting);
 

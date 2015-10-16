@@ -7,9 +7,12 @@
    */
   angular
     .module('spam.components.user.index.course', [
+      'lodash',
       'blurOnEnter',
       'dropdown',
       'tickable',
+      '720kb.tooltips',
+      'spam.components.user.services.user',
       'spam.components.user.index.field'
     ])
     .directive('course', courseDirective);

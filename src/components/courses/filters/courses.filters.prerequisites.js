@@ -8,7 +8,9 @@
    * Parse a course's description text for prerequisits and make them hyperlinks.
    */
   angular
-    .module('spam.components.courses.filters.prerequisites', [])
+    .module('spam.components.courses.filters.prerequisites', [
+      'ngSanitize'
+    ])
     .filter('prerequisites', prerequisitesFilter);
 
 

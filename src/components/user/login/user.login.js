@@ -8,6 +8,7 @@
    */
   angular
     .module('spam.components.user.login', [
+      'ngRoute', // $routeParams
       'spam.components.app.services.routes',
       'spam.components.user.login.form'
     ])

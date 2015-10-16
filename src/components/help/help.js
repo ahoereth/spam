@@ -2,13 +2,15 @@
   'use strict';
 
   /**
-   * CONTROLLER: Help
+   * MODULE: spam.components.help
+   * CONTROLLER: HelpController
    * ROUTE: /help
    */
   angular
     .module('spam.components.help', [
+      'ngRoute', // $routeParams
       'spam.components.app.services.routes',
-      'spam.components.help.help-fragment'
+      'spam.components.help.fragment'
     ])
     .config(helpRouting)
     .controller('HelpController', helpController);
@@ -45,4 +47,5 @@
       $location.path('/help/' + subject);
     };
   }
+
 })();
