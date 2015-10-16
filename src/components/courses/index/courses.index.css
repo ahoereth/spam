@@ -1,0 +1,5 @@
+.courses .caret.up {
+  border-top: 0;
+  border-bottom: 4px solid;
+  content: "";
+}

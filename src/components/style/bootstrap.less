@@ -1,0 +1,76 @@
+// bower:less
+@import "../../lib/bootstrap/less/bootstrap.less";
+@import "../../lib/open-sans-fontface/open-sans.less";
+// endbower
+
+@import "_variables.less";
+
+.jumbotron {
+  border-left: 12px solid @uos-highlight;
+}
+
+.panel {
+  border-left: 6px solid @uos-highlight;
+}
+
+.label {
+  border-radius: 0px;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  font-family: 'Open Sans', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/// ****************************************************************************
+/// ****************************************************************************
+/// Additional form classes
+
+.input-tiny {
+  display: block;
+  width: 100%;
+  text-align: center;
+  height: 20px;
+  padding: 0 2px !important;
+  margin: 0 !important;
+  border: none !important;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.form-control-tight {
+  text-align: center;
+
+  @media (max-width: 530px) {
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+
+  @media (min-width: 531px) and (max-width: 991px) {
+    padding-left: 1px;
+    padding-right: 1px;
+  }
+
+  @media (min-width: 992px) and (max-width: 1199px) {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
+
+// Fix for narrow spaces
+.btn-block {
+  padding-left: 0;
+  padding-right: 0;
+  text-align: center;
+}

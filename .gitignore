@@ -6,7 +6,7 @@
 /node_modules/
 /src/fonts/
 /src/lib/
-/src/**/app.css
+/src/**/*.compiled.css
 /composer.phar
 *.swp
 **.ignore.*

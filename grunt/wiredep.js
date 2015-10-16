@@ -11,7 +11,7 @@ module.exports = function(grunt) {
   wiredep.dev = {
     src: [
       'src/index.html',
-      'src/styles/app.less'
+      'src/components/style/bootstrap.less'
     ],
     options: {
       devDependencies: true,

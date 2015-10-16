@@ -31,7 +31,7 @@ module.exports = function(grunt) {
       plugins: plugins
     },
     files: {
-      'src/styles/app.css': glob
+      'src/less.compiled.css': glob
     }
   };
 
@@ -42,8 +42,9 @@ module.exports = function(grunt) {
       plugins: plugins
     },
     files: {
-      'app/css/spamin.css': glob.concat(['src/components/**/*.css'])
-                                .concat(dependencies.css)
+      'app/css/spamin.css': ['src/components/**/*.css']
+                              .concat(glob)
+                              .concat(dependencies.css)
     }
   };
 

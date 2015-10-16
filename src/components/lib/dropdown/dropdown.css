@@ -1,0 +1,35 @@
+.dropdown-menu::after {
+  position: absolute;
+  top: -6px;
+  left: 4px;
+  display: inline-block;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid white;
+  border-left: 6px solid transparent;
+  content: '';
+}
+
+.dropdown-menu.pull-right {
+  right: 0;
+  left: auto;
+}
+
+.dropdown-menu.pull-right::after {
+  right: 4px;
+  left: auto;
+}
+
+.dropdown-menu li {
+  min-width: 120px;
+}
+
+.dropdown-menu li > * {
+  width: 100%;
+}
+
+.dropdown-menu > li > *:hover,
+.dropdown-menu > li > *:focus, {
+  text-decoration: none;
+  color: #262626;
+  background-color: #f5f5f5;
+}
