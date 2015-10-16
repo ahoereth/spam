@@ -50,7 +50,11 @@
       <div class="col-md-2 col-xs-3">
 
         <div class="btn-group btn-group-justified">
-          <add-remove-course course="course" style="width: 50%; float: left;" btn-class="btn-block" add-course="addCourse" remove-course="removeCourse" ng-if="user"></add-remove-course>
+          <add-remove-course
+            course="course"
+            style="width: 50%; float: left;"
+            btn-class="btn-block"
+          ></add-remove-course>
 
           <!-- view details -->
           <a class="btn btn-warning" style="width: 50%; float: right;" ng-href="courses/{{course.course_id}}">

@@ -31,6 +31,23 @@
         var course = scope.course;
         var rel = {};
 
+        // Expose relevant user variables to scope.
+        function userConstruct(event, user) {
+          scope.user = {
+            loggedin: !!user,
+            regulation_id: user && user.regulation_id
+          };
+        }
+        userConstruct(undefined, User.details || undefined);
+
+        // Add remove buttons are not required for not loggedin users.
+        if (! scope.user.loggedin) {
+          return false;
+        }
+
+        // Watch for user changes.
+        scope.$on('user-construct', userConstruct);
+
         // Expose addCourse method to scope and trigger busy and enrolled
         // state accordingly.
         scope.add = function(fieldId) {
@@ -48,17 +65,6 @@
             .then(function() { scope.enrolled = false; })
             .finally(function() { scope.busy = false; });
         };
-
-        // Expose relevant user variables to scope.
-        scope.user = {
-          loggedin: !! User.details,
-          regulation_id: User.getRegulation()
-        };
-
-        // Add remove buttons are not required for not loggedin users.
-        if (! scope.user.loggedin) {
-          return false;
-        }
 
         // The fields array might contain all fields from all regulations -
         // we only care about the regulations relevant for the current user.
