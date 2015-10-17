@@ -2,18 +2,18 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.index.field
+   * MODULE: spam.user.index.field
    * DIRECTIVE: field
    * CONTROLLER: UserIndexFieldController
    */
   angular
-    .module('spam.components.user.index.field', [
+    .module('spam.user.index.field', [
       'lodash',
       'progress',
       'dropdown',
       'tickable',
       'iifFilter',
-      'spam.components.user.services.user'
+      'spam.user.services.user'
     ])
     .directive('field', userIndexFieldDirective)
     .controller('UserIndexFieldController', userIndexFieldController);

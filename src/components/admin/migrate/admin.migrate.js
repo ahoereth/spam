@@ -2,21 +2,21 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.admin.migrate
+   * MODULE: spam.admin.migrate
    * ROUTE: /admin/migrate
    * CONTROLLER: AdminMigrateController
    */
   angular
-    .module('spam.components.admin.migrate', [
+    .module('spam.admin.migrate', [
       'restangular',
       'lodash',
       'instafocus',
       'inlineSelectables',
       'mgcrea.ngStrap.button',
       'yearFilter',
-      'spam.components.courses.row',
-      'spam.components.app.constants',
-      'spam.components.app.services.routes'
+      'spam.courses.row',
+      'spam.app.constants',
+      'spam.app.services.routes'
     ])
     .config(adminMigrateRouting)
     .controller('AdminMigrateController', adminMigrateController);

@@ -2,11 +2,11 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.filters.course
+   * MODULE: spam.courses.filters.course
    * FILTER: courseFilter
    */
   angular
-    .module('spam.components.courses.filters.course', [])
+    .module('spam.courses.filters.course', [])
     .filter('courseFilter', courseFilter);
 
 

@@ -2,16 +2,16 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.app.run
+   * MODULE: spam.app.run
    *
    * TODO: Refactor this.
    */
   angular
-    .module('spam.components.app.run', [
+    .module('spam.app.run', [
       'restangular',
       'lodash',
-      'spam.components.user.services.user',
-      'spam.components.app.constants'
+      'spam.user.services.user',
+      'spam.app.constants'
     ])
     .run(appInitialization);
 

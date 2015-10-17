@@ -2,20 +2,20 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.course.edit
+   * MODULE: spam.user.course.edit
    * ROUTES:
    *   /~/courses/new
    *   /~/courses/:course_id (TODO)
    * CONTROLLER: UserCourseEditController
    */
   angular
-    .module('spam.components.user.course.edit', [
+    .module('spam.user.course.edit', [
       'restangular',
       'instafocus',
       'lodash',
       'iifFilter',
-      'spam.components.app.services.routes',
-      'spam.components.user.services.user'
+      'spam.app.services.routes',
+      'spam.user.services.user'
     ])
     .config(userCourseEditRouting)
     .controller('UserCourseEditController', userCourseEditController);

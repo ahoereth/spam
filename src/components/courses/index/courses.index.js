@@ -2,21 +2,21 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.index
+   * MODULE: spam.courses.index
    * CONTROLLER: CoursesIndexController
    * ROUTE: /courses
    */
   angular
-    .module('spam.components.courses.index', [
+    .module('spam.courses.index', [
       'ngRoute', // $routeParams
       'restangular',
       'lodash',
       'iifFilter',
-      'spam.components.app.services.routes',
-      'spam.components.courses.services.courses',
-      'spam.components.courses.filters.course',
-      'spam.components.courses.single',
-      'spam.components.courses.row'
+      'spam.app.services.routes',
+      'spam.courses.services.courses',
+      'spam.courses.filters.course',
+      'spam.courses.single',
+      'spam.courses.row'
     ])
     .config(coursesIndexRouting)
     .controller('CoursesIndexController', coursesIndexController);

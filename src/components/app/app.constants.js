@@ -2,7 +2,7 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.app.constants
+   * MODULE: spam.app.constants
    * CONSTANTS:
    *   TITLE
    *   APIURL
@@ -10,7 +10,7 @@
    *   LOCALAPIURL
    */
   angular
-    .module('spam.components.app.constants', [])
+    .module('spam.app.constants', [])
     .constant('TITLE', 'Studyplanning in Cognitive Science')
     .constant('LOCALAPI', false)
     .constant('APIURL', 'https://cogsci.uni-osnabrueck.de/~SPAM/api')

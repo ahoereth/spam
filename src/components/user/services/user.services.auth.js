@@ -2,15 +2,15 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.services.auth
+   * MODULE: spam.user.services.auth
    * SERVICE: Auth
    */
   angular
-    .module('spam.components.user.services.auth', [
+    .module('spam.user.services.auth', [
       'ab-base64',
       'lodash',
       'restangular',
-      'spam.components.user.services.user'
+      'spam.user.services.user'
     ])
     .factory('Auth', authFactory);
 

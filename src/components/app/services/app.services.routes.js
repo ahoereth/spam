@@ -2,7 +2,7 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.app.services.routes
+   * MODULE: spam.app.services.routes
    * SERVICE: Routes
    * CONSTANTS:
    *   HTML5MODE
@@ -11,7 +11,7 @@
    * Wrapper around the user router.
    */
   angular
-    .module('spam.components.app.services.routes', [
+    .module('spam.app.services.routes', [
       'ngRoute'
     ])
     .provider('Routes', routesProvider)

@@ -2,12 +2,12 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.admin.index
+   * MODULE: spam.admin.index
    * ROUTE: /admin
    */
   angular
-    .module('spam.components.admin.index', [
-      'spam.components.app.services.routes'
+    .module('spam.admin.index', [
+      'spam.app.services.routes'
     ])
     .config(adminIndexRouting);
 

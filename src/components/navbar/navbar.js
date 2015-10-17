@@ -2,20 +2,20 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.navbar
+   * MODULE: spam.navbar
    * DIRECTIVE: navbar
    * CONTROLLER: NavbarController
    */
   angular
-    .module('spam.components.navbar', [
+    .module('spam.navbar', [
       'lodash',
       'highlightFilter',
       'iifFilter',
       'yearFilter',
-      'spam.components.landing',
-      'spam.components.courses',
-      'spam.components.guide',
-      'spam.components.user'
+      'spam.landing',
+      'spam.courses',
+      'spam.guide',
+      'spam.user'
     ])
     .directive('navbar', navbarDirective)
     .controller('NavbarController', navbarController);

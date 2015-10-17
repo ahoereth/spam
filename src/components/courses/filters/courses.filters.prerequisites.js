@@ -2,13 +2,13 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.filters.prerequisites
+   * MODULE: spam.courses.filters.prerequisites
    * FILTER: prerequisites
    *
    * Parse a course's description text for prerequisits and make them hyperlinks.
    */
   angular
-    .module('spam.components.courses.filters.prerequisites', [
+    .module('spam.courses.filters.prerequisites', [
       'ngSanitize'
     ])
     .filter('prerequisites', prerequisitesFilter);

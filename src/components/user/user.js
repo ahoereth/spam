@@ -2,7 +2,7 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user
+   * MODULE: spam.user
    * ROUTES:
    *   /login
    *   /~
@@ -11,13 +11,13 @@
    *   Auth
    */
   angular
-    .module('spam.components.user', [
-      'spam.components.user.services',
-      'spam.components.user.index',
-      'spam.components.user.settings',
-      'spam.components.user.logout',
-      'spam.components.user.courses',
-      'spam.components.user.login'
+    .module('spam.user', [
+      'spam.user.services',
+      'spam.user.index',
+      'spam.user.settings',
+      'spam.user.logout',
+      'spam.user.courses',
+      'spam.user.login'
     ]);
 
 })();

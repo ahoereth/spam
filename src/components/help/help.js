@@ -2,15 +2,15 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.help
+   * MODULE: spam.help
    * CONTROLLER: HelpController
    * ROUTE: /help
    */
   angular
-    .module('spam.components.help', [
+    .module('spam.help', [
       'ngRoute', // $routeParams
-      'spam.components.app.services.routes',
-      'spam.components.help.fragment'
+      'spam.app.services.routes',
+      'spam.help.fragment'
     ])
     .config(helpRouting)
     .controller('HelpController', helpController);

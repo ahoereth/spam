@@ -2,13 +2,13 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.courses
+   * MODULE: spam.user.courses
    * ROUTES:
    *   /~/courses
    */
   angular
-    .module('spam.components.user.courses', [
-      'spam.components.user.course.edit'
+    .module('spam.user.courses', [
+      'spam.user.course.edit'
     ]);
 
 })();

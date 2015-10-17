@@ -2,7 +2,7 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.row
+   * MODULE: spam.courses.row
    * DIRECTIVES:
    *   courserow
    *   courserowFields
@@ -10,7 +10,7 @@
    * TODO: controllerAs required?
    */
   angular
-    .module('spam.components.courses.row', [
+    .module('spam.courses.row', [
       'lodash',
       'nl2brFilter',
       'yearFilter'

@@ -2,15 +2,15 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.add-remove
+   * MODULE: spam.courses.add-remove
    * DIRECTIVE: addRemoveCourse
    *
    * TODO: move to courses module
    */
   angular
-    .module('spam.components.courses.add-remove', [
+    .module('spam.courses.add-remove', [
       'lodash',
-      'spam.components.user.services.user'
+      'spam.user.services.user'
     ])
     .directive('addRemoveCourse', addRemoveCourseDirective);
 

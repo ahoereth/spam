@@ -2,11 +2,11 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.help.fragment
+   * MODULE: spam.help.fragment
    * DIRECTIVE: helpFragment
    */
   angular
-    .module('spam.components.help.fragment', [])
+    .module('spam.help.fragment', [])
     .directive('helpFragment', helpFragmentDirective);
 
 

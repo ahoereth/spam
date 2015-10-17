@@ -2,11 +2,11 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.services.courses
+   * MODULE: spam.courses.services.courses
    * SERVICE: Courses
    */
   angular
-    .module('spam.components.courses.services.courses', [
+    .module('spam.courses.services.courses', [
       'restangular',
       'lodash'
     ])

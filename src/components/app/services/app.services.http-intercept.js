@@ -2,7 +2,7 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.app.services.http-intercept
+   * MODULE: spam.app.services.http-intercept
    * SERVICE: httpIntercept
    *
    * Used for intercepting all HTTP requests (using $http and $resource).
@@ -19,7 +19,7 @@
    *                                  could be resolved now
    */
   angular
-    .module('spam.components.app.services.http-intercept', [])
+    .module('spam.app.services.http-intercept', [])
     .factory('httpIntercept', httpInterceptFactory);
 
 

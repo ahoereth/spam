@@ -2,15 +2,15 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.login
+   * MODULE: spam.user.login
    * ROUTE: /login
    * CONTROLLER: UserLoginController
    */
   angular
-    .module('spam.components.user.login', [
+    .module('spam.user.login', [
       'ngRoute', // $routeParams
-      'spam.components.app.services.routes',
-      'spam.components.user.login.form'
+      'spam.app.services.routes',
+      'spam.user.login.form'
     ])
     .config(userLoginRouting)
     .controller('UserLoginController', userLoginController);

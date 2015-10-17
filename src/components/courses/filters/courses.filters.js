@@ -2,12 +2,12 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.filters
+   * MODULE: spam.courses.filters
    */
   angular
-    .module('spam.components.courses.filters', [
-      'spam.components.courses.filters.course',
-      'spam.components.courses.filters.prerequisites'
+    .module('spam.courses.filters', [
+      'spam.courses.filters.course',
+      'spam.courses.filters.prerequisites'
     ]);
 
 })();

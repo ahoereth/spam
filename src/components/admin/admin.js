@@ -3,15 +3,15 @@
 
 
   /**
-   * MODULE: spam.components.admin
+   * MODULE: spam.admin
    * ROUTES:
    *   /admin
    *   /admin/migrate
    */
   angular
-    .module('spam.components.admin', [
-      'spam.components.admin.index',
-      'spam.components.admin.migrate'
+    .module('spam.admin', [
+      'spam.admin.index',
+      'spam.admin.migrate'
     ]);
 
 })();

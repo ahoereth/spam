@@ -2,12 +2,12 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.app.services
+   * MODULE: spam.app.services
    */
   angular
-    .module('spam.components.app.services', [
-      'spam.components.app.services.routes',
-      'spam.components.app.services.http-intercept'
+    .module('spam.app.services', [
+      'spam.app.services.routes',
+      'spam.app.services.http-intercept'
     ]);
 
 })();

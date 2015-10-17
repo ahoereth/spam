@@ -2,12 +2,12 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.app.config
+   * MODULE: spam.app.config
    */
   angular
-    .module('spam.components.app.config', [
+    .module('spam.app.config', [
       'restangular',
-      'spam.components.app.constants'
+      'spam.app.constants'
     ])
     .config(appConfigInit);
 

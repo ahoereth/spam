@@ -2,14 +2,14 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.landing
+   * MODULE: spam.landing
    * ROUTE: /
    */
   angular
-    .module('spam.components.landing', [
+    .module('spam.landing', [
       'iifFilter',
-      'spam.components.app.services.routes',
-      'spam.components.user.login.form'
+      'spam.app.services.routes',
+      'spam.user.login.form'
     ])
     .config(landingRouting);
 

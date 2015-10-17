@@ -2,14 +2,14 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.401
+   * MODULE: spam.401
    * ROUTE: /401
    */
   angular
-    .module('spam.components.401', [
+    .module('spam.401', [
       'unicorn-directive',
-      'spam.components.app.services.routes',
-      'spam.components.user.login.form'
+      'spam.app.services.routes',
+      'spam.user.login.form'
     ])
     .config(notauthorizedRouting);
 

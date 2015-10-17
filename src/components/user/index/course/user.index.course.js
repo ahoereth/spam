@@ -2,18 +2,18 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.index.course
+   * MODULE: spam.user.index.course
    * DIRECTIVE: course
    */
   angular
-    .module('spam.components.user.index.course', [
+    .module('spam.user.index.course', [
       'lodash',
       'blurOnEnter',
       'dropdown',
       'tickable',
       '720kb.tooltips',
-      'spam.components.user.services.user',
-      'spam.components.user.index.field'
+      'spam.user.services.user',
+      'spam.user.index.field'
     ])
     .directive('course', courseDirective);
 

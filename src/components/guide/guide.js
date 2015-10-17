@@ -2,16 +2,16 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.guide
+   * MODULE: spam.guide
    * CONTROLLER: GuideController
    * ROUTE: /guide
    */
   angular
-    .module('spam.components.guide', [
+    .module('spam.guide', [
       'lodash',
       'restangular',
-      'spam.components.app.services.routes',
-      'spam.components.courses.single'
+      'spam.app.services.routes',
+      'spam.courses.single'
     ])
     .config(guideRouting)
     .controller('GuideController', guideController);

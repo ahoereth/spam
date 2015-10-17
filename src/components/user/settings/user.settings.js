@@ -2,16 +2,16 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.settings
+   * MODULE: spam.user.settings
    * ROUTE: /~/settings
    * CONTROLLER: UserSettingsController
    */
   angular
-    .module('spam.components.user.settings', [
+    .module('spam.user.settings', [
       'blurOnEnter',
-      'spam.components.app.services.routes',
-      'spam.components.user.services.user',
-      'spam.components.user.settings.matriculation-setter',
+      'spam.app.services.routes',
+      'spam.user.services.user',
+      'spam.user.settings.matriculation-setter',
     ])
     .config(userSettingsRouting)
     .controller('UserSettingsController', userSettingsController);

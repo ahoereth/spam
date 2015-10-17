@@ -2,14 +2,14 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.settings.matriculation-setter
+   * MODULE: spam.user.settings.matriculation-setter
    * DIRECTIVE: matriculation-setter
    */
   angular
-    .module('spam.components.user.settings.matriculation-setter', [
+    .module('spam.user.settings.matriculation-setter', [
       'lodash',
       'mgcrea.ngStrap.button',
-      'spam.components.user.services.user'
+      'spam.user.services.user'
     ])
     .directive('matriculationSetter', userMatriculationSetterDirective);
 

@@ -2,11 +2,11 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.services
+   * MODULE: spam.courses.services
    */
   angular
-    .module('spam.components.courses.services', [
-      'spam.components.courses.services.courses'
+    .module('spam.courses.services', [
+      'spam.courses.services.courses'
     ]);
 
 })();

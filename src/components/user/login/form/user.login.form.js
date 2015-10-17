@@ -2,15 +2,15 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.login.form
+   * MODULE: spam.user.login.form
    * DIRECTIVE: loginform
    * CONTROLLER: LoginformController
    */
   angular
-    .module('spam.components.user.login.form', [
+    .module('spam.user.login.form', [
       'lodash',
       'iifFilter',
-      'spam.components.user.services.auth'
+      'spam.user.services.auth'
     ])
     .directive('loginform', loginformDirective)
     .controller('LoginformController', loginformController);

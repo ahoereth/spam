@@ -2,7 +2,7 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.notifications
+   * MODULE: spam.notifications
    * DIRECTIVE: notifications
    * CONTROLLER: NotificationsController
    *
@@ -11,9 +11,9 @@
    * system - if required.
    */
   angular
-    .module('spam.components.notifications', [
+    .module('spam.notifications', [
       'lodash',
-      'spam.components.app.services.http-intercept'
+      'spam.app.services.http-intercept'
     ])
     .directive('notifications', notificationsDirective)
     .controller('NotificationsController', notificationsController);

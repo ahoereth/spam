@@ -2,15 +2,15 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.footer
+   * MODULE: spam.footer
    * DIRECTIVE: footer
    * CONTROLLER: FooterController
    */
   angular
-    .module('spam.components.footer', [
-      'spam.components.help',
-      'spam.components.user.settings',
-      'spam.components.user.logout'
+    .module('spam.footer', [
+      'spam.help',
+      'spam.user.settings',
+      'spam.user.logout'
     ])
     .directive('footer', footerDirective)
     .controller('FooterController', footerController);

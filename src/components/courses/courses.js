@@ -2,16 +2,16 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses
+   * MODULE: spam.courses
    */
   angular
-    .module('spam.components.courses', [
-      'spam.components.courses.filters',
-      'spam.components.courses.services',
-      'spam.components.courses.index',
-      'spam.components.courses.single',
-      'spam.components.courses.row',
-      'spam.components.courses.add-remove'
+    .module('spam.courses', [
+      'spam.courses.filters',
+      'spam.courses.services',
+      'spam.courses.index',
+      'spam.courses.single',
+      'spam.courses.row',
+      'spam.courses.add-remove'
     ]);
 
 })();

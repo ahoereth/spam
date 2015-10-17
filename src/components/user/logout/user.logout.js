@@ -2,14 +2,14 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.logout
+   * MODULE: spam.user.logout
    * ROUTE: /~/logout
    * CONTROLLER: UserLogoutController
    */
   angular
-    .module('spam.components.user.logout', [
-      'spam.components.app.services.routes',
-      'spam.components.user.services.user'
+    .module('spam.user.logout', [
+      'spam.app.services.routes',
+      'spam.user.services.user'
     ])
     .config(userLogoutRouting)
     .controller('UserLogoutController', userLogoutController);

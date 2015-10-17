@@ -2,21 +2,21 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.user.index
+   * MODULE: spam.user.index
    * ROUTE: /~
    * CONTROLLER: UserIndexController
    */
   angular
-    .module('spam.components.user.index', [
+    .module('spam.user.index', [
       'restangular',
       'lodash',
       'iifFilter',
       '720kb.tooltips',
-      'spam.components.app.services.routes',
-      'spam.components.user.services.user',
-      'spam.components.user.index.field',
-      'spam.components.user.index.course',
-      'spam.components.user.settings.matriculation-setter'
+      'spam.app.services.routes',
+      'spam.user.services.user',
+      'spam.user.index.field',
+      'spam.user.index.course',
+      'spam.user.settings.matriculation-setter'
     ])
     .config(userIndexRouting)
     .controller('UserIndexController', userIndexController);

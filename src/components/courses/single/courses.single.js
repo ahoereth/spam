@@ -2,18 +2,18 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.courses.single
+   * MODULE: spam.courses.single
    * CONTROLLER: CoursesSingleController
    * ROUTE: /courses/:course_id
    */
   angular
-    .module('spam.components.courses.single', [
+    .module('spam.courses.single', [
       'ngRoute', // $routeParams
       'restangular',
       'lodash',
       'urlencodeFilter',
-      'spam.components.app.services.routes',
-      'spam.components.user.services.user'
+      'spam.app.services.routes',
+      'spam.user.services.user'
     ])
     .config(coursesSingleRouting)
     .controller('CoursesSingleController', coursesSingleController);

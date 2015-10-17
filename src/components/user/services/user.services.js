@@ -2,12 +2,12 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.app.services
+   * MODULE: spam.app.services
    */
   angular
-    .module('spam.components.user.services', [
-      'spam.components.user.services.user',
-      'spam.components.user.services.auth'
+    .module('spam.user.services', [
+      'spam.user.services.user',
+      'spam.user.services.auth'
     ]);
 
 })();

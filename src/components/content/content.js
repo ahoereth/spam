@@ -2,12 +2,12 @@
   'use strict';
 
   /**
-   * MODULE: spam.components.content
+   * MODULE: spam.content
    * DIRECTIVE: content
    * CONTROLLER: ContentController
    */
   angular
-    .module('spam.components.content', [
+    .module('spam.content', [
       'ngRoute',
       'lodash'
     ])
