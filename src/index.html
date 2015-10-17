@@ -36,6 +36,7 @@
   <!-- endbower -->
 
   <!-- injector:css -->
+  <link rel="stylesheet" href="components/app/app.layout.css">
   <link rel="stylesheet" href="components/courses/index/courses.index.css">
   <link rel="stylesheet" href="components/lib/dropdown/dropdown.css">
   <link rel="stylesheet" href="components/lib/progress/progress.css">
@@ -44,7 +45,9 @@
   <!-- endinjector -->
 </head>
 <body class="ng-cloak">
-  <app></app>
+  <navbar></navbar>
+  <content></content>
+  <footer></footer>
 
   <!-- bower:js -->
   <script src="lib/lodash/lodash.js"></script>
@@ -66,10 +69,10 @@
   <script src="components/app/app.constants.js"></script>
   <script src="components/app/app.js"></script>
   <script src="components/app/app.run.js"></script>
-  <script src="components/app/node/app.node.js"></script>
   <script src="components/app/services/app.services.http-intercept.js"></script>
   <script src="components/app/services/app.services.js"></script>
   <script src="components/app/services/app.services.routes.js"></script>
+  <script src="components/content/content.js"></script>
   <script src="components/courses/add-remove/courses.add-remove.js"></script>
   <script src="components/courses/courses.js"></script>
   <script src="components/courses/filters/courses.filters.course.js"></script>
@@ -80,6 +83,7 @@
   <script src="components/courses/services/courses.services.courses.js"></script>
   <script src="components/courses/services/courses.services.js"></script>
   <script src="components/courses/single/courses.single.js"></script>
+  <script src="components/footer/footer.js"></script>
   <script src="components/guide/guide.js"></script>
   <script src="components/help/help.help-fragment.js"></script>
   <script src="components/help/help.js"></script>

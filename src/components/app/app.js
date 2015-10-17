@@ -10,7 +10,9 @@
       'spam.components.app.constants',
       'spam.components.app.config',
       'spam.components.app.services',
-      'spam.components.app.node',
+      'spam.components.navbar',
+      'spam.components.content',
+      'spam.components.footer',
       'spam.components.401'
     ]);
 
