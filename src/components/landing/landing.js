@@ -9,9 +9,11 @@
     .module('spam.landing', [
       'iifFilter',
       'spam.app.services.routes',
+      'spam.user.services.user',
       'spam.user.login.form'
     ])
-    .config(landingRouting);
+    .config(landingRouting)
+    .controller('LandingController', landingController);
 
 
 
@@ -19,7 +21,9 @@
   /* @ngInject */
   function landingRouting(RoutesProvider) {
     RoutesProvider.add('/', {
-      templateUrl: '/components/landing/landing.html'
+      templateUrl: '/components/landing/landing.html',
+      controller: 'LandingController',
+      controllerAs: 'landing'
     });
 
     RoutesProvider.add('/.', {
@@ -29,6 +33,28 @@
     RoutesProvider.add('*', {
       redirectTo: '/'
     });
+  }
+
+
+
+
+  /* @ngInject */
+  function landingController($scope, User) {
+    var ctrl = this;
+
+    function userConstruct(event, user) {
+      if (!user) {
+        ctrl.loggedin = false;
+        ctrl.username = '';
+      } else {
+        ctrl.loggedin = true;
+        ctrl.username = user.username;
+      }
+    }
+
+    $scope.$on('user-construct', userConstruct);
+    userConstruct(null, User.details);
+    ctrl.loginloading = false;
   }
 
 })();

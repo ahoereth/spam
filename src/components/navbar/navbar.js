@@ -72,7 +72,7 @@
     });
 
 
-    $scope.$on('user-construct', function(event, user) {
+    function userConstruct(event, user) {
       if (!user) {
         ctrl.user = false;
       } else {
@@ -81,7 +81,10 @@
           role: user.role
         };
       }
-    });
+    }
+
+    $scope.$on('user-construct', userConstruct);
+    userConstruct(null, User.details);
 
 
     /**

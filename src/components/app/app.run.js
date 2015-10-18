@@ -100,8 +100,8 @@
       event, current, previous, rejection
     ) {
       if ('not_authenticated' === rejection) {
-        $rootScope.requested_route = $location.path();
-        $location.path('/401');
+        var requested = $location.path();
+        $location.path('/401').search('path', requested);
       } else {
         $location.path('/login');
       }
@@ -117,7 +117,7 @@
 
       // Don't allow entering the page on /401
       if (current.originalPath === '/401' && _.isUndefined(previous)) {
-        $location.path('/');
+        $location.path('/').search({});
         return;
       }
 

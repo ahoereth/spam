@@ -8,7 +8,7 @@
    */
   angular
     .module('spam.user.login.form', [
-      'lodash',
+      'ngRoute', // $routeParams
       'iifFilter',
       'spam.user.services.auth'
     ])
@@ -23,9 +23,14 @@
     return {
       restrict: 'E',
       replace: true,
-      scope: true,
+      scope: {
+        username: '=',
+        loading: '='
+      },
       templateUrl: 'components/user/login/form/user.login.form.html',
-      controller: 'LoginformController'
+      controller: 'LoginformController',
+      controllerAs: 'loginform',
+      bindToController: true
     };
   }
 
@@ -34,37 +39,30 @@
 
   /* @ngInject */
   function loginformController(
-    $rootScope,
-    $scope,
     $location,
     $routeParams,
-    Auth,
-    _
+    Auth
   ) {
-    $rootScope.loginform = _.extend(
-      $rootScope.loginform || {},
-      {username: $routeParams.username}
-    );
+    var ctrl = this;
 
-    /**
-     * Trigger the login request.
-     */
-    $scope.login = function() {
-      var t = this.loginform;
+    ctrl.login = function() {
+      var self = this;
 
       Auth.init(
-        t.username,
-        t.password,
-        t.remember
+        self.username,
+        self.password,
+        self.remember
       ).then(function() {
-        var targetRoute = ! _.isEmpty($rootScope.requested_route) ?
-          $rootScope.requested_route : '/~';
-
-        $location.path(targetRoute).search({});
+        var path = $routeParams.path || '/~';
+        $location.path(path).search({});
       }, function() {
-        $location.path('/login').search({username: t.username});
+        $location.path('/login').search({username: self.username});
       });
     };
+
+    if ('' === ctrl.username) {
+      ctrl.username = $routeParams.username || '';
+    }
   }
 
 })();

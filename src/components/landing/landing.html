@@ -1,5 +1,7 @@
 <div class="jumbotron">
-  <h1>Welcome<span ng-show="loginform.username||user">, {{user | iif:user.username:loginform.username}}</span>!</h1>
+  <h1>
+    Welcome<span ng-if="landing.username">,&nbsp;{{landing.username}}</span>!
+  </h1>
   <p>
     This is your personal <span class="text-success">study planning machine</span>.
     It will help you to keep track of your courses, grades and credits throughout your course of study;
@@ -17,12 +19,17 @@
   </p>
 </div>
 
-<div class="col-md-4" ng-hide="user">
-  <h2 ng-class="{'inactive': loginform.loading}">Get started: Login!</h2>
-  <loginform></loginform>
+<div class="col-md-4" ng-if="!landing.loggedin">
+  <h2 ng-class="{'inactive': landing.loginloading}">
+    Get started: Login!
+  </h2>
+  <loginform
+    username="landing.username"
+    loading="landing.loginloading"
+  ></loginform>
 </div>
 
-<div class="col-md-4" ng-if="user">
+<div class="col-md-4" ng-if="landing.loggedin">
   <h2>You are logged in!</h2>
   <p>
     Click on your username in the top navigation and enroll in some courses using the quick search in the top right.
@@ -30,7 +37,7 @@
   </p>
 </div>
 
-<div class="col-md-4" ng-if="!user">
+<div class="col-md-4" ng-if="!landing.loggedin">
   <h2>Demo</h2>
   <p>
     Do not want to login using your sacred university credentials before you know it is actually worth it?
@@ -39,7 +46,7 @@
 </div>
 
 <!-- hard coded for now to fill up the third column when logged in -->
-<div class="col-md-4" ng-if="user">
+<div class="col-md-4" ng-if="landing.loggedin">
   <h2>Meta</h2>
   <p>
     The app currently has over 450 users with about 7000 individual course enrollments.

@@ -1,7 +1,7 @@
 <div>
   <form
     class="form-horizontal"
-    ng-submit="login()"
+    ng-submit="loginform.login()"
     ng-class="{'inactive': loginform.loading}"
   >
 
@@ -13,8 +13,8 @@
           type="text"
           class="form-control"
           id="username"
-          ng-model="loginform.username"
-          placeholder="wwacker">
+          placeholder="wwacker"
+          ng-model="loginform.username">
         <span class="input-group-addon">@uos.de</span>
       </div>
     </div>
@@ -48,7 +48,7 @@
           ng-class="{disabled : loginform.loading}"
           ng-disabled="loginform.loading"
         >
-          {{loginform.loading | iif: 'Loading...' : 'Let\'s go!'}}
+          {{loading | iif: 'Loading...' : 'Let\'s go!'}}
         </button>
       </div>
     </div>
