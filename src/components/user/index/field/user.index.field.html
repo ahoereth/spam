@@ -79,12 +79,19 @@
   <div class="panel-body">
     <!-- most likely only 'course' directives here -->
     <ng-transclude></ng-transclude>
-    <div ng-if="field.credits.foreign" class="foreign-credits">
-      <span class="bold">+<ng-pluralize
-        count="field.credits.foreign"
-        when="{'1': 'one credit',
-               'other': '{} credits'}"
-      ></ng-pluralize></span> from other fields.
+    <div class="row" ng-if="field.credits.foreign">
+      <div class="foreign-credits col-xs-11">
+        <span
+          ng-if="::!course.course_id"
+          tooltips
+          tooltip-title="{{::course.term_abbr}}"
+        >
+          Overflowing credits from other fields
+        </span>
+        <small class="text-info">
+          [{{field.credits.foreign}}]
+        </small>
+      </div>
     </div>
   </div>
 
