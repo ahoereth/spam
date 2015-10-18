@@ -184,11 +184,7 @@
 </form>
 
 <!-- infinite scroll container -->
-<div
-  infinite-scroll="scrollOn()"
-  infinite-scroll-immediate-check="false"
-  infinite-scroll-distance="2"
->
+<div infinite-scroll="scrollOn()">
 
   <!-- ngRepeat for the course list -->
   <courserow
@@ -196,7 +192,7 @@
       | orderBy:order
       | limitTo: displayLimit
       track by course.course_id"
-    course="course"
+    course="::course"
     add-remove-course
   ></courserow>
 

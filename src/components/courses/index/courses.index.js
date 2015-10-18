@@ -12,6 +12,8 @@
       'restangular',
       'lodash',
       'iifFilter',
+      'scroll',
+      'infiniteScroll',
       'spam.app.services.routes',
       'spam.courses.services.courses',
       'spam.courses.filters.course',
@@ -48,6 +50,7 @@
     $q,
     Restangular,
     _,
+    Scroll,
     Courses
   ) {
     var url = {},
