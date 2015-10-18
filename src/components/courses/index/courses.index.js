@@ -14,6 +14,7 @@
       'iifFilter',
       'scroll',
       'infiniteScroll',
+      'buttons',
       'spam.app.services.routes',
       'spam.courses.services.courses',
       'spam.courses.filters.course',

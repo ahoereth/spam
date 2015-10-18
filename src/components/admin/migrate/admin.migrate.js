@@ -12,7 +12,7 @@
       'lodash',
       'instafocus',
       'inlineSelectables',
-      'mgcrea.ngStrap.button',
+      'buttons',
       'yearFilter',
       'spam.courses.row',
       'spam.app.constants',

@@ -8,7 +8,7 @@
   angular
     .module('spam.user.settings.matriculation-setter', [
       'lodash',
-      'mgcrea.ngStrap.button',
+      'buttons',
       'spam.user.services.user'
     ])
     .directive('matriculationSetter', userMatriculationSetterDirective);
