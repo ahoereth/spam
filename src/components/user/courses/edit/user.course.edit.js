@@ -27,17 +27,23 @@
   function userCourseEditRouting(RoutesProvider) {
     RoutesProvider.add('/~/courses/new', {
       controller: 'UserCourseEditController',
-      templateUrl: 'components/user/courses/new/user.course.edit.html',
-      title: 'Add unofficial Course',
+      controllerAs: 'edit',
+      templateUrl: 'components/user/courses/edit/user.course.edit.html',
+      title: 'Add unofficial course',
       access: 1
     });
 
-    /*RoutesProvider.add('/~/courses/edit/:course_id', {
+    RoutesProvider.add('/~/courses/edit/:student_in_course_id', {
       controller: 'UserCourseEditController',
-      templateUrl: 'components/user/courses/new/user.course.edit.html',
+      controllerAs: 'edit',
+      templateUrl: 'components/user/courses/edit/user.course.edit.html',
       title: 'Edit personal course',
       access: 1
-    });*/
+    });
+
+    RoutesProvider.add('/~/courses/edit', {
+      redirectTo: '/~/courses/new'
+    });
   }
 
 
@@ -45,48 +51,60 @@
 
   /* @ngInject */
   function userCourseEditController(
-    $rootScope,
-    $scope,
     $location,
     $routeParams,
     Restangular,
     User,
     _
   ) {
-    $scope.fields = Restangular.all('fields').getList({
-      regulation_id: $scope.user.regulation_id
+    var ctrl = this;
+
+    ctrl.fields = Restangular.all('fields').getList({
+      regulation_id: User.details.regulation_id
     }).$object;
 
-    $scope.course = {
-      field_id: parseInt($routeParams.field_id, 10),
-      unofficial_year: $rootScope.meta.currentTermYear,
-      unofficial_term: $rootScope.meta.term
-    };
+    var d = new Date(), m = d.getMonth(), y = d.getFullYear();
+    var currentTermYear = (m > 3) ? y : y - 1;
+    var currentTerm = (m > 8 || m < 3) ? 'W' : 'S';
 
+    if ($routeParams.student_in_course_id) {
+      // edit course
+      var id = parseInt($routeParams.student_in_course_id, 10);
+      ctrl.course = User.details.one('courses', id).get().$object;
+    } else {
+      // new course
+      var fieldId = $routeParams.fieldId ?
+        parseInt($routeParams.field_id, 10) : 1;
+      ctrl.course = {
+        enrolled_field_id: fieldId,
+        year: currentTermYear,
+        term: currentTerm
+      };
+    }
 
     /**
      * Adds the form data as unofficial course to the user's course collection.
      */
-    $scope.submit = function() {
-      $scope.submitted = true;
+    ctrl.submit = function() {
+      ctrl.submitted = true;
       var course = this.course || {};
 
-      // The course needs to be located in some semester. If none is defined
-      // add it to the current.
+      // The course needs to be located in some semester and some field.
       _.defaults(course, {
-        unofficial_year: $rootScope.meta.currentTermYear,
-        unofficial_term: $rootScope.meta.term
+        year: currentTermYear,
+        term: currentTerm,
+        field_id: 1
       });
 
       // Can't submit if the course has no title.
       if (_.isEmpty(course.unofficial_course)) {
-        $scope.submitted = false;
+        ctrl.submitted = false;
         return;
       }
 
       // Add and redirect.
       User.addCourse(course).then(function() {
-        $scope.submitted = false;
+        ctrl.submitted = false;
         $location.search({}).path('/~');
       });
     };

@@ -1,7 +1,9 @@
 <div class="col-md-6 col-md-offset-3">
-  <form ng-submit="submit()" class="form-horizontal">
-
-    <h1>{{course.unofficial_course | iif : course.unofficial_course : 'Unofficial course'}}</h1>
+  <form ng-submit="edit.submit()" class="form-horizontal">
+    <h1>
+      {{edit.course.course | iif :
+        edit.course.course : 'Unofficial course'}}
+    </h1>
 
     <hr>
 
@@ -11,9 +13,9 @@
         <input
           type="text"
           class="form-control"
-          ng-model="course.unofficial_code"
           id="code"
-          placeholder="8.042">
+          placeholder="8.042"
+          ng-model="edit.course.code">
       </div>
     </div>
 
@@ -25,8 +27,8 @@
           id="title"
           class="form-control"
           instafocus
-          ng-model="course.unofficial_course"
-          placeholder="Full course name">
+          placeholder="Full course name"
+          ng-model="edit.course.course">
       </div>
     </div>
 
@@ -35,10 +37,10 @@
       <div class="col-md-9">
         <select
           class="form-control"
-          ng-model="course.field_id"
-          ng-options="field.field_id as field.field for field in fields"
-          id="field">
-        </select>
+          id="field"
+          ng-options="field.field_id as field.field for field in edit.fields"
+          ng-model="edit.course.enrolled_field_id"
+        ></select>
       </div>
     </div>
 
@@ -50,8 +52,8 @@
           class="form-control"
           min="0"
           max="18"
-          ng-model="course.unofficial_ects"
-          id="ects">
+          id="ects"
+          ng-model="edit.course.ects">
       </div>
     </div>
 
@@ -66,18 +68,18 @@
               class="form-control"
               min="2000"
               max="2030"
-              ng-model="course.unofficial_year"
               id="year"
-              placeholder="{{meta.year}}">
+              placeholder="{{::meta.year}}"
+              ng-model="edit.course.year">
           </div>
 
           <div class="col-md-4">
-            <label style="margin: 0 !important; font-weight:normal">
-              <input type="radio" ng-model="course.unofficial_term" value="S">
+            <label style="margin: 0 !important; font-weight: normal;">
+              <input type="radio" value="S" ng-model="edit.course.term">
               Summer
             </label>
-            <label style="margin: 0 !important; font-weight:normal">
-              <input type="radio" ng-model="course.unofficial_term" value="W">
+            <label style="margin: 0 !important; font-weight: normal;">
+              <input type="radio" value="W" ng-model="edit.course.term">
               Winter
             </label>
           </div>
@@ -96,8 +98,8 @@
       <button
         type="submit"
         class="btn btn-success"
-        ng-class="{disabled : submitted}"
-        ng-disabled="submitted"
+        ng-class="{disabled : edit.submitted}"
+        ng-disabled="edit.submitted"
         style="width: 50%"
       >
         <span class="glyphicon glyphicon-plus"></span>

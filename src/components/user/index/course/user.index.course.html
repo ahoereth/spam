@@ -74,11 +74,18 @@
           </tickable>
         </li>
 
+        <!-- edit course -->
+        <li ng-if="!course.course_id">
+          <a ng-href="/~/courses/edit/{{::course.student_in_course_id}}">
+            Edit Course
+          </a>
+        </li>
+
         <!-- un-enroll from course -->
         <li><a class="pointer" ng-click="remove()">Remove</a></li>
 
         <!-- move to other fields headline -->
-        <li ng-hide="course.fields.length == 0 && course.enrolled_field_id == 1"
+        <li ng-hide="!course.fields.length && course.enrolled_field_id == 1"
             class="dropdown-header">
           Change field
         </li>

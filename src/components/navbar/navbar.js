@@ -84,7 +84,7 @@
     }
 
     $scope.$on('user-construct', userConstruct);
-    userConstruct(null, User.details);
+    //userConstruct(null, User.details);
 
 
     /**

@@ -12,8 +12,8 @@
   angular
     .module('spam.app.constants', [])
     .constant('TITLE', 'Studyplanning in Cognitive Science')
-    .constant('LOCALAPI', false)
+    .constant('LOCALAPI', true)
     .constant('APIURL', 'https://cogsci.uni-osnabrueck.de/~SPAM/api')
-    .constant('LOCALAPIURL', '/~SPAM/api');
+    .constant('LOCALAPIURL', 'http://spam.local/api');
 
 })();
