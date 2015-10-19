@@ -61,7 +61,7 @@ abstract class Model {
     }
 
     if (! empty($columns)) {
-      return array_pick_pairs($result, $keys);
+      return array_pick($result, $keys);
     }
 
     return $result;
@@ -81,7 +81,11 @@ abstract class Model {
     $selector = array();
     $selector[ static::get_pk() ] = $this->get_pk_value();
 
-    $data = self::$db->sql_select_one($tablename, $selector, static::$table);
+    $data = self::$db->sql_select_one(
+      $tablename,
+      $selector,
+      array_keys(static::$table)
+    );
 
     if (! $data) {
       return false;

@@ -152,112 +152,13 @@ class Route_Users_Courses extends Route {
    * /users/:username/courses
    *
    * @param $username
-   * @param $data     Optional. Can contain alternative course_id and field_id.
    */
   public function all_post() {
     extract(self::args(func_get_args(), array(
       'username',
-      'data'
     )));
 
-    $user = self::authorize($username);
-
-    $post = json_decode(self::$app->request()->getBody(), true);
-
-    $course_id = ! empty($post['course_id']) ? (int) $post['course_id'] : null;
-    $field_id  = ! empty($post['field_id' ]) ? (int) $post['field_id' ] : null;
-    $field_id  = $field_id !== 1 ? $field_id : null;
-
-    if (empty($course_id) && empty($post['unofficial_course'])) {
-      return $this->bad_request();
-    }
-
-    // perform some checks if the user tries to enroll in an existing course
-    if (! empty($course_id)) {
-      $args = array(
-        ':course_id' => $course_id,
-      );
-
-      $field = '';
-      if (! empty($field_id)) {
-        $args[':field_id']      = $field_id;
-        $args[':regulation_id'] = $user['regulation_id'];
-
-        $field = "AND field_id = :field_id AND regulation_id = :regulation_id";
-      }
-
-      $select = "SELECT
-          course_id,
-          parent_course_id,
-          preliminary
-        FROM courses c
-        NATURAL LEFT JOIN courses_in_fields cf
-        NATURAL LEFT JOIN fields f
-        NATURAL LEFT JOIN fields_in_regulations fr
-        WHERE
-          c.course_id = :course_id
-          {$field}
-        LIMIT 1;
-      ";
-
-      $get = self::$db->prepare($select);
-      $get->execute($args);
-
-      // course does not exist OR course does not exist in
-      // this field & regulation
-      if (! $course = $get->fetch(PDO::FETCH_ASSOC)) {
-        return $this->bad_request();
-      }
-
-      // course is a subcourse of some other course -->
-      // put the student into the parent course
-      if ($course['parent_course_id']) {
-        return $this->all_post($username, array(
-          'course_id' => $course['parent_course_id'],
-          'field_id'  => $field_id,
-        ));
-      }
-
-      // students cannot join preliminary courses
-      if ($course['preliminary']) {
-        return $this->bad_request();
-      }
-    }
-
-    $set = array();
-    $unofficials = array(
-      'unofficial_code',
-      'unofficial_course',
-      'unofficial_ects',
-      'unofficial_term',
-      'unofficial_year',
-    );
-    foreach ($unofficials AS $unofficial) {
-      if (isset($post[$unofficial])) {
-        $set[$unofficial] = $post[$unofficial];
-      }
-    }
-
-    $set = array_merge($set, array(
-      'username'  => md5($username),
-      'course_id' => $course_id,
-      'field_id'  => $field_id,
-      'regulation_id' => $user['regulation_id'],
-    ));
-
-    $insert = self::$db->sql_insert('students_in_courses', $set);
-
-    if (! $insert) {
-      return $this->bad_request();
-    }
-
-    $student_in_course_id = self::$db->sql_select_one(
-      'students_in_courses',
-      $set,
-      'student_in_course_id'
-    );
-
-    return $this->one_get($username, $student_in_course_id);
+    return $this->one_put($username);
   }
 
 
@@ -286,10 +187,10 @@ class Route_Users_Courses extends Route {
 
   /**
    * PUT
-   * /users/:username/courses/:course_id
+   * /users/:username/courses/:student_in_course_id
    *
    * @param $username
-   * @param $course_id
+   * @param $student_in_course_id
    */
   public function one_put($username) {
     extract(self::args(func_get_args(), array(
@@ -297,47 +198,133 @@ class Route_Users_Courses extends Route {
       'student_in_course_id',
     )));
 
-    self::authorize($username);
+    $user = self::authorize($username);
 
-    if (empty($student_in_course_id)) {
-      return $this->bad_request();
+    $payload = self::$params;
+    $toupdate = false;
+    $set = array(
+      'username' => md5($user['username']),
+      'regulation_id' => $user['regulation_id'],
+    );
+
+    $selector = array( 'username' => md5($username) );
+    if ($student_in_course_id) {
+      $selector['student_in_course_id'] = $student_in_course_id;
     }
 
-    $put = self::$params;
-    $set = array();
+    // enrolled_field_id / field_id
+    $field_id = false;
+    if (!empty($payload['enrolled_field_id'])) {
+      $field_id = (int) $payload['enrolled_field_id'];
+    } elseif (!empty($payload['field_id'])) {
+      $field_id = (int) $payload['field_id'];
+    }
+    if ($field_id) {
+      $set['field_id'] = $field_id > 1 ? $field_id : null;
+      $toupdate = true;
+    }
+
+    // course_id
+    if (isset($payload['course_id'])) {
+      $set['course_id'] = (int) $payload['course_id'];
+      $toupdate = true;
+
+      $selectors = array( 'course_id' => $set['course_id'] );
+      if (array_key_exists('field_id', $set)) {
+        $selectors['field_id'] = $set['field_id'];
+        $selectors['regulation_id'] = $user['regulation_id'];
+      }
+
+      $course = self::$db->sql_select_one(
+        array('courses', 'courses_in_fields', 'fields_in_regulations'),
+        $selectors,
+        array('course_id', 'parent_course_id', 'preliminary')
+      );
+
+      if (!$course) {
+        return $this->bad_request();
+      }
+
+      // Course is a subcourse of some other course... Redirect the request.
+      if ($course['parent_course_id']) {
+        $selectors['course_id'] = $course['parent_course_id'];
+        $course = self::$db->sql_select_one(
+          array('courses', 'courses_in_fields', 'fields_in_regulations'),
+          $selectors,
+          array('course_id', 'parent_course_id', 'preliminary')
+        );
+        self::$params['course_id'] = $course['course_id'];
+        return $this->one_put($username, $student_in_course_id);
+      }
+
+      // Students cannot join preliminary courses.
+      if ($course['preliminary']) {
+        return $this->bar_request();
+      }
+    }
+
+    // 'unoffical' course information
+    $infofields = ['course', 'code', 'ects', 'term', 'year'];
+    $info = array_pick($payload, $infofields);
+    if (!empty($info)) {
+      if (!empty($student_in_course_id)) {
+        $current = self::$db->sql_select_one('students_in_courses', array(
+          'student_in_course_id' => $student_in_course_id,
+        ));
+
+        if (!empty($current['course_id'])) {
+          // Saving unofficial info for an official course.
+          $course = self::$db->sql_select_one('courses', array(
+            'course_id' => $current['course_id'],
+          ));
+
+          $diff = array_diff_assoc($info, array_pick($course, $infofields));
+          $info = array_pick($info, array_keys($diff));
+        } else {
+          // Empty course name, year, term not allowed.
+          if (empty($info['course'])) { $info['course'] = $current['course']; }
+          if (empty($info['year'])) { $info['year'] = get_current_term_year(); }
+          if (empty($info['term'])) { $info['term'] = get_current_term(); }
+        }
+      }
+
+      $set = array_merge($set, prefix_keys($info, 'unofficial_'));
+      $toupdate = true;
+    }
 
     // grade
-    if (array_key_exists('grade', $put)) {
+    if (array_key_exists('grade', $payload)) {
       $grade = (float) preg_replace(
-        '/[^\\d.]+/', '', str_replace(',', '.', $put['grade'])
+        '/[^\\d.]+/', '', str_replace(',', '.', $payload['grade'])
       );
       $grade = $grade < 1 || $grade > 5 ? ($grade > 5 ? 5 : null) : $grade;
       $set['grade'] = $grade;
       $set['passed'] = $grade >= 1 && $grade <= 4 ? 1 : 0;
+      $toupdate = true;
     }
 
     // passed
-    if (isset($put['passed'])) {
-      $set['passed'] = (int) $put['passed'];
+    if (isset($payload['passed'])) {
+      $set['passed'] = (int) $payload['passed'];
+      $toupdate = true;
     }
 
     // muted
-    if (isset($put['muted'])) {
-      $set['muted']= (int) $put['muted'] > 0 ? 1 : 0;
+    if (isset($payload['muted'])) {
+      $set['muted']= (int) $payload['muted'] > 0 ? 1 : 0;
+      $toupdate = true;
     }
 
-    // enrolled_field_id
-    if (isset($put['enrolled_field_id'])) {
-      $id = (int) $put['enrolled_field_id'];
-      $set['field_id'] = $id > 1 ? $id : null;
+    if ($toupdate) {
+      $new = self::$db->sql_put('students_in_courses', $selector, $set);
+      $student_in_course_id = $new['student_in_course_id'];
     }
 
-    self::$db->sql_update('students_in_courses', array(
-      'student_in_course_id' => $student_in_course_id,
-      'username' => md5($username),
-    ), $set);
-
-    return $this->one_get($username, $student_in_course_id);
+    if (!empty($student_in_course_id)) {
+      return $this->one_get($username, $student_in_course_id);
+    } else {
+      return $this->no_content();
+    }
   }
 
 

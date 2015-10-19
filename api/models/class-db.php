@@ -45,12 +45,12 @@ class DB extends PDO {
   public function sql_select($tablename, $selectors, $columns = '*') {
     $single = is_string($columns) && '*' != $columns ? $columns : false;
     $selects = '*' != $columns ? self::generate_selects((array) $columns) : '*';
-    $where   = self::generate_selectors($selectors);
+    $where   = self::generate_selectors($selectors, true);
     $values  = array_values(array_filter($selectors, 'self::sql_null'));
     $tablename = implode((array) $tablename, ' NATURAL LEFT JOIN ');
 
-    $query = "SELECT {$selects} FROM {$tablename} WHERE {$where};";
 
+    $query = "SELECT {$selects} FROM {$tablename} {$where};";
     $stmt = $this->prepare($query);
     $stmt->execute($values);
     $rows = self::fetchAllAssoc($stmt);
@@ -88,7 +88,7 @@ class DB extends PDO {
       $this->sql_insert($tablename, array_merge($data, $selectors));
     }
 
-    return $this->sql_select_one($tablename, $selectors);
+    return $this->sql_select_one($tablename, array_merge($data, $selectors));
   }
 
 
@@ -189,24 +189,46 @@ class DB extends PDO {
    *                        which is useful for NULL values.
    * @return {string}       Selector pair string for PDO prepare.
    */
-  public static function generate_selectors($data = null) {
+  public static function generate_selectors($data = null, $where = false) {
     if (empty($data)) {
       return false;
     }
 
     if (is_assoc($data)) {
       $string = '';
-      foreach ($data AS $key => $v) {
-        $string .= "`{$key}`";
-        $v = null === $v ? 'NULL' : $v;
-        $string .= 'NULL' === $v || 'NOT NULL' === $v ? ' IS ' . $v : " = ?";
-        $string .= ' AND ';
+      foreach ($data AS $key => $value) {
+        if (is_bool($value)) {
+          if (false === $value) {
+            continue;
+          } else {
+            $value = 'NOT NULL';
+          }
+        }
+
+        $lastchar = substr($key, -1);
+        $value = (null === $value) ? 'NULL' : $value;
+        if ('NULL' === $value || 'NOT NULL' === $value) {
+          $operator = 'IS';
+        } elseif ('>' === $lastchar || '<' === $lastchar) {
+          $operator = $lastchar;
+          $key = substr($key, 0, -1);
+          $value = '?';
+        } else {
+          $operator = '=';
+          $value = '?';
+        }
+
+        $string .= "`{$key}` {$operator} {$value} AND ";
       }
 
       // cut off last AND
       $string = substr($string, 0, -5);
     } else {
-      $string = '`' . implode('`=? AND `', $data) . '`=?';
+      $string = '`' . implode('` = ? AND `', $data) . '` = ?';
+    }
+
+    if ($where) {
+      return 'WHERE ' . $string;
     }
 
     return $string;
@@ -225,12 +247,14 @@ class DB extends PDO {
     }
 
     $selects = '';
-    foreach ($data AS $column => $datatype) {
-      if ($datatype == 'TIMESTAMP') {
-        $column = "UNIX_TIMESTAMP({$column}) AS {$column}";
+    foreach ($data AS $key => $value) {
+      if ('TIMESTAMP' === $value) { // value is the datatype
+        $selects .= "UNIX_TIMESTAMP({$key}) AS {$key},";
+      } else if (is_numeric($key)) { // value is the column name
+        $selects .= $value . ',';
+      } else { // value specifies a column name translation using 'as'
+        $selects .= $key . ' AS ' . $value;
       }
-
-      $selects .= $column . ',';
     }
 
     return rtrim($selects, ',');

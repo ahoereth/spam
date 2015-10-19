@@ -33,28 +33,6 @@ function array_2d_search($haystack, $key, $value) {
 
 
 /**
- * Picks all specified keys from the source array.
- *
- * @param  {array} $src
- * @param  {array} $keys
- * @return {array}
- */
-function array_pick_pairs($src, $keys) {
-  $dst = array();
-
-  foreach ($keys AS $key) {
-    if (empty($src[$key])) {
-      continue;
-    }
-
-    $dst[$key] = $src[$key];
-  }
-
-  return $dst;
-}
-
-
-/**
  * Duplicates the given array.
  *
  * @param  {array} $array
@@ -131,7 +109,7 @@ function multi_implode($glue, $array) {
 
 
 /**
- * Creates an object composed of the picked object properties.
+ * Creates an associative array composed of the picked array keys.
  *
  * @param  {assoc} $assoc
  * @param  {array} $keys
@@ -139,10 +117,29 @@ function multi_implode($glue, $array) {
  */
 function array_pick($assoc, $keys) {
   $result = array();
+
   foreach ($keys AS $key) {
     if (isset($assoc[$key])) {
       $result[$key] = $assoc[$key];
     }
+  }
+
+  return $result;
+}
+
+
+/**
+ * Prefixes all keys of an associative array with a specific string.
+ *
+ * @param  {assoc}  $assoc
+ * @param  {string} $prefix
+ * @return {assoc}
+ */
+function prefix_keys($assoc, $prefix) {
+  $result = array();
+
+  foreach ($assoc AS $key => $val) {
+    $result[$prefix . $key] = $val;
   }
 
   return $result;
