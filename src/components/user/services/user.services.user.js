@@ -90,7 +90,7 @@
 
       facts.credits = {
         passed  : fields.pluck('overallPassedCredits').sum().value() +
-                  facts.examinationCredits,
+                  facts.examinationCredits + (thesisGrade ? 12 : 0),
         //overflow: fields.pluck('overflowPassedCredits').sum().value(),
         enrolled: fields.pluck('enrolledCredits').sum().value()
       };

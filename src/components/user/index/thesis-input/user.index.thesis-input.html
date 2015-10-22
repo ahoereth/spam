@@ -1,0 +1,28 @@
+<div>
+  <form class="inline-form row">
+    <div class="form-group col-lg-10 col-sm-9 col-xs-8" style="margin: 0;">
+      <input
+        type="text"
+        class="form-control"
+        blur-on-enter
+        placeholder="Bachelor thesis title"
+        ng-model="thesis.title"
+        ng-blur="thesis.blur()"
+        ng-focus="thesis.focus()"
+        ng-style="!thesis.styled && { border: 'none', boxShadow: 'none' }">
+    </div>
+
+    <div class="form-group col-lg-2 col-sm-3 col-xs-4" style="margin: 0;">
+      <input
+        type="text"
+        class="form-control form-control-tight"
+        blur-on-enter
+        placeholder="Grade"
+        onclick="select()"
+        ng-model="thesis.grade"
+        ng-blur="thesis.blur()"
+        ng-focus="thesis.focus()"
+        ng-style="!thesis.styled && { border: 'none', boxShadow: 'none' }">
+    </div>
+  </form>
+</div>

@@ -3,6 +3,9 @@
   You are currently viewing the live demo. To make sustaining changes please log in with your own credentials!
 </div>
 
+
+
+<!-- Headline -->
 <h1>
   {{overview.user.username}}'s overview
   <span
@@ -12,6 +15,9 @@
   ></span>
 </h1>
 
+
+
+<!-- Leading descriptive sentences. -->
 <div>
   <!-- already enrolled in some courses -->
   <p class="lead" ng-if="overview.courses.length">
@@ -36,10 +42,16 @@
       Presumably you will have something around a <strong>{{overview.facts.grades.bachelor}} bachelor grade</strong>.
     </span>
 
-    <span ng-if="!overview.thesis.active">
-      <abbr class="undercover" ng-click="overview.thesis.active=!overview.thesis.active">
+    <span ng-if="!overview.thesisinput">
+      <abbr
+        class="undercover"
+        ng-click="overview.thesisinput=!overview.thesisinput"
+      >
         You did not yet write your bachelor thesis
-      </abbr>{{overview.facts.bscFieldsCount>overview.facts.bscFieldsCompletedCount | iif : ' and ' : '.'}}
+      </abbr>{{
+        overview.facts.bscFieldsCount > overview.facts.bscFieldsCompletedCount |
+        iif : ' and ' : '.'
+      }}
     </span>
 
     <span ng-if="overview.facts.bscFieldsCount>overview.facts.bscFieldsCompletedCount">
@@ -68,41 +80,16 @@
   </div>
 </div>
 
+
+
 <!-- bachelor thesis row -->
-<div ng-show="overview.thesis.active">
-  <hr>
+<hr ng-if="overview.thesisinput">
+<thesis-input ng-if="overview.thesisinput"></thesis-input>
 
-  <form class="inline-form row">
-    <div class="form-group col-lg-10 col-sm-9 col-xs-8">
-      <input
-        type="text"
-        class="form-control"
-        blur-on-enter
-        placeholder="Bachelor thesis title"
-        ng-model="overview.thesis.title"
-        ng-blur="overview.thesisChange()"
-      >
-    </div>
-
-    <div class="form-group col-lg-2 col-sm-3 col-xs-4">
-      <input
-        type="text"
-        class="form-control form-control-tight"
-        blur-on-enter
-        placeholder="Grade"
-        onclick="select()"
-        ng-model="overview.thesis.grade"
-        ng-blur="overview.thesisChange()"
-      >
-    </div>
-  </form>
-</div>
-
-
-<hr ng-show="overview.user.mat_verify">
 
 
 <!-- the fields -->
+<hr ng-show="overview.user.mat_verify">
 <div class="overview-container row">
 
 
@@ -155,9 +142,10 @@
 
 </div>
 
-<hr>
+
 
 <!-- legend -->
+<hr>
 <p class="pull-right" ng-show="overview.user.mat_verify">
   <small>
     <span class="text-primary glyphicon glyphicon-pencil"></span> Current,&nbsp;

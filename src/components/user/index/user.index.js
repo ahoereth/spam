@@ -16,6 +16,7 @@
       'spam.user.services.user',
       'spam.user.index.field',
       'spam.user.index.course',
+      'spam.user.index.thesis-input',
       'spam.user.settings.matriculation-setter'
     ])
     .config(userIndexRouting)
@@ -58,22 +59,6 @@
 
 
     /**
-     * Called when any of the thesis details (title or grade) change. Updates
-     * the User data.
-     */
-     ctrl.thesisChange = function() {
-      if (User.details.thesis.title === ctrl.thesis.title &&
-          User.details.thesis.grade === ctrl.thesis.grade
-      ) { return; }
-
-      ctrl.thesis = _.extend(
-        ctrl.thesis,
-        User.updateThesis(ctrl.thesis.title, ctrl.thesis.grade)
-      );
-    };
-
-
-    /**
      * Function to give the user a headstart and add the guide courses for his
      * first semester to his personal overview.
      */
@@ -100,12 +85,8 @@
     ctrl.facts   = User.facts;
     ctrl.fields  = User.fields;
     ctrl.courses = User.courses;
-    ctrl.thesis  = {
-      title :     User.details.thesis.title,
-      grade :     User.details.thesis.grade,
-      active: !! (User.details.thesis.title ||
-                  User.details.thesis.grade)
-    };
+    ctrl.thesisinput = !!(User.details.thesis.title ||
+                          User.details.thesis.grade);
   }
 
 })();
