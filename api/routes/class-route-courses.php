@@ -154,8 +154,9 @@ class Route_Courses extends Route {
       NATURAL LEFT JOIN fields_in_regulations fr
       NATURAL LEFT JOIN regulations r
       WHERE
-        c.course_id = :course_id AND
-        r.invisible != 1
+        c.course_id = :course_id
+        # The official lectures index ignores this parameter.
+        # AND r.invisible != 1
       ORDER BY c.course_id DESC;"
     );
 

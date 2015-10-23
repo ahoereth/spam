@@ -286,6 +286,33 @@
     };
 
 
+    self.refreshCourse = function(course) {
+      var studentInCourseId = _.isObject(course) ?
+        course.student_in_course_id : course;
+
+      var idx = _.findIndex(self.courses, {
+        student_in_course_id: studentInCourseId
+      });
+
+      if (-1 === idx) {
+        return $q.reject();
+      }
+
+      if (_.isObject(course)) {
+        // Course already provided on function call.
+        self.courses[idx] = course;
+        return $q.resolve();
+      }
+
+      // Request fresh course data from API.
+      return self.details.one('courses', studentInCourseId)
+        .get().then(function(c) {
+          self.courses[idx] = c;
+          return true;
+        });
+    };
+
+
     self.updateFieldData = function(id, data) {
       fieldData[id] = data;
       factsCalculation();

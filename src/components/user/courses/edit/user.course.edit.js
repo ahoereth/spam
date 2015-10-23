@@ -58,6 +58,8 @@
     _
   ) {
     var ctrl = this;
+    ctrl.course = {};
+    ctrl.page = $routeParams.student_in_course_id ? 'edit' : 'new';
 
     ctrl.fields = Restangular.all('fields').getList({
       regulation_id: User.details.regulation_id
@@ -66,11 +68,22 @@
     var d = new Date(), m = d.getMonth(), y = d.getFullYear();
     var currentTermYear = (m > 3) ? y : y - 1;
     var currentTerm = (m > 8 || m < 3) ? 'W' : 'S';
+    ctrl.year = currentTermYear;
 
-    if ($routeParams.student_in_course_id) {
+    if ('edit' === ctrl.page) {
       // edit course
       var id = parseInt($routeParams.student_in_course_id, 10);
-      ctrl.course = User.details.one('courses', id).get().$object;
+      User.details.one('courses', id).get().then(function(c) {
+        // No edits allowed for official courses yet.
+        if (c.course_id) {
+          $location.path('/~/courses/new');
+          return false;
+        }
+        ctrl.course = c;
+      }, function() {
+        // Course does not exist, redirect.
+        $location.path('/~/courses/new');
+      });
     } else {
       // new course
       var fieldId = $routeParams.fieldId ?
@@ -97,16 +110,25 @@
       });
 
       // Can't submit if the course has no title.
-      if (_.isEmpty(course.unofficial_course)) {
+      if (_.isEmpty(course.course)) {
         ctrl.submitted = false;
         return;
       }
 
-      // Add and redirect.
-      User.addCourse(course).then(function() {
-        ctrl.submitted = false;
-        $location.search({}).path('/~');
-      });
+      if (course.restangularized) {
+        // Update existing course.
+        course.save().then(function(refreshedCourse) {
+          User.refreshCourse(refreshedCourse).then(function() {
+            $location.search({}).path('/~');
+          });
+        });
+      } else {
+        // Add and redirect.
+        User.addCourse(course).then(function() {
+          ctrl.submitted = false;
+          $location.search({}).path('/~');
+        });
+      }
     };
   }
 

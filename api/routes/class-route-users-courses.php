@@ -288,8 +288,11 @@ class Route_Users_Courses extends Route {
         }
       }
 
-      $set = array_merge($set, prefix_keys($info, 'unofficial_'));
-      $toupdate = true;
+      // Course info changes only allowed for unofficial courses currently.
+      if (empty($set['course_id']) || !$set['course_id']) {
+        $set = array_merge($set, prefix_keys($info, 'unofficial_'));
+        $toupdate = true;
+      }
     }
 
     // grade

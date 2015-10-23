@@ -102,7 +102,10 @@
         ng-disabled="edit.submitted"
         style="width: 50%"
       >
-        <span class="glyphicon glyphicon-plus"></span>
+        <span class="glyphicon" ng-class="{
+           'glyphicon-ok': 'edit' == edit.page,
+           'glyphicon-plus': 'new' == edit.page
+        }"></span>
       </button>
     </div>
 
