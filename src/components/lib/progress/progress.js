@@ -39,8 +39,8 @@
         text: '='
       },
       template: '<div class="progress-bar progress-bar-{{type}}" ' +
-                     'ng-style="{width: value + \'%\'}" ng-bind="text"' +
-                '></div>'
+                  'ng-style="{width: value + \'%\'}" ng-bind="text" ' +
+                  'ng-show="value"></div>'
     };
   }
 
