@@ -12,15 +12,21 @@
 <!-- guide table -->
 <div class="guide" ng-repeat="(semester, fields) in guide.courses track by semester" style="margin: 40px 0;">
 
+  <div class="row visible-xs">
+    <h2 style="text-align: center; col-xs-12">
+      <span class="label label-info" style="display: block; width: 100%;">{{::semester}}</span>
+    </h2>
+  </div>
+
   <!-- guide table headline -->
   <div class="row head">
     <div class="col-sm-1 hidden-xs">#</div>
     <div class="col-md-5 col-sm-5 col-xs-8">Title</div>
-    <div class="col-sm-2 hidden-xs">Teachers</div>
+    <div class="col-md-2 col-sm-3 hidden-xs">Teachers</div>
     <div class="col-md-1 hidden-sm hidden-xs">Type</div>
-    <div class="col-xs-1">ECTS</div>
-    <div class="col-md-2 col-xs-3">
-      <h2 style="text-align: center; margin: 0;">
+    <div class="col-sm-1 col-xs-2">ECTS</div>
+    <div class="col-sm-2 hidden-xs">
+      <h2 style="text-align: center; padding: 0; margin: 0;">
         <span class="label label-info" style="display: block; width: 100%;">{{::semester}}</span>
       </h2>
     </div>
@@ -30,8 +36,8 @@
   <div class="field" ng-repeat="(field, courses) in fields track by field">
 
     <!-- field headline -->
-    <div class="row title">
-      <h3 class="col-xs-12" style="margin: 0;">{{courses[0].fields[0].field}}</h3>
+    <div class="row">
+      <h3 class="col-xs-12 title" style="margin: 0;">{{courses[0].fields[0].field}}</h3>
     </div>
 
     <!-- courses in field -->
@@ -39,28 +45,19 @@
 
       <div class="col-sm-1 hidden-xs"><code>{{course.code}}</code></div>
 
-      <div class="col-md-5 col-sm-5 col-xs-8">
-        {{course.course}}
-        <span ng-if="course.field.course_in_field_type=='WPM'">&nbsp;(WPM)</span>
+      <div class="col-md-5 col-sm-5 col-xs-8 course-title">
+        <a ng-href="courses/{{course.course_id}}">
+          {{course.course}}
+          <span ng-if="course.field.course_in_field_type=='WPM'">&nbsp;(WPM)</span>
+        </a>
       </div>
 
-      <div class="col-sm-2 hidden-xs">{{course.teachers_str}}</div>
+      <div class="col-sm-3 col-md-2 hidden-xs">{{course.teachers_str}}</div>
       <div class="col-md-1 hidden-sm hidden-xs">{{course.type}}</div>
-      <div class="col-xs-1">{{course.ects}}</div>
-      <div class="col-md-2 col-xs-3">
-
-        <div class="btn-group btn-group-justified">
-          <add-remove-course
-            course="course"
-            style="width: 50%; float: left;"
-            btn-class="btn-block"
-          ></add-remove-course>
-
-          <!-- view details -->
-          <a class="btn btn-warning" style="width: 50%; float: right;" ng-href="courses/{{course.course_id}}">
-            <span class="glyphicon glyphicon-share-alt"></span>
-          </a>
-        </div>
+      <div class="col-sm-1 col-xs-2">{{course.ects}}</div>
+      <div class="col-xs-2">
+        <add-remove-course course="course" btn-class="btn-block">
+        </add-remove-course>
       </div>
 
     </div><!-- /guide course -->
