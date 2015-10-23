@@ -12,12 +12,48 @@
    */
   angular
     .module('spam.app.services.routes', [
-      'ngRoute'
+      'ngRoute',
+      'spam.user.services.auth'
     ])
     .provider('Routes', routesProvider)
+    .run(routesInitialization)
     .config(routesProviderInit)
     .constant('HTML5MODE', true)
     .constant('HASHPREFIX', '!');
+
+
+
+
+  /* @ngInject */
+  function routesInitialization($location, $rootScope) {
+    // Handle errors occurring on route changing. This is called when one of the
+    // promises to be resolved before visiting the route is rejected.
+    $rootScope.$on('$routeChangeError', function(
+      event, current, previous, rejection
+    ) {
+      if ('not_authenticated' === rejection) {
+        var requested = $location.path();
+        $location.path('/401').search('path', requested);
+      } else {
+        $location.path('/login');
+      }
+    });
+
+    // Called on every route change for user authentication verification and
+    // possible redirecting.
+    $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+      if (!current) { return; }
+
+      // Don't allow entering the page on /401
+      if (current.originalPath === '/401' && !previous) {
+        $location.path('/').search({});
+        return;
+      }
+
+      // Handle page title.
+      $rootScope.$broadcast('title', current.title, true);
+    });
+  }
 
 
 

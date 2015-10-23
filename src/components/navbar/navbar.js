@@ -51,13 +51,14 @@
   ) {
     var ctrl = this;
 
-    var courses = [],
-        hideLoader,
-        lowerYear = $rootScope.meta.year-1,
-        upperYear = $rootScope.meta.year+1,
-        fetching = false,
-        filteredIds = [],
-        filteredSelectedKey = 0;
+    var courses = [];
+    var hideLoader;
+    var year = new Date().getFullYear();
+    var lowerYear = year - 1;
+    var upperYear = year + 1;
+    var fetching = false;
+    var filteredIds = [];
+    var filteredSelectedKey = 0;
 
     ctrl = _.extend(ctrl, {
       search : {

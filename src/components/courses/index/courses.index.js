@@ -54,12 +54,13 @@
     Scroll,
     Courses
   ) {
-    var url = {},
-        lowerYear = $rootScope.meta.year-1,
-        upperYear = $rootScope.meta.year+1,
-        courses = [],
-        fetching = false,
-        originalDisplayLimit = 25;
+    var url = {};
+    var year = new Date().getFullYear();
+    var lowerYear = year - 1;
+    var upperYear = year + 1;
+    var courses = [];
+    var fetching = false;
+    var originalDisplayLimit = 25;
 
     _.extend($scope, {
       coursesPerFetch : 100,
@@ -129,7 +130,7 @@
       if (_.isUndefined(next) || next === current) { return; }
 
       $scope.displayLimit = originalDisplayLimit;
-      lowerYear = $rootScope.meta.year-1;
+      lowerYear = year - 1;
 
       $scope.filteredCourses = [];
       applyFilter(true);
