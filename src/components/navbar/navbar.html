@@ -84,42 +84,37 @@
 
     <!-- quick search result rows -->
     <div
-      class="row"
-      ng-repeat="course in navbar.search.filtered track by course.course_id">
-
+      class="row hidden-xs"
+      ng-repeat="course in navbar.search.filtered track by course.course_id"
+    >
+      <!-- course code -->
       <div class="col-sm-1 hidden-xs"><code>{{::course.code}}</code></div>
 
-      <div
-        class="col-sm-4 col-xs-6"
-        ng-bind-html="course.course | highlight: search.filter.course"
-      ></div>
+      <!-- course name -->
+      <div class="col-sm-4 col-xs-6 course-title">
+        <a
+          ng-href="/courses/{{::course.course_id}}"
+          ng-bind-html="::course.course | highlight: search.filter.course"
+        ></a>
+      </div>
 
+      <!-- course year/term -->
       <div class="col-sm-1 col-xs-2" style="text-align: right;">
         {{::course.term}}{{::course.year | year}}
       </div>
 
-      <div class="col-sm-2 hidden-xs" ng-bind="course.teachers_str"></div>
+      <!-- teachers -->
+      <div class="col-sm-2 hidden-xs" ng-bind="::course.teachers_str"></div>
 
-      <div class="col-sm-2 hidden-xs" ng-bind="course.fields_str"></div>
+      <!-- fields -->
+      <div class="col-sm-4 col-xs-7 hidden-xs" ng-hide="navbar.user">{{::course.fields_str}}</div>
+      <div class="col-sm-3 col-xs-5 hidden-xs" ng-show="navbar.user">{{::course.fields_str}}</div>
 
       <!-- add/remove + details buttons -->
-      <div class="col-sm-2 col-xs-4">
-        <add-remove-course
-          course="course"
-          style="width: 50%; float: left;"
-          btn-class="btn-block"
-        ></add-remove-course>
-
-        <a
-          class="btn btn-warning"
-          style="width: 50%; float: right;"
-          ng-href="courses/{{course.course_id}}"
-        >
-          <span class="glyphicon glyphicon-share-alt"></span>
-        </a>
-
+      <div class="col-sm-1 col-xs-2" ng-show="navbar.user">
+        <add-remove-course course="course" btn-class="btn-block">
+        </add-remove-course>
       </div>
-
     </div>
   </div><!--/quick search section -->
 </div>
