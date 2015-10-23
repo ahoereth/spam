@@ -46,10 +46,9 @@
 </div>
 
 <!-- hard coded for now to fill up the third column when logged in -->
-<div class="col-md-4" ng-if="landing.loggedin">
+<div class="col-md-4" ng-if="landing.loggedin && landing.stats">
   <h2>Meta</h2>
   <p>
-    The app currently has over 450 users with about 7000 individual course enrollments.
-    The course database contains 2350 distinct listings with a total of 276 teachers.
+    The app currently has over {{landing.stats.user_count}} users with about {{landing.stats.enrollment_count}} individual course enrollments. The course database contains {{landing.stats.course_count}} distinct listings with a total of {{landing.stats.teacher_count}} teachers.
   </p>
 </div>

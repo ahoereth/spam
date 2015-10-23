@@ -184,4 +184,10 @@ abstract class Route {
   }
 
 
+  /**
+   * Noop mock.
+   */
+  public function noop() {}
+
+
 }

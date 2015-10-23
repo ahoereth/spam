@@ -39,7 +39,7 @@
 
 
   /* @ngInject */
-  function landingController($scope, User) {
+  function landingController($scope, Restangular, User) {
     var ctrl = this;
 
     function userConstruct(event, user) {
@@ -51,6 +51,8 @@
         ctrl.username = user.username;
       }
     }
+
+    ctrl.stats = Restangular.one('/stats').get().$object;
 
     $scope.$on('user-construct', userConstruct);
     userConstruct(null, User.details);
