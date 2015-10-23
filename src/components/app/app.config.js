@@ -7,15 +7,17 @@
   angular
     .module('spam.app.config', [
       'restangular',
+      'lodash',
       'spam.app.constants'
     ])
-    .config(appConfigInit);
+    .config(appConfig)
+    .run(appConfigRun);
 
 
 
 
   /* @ngInject */
-  function appConfigInit(
+  function appConfig(
     $httpProvider,
     RestangularProvider,
     LOCALAPI,
@@ -41,6 +43,30 @@
 
       return elem;
     });
+  }
+
+
+
+
+  /* @ngInject */
+  function appConfigRun(Restangular, _) {
+    Restangular.configuration.getIdFromElem = function(elem) {
+      if (elem.id) {
+        return elem.id;
+      }
+
+      if (elem.route === 'users') {
+        return elem.username;
+      } else if (
+        elem.route === 'courses' &&
+        elem.parentResource && elem.parentResource.route === 'users'
+      ) {
+        return elem.student_in_course_id;
+      } else {
+        var e = elem[_.initial(elem.route).join('') + '_id'];
+        return e;
+      }
+    };
   }
 
 })();

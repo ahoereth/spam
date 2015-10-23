@@ -25,7 +25,11 @@
 
 
   /* @ngInject */
-  function routesInitialization($location, $rootScope) {
+  function routesInitialization(
+    $location,
+    $rootScope,
+    $route // Required for initializing the root route.
+   ) {
     // Handle errors occurring on route changing. This is called when one of the
     // promises to be resolved before visiting the route is rejected.
     $rootScope.$on('$routeChangeError', function(

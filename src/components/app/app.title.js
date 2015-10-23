@@ -2,30 +2,24 @@
   'use strict';
 
   /**
-   * MODULE: spam.app.run
+   * MODULE: spam.app.title
    *
    * TODO: Refactor this.
    */
   angular
-    .module('spam.app.run', [
+    .module('spam.app.title', [
       'restangular',
       'lodash',
-      'spam.user.services.user',
       'spam.app.constants'
     ])
-    .run(appInitialization);
+    .run(title);
 
 
 
 
   /* @ngInject */
-  function appInitialization(
+  function title(
     $rootScope,
-    $location,
-    $document,
-    $route,
-    Restangular,
-    User,
     TITLE,
     _
   ) {
@@ -33,11 +27,12 @@
 
     /**
      * Construct the page title (<head><title>) from the TITLE constant, the
-     * route dependend prefix and optional contextual variables.
+     * route's title prefix and optional contextual variables like the
+     * username.
      *
      * @param {string} prefix
      */
-    function constructTitle(data, clear) {
+    function constructTitle(e, data, clear) {
       var title = clear ? TITLE : ($rootScope.title || TITLE);
       if (_.isString(data) && ! _.isEmpty(data)) {
         title = data + ' :: ' + title;
@@ -57,33 +52,14 @@
       $rootScope.title = title;
     }
 
-    // Listen for title data change event.
-    $rootScope.$on('title', function(event, title, clear) {
-      constructTitle(title, clear);
-    });
-
-    Restangular.configuration.getIdFromElem = function(elem) {
-      if (elem.id) {
-        return elem.id;
-      }
-
-      if (elem.route === 'users') {
-        return elem.username;
-      } else if (
-        elem.route === 'courses' &&
-        elem.parentResource && elem.parentResource.route === 'users'
-      ) {
-        return elem.student_in_course_id;
-      } else {
-        var e = elem[_.initial(elem.route).join('') + '_id'];
-        return e;
-      }
-    };
-
     // Save the current username when it changes.
     $rootScope.$on('user-construct', function(event, user) {
       username = _.get(user, 'username');
     });
+
+    // Listen for title data change event.
+    $rootScope.$on('title', constructTitle);
+    //constructTitle();
   }
 
 })();

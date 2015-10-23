@@ -6,10 +6,10 @@
    */
   angular
     .module('spam.app', [
-      'spam.app.run',
-      'spam.app.constants',
       'spam.app.config',
+      'spam.app.constants',
       'spam.app.services',
+      'spam.app.title',
       'spam.navbar',
       'spam.content',
       'spam.footer',
