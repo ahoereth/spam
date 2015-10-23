@@ -32,6 +32,15 @@
     // production API.
     var api = LOCALAPI ? LOCALAPIURL : APIURL;
     RestangularProvider.setBaseUrl(api);
+
+    // Send empty payload on `DELETE` requests.
+    RestangularProvider.setRequestInterceptor(function(elem, operation) {
+      if ('remove' === operation) {
+         return null;
+      }
+
+      return elem;
+    });
   }
 
 })();
