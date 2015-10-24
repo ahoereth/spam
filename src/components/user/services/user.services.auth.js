@@ -31,35 +31,22 @@
 
     var login = function () {
       deferredLogin = $q.defer();
-
       var username = User.logininfo.username;
 
       if (! _.isEmpty(username)) {
         $http.defaults.headers.common.Authorization =
           'Basic ' + User.logininfo.authdata;
 
-        // Visualize the login process.
-        $rootScope.loginform = _.extend(
-          $rootScope.loginform || {},
-          {loading: true}
-        );
-
         // Server login request.
-        Restangular
-          .one('users', username)
-          .get()
-          .then(
-            function(data) {
-              User.construct(data);
-              deferredLogin.resolve(User.details);
-            }, function() {
-              User.logout();
-              deferredLogin.reject();
-            }
-          )
-          .finally(function() {
-            $rootScope.loginform = { loading: false };
-          });
+        Restangular.one('users', username).get().then(
+          function(data) {
+            User.construct(data);
+            deferredLogin.resolve(User.details);
+          }, function() {
+            User.logout();
+            deferredLogin.reject();
+          }
+        );
       } else {
         deferredLogin.reject();
       }
@@ -67,20 +54,15 @@
       return deferredLogin.promise;
     };
 
-    // Initiate the login process as early as possible so we do not have to start
-    // it when a controller is initiated. No matter what page the user is viewing,
-    // we are interested in if he is logged in or not.
-    login();
-
     return {
-      init: function (username, password, useLocalStorage) {
+      init: function(username, password, useLocalStorage) {
         var authdata = base64.encode(username + ':' + password);
         User.setLogininfo(username, authdata, useLocalStorage);
         return login();
       },
 
 
-      authenticate: function (accessSet) {
+      authenticate: function(accessSet) {
         var loginPromise, deferredAuthentication = $q.defer();
 
         if ('not_initiated' === deferredLogin) {
