@@ -10,7 +10,7 @@ require_once 'routes/stats.php';
 require_once 'routes/hash.php';
 
 // OPTIONS catchall
-$app->options('/(:route*)', function() use ($app) {
+$app->options('/(:route+)', function() use ($app) {
   //noop
 });
 
