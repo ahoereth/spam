@@ -30,26 +30,26 @@
         >
           <button
             class="btn btn-block btn-primary"
-            ng-model="user.mat_year"
-            radio-button
             value="{{::year}}"
+            radio-button
+            ng-model="user.mat_year"
             ng-bind="::year"
           ></button>
         </div>
 
         <!-- input for all other years -->
         <input
-          blur-on-enter
           min="2000"
           max="2020"
           type="number"
-          class="form-control centering"
-          ng-model="user.mat_year"
-          ng-model-options="{updateOn: 'blur'}"
-          ng-class="{'has-error': matriculationSetter.year.$invalid}"
-          placeholder="{{::years[2]-1}}"
           name="year"
-          required>
+          required
+          placeholder="{{::years[2]-1}}"
+          class="form-control centering"
+          ng-class="{'has-error': matriculationSetter.year.$invalid}"
+          blur-on-enter
+          ng-model="user.mat_year"
+          ng-model-options="{updateOn: 'blur'}">
       </div>
     </div>
 
@@ -58,7 +58,8 @@
       <button
         class="btn btn-block btn-success"
         ng-disabled="matriculationSetter.$invalid"
-        ng-click="verify()">
+        ng-click="verify()"
+      >
         Verify&nbsp;
         <span class="glyphicon glyphicon-ok"></span>
       </button>

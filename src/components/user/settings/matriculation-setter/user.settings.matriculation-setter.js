@@ -29,7 +29,10 @@
         var currentYear = (m > 3) ? y : y - 1;
         scope.verifyButton = ! _.isUndefined(attrs.verify);
         scope.years = _.range(currentYear, currentYear - 3, -1);
-        scope.user = User.details;
+        scope.user = {
+          mat_year: User.details.mat_year,
+          mat_term: User.details.mat_term,
+        };
 
         scope.$watchGroup(['user.mat_year', 'user.mat_term'], function(n, o) {
           if (n === o) { return; }
