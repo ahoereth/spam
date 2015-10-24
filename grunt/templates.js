@@ -16,6 +16,8 @@ module.exports = function(grunt) {
     ],
     dest: 'app/js/tmp.templates.js',
     options: {
+      module: 'spam.app',
+      standalone: false,
       htmlmin: {
         collapseBooleanAttributes: true,
         collapseWhitespace: true,
@@ -26,9 +28,6 @@ module.exports = function(grunt) {
         removeStyleLinkTypeAttributes: true,
         removeComments: true,
         customAttrCollapse: /.+/,
-      },
-      bootstrap: function(module, script) {
-        return 'angular.module("'+module+'").run(function($templateCache){'+script+'});';
       }
     }
   };

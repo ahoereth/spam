@@ -21,7 +21,7 @@
   /* @ngInject */
   function landingRouting(RoutesProvider) {
     RoutesProvider.add('/', {
-      templateUrl: '/components/landing/landing.html',
+      templateUrl: 'components/landing/landing.html',
       controller: 'LandingController',
       controllerAs: 'landing'
     });
