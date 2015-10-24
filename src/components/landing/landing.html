@@ -4,51 +4,55 @@
   </h1>
   <p>
     This is your personal <span class="text-success">study planning machine</span>.
-    It will help you to keep track of your courses, grades and credits throughout your course of study;
-    Not only of the stuff you already accomplished but also which fields still might need some work.
-    Find new interesting courses for the next semesters and generate your transcript of records with ease when applying for your semester abroad.
+    It will help you with keeping track of your courses, grades and credits throughout your course of study. Besides tracking stuff you already accomplished it also helps you to see how much work still lies ahead of you.
   </p>
 </div>
 
-<div class="col-md-4">
-  <h2>Work in progress</h2>
-  <p>
-    The study planning machine is a living project.
-    You can follow the progress and contribute to it yourself on <a href="https://github.com/ahoereth/spam">GitHub</a>.
-    For the time being I also take bug reports directly per mail at <a href="mailto:ahoereth@uos.de">ahoereth@uos.de</a>.
-  </p>
-</div>
+<div class="row">
+  <div class="col-md-4">
+    <!-- GitHub -->
+    <h2>Contribute</h2>
+    <p>
+      The study planning machine is a living project.
+      You can follow the progress and contribute to it yourself on <a href="https://github.com/ahoereth/spam">GitHub</a>.
+      For the time being I also take bug reports directly per mail at <a href="mailto:ahoereth@uos.de">ahoereth@uos.de</a>.
+    </p>
+  </div>
 
-<div class="col-md-4" ng-if="!landing.loggedin">
-  <h2 ng-class="{'inactive': landing.loginloading}">
-    Get started: Login!
-  </h2>
-  <loginform
-    username="landing.username"
-    loading="landing.loginloading"
-  ></loginform>
-</div>
+  <!-- Login -->
+  <div class="col-md-4" ng-if="!landing.loggedin">
+    <h2 ng-class="{'inactive': landing.loginloading}">
+      Get started: Login!
+    </h2>
+    <loginform
+      username="landing.username"
+      loading="landing.loginloading"
+    ></loginform>
+  </div>
 
-<div class="col-md-4" ng-if="landing.loggedin">
-  <h2>You are logged in!</h2>
-  <p>
-    Click on your username in the top navigation and enroll in some courses using the quick search in the top right.
-    Add your grades and check out what your expected bachelor grade is.
-  </p>
-</div>
+  <!-- Loggedin -->
+  <div class="col-md-4" ng-if="landing.loggedin">
+    <h2>You are logged in!</h2>
+    <p>
+      Click on your username in the top navigation and enroll in some courses using the quick search in the top right.
+      Add your grades and check out what your expected bachelor grade is.
+    </p>
+  </div>
 
-<div class="col-md-4" ng-if="!landing.loggedin">
-  <h2>Demo</h2>
-  <p>
-    Do not want to login using your sacred university credentials before you know it is actually worth it?
-    Take a look inside using the live demo using the username <em>demo</em> and password <em>studyplanning</em>.
-  </p>
-</div>
+  <!-- Demo Login Notice -->
+  <div class="col-md-4" ng-if="!landing.loggedin">
+    <h2>Demo</h2>
+    <p>
+      Do not want to login using your sacred university credentials before you know it is actually worth it?
+      Take a look inside using the live demo using the username <em>demo</em> and password <em>studyplanning</em>.
+    </p>
+  </div>
 
-<!-- hard coded for now to fill up the third column when logged in -->
-<div class="col-md-4" ng-if="landing.loggedin && landing.stats">
-  <h2>Meta</h2>
-  <p>
-    The app currently has over {{landing.stats.user_count}} users with about {{landing.stats.enrollment_count}} individual course enrollments. The course database contains {{landing.stats.course_count}} distinct listings with a total of {{landing.stats.teacher_count}} teachers.
-  </p>
+  <!-- Stats (when loggedin) -->
+  <div class="col-md-4" ng-if="landing.loggedin && landing.stats">
+    <h2>Meta</h2>
+    <p>
+      The app currently has over {{landing.stats.user_count}} users with about {{landing.stats.enrollment_count}} individual course enrollments. The course database contains {{landing.stats.course_count}} distinct listings with a total of {{landing.stats.teacher_count}} teachers.
+    </p>
+  </div>
 </div>
