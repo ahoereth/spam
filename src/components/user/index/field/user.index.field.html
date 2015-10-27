@@ -17,14 +17,13 @@
       <div class="col-xs-2">
         <input
           type="text"
-          blur-on-enter
+          onclick="select()"
           class="input-tiny"
           ng-class="{'disabled': !examination}"
+          blur-on-enter
           ng-model="grade"
           ng-blur="gradeChange()"
-          ng-disabled="!examination"
-          onclick="select()"
-        >
+          ng-disabled="!examination">
       </div>
 
       <!-- field button + dropdown -->

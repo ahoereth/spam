@@ -230,8 +230,11 @@
      * changes to the server.
      */
     $scope.gradeChange = function() {
-      $scope.grade = _.formatGrade($scope.grade);
+      if (_.isEmpty($scope.grade)) {
+        $scope.examination = false;
+      }
 
+      $scope.grade = _.formatGrade($scope.grade);
       if ( // grade can't change if no module examination is possible.
            (! field.field_examination_possible) ||
            // Field was not passed so a module examination is not possible.
@@ -252,8 +255,8 @@
      * Method called by the UI when the 'examination' triggerable is triggered.
      */
     $scope.examine = function() {
-      $scope.examination = ! $scope.examination;
-      if (! $scope.examination) {
+      $scope.examination = !$scope.examination;
+      if (!$scope.examination) {
         $scope.grade = null;
         $scope.gradeChange();
       }
