@@ -15,6 +15,7 @@
       'scroll',
       'infiniteScroll',
       'buttons',
+      '720kb.tooltips',
       'spam.app.services.routes',
       'spam.courses.services.courses',
       'spam.courses.filters.course',

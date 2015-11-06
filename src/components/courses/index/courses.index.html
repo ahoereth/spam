@@ -28,8 +28,7 @@
       class="form-control"
       placeholder="Field of Study"
       ng-model="filter.fields_str"
-      ng-model-options="textModelOptions"
-    >
+      ng-model-options="textModelOptions">
     <span class="input-group-btn">
       <button type="button" class="btn btn-default" ng-model="pm" checkbox-button>
         PM
@@ -47,8 +46,7 @@
       class="form-control"
       placeholder="Teacher Name"
       ng-model="filter.teachers_str"
-      ng-model-options="textModelOptions"
-    >
+      ng-model-options="textModelOptions">
   </div>
   <div class="col-sm-5 hidden-xs help-block">Search for a specific teacher.</div>
 </div>
@@ -113,8 +111,7 @@
         class="form-control"
         id="filter.code"
         ng-model="filter.code"
-        ng-model-options="textModelOptions"
-      >
+        ng-model-options="textModelOptions">
     </div>
 
     <!-- timeframe -->
@@ -123,10 +120,10 @@
         type="text"
         class="form-control form-control-tight"
         id="timeframe"
-        title='Use strings similar to any of those: "2010-2012", "2011+", "W:09-11" or "2004-"'
+        tooltips
+        tooltip-title='Try something like this: "10-12", "2011+" or "2004-"'
         ng-model="timeframe"
-        ng-model-options="textModelOptions"
-      >
+        ng-model-options="textModelOptions">
     </div>
 
     <!-- course title filter -->
@@ -136,8 +133,7 @@
         class="form-control"
         id="filter.course"
         ng-model="filter.course"
-        ng-model-options="textModelOptions"
-      >
+        ng-model-options="textModelOptions">
     </div>
 
     <!-- teachers filter -->
@@ -147,8 +143,7 @@
         class="form-control"
         id="filter.teachers_str"
         ng-model="filter.teachers_str"
-        ng-model-options="textModelOptions"
-      >
+        ng-model-options="textModelOptions">
     </div>
 
     <!-- fields filter -->
