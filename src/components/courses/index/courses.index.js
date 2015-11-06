@@ -56,7 +56,7 @@
   ) {
     var url = {};
     var year = new Date().getFullYear();
-    var lowerYear = year - 1;
+    var lowerYear = year;
     var upperYear = year + 1;
     var courses = [];
     var fetching = false;
@@ -158,7 +158,6 @@
         $scope.orderBys['-' + order] :
         $scope.orderBys[order];
 
-      lowerYear = lowerYear <= 1995 ? lowerYear - 1 : 1995;
       applyFilter(true, true);
     };
 
@@ -254,11 +253,19 @@
         $scope.filteredCourses = $filter('courseFilter')(courses, $scope.filter);
       }
 
-      if (lowerYear < 1995 || fetching) { return; }
+      var minYear = _.get($scope.filter, 'year#=',
+                    _.get($scope.filter, 'year#<', 1995));
+      if (fetching || lowerYear < minYear) {
+        return;
+      }
 
-      if ($scope.displayLimit > ( $scope.filteredCourses.length - 5 ) || force) {
+      if (
+        ($scope.order === $scope.orderBys.time && lowerYear > minYear) ||
+        $scope.displayLimit > ($scope.filteredCourses.length - 5) || force
+      ) {
         fetching = true;
 
+        lowerYear = lowerYear - 2;
         Courses
           .fetch($scope.regulation_id, lowerYear, upperYear, null)
           .then(function(newCourses) {
@@ -266,7 +273,6 @@
             fetching = false;
             applyFilter();
           });
-        lowerYear = lowerYear - 3;
       }
     };
 
