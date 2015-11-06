@@ -4,6 +4,19 @@
   content: "";
 }
 
+@media (max-width: 500px), (min-width: 780px) and (max-width: 980px) {
+  .courses .caret {
+    display: none;
+  }
+}
+
+@media (max-width: 500px) {
+  .courses .form-group.col-xs-1,
+  .courses .form-group.col-xs-2 {
+    padding-right: 0;
+  }
+}
+
 @media (min-width: 1024px) {
   .courses.third-page + .footer {
     position: fixed;

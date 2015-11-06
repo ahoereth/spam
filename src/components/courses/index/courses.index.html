@@ -75,7 +75,7 @@
     </div>
 
     <!-- title label -->
-    <div class="col-md-4 col-sm-6 col-xs-8">
+    <div class="col-md-4 col-sm-6 col-xs-10">
       <label for="filter.course" ng-click="orderBy('course')">Title</label>
       <span ng-class="{ caret    : order == orderBys['-course'],
                        'caret up': order == orderBys['course']}"
@@ -99,7 +99,7 @@
     </div>
 
     <!-- loading spinner and result counter label -->
-    <div class="col-sm-1 col-xs-2">
+    <div class="col-sm-1 hidden-xs">
       <label>Results</label>
     </div>
   </div>
@@ -130,7 +130,7 @@
     </div>
 
     <!-- course title filter -->
-    <div class="col-md-4 col-sm-6 col-xs-8 form-group">
+    <div class="col-md-4 col-sm-6 col-sm-8 col-xs-10 form-group">
       <input
         type="text"
         class="form-control"
@@ -169,7 +169,7 @@
     </div>
 
     <!-- loading spinner and result counter -->
-    <div class="col-sm-1 col-xs-2">
+    <div class="col-sm-1 hidden-xs">
       <div class="form-control" style="border: none; text-align: center;">
         <!-- Spinner -->
         <span class="glyphicon glyphicon-refresh spin" ng-show="loading"></span>
@@ -216,11 +216,10 @@
       type="button"
       class="btn btn-default btn-block"
       disabled="disabled"
-      ng-hide="filteredCourses.length > displayLimit"
-      ng-bind="loading | iif
-        : 'Loading...'
-        : 'no more courses using the current filter'"
-    ></button>
+      ng-hide="filteredCourses.length > displayLimit || !loading"
+    >
+      Loading...
+    </button>
   </div>
 
 </div>
