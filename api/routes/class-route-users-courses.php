@@ -264,7 +264,7 @@ class Route_Users_Courses extends Route {
     }
 
     // 'unoffical' course information
-    $infofields = ['course', 'code', 'ects', 'term', 'year'];
+    $infofields = array('course', 'code', 'ects', 'term', 'year');
     $info = array_pick($payload, $infofields);
     if (!empty($info)) {
       if (!empty($student_in_course_id)) {
