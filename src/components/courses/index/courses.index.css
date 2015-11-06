@@ -4,18 +4,15 @@
   content: "";
 }
 
-.courses.third-page + .footer {
-  position: fixed;
-}
-
 @media (min-width: 1024px) {
+  .courses.third-page + .footer {
+    position: fixed;
+    opacity: .5;
+    transition: opacity 500ms ease;
+  }
+
   .courses.third-page + .footer:hover,
   .courses.scroll-bottom + .footer {
     opacity: 1 !important;
-  }
-
-  .courses.third-page + .footer {
-    opacity: .5;
-    transition: opacity 500ms ease;
   }
 }

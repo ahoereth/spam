@@ -19,10 +19,11 @@ module.exports = function(grunt) {
 
   var glob = [
     'src/**/*.less',
+    'src/components/**/*.css',
     '!src/**/*.ignore.less',
     '!src/**/_*.less',
     '!src/lib/**',
-  ];
+  ].concat(dependencies.css);
 
   // **********
   // compile styles
@@ -31,7 +32,7 @@ module.exports = function(grunt) {
       plugins: plugins
     },
     files: {
-      'src/less.compiled.css': glob
+      'src/compiled.css': glob
     }
   };
 
@@ -42,8 +43,7 @@ module.exports = function(grunt) {
       plugins: plugins
     },
     files: {
-      'app/css/spamin.css': glob.concat(['src/components/**/*.css'])
-                                .concat(dependencies.css)
+      'app/css/spamin.css': glob
     }
   };
 

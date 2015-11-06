@@ -69,9 +69,10 @@
       var clientHeight = Scroll.getClientHeight();
       var scrolled = Scroll.getScrolledDistance();
       var bottom = clientHeight + scrolled;
+      var bodyHeight = $document[0].body.clientHeight+20; // +body padding
       updateContentClass({name: 'content-classname'}, {
         'scrolled': Scroll.getScrollDistance > 50,
-        'scroll-bottom': bottom === $document[0].body.clientHeight,
+        'scroll-bottom': bottom >= bodyHeight,
         'second-page': scrolled > clientHeight,
         'third-page': scrolled > (clientHeight * 2),
       });

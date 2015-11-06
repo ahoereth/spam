@@ -7,7 +7,7 @@
 /node_modules/
 /src/fonts/
 /src/lib/
-/src/**/*.compiled.css
+/src/**/*compiled.css
 /composer.phar
 *.swp
 **.ignore.*
