@@ -13,7 +13,8 @@
       'tickable',
       '720kb.tooltips',
       'spam.user.services.user',
-      'spam.user.index.field'
+      'spam.user.index.field',
+      'spam.user.index.grade-input'
     ])
     .directive('course', courseDirective);
 

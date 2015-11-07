@@ -1,0 +1,5 @@
+.grade-input span {
+  display: inline-block;
+  background-color: transparent;
+  cursor: default;
+}

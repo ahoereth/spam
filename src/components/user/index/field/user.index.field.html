@@ -15,15 +15,11 @@
 
       <!-- field grade input -->
       <div class="col-xs-2">
-        <input
-          type="text"
-          onclick="select()"
-          class="input-tiny"
-          ng-class="{'disabled': !examination}"
-          blur-on-enter
-          ng-model="grade"
-          ng-blur="gradeChange()"
-          ng-disabled="!examination">
+        <grade-input
+          disabled="!examination"
+          grade="grade"
+          change="gradeChange()"
+        ></grade-input>
       </div>
 
       <!-- field button + dropdown -->
@@ -76,17 +72,13 @@
   </div><!--/panel-heading-->
 
   <div class="panel-body">
-    <!-- most likely only 'course' directives here -->
+    <!-- 'course' directives -->
     <ng-transclude></ng-transclude>
+
+    <!-- foreign credits -->
     <div class="row" ng-if="field.credits.foreign">
       <div class="foreign-credits col-xs-11">
-        <span
-          ng-if="::!course.course_id"
-          tooltips
-          tooltip-title="{{::course.term_abbr}}"
-        >
-          Overflowing credits from other fields
-        </span>
+        Overflowing credits from other fields
         <small class="text-info">
           [{{field.credits.foreign}}]
         </small>

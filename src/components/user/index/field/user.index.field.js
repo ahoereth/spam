@@ -13,7 +13,8 @@
       'dropdown',
       'tickable',
       'iifFilter',
-      'spam.user.services.user'
+      'spam.user.services.user',
+      'spam.user.index.grade-input'
     ])
     .directive('field', userIndexFieldDirective)
     .controller('UserIndexFieldController', userIndexFieldController);
