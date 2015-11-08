@@ -2,6 +2,15 @@
 
 
 /**
+ * MySQL TIMESTAMP field format for use with PHP date().
+ *
+ * PHP itself does not ship a compatible constant:
+ * @see php.net/manual/class.datetime.php#datetime.constants.types
+ */
+define('MYSQL_DATE_FORMAT', 'Y-m-d H:i:s');
+
+
+/**
  * Checks if an array is an associative array.
  */
 function is_assoc($array) {

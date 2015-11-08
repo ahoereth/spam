@@ -197,7 +197,7 @@ class User extends Model {
       $user->save(array(
         'username' => $userhash,
         'password' => $password,
-        'uos_ldap' => self::current_timestamp(),
+        'uos_ldap' => time(),
         'special'  => ('demo' === $username),
         'rank'     => ('demo' === $username) ? 1 : 2, // LDAP users have rank 2
       ));
@@ -215,7 +215,7 @@ class User extends Model {
     // Update request count and timestamp.
     $user->save(array(
       'request_count' => ++$data['request_count'],
-      'last_login' => self::current_timestamp(),
+      'last_login' => time(),
     ));
 
     // Check rank.

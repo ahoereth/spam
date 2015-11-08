@@ -123,8 +123,8 @@ abstract class Model {
     }
 
     $tablename = static::get_tablename();
-
-    if (self::$db->sql_insert($tablename, $this->data)) {
+    $data = $this->get_data_for_insert();
+    if (self::$db->sql_insert($tablename, $data)) {
       if (static::has_numeric_pk()) {
         $this->set_pk_value(self::$db->lastInsertId(static::get_pk()));
       }
@@ -147,7 +147,7 @@ abstract class Model {
       return false;
     }
 
-    $put_data = $this->data;
+    $put_data = $this->get_data_for_insert();
     if ($this->from_server && ! empty($this->server_data)) {
       $put_data = array_diff_assoc($this->data, $this->server_data);
     }
@@ -317,7 +317,7 @@ abstract class Model {
       foreach (static::$defaults as $key => $value) {
         switch ($value) {
           case '%TIME%':
-            static::$defaults[ $key ] = self::current_timestamp('cache');
+            static::$defaults[ $key ] = time();
             break;
           case '%YEAR%':
             static::$defaults[ $key ] = idate('Y');
@@ -340,67 +340,24 @@ abstract class Model {
 
 
   /**
-   * Returns the current mySQL formatted timestamp - ready to for the database.
+   * Prepares the model's data for sql insert. Depending on the datatype
+   * of specific fields the data itself might be converted/adjusted.
    *
-   * @param  {boolean} $cache If a new timestamp must be generated or a cached
-   *                          version is reasonable.
-   * @return {string}  mySQL formatted timestamp
+   * @return {assoc}}
    */
-  protected static function current_timestamp($cache = false) {
-    static $timestamp;
+  private function get_data_for_insert() {
+    $data = $this->data;
 
-    if ($cache && $timestamp) {
-      return $timestamp;
-    }
-
-    return $timestamp = date('Y-m-d G:i:s');
-  }
-
-
-  public static function parseData($data) {
-    foreach ($data as $key => $value) {
-      $data[ $key ] = static::parse($key, $value);
+    foreach (static::$table as $key => $value) {
+      if (starts_with($value, 'TIMESTAMP')) {
+        if (!is_numeric($data[$key])) {
+          $data[$key] = strtotime($data[$key]);
+        }
+        $data[$key] = date(MYSQL_DATE_FORMAT, $data[$key]);
+      }
     }
 
     return $data;
-  }
-
-
-  public static function parse($key, $value) {
-    // TODO: return null here?
-    if (! isset(static::$table[ $key ])) {
-      return $value;
-    }
-
-    $key = substr(static::$table[ $key ], 0, 4);
-    switch ($key) {
-      case 'VARC'://HAR(255)':
-      //case 'VARCHAR(32)':
-      //case 'VARCHAR(4)':
-      case 'CHAR'://(1)':
-      case 'TEXT':
-        break;
-
-      case 'TINY'://INT':
-      case 'SMAL'://LINT':
-      case 'INTE'://GER':
-      //case 'INTEGER SIGNED':
-      //case 'INTEGER UNSIGNED':
-      case 'BIGI'://NT':
-      //case 'BIGINT SIGNED':
-      //case 'BIGINT UNSIGNED':
-        $value = intval($value);
-        break;
-
-      case 'BOOL'://EAN':
-        $value = !! intval($value);
-        break;
-
-      case 'TIME'://STAMP':
-        break;
-    }
-
-    return $value;
   }
 
 
