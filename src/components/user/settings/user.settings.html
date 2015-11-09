@@ -53,6 +53,30 @@
 <hr>
 
 <div class="btn-group btn-group-justified">
+  <!-- export data -->
+  <a
+    class="btn btn-info hidden-xs hidden-sm"
+    ng-click="settings.export.init()"
+    ng-disabled="settings.export.loading"
+    ng-if="!settings.export.data"
+    ng-bind="settings.export.loading | iif : 'Preparing...' : 'Export Data'"
+    tooltips
+    tooltip-html="Requires a <a href='http://caniuse.com/#feat=download'>modern browser</a>."
+  ></a>
+
+  <a
+    class="btn btn-success hidden-xs hidden-sm"
+    ng-if="settings.export.data"
+    download="{{::settings.user.username}}.json"
+    ng-href="{{settings.export.data | textDownload}}"
+    tooltips
+    tooltip-html="Doesn't work? Get <a href='http://caniuse.com/#feat=download' target='blank'>more info</a>."
+    tooltip-show-trigger="mouseover click"
+    tooltip-hide-trigger="click"
+  >
+    Download personal data
+  </a>
+
   <!-- delete account -->
   <a class="btn btn-default"
      ng-click="settings.showDelete = true"
@@ -68,12 +92,5 @@
      ng-click="settings.deleteUser()"
      ng-show="settings.showDelete2">
     Delete all my data, for really sure!
-  </a>
-
-  <!-- export data -->
-  <a class="btn btn-success"
-     ng-click="settings.exportData()"
-     disabled="disabled">
-    Export data (coming soon)
   </a>
 </div>

@@ -8,7 +8,10 @@
    */
   angular
     .module('spam.user.settings', [
+      'restangular',
+      '720kb.tooltips',
       'blurOnEnter',
+      'textDownload',
       'spam.app.services.routes',
       'spam.user.services.user',
       'spam.user.settings.matriculation-setter',
@@ -34,8 +37,9 @@
 
 
   /* @ngInject */
-  function userSettingsController($scope, User) {
-    this.user = User.details;
+  function userSettingsController($scope, Restangular, User) {
+    var ctrl = this;
+    ctrl.user = User.details;
 
     $scope.$watchGroup(['user.firstname', 'user.lastname'], function(n, o) {
       if (n === o) { return; }
@@ -46,8 +50,20 @@
       }, true);
     });
 
-    this.deleteUser = function() {
+    ctrl.deleteUser = function() {
       User.deleteUser();
+    };
+
+    ctrl.export = {
+      loading: false,
+      data: false,
+      init: function() {
+        ctrl.export.loading = true;
+        ctrl.user.get().then(function(data) {
+          ctrl.export.data = JSON.stringify(data.plain(), null, '  ');
+          ctrl.export.loading = false;
+        });
+      }
     };
   }
 
