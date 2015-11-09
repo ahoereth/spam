@@ -22,22 +22,18 @@
 
 
 
-  /* @ngInject */
-  function userIndexFieldDirective(_) {
+  function userIndexFieldDirective() {
     return {
       restrict: 'E',
       replace: false,
       scope: {
-        field: '='
+        raw: '=field'
       },
       transclude: true,
       templateUrl: 'components/user/index/field/user.index.field.html',
       controller: 'UserIndexFieldController',
-      link: function(scope/*, elem, attrs*/) {
-        var field = scope.field;
-        field.old_grade = field.grade = _.formatGrade(field.grade);
-        scope.examination = !! scope.field.grade;
-      }
+      controllerAs: 'field',
+      bindToController: true
     };
   }
 
@@ -45,9 +41,11 @@
 
 
   /* @ngInject */
-  function userIndexFieldController($scope, User, _) {
-    var self = this;
-    var field = $scope.field;
+  function userIndexFieldController(User, _) {
+    var ctrl = _.assign(this, _.pick(this.raw,
+      'field', 'field_id', 'field_examination_possible', 'regulation_id'
+    ));
+    var field = ctrl.raw;
     var courses = {};
     var defaultCreditSet = {
       overflowing: 0,
@@ -115,13 +113,13 @@
      * This function is debounced in order to handle multiple calls on
      * the initial pageload smoothly.
      */
-    var doAnalysis = _.debounce(function(foreignCredits) {
+    var doAnalysis = function(foreignCredits) {
       foreignCredits = foreignCredits || 0;
       if (foreignCredits !== foreignCreditsMem) {
         foreignCreditsMem = foreignCredits;
       }
 
-      var credits = field.credits = {
+      var credits = ctrl.credits = {
         passed: _.clone(defaultCreditSet),
         enrolled: _.clone(defaultCreditSet),
         full: field.field_pm + field.field_wpm
@@ -180,10 +178,11 @@
       // do not include foreign credits. Foreign credit updates are always
       // called after the calculations already ran beforehand.
       if (!foreignCredits) {
-        $scope.grade = field.grade ? field.grade : calculateGrade();
+        ctrl.grade = field.grade ? field.grade : calculateGrade();
+        ctrl.examination = !!field.grade;
 
         User.updateFieldData(field.field_id, {
-          grade: $scope.grade,
+          grade: ctrl.grade,
           overallGrade: calculateGrade(true),
           passedCredits: credits.passed.sum,
           overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
@@ -191,13 +190,10 @@
           enrolledCredits: credits.enrolled.sum,
           completed: 100 === credits.passed.percentage,
           examinationPossible: !! field.field_examination_possible,
-          examination: $scope.examination
+          examination: ctrl.examination
         });
       }
-
-      // A manual $apply call is required because of debouncing.
-      $scope.$apply();
-    }, 200);
+    };
 
 
     /**
@@ -209,7 +205,7 @@
      * @param {object}  course
      * @param {boolean} removed
      */
-    self.courseChange = function(course, removed) {
+    ctrl.courseChange = function(course, removed) {
       // Courses without credits are of no interest.
       if (! course.ects || course.muted || course.failed || removed) {
         courses[ course.student_in_course_id ] = null;
@@ -230,37 +226,19 @@
      * Student in field grade edited. Redo some calculations and save the
      * changes to the server.
      */
-    $scope.gradeChange = function() {
-      if (_.isEmpty($scope.grade)) {
-        $scope.examination = false;
-      }
-
-      $scope.grade = _.formatGrade($scope.grade);
-      if ( // grade can't change if no module examination is possible.
-           (! field.field_examination_possible) ||
-           // Field was not passed so a module examination is not possible.
-           (100 !== field.credits.passed.percentage) ||
-           // Nothing to do if the grade did not actually change.
-           ($scope.grade === field.old_grade)
+    ctrl.gradeChange = function(newGrade) {
+      if (
+        // Grade can't change if no module examination is possible.
+        (!field.field_examination_possible) ||
+        // Field was not passed so a module examination is not possible.
+        (100 !== ctrl.credits.passed.percentage)
       ) {
-        $scope.grade = field.old_grade;
+        return;
       }
 
-      field.grade = field.old_grade = $scope.grade;
+      field.grade = newGrade;
       field.put();
       doAnalysis();
-    };
-
-
-    /**
-     * Method called by the UI when the 'examination' triggerable is triggered.
-     */
-    $scope.examine = function() {
-      $scope.examination = !$scope.examination;
-      if (!$scope.examination) {
-        $scope.grade = null;
-        $scope.gradeChange();
-      }
     };
 
 
@@ -271,7 +249,8 @@
       User.addWatcher(handleOverflowingCredits);
     }
 
-    // Initialize the field data even if there is no course.
+    // Initialize the field data. In general this function will be called
+    // from individual courses on data changes.
     doAnalysis();
   }
 

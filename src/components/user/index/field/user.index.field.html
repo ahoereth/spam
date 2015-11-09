@@ -11,14 +11,15 @@
   <div class="panel-heading">
     <div class="row">
 
+      <!-- title -->
       <h4 class="col-xs-9">{{::field.field}}</h4>
 
       <!-- field grade input -->
       <div class="col-xs-2">
         <grade-input
-          disabled="!examination"
-          grade="grade"
-          change="gradeChange()"
+          grade="field.grade"
+          disabled="!field.examination"
+          change="field.gradeChange(newGrade)"
         ></grade-input>
       </div>
 
@@ -47,7 +48,10 @@
 
             <!-- trigger field examination -->
             <li ng-if="field.field_examination_possible">
-              <tickable ng-model="examination" ng-change="examine()">
+              <tickable
+                ng-model="field.examination"
+                ng-change="field.grade = null"
+              >
                 Examination
               </tickable>
             </li>
@@ -59,7 +63,7 @@
             </li>
 
             <li>
-              <a ng-href="courses?regulation={{::user.regulation_id}}&field={{::field.field}}">
+              <a ng-href="courses?regulation={{::field.regulation_id}}&field={{::field.field}}">
                 Find courses
               </a>
             </li>

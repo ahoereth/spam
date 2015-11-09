@@ -5,7 +5,7 @@
     onclick="select()"
     blur-on-enter
     ng-model="gradeinput.grade"
-    ng-blur="gradeinput.change()"
+    ng-blur="gradeinput.blur(gradeinput.grade)"
     ng-if="!gradeinput.disabled">
 
   <span
