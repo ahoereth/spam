@@ -76,8 +76,7 @@
 
       // Take thesis grade into consideration.
       // TODO: The weight relation should be information taken from the api.
-      var thesisGrade = self.details.thesis ?
-        parseFloat(self.details.thesis.grade) : false;
+      var thesisGrade = parseFloat(self.details.thesis_grade);
       if (thesisGrade >= 1 && thesisGrade <= 4) {
         facts.grades.bachelor = _.formatGrade(
           (parseFloat(facts.grades.bachelor) * 2 + thesisGrade) / 3
@@ -183,21 +182,12 @@
 
     self.updateThesis = function(title, grade) {
       var details = self.details;
-      details.thesis = {
-        title: title,
-        grade: grade = _.formatGrade(grade)
-      };
-
-      details
-        .one('regulations', details.regulation_id)
-        .customPUT(details.thesis)
-        .then(function() {
-          $log.info('Student thesis updated: ' + title + ' - ' + grade);
-        });
-
+      details.thesis_title = title;
+      details.thesis_grade = _.formatGrade(grade);
+      var thesis = _.pick(details, 'thesis_title', 'thesis_grade');
+      details.one('regulations', details.regulation_id).customPUT(thesis);
       factsCalculation();
-
-      return details.thesis;
+      return thesis;
     };
 
 
@@ -358,7 +348,7 @@
           self.fields  = data.fields;
         }
 
-        data.thesis.grade = _.formatGrade(data.thesis.grade);
+        data.thesis_grade = _.formatGrade(data.thesis_grade);
         self.details = _.omit(data, ['fields', 'courses']);
       }
 

@@ -6,7 +6,7 @@
  *
  * Implemented: all_get, all_post, one_get, one_put, one_delete
  *
- * Additional: !
+ * Additional: regulation_put, field_put
  *
  * TODO: move additional routes to their own route classes / remove them
  */
@@ -75,6 +75,23 @@ class Route_Users extends Route {
 
     $user = self::authorize($username);
 
+    // regulation
+    $user = array_merge($user, self::$db->sql_select_one(
+      array('students_in_regulations', 'regulations'), array(
+        'username' => md5($username),
+        'regulation_id' => $user['regulation_id'],
+      ), array(
+        'regulation_id',
+        'regulation_title',
+        'regulation_abbr',
+        'regulation',
+        'thesis_title',
+        'thesis_grade',
+        'overview_order',
+        'overview_columns',
+      )
+    ));
+
     // get this users courses
     $user_courses = new Route_Users_Courses();
     $user['courses'] = $user_courses->all_get($username, array(
@@ -82,16 +99,8 @@ class Route_Users extends Route {
       'return' => true
     ));
 
-    // regulation
-    $user = array_merge($user, self::$db->sql_select_one('regulations', array(
-      'regulation_id' => $user['regulation_id'],
-    )));
-
     // fields
     $user['fields'] = $this->get_fields($username, $user['regulation_id']);
-
-    // thesis
-    $user['thesis'] = $this->get_thesis($username, $user['regulation_id']);
 
     // Function might be called from another api function, return result instead
     // of sending it down the wire directly.
@@ -161,14 +170,16 @@ class Route_Users extends Route {
    */
   public function field_put($username, $field_id) {
     $user = self::authorize($username);
-
-    $userhash = md5($username);
-    $regulation_id = $user['regulation_id'];
-    $grade = ! empty(self::$params['grade']) ? self::$params['grade'] : null;
+    $data = self::$params;
 
     if (empty($field_id)) {
       return $this->bad_request();
     }
+
+    $userhash = md5($username);
+    $regulation_id = $user['regulation_id'];
+    $grade = !empty($data['grade']) ? $data['grade'] : null;
+    $minimized = !empty($data['minimized']) ? !!$data['minimized'] : false;
 
     $select = array(
       'username' => $userhash,
@@ -176,26 +187,27 @@ class Route_Users extends Route {
       'regulation_id' => $regulation_id
     );
 
+    $set = array(
+      'grade' => $grade,
+      'minimized' => $minimized
+    );
+
     // delete
-    if (empty($grade)) {
+    if (empty($grade) && !$minimized) {
       self::$db->sql_delete('students_in_fields', $select);
       $this->no_content();
       return;
     }
 
-    $put = self::$db->sql_put('students_in_fields', $select, array(
-      'grade' => $grade
-    ));
+    $put = self::$db->sql_put('students_in_fields', $select, $set);
 
-    if (! $put) {
+    if (!$put) {
       $this->bad_request();
       return;
     }
 
-    $this->ok(array_merge($select, array(
-      'grade' => $grade,
-      'username' => $username
-    )));
+    $put['username'] = $username;
+    $this->ok($put);
   }
 
 
@@ -208,7 +220,7 @@ class Route_Users extends Route {
    */
   public function regulation_put($username, $regulation_id) {
     $user = self::authorize($username);
-    $put = self::$params;
+    $data = self::$params;
 
     $put = self::$db->sql_put(
       'students_in_regulations',
@@ -216,10 +228,12 @@ class Route_Users extends Route {
         'username'      => md5($username),
         'regulation_id' => (int) $regulation_id,
       ),
-      array(
-        'thesis_title' => ! empty($put['title']) ? $put['title'] : null,
-        'thesis_grade' => ! empty($put['grade']) ? $put['grade'] : null,
-      )
+      array_map(array('DB', 'sanitize'), array_pick($data, array(
+        'thesis_title',
+        'thesis_grade',
+        'overview_order',
+        'overview_columns'
+      )))
     );
 
     $put['username'] = $username;
@@ -240,38 +254,34 @@ class Route_Users extends Route {
       ':regulation_id' => $regulation_id,
     );
 
-    $fields = "SELECT *
-      FROM fields
-      NATURAL LEFT JOIN fields_in_regulations
-      NATURAL LEFT JOIN (
-        SELECT *
-        FROM students_in_fields
-        WHERE username = :username
-      ) AS sf
-      WHERE regulation_id = :regulation_id
-    ";
-
-    $stmt = self::$db->prepare($fields);
-    $stmt->execute($args);
-    $fields = self::$db->fetchAllAssoc($stmt);
-    return $fields;
-  }
-
-
-  private function get_thesis($username, $regulation_id) {
-    $thesis = self::$db->sql_select_one(
-      'students_in_regulations',
-      array(
-        'username' => md5($username),
-        'regulation_id' => $regulation_id,
-      ),
-      array(
-        'thesis_title AS title',
-        'thesis_grade AS grade',
-      )
+    $fields = self::$db->sql_select(
+      array('fields', 'fields_in_regulations'),
+      array('regulation_id' => $regulation_id),
+      array('field_id', 'field', 'field_examination_possible',
+            'field_pm', 'field_wpm'),
+          //'field_abbr','field_desc','field_in_regulation_id','regulation_id'
+      array('style' => 'groupassoc')
     );
 
-    return ! empty($thesis) ? $thesis : array('title' => null, 'grade' => null);
+    $userfields = self::$db->sql_select(
+      'students_in_fields',
+      array('username' => md5($username)),
+      array('field_id', 'student_in_field_id', 'grade', 'minimized'),
+          //'username', 'regulation_id', 'one_of_five'
+      array('style' => 'groupassoc')
+    );
+
+    $result = array();
+    foreach ($fields as $field_id => $field) {
+      $result[] = array_merge($field, array(
+          'field_id' => $field_id,
+          'minimized' => false,
+        ),
+        !empty($userfields[$field_id]) ? $userfields[$field_id] : array()
+      );
+    }
+
+    return $result;
   }
 
 

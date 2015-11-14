@@ -90,57 +90,8 @@
 
 <!-- the fields -->
 <hr ng-show="overview.user.mat_verify">
-<div class="overview-container row">
-
-
-  <!-- left column (lg/md/sm) -->
-  <div class="col-lg-4 col-sm-6 col-xs-12">
-    <field
-      ng-repeat="field in overview.fields track by field.field_id"
-      ng-if="($index % 3 == 0) || ($index % 3 == 2 && $odd)"
-      ng-class="{'hidden-lg': $index % 3 == 2 && $odd}"
-      field="field"
-    >
-      <course
-        ng-repeat="course in overview.courses |
-                   filter:{enrolled_field_id: field.field_id}:true"
-        course="course"
-      ></course>
-    </field>
-  </div>
-
-  <!-- center (lg) or right column (md/sm) -->
-  <div class="col-lg-4 col-sm-6 col-xs-12">
-    <field
-      ng-repeat="field in overview.fields track by field.field_id"
-      ng-if="($index % 3 == 1) || ($index % 3 == 2 && $even)"
-      ng-class="{'hidden-lg': $index % 3 == 2 && $even}"
-      field="field"
-    >
-      <course
-        ng-repeat="course in overview.courses |
-                   filter:{enrolled_field_id: field.field_id}:true"
-        course="course"
-      ></course>
-    </field>
-  </div>
-
-  <!-- right column (lg) -->
-  <div class="col-lg-4 visible-lg-block">
-    <field
-      ng-repeat="field in overview.fields track by field.field_id"
-      ng-if="$index % 3 == 2"
-      field="field"
-    >
-      <course
-        ng-repeat="course in overview.courses |
-                   filter:{enrolled_field_id: field.field_id}:true"
-        course="course"
-      ></course>
-    </field>
-  </div>
-
-</div>
+<overview-columns fields="overview.fields" courses="overview.courses">
+</overview-columns>
 
 
 

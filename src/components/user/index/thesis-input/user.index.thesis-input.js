@@ -29,8 +29,8 @@
         }
 
         scope.thesis = {
-          title  : User.details.thesis.title,
-          grade  : User.details.thesis.grade
+          title: User.details.thesis_title,
+          grade: User.details.thesis_grade
         };
 
         scope.thesis.styled = !scope.thesis.title || !scope.thesis.grade;
@@ -43,8 +43,8 @@
           ) { return; }
 
           var n = User.updateThesis(scope.thesis.title, scope.thesis.grade);
-          scope.thesis.title = n.title;
-          scope.thesis.grade = n.grade;
+          scope.thesis.title = n.thesis_title;
+          scope.thesis.grade = n.thesis_grade;
         };
 
         scope.thesis.focus = function() {
@@ -54,4 +54,4 @@
     };
   }
 
-}());
+})();

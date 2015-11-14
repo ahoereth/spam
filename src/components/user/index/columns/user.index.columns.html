@@ -1,0 +1,22 @@
+<div class="overview-container row">
+  <div
+    class="overview-column"
+    ng-class="{'col-xs-4' : 3 == columns.set.length,
+               'col-xs-6' : 2 == columns.set.length,
+               'col-xs-12': 1 == columns.set.length}"
+    sortable="columns.sortable"
+    ng-repeat="column in columns.set"
+    ng-model="column"
+  >
+    <div ng-repeat="field in column track by field.field_id">
+      <field field="field">
+        <course
+          ng-repeat="course in columns.courses
+                     | filter:{enrolled_field_id: field.field_id}:true
+                       track by course.student_in_course_id"
+          course="course"
+        ></course>
+      </field>
+    </div>
+  </div>
+</div>

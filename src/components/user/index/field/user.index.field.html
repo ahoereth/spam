@@ -63,6 +63,12 @@
             </li>
 
             <li>
+              <tickable ng-model="field.minimized" ng-change="field.minimize()">
+                {{field.minimized | iif : 'Maximize' : 'Minimize'}}
+              </tickable>
+            </li>
+
+            <li>
               <a ng-href="courses?regulation={{::field.regulation_id}}&field={{::field.field}}">
                 Find courses
               </a>
@@ -75,7 +81,7 @@
     </div>
   </div><!--/panel-heading-->
 
-  <div class="panel-body">
+  <div class="panel-body" ng-hide="field.minimized">
     <!-- 'course' directives -->
     <ng-transclude></ng-transclude>
 
@@ -91,7 +97,7 @@
   </div>
 
   <!-- progress bar panel footer -->
-  <div class="panel-footer">
+  <div class="panel-footer" ng-hide="field.minimized">
     <progress>
       <progressbar
         data-type="'success'"

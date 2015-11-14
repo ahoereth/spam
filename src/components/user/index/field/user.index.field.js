@@ -43,7 +43,8 @@
   /* @ngInject */
   function userIndexFieldController(User, _) {
     var ctrl = _.assign(this, _.pick(this.raw,
-      'field', 'field_id', 'field_examination_possible', 'regulation_id'
+      'field', 'field_id', 'field_examination_possible',
+      'regulation_id', 'minimized'
     ));
     var field = ctrl.raw;
     var courses = {};
@@ -242,6 +243,15 @@
     };
 
 
+    /**
+     * Update field minimization setting.
+     */
+    ctrl.minimize = function() {
+      field.minimized = ctrl.minimized;
+      field.put();
+    };
+
+
     // If this field is the open studies field add a watcher which is being
     // called when the user facts have been updated in order to handle
     // credits flowing from other fields to this field.
@@ -254,4 +264,4 @@
     doAnalysis();
   }
 
-}());
+})();

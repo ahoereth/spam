@@ -19,6 +19,17 @@ function is_assoc($array) {
 
 
 /**
+ * Checks if a string is a json object.
+ * @param  {string}  $string
+ * @return {boolean}
+ */
+function is_json($string){
+  json_decode($string);
+  return (json_last_error() == JSON_ERROR_NONE);
+}
+
+
+/**
  * Searches the first level of all associative arrays contained in the passed
  * associative array for the specified key/value pair.
  *

@@ -39,10 +39,16 @@ class DB extends PDO {
    *                                   column name as string to select a single
    *                                   column and return it as ENUMERATED
    *                                   array.
+   * @param  {assoc}        $options
    * @return {array}       Array of column/value pair objects or of
    *                       string/number values.
    */
-  public function sql_select($tablename, $selectors, $columns = '*') {
+  public function sql_select(
+    $tablename,
+    $selectors,
+    $columns = '*',
+    $options = array()
+  ) {
     $single = is_string($columns) && '*' != $columns ? $columns : false;
     $selects = '*' != $columns ? self::generate_selects((array) $columns) : '*';
     $where   = self::generate_selectors($selectors, true);
@@ -53,7 +59,12 @@ class DB extends PDO {
     $query = "SELECT {$selects} FROM {$tablename} {$where};";
     $stmt = $this->prepare($query);
     $stmt->execute($values);
-    $rows = self::fetchAllAssoc($stmt);
+
+    if (!empty($options['style'])) {
+      $rows = self::fetchAllAssoc($stmt, $options['style']);
+    } else {
+      $rows = self::fetchAllAssoc($stmt);
+    }
 
     if ($single) {
       $result = array();
@@ -303,7 +314,7 @@ class DB extends PDO {
         }
       }
 
-      // Handle special tinyint(1) / bool cases.
+      // Handle special tinyint(1) / bool and json string cases.
       // See: https://bugs.php.net/bug.php?id=48724
       switch ($name) {
         case 'passed':
@@ -314,7 +325,13 @@ class DB extends PDO {
         case 'one_of_five':
         case 'field_examination_possible':
         case 'special':
+        case 'minimized':
           $assoc[ $name ] = (bool) $assoc[ $name ];
+          break;
+        case 'overview_order':
+        case 'overview_columns':
+          // JSON strings to array/assoc. Use `unsanitize` alternativley.
+          $assoc[ $name ] = json_decode($assoc[ $name ], true);
           break;
       }
     }
@@ -342,8 +359,19 @@ class DB extends PDO {
   /**
    * Wrapper for PDO fetchAll(PDO::FETCH_ASSOC)
    */
-  public static function fetchAllAssoc(PDOStatement $stmt) {
-    return self::convertTypesAll($stmt, $stmt->fetchAll(PDO::FETCH_ASSOC));
+  public static function fetchAllAssoc(
+    PDOStatement $stmt,
+    $style = 'assoc'
+  ) {
+    switch ($style) {
+      case 'groupassoc':
+        $rows = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
+        return self::convertTypesAll($stmt, array_map('reset', $rows));
+        break;
+      case 'assoc':
+      default:
+        return self::convertTypesAll($stmt, $stmt->fetchAll(PDO::FETCH_ASSOC));
+    }
   }
 
 
@@ -356,6 +384,36 @@ class DB extends PDO {
 
 
   /**
+   * Converts arrays/assocs to json strings. Use with `array_map`.
+   *
+   * @param  {string/number/array/assoc} $var
+   * @return {string/number}
+   */
+  public static function sanitize($var) {
+    if (is_array($var)) {
+      return json_encode($var);
+    }
+
+    return $var;
+  }
+
+
+  /**
+   * Converts json strings to arrays/assocs. Use with `array_map`.
+   *
+   * @param  {string/number} $var
+   * @return {string/number/array/assoc}
+   */
+  public static function unsanitize($var) {
+    if (is_json($var)) {
+      return json_decode($var, true);
+    }
+
+    return $var;
+  }
+
+
+  /**
    * Checks a string for being null or the string null/not null. Used for sql
    * statements.
    *
@@ -363,7 +421,8 @@ class DB extends PDO {
    * @return {bool}
    */
   private static function sql_null($var) {
-    return (null !== $var && 'NULL' !== $var && 'NOT NULL' !== $var);
+    return (null !== $var && 'NULL' !== $var && 'NOT NULL' !== $var &&
+            !is_bool($var));
   }
 
 

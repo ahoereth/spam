@@ -14,8 +14,7 @@
       '720kb.tooltips',
       'spam.app.services.routes',
       'spam.user.services.user',
-      'spam.user.index.field',
-      'spam.user.index.course',
+      'spam.user.index.columns',
       'spam.user.index.thesis-input',
       'spam.user.settings.matriculation-setter'
     ])
@@ -45,6 +44,7 @@
     $scope,
     Restangular,
     User,
+    UserIndexColumns,
     _
   ) {
     var ctrl = this;
@@ -80,13 +80,14 @@
     // Forces a $scope.$apply when relevant user data changes out-of-cycle.
     User.addWatcher(scopeApply);
 
+
     // Initialize local scope data.
     ctrl.user    = User.details;
     ctrl.facts   = User.facts;
     ctrl.fields  = User.fields;
     ctrl.courses = User.courses;
-    ctrl.thesisinput = !!(User.details.thesis.title ||
-                          User.details.thesis.grade);
+    ctrl.thesisinput = !!(User.details.thesis_title ||
+                          User.details.thesis_grade);
   }
 
 })();

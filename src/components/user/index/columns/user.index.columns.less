@@ -1,0 +1,33 @@
+.overview-column.sortable {
+    min-height: 100px;
+
+  div[draggable], div[draggable] .panel {
+    transition: all .1s ease-in-out;
+  }
+
+  .panel-heading {
+    cursor: grab;
+  }
+
+  .moving {
+    transform: scale(0.9);
+    opacity: .5;
+  }
+
+  .dropzone {
+    display: none;
+  }
+
+  .over:not(.moving) {
+    outline: 1px dashed #ccc;
+
+    .panel {
+      transform: translateY(15px);
+    }
+  }
+}
+
+.sortable-active .sortable .dropzone {
+  display: block;
+  height: 4em;
+}
