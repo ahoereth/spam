@@ -44,7 +44,7 @@
   function userIndexFieldController(User, _) {
     var ctrl = _.assign(this, _.pick(this.raw,
       'field', 'field_id', 'field_examination_possible',
-      'regulation_id', 'minimized'
+      'regulation_id', 'minimized', 'grade'
     ));
     var field = ctrl.raw;
     var courses = {};
@@ -175,15 +175,19 @@
         this[group].percentage_optional = percentage(this[group].optional);
       }, credits);
 
+      // An examination is not possible enough credits have been achieved.
+      if (100 !== credits.passed.percentage) {
+        ctrl.examination = false;
+      }
+
       // Only update the field's grade and update the user facts if the credits
       // do not include foreign credits. Foreign credit updates are always
       // called after the calculations already ran beforehand.
       if (!foreignCredits) {
-        ctrl.grade = field.grade ? field.grade : calculateGrade();
-        ctrl.examination = !!field.grade;
+        ctrl.grade = ctrl.examination ? field.grade : calculateGrade();
 
         User.updateFieldData(field.field_id, {
-          grade: ctrl.grade,
+          grade: field.grade ? field.grade : calculateGrade(),
           overallGrade: calculateGrade(true),
           passedCredits: credits.passed.sum,
           overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
@@ -230,15 +234,15 @@
     ctrl.gradeChange = function(newGrade) {
       if (
         // Grade can't change if no module examination is possible.
-        (!field.field_examination_possible) ||
+        (field.field_examination_possible) &&
         // Field was not passed so a module examination is not possible.
-        (100 !== ctrl.credits.passed.percentage)
+        (100 === ctrl.credits.passed.percentage) &&
+        ((field.grade||null) !== newGrade)
       ) {
-        return;
+        field.grade = newGrade || null;
+        field.put();
       }
 
-      field.grade = newGrade;
-      field.put();
       doAnalysis();
     };
 
@@ -261,6 +265,7 @@
 
     // Initialize the field data. In general this function will be called
     // from individual courses on data changes.
+    ctrl.examination = !!field.grade;
     doAnalysis();
   }
 

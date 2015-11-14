@@ -37,18 +37,22 @@
   /* @ngInject */
   function gradeInputController($scope, _) {
     var ctrl = this;
-    var oldGrade;
 
-    ctrl.blur = function(grade) {
-      ctrl.grade = _.formatGrade(grade);
+    $scope.$watch('gradeinput.grade', function(n, o) {
+      if (n === o || parseFloat(n) === parseFloat(o)) {
+        return false;
+      }
 
-      if (ctrl.grade !== oldGrade) {
-        oldGrade = ctrl.grade;
+      ctrl.grade = _.formatGrade(n);
+      if (
+        (!ctrl.disabled && ctrl.grade) || // Special case for fields.
+        (ctrl.disabled && !n && o) // Special case for courses.
+      ) {
         ctrl.change({newGrade: ctrl.grade});
       }
-    };
+    });
 
-    ctrl.grade = oldGrade = _.formatGrade(ctrl.grade);
+    ctrl.grade = _.formatGrade(ctrl.grade);
   }
 
 }());
