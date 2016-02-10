@@ -49,8 +49,6 @@ class DB extends PDO {
     $columns = '*',
     $options = array()
   ) {
-    if (empty($selectors)) { return null; }
-
     $single = is_string($columns) && '*' != $columns ? $columns : false;
     $selects = '*' != $columns ? self::generate_selects((array) $columns) : '*';
     $where   = self::generate_selectors($selectors, true);
@@ -95,7 +93,10 @@ class DB extends PDO {
    * @return {assoc}             Inserted/updated database entry.
    */
   public function sql_put($tablename, $selectors, $data) {
-    if (1 === count($this->sql_select($tablename, $selectors))) {
+    if (
+      !empty($selectors) &&
+      1 === count($this->sql_select($tablename, $selectors))
+    ) {
       $this->sql_update($tablename, $selectors, $data);
     } else {
       $this->sql_insert($tablename, array_merge($data, $selectors));
