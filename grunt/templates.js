@@ -26,8 +26,7 @@ module.exports = function(grunt) {
         removeRedundantAttributes: true,
         removeScriptTypeAttributes: true,
         removeStyleLinkTypeAttributes: true,
-        removeComments: true,
-        customAttrCollapse: /.+/,
+        removeComments: true
       }
     }
   };

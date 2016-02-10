@@ -4,52 +4,53 @@
 //   connect:dev  - starts the development version from /src
 //   connect:demo - starts the deployed app from /app
 
+var rewriteMiddle = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+var serveStatic = require('serve-static');
+
 /* global module, require */
 module.exports = function(grunt) {
   'use strict';
   var connect = grunt.config('connect') ||  {};
-  var rewrite = [
-    '!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.less$ ' +
-    '/index.html [L]'
-  ];
-
-  var modRewrite = require('connect-modrewrite');
-  var mountFolder = function(connect, dir) {
-    return connect.static(require('path').resolve(dir));
-  };
 
   connect.options = {
     port: 8000,
     hostname: '0.0.0.0',
-    open: false
+    open: false,
+    livereload: true,
+    middleware: function(connect, options, middlewares) {
+      middlewares.unshift(rewriteMiddle);
+      options.base.forEach(function(base) {
+        middlewares.unshift(serveStatic(base));
+      });
+      return middlewares;
+    }
   };
+
+  connect.rules = [{
+    from: '.*(?!\\.html|\\.js|\\.svg|\\.css|\\.png|\\.jpg|\\.woff|\\.ttf|\\.less)$',
+    to: '/index.html'
+  }];
 
   connect.dev = {
     options: {
-      base: 'src',
-      livereload: true,
-      middleware: function(connect) {
-        return [
-          modRewrite(rewrite),
-          mountFolder(connect, 'src')
-        ];
-      }
+      base: 'src'
     }
   };
 
   connect.demo = {
     options: {
-      base: 'app',
-      livereload: true,
-      middleware: function(connect) {
-        return [
-          modRewrite(rewrite),
-          mountFolder(connect, 'app')
-        ];
-      }
+      base: 'app'
     }
   };
 
   grunt.config('connect', connect);
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-connect-rewrite');
+  grunt.registerTask('server', function(target) {
+    if (target === 'demo') {
+      grunt.task.run(['configureRewriteRules', 'connect:demo']);
+    } else {
+      grunt.task.run(['configureRewriteRules', 'connect:dev']);
+    }
+  });
 };
