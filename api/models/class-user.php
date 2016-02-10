@@ -174,9 +174,9 @@ class User extends Model {
     // When logging in special users like demo accounts or when using the site
     // on a local installation we do not use ldap authentication, just
     // username/password combinations.
-    if ($data['special'] || LOCAL) {
-      if (self::$authentication_errors['password'] ||
-          self::$authentication_errors['username']
+    if ($data['special'] || ($data !== false && LOCAL)) {
+      if (self::$authentication_errors['username'] ||
+          self::$authentication_errors['password']
       ) {
         return false;
       }
