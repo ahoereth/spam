@@ -15,19 +15,23 @@
 
 
 
+  /* @ngInject */
   function gradeInputDirective() {
     return {
       restrict: 'E',
       replace: true,
-      scope: true,
-      templateUrl: 'components/user/index/grade-input/user.index.grade-input.html',
-      controller: 'GradeInputController',
-      controllerAs: 'gradeinput',
-      bindToController: {
+      scope: {
         change: '&',
         grade: '=',
-        disabled: '='
+        editable: '='
       },
+      templateUrl: 'components/user/index/grade-input/user.index.grade-input.html',
+      controllerAs: 'gradeinput',
+      controller: 'GradeInputController',
+      bindToController: true,
+      link: function(scope, elem, attr, ctrl) {
+        scope.$watch('gradeinput.grade', ctrl.changeGrade);
+      }
     };
   }
 
@@ -38,19 +42,22 @@
   function gradeInputController($scope, _) {
     var ctrl = this;
 
-    $scope.$watch('gradeinput.grade', function(n, o) {
-      if (n === o || parseFloat(n) === parseFloat(o)) {
+    ctrl.changeGrade = function changeGrade(newGrade, oldGrade) {
+      if (
+        newGrade === oldGrade ||
+        parseFloat(newGrade) === parseFloat(oldGrade)
+      ) {
         return false;
       }
 
-      ctrl.grade = _.formatGrade(n);
+      ctrl.grade = _.formatGrade(newGrade);
       if (
-        (!ctrl.disabled && ctrl.grade) || // Special case for fields.
-        (ctrl.disabled && !n && o) // Special case for courses.
+        (ctrl.editable && (newGrade || (!newGrade && oldGrade))) || // Special case for fields.
+        (!ctrl.editable && !newGrade && oldGrade) // Special case for courses.
       ) {
         ctrl.change({newGrade: ctrl.grade});
       }
-    });
+    };
 
     ctrl.grade = _.formatGrade(ctrl.grade);
   }

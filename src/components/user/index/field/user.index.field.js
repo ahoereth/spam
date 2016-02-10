@@ -237,7 +237,7 @@
         (field.field_examination_possible) &&
         // Field was not passed so a module examination is not possible.
         (100 === ctrl.credits.passed.percentage) &&
-        ((field.grade||null) !== newGrade)
+        (newGrade !== (field.grade||null))
       ) {
         field.grade = newGrade || null;
         field.put();

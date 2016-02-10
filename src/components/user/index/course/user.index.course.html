@@ -30,7 +30,7 @@
     class="col-xs-2"
     grade="course.grade"
     change="grade()"
-    disabled="course.passed && !course.grade"
+    editable="!course.passed || course.grade"
   ></grade-input>
 
   <!-- dropdown button -->

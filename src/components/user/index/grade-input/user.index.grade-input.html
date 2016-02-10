@@ -7,12 +7,12 @@
     blur-on-enter
     ng-model="gradeinput.grade"
     ng-model-options="{updateOn: 'blur'}"
-    ng-if="!gradeinput.disabled">
+    ng-if="gradeinput.editable">
 
   <!-- disabled -->
   <span
     class="input-tiny"
-    ng-if="gradeinput.disabled"
+    ng-if="!gradeinput.editable"
     ng-bind="gradeinput.grade"
   ></span>
 </div>
