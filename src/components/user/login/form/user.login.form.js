@@ -24,8 +24,8 @@
       restrict: 'E',
       replace: true,
       scope: {
-        username: '=',
-        loading: '='
+        username: '=?',
+        loading: '=?'
       },
       templateUrl: 'components/user/login/form/user.login.form.html',
       controller: 'LoginformController',
