@@ -7,6 +7,7 @@
 /* global require, module */
 var path = require('path');
 var ext = function(file) {
+  'use strict';
   return path.extname(file).slice(1);
 };
 
@@ -22,7 +23,7 @@ module.exports = function(grunt) {
       if (e === 'css') {
         return '<link rel="stylesheet" href="' + filepath + '">';
       } else if (e === 'less') {
-        return '<link rel="stylesheet/less"  type="text/css" href="' + filepath + '">';
+        return '<link rel="stylesheet/less" type="text/css" href="' + filepath + '">';
       } else if (e === 'js') {
         return '<script src="' + filepath + '"></script>';
       } else if (e === 'html') {

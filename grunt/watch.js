@@ -32,9 +32,18 @@ module.exports = function(grunt) {
     tasks: [ 'less:dev', 'injector' ]
   };
 
-  watch.scripts = {
+  watch.scripts_dev = {
     files: [ 'src/**/*.js' ],
     tasks: [ 'injector' ]
+  };
+
+  watch.scripts_dist = {
+    files: [ 'src/**/*.js' ],
+    tasks: [
+      'ngtemplates',
+      'ngAnnotate',
+      'uglify'
+    ]
   };
 
   watch.bower = {

@@ -39,8 +39,8 @@ module.exports = function(grunt) {
 
   connect.demo = {
     options: {
-      keepalive: true,
       base: 'app',
+      livereload: true,
       middleware: function(connect) {
         return [
           modRewrite(rewrite),
