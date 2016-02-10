@@ -11,6 +11,7 @@
       'spam.app.constants'
     ])
     .config(appConfig)
+    .config(saveInternalLinks)
     .run(appConfigRun);
 
 
@@ -36,6 +37,25 @@
 
       return elem;
     });
+  }
+
+
+
+
+  /**
+   * Add the local root links to the href whitelist.
+   *
+   * @ngInject
+   */
+  function saveInternalLinks($compileProvider) {
+    var whitelist = ('' + $compileProvider.aHrefSanitizationWhitelist());
+    if (whitelist.charAt(whitelist.length-1) === '/') {
+      whitelist = whitelist.slice(0, whitelist.length-1);
+    } else {
+      whitelist = '/';
+    }
+    whitelist += '|\\//';
+    $compileProvider.aHrefSanitizationWhitelist(whitelist);
   }
 
 
