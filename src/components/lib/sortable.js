@@ -11,7 +11,7 @@
    */
   angular
     .module('sortable', [])
-    .directive('sortable', sortableDirective);
+    .directive('htmlSortable', sortableDirective);
 
 
 
@@ -23,7 +23,7 @@
       restrict: 'A',
       require: 'ngModel',
       scope: {
-        sortable: '=',
+        options: '=htmlSortable',
         ngModel : '='
       },
       link: function(scope, element, attrs, ngModel) {
@@ -36,6 +36,7 @@
         var defaults = {
             active: true,
             allow_cross: false,
+            handle: false,
             construct: function(/*models*/) {},
             stop: function(/*model, idx*/) {}
         };
@@ -45,8 +46,6 @@
           in_use: false,
           options: angular.copy(defaults)
         };
-
-        var timeout;
 
         // Start dragging.
         sortable.handleDragStart = function(e) {
@@ -234,7 +233,7 @@
 
 
         // Watch sortable option for changes.
-        scope.$watch('sortable', function(options) {
+        scope.$watch('options', function(options, oldOptions) {
           sortable.options = angular.extend({}, defaults, options);
 
           if (false === sortable.options.active) {

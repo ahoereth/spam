@@ -4,7 +4,7 @@
     ng-class="{'col-xs-4' : 3 == columns.set.length,
                'col-xs-6' : 2 == columns.set.length,
                'col-xs-12': 1 == columns.set.length}"
-    sortable="columns.sortable"
+    html-sortable="columns.sortable"
     ng-repeat="column in columns.set"
     ng-model="column"
   >

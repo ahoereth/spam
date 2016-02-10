@@ -125,8 +125,7 @@
       controller: function userIndexColumnsController() {},
       controllerAs: 'columns',
       bindToController: true,
-      link: function(scope) {
-        var ctrl = scope.columns;
+      link: function(scope, elem, attrs, ctrl) {
         var columncount = null;
 
         function resize() {
