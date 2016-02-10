@@ -3,6 +3,7 @@
 // prefixed config_* and contain the real database authentication keys -
 // therefore they are listed in .gitignore.
 
+define('DEV', true);
 define('DEBUG', true);
 define('LOCAL', true);
 
