@@ -18,7 +18,7 @@
 
 
 <!-- Leading descriptive sentences. -->
-<div>
+<div ng-if="overview.user.mat_verify">
   <!-- already enrolled in some courses -->
   <p class="lead" ng-if="overview.courses.length">
     <span ng-show="overview.facts.grades.overall && overview.facts.credits.passed">
@@ -65,31 +65,37 @@
   </p>
 
   <!-- no courses yet -->
-  <p class="lead" ng-if="overview.user.mat_verify&&overview.courses.length==0">
+  <p class="lead" ng-if="overview.courses.length==0">
     You have not yet added any courses.
     To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation={{overview.user.regulation_id}}&timeframe=11%2B}">course index</a> or take a look at the <a href="guide">study guide</a>.
     Alternatively I can also give you a head start by adding the typical courses for your first semester: <button class="btn btn-primary" ng-click="overview.headstart()">Initialize</button>
   </p>
 
-  <!-- verify enrollment semester -->
-  <div ng-if="!overview.user.mat_verify">
-    <hr ng-if="overview.courses.length">
-    <p class="lead">Please verify your matriculation semester:</p>
-    <matriculation-setter verify></matriculation-setter>
-    <br>
-  </div>
+  <hr>
+</div>
+
+
+
+<!-- verify enrollment semester -->
+<div ng-if="!overview.user.mat_verify">
+  <p class="lead" style="margin-bottom: 0">
+    Please verify your matriculation semester:
+  </p>
+  <div class="row"><matriculation-setter verify></matriculation-setter></div>
+  <hr>
 </div>
 
 
 
 <!-- bachelor thesis row -->
-<hr ng-if="overview.thesisinput">
-<thesis-input ng-if="overview.thesisinput"></thesis-input>
+<div ng-if="overview.thesisinput">
+  <thesis-input></thesis-input>
+  <hr>
+</div>
 
 
 
 <!-- the fields -->
-<hr ng-show="overview.user.mat_verify">
 <overview-columns fields="overview.fields" courses="overview.courses">
 </overview-columns>
 
