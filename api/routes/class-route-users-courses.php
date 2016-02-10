@@ -319,6 +319,12 @@ class Route_Users_Courses extends Route {
     }
 
     if ($toupdate) {
+      // Only update if there is a specific student_in_course_id.
+      if (!isset($selector['student_in_course_id'])) {
+        $set = array_merge($selector, $set);
+        $selector = array();
+      }
+
       $new = self::$db->sql_put('students_in_courses', $selector, $set);
       $student_in_course_id = $new['student_in_course_id'];
     }

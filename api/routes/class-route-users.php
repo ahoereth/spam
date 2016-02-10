@@ -76,7 +76,7 @@ class Route_Users extends Route {
     $user = self::authorize($username);
 
     // regulation
-    $user = array_merge($user, self::$db->sql_select_one(
+    $regulation = self::$db->sql_select_one(
       array('students_in_regulations', 'regulations'), array(
         'username' => md5($username),
         'regulation_id' => $user['regulation_id'],
@@ -90,7 +90,8 @@ class Route_Users extends Route {
         'overview_order',
         'overview_columns',
       )
-    ));
+    );
+    $user = array_merge($user, !empty($regulation) ? $regulation : array() );
 
     // get this users courses
     $user_courses = new Route_Users_Courses();

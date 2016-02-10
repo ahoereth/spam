@@ -49,6 +49,8 @@ class DB extends PDO {
     $columns = '*',
     $options = array()
   ) {
+    if (empty($selectors)) { return null; }
+
     $single = is_string($columns) && '*' != $columns ? $columns : false;
     $selects = '*' != $columns ? self::generate_selects((array) $columns) : '*';
     $where   = self::generate_selectors($selectors, true);
