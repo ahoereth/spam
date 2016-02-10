@@ -29,8 +29,8 @@
   <grade-input
     class="col-xs-2"
     grade="course.grade"
-    change="grade()"
-    editable="!course.passed || course.grade"
+    change="grade(newGrade)"
+    editable="(!course.passed || course.grade) && !course.muted"
   ></grade-input>
 
   <!-- dropdown button -->
@@ -57,7 +57,7 @@
 
         <!-- force pass or un-pass course -->
         <li>
-          <tickable ng-model="course.passed" ng-change="pass()">
+          <tickable ng-model="course.passed" ng-change="grade(null)">
             Passed
           </tickable>
         </li>

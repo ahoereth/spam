@@ -34,8 +34,8 @@
       link: function(scope, elem, attrs, fieldCtrl) {
         var course = scope.course;
 
-        scope.grade = function(force) {
-          course.grade = _.formatGrade(course.grade);
+        scope.grade = function(newGrade) {
+          course.grade = _.formatGrade(newGrade);
 
           course.passed = (
             (course.grade >= 1 && course.grade <= 4) ||
@@ -44,7 +44,7 @@
           course.failed = !course.passed && 5 <= course.grade;
           fieldCtrl.courseChange(course);
 
-          if (course.grade === course.oldGrade && !force) { return; }
+          if (course.grade === course.oldGrade) { return; }
           course.oldGrade = course.grade;
           course.customPUT({
             grade: course.grade,
@@ -59,11 +59,6 @@
           });
         };
 
-        scope.pass = function() {
-          course.grade = ! course.grade ? course.grade : null;
-          scope.grade(true);
-        };
-
         scope.remove = function() {
           course.muted = true;
           fieldCtrl.courseChange(course);
@@ -76,9 +71,10 @@
           fieldCtrl.courseChange(course, true);
         };
 
-        course.grade = course.oldGrade = _.formatGrade(course.grade);
+        // course.grade = course.oldGrade = _.formatGrade(course.grade);
         course.term_abbr = course.term + course.year;
-        scope.grade();
+        course.oldGrade = _.formatGrade(course.grade);
+        scope.grade(course.grade);
       }
     };
   }

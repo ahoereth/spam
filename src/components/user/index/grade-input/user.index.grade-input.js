@@ -3,37 +3,22 @@
 
   /**
    * MODULE: spam.user.index.grade-input
-   * DIRECTIVE: gradeInput
+   * COMPONENT: gradeInput
    */
   angular
     .module('spam.user.index.grade-input', [
       'blurOnEnter'
     ])
-    .directive('gradeInput', gradeInputDirective)
-    .controller('GradeInputController', gradeInputController);
-
-
-
-
-  /* @ngInject */
-  function gradeInputDirective() {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: {
-        change: '&',
-        grade: '=',
-        editable: '='
-      },
-      templateUrl: 'components/user/index/grade-input/user.index.grade-input.html',
-      controllerAs: 'gradeinput',
+    .controller('GradeInputController', gradeInputController)
+    .component('gradeInput', {
       controller: 'GradeInputController',
-      bindToController: true,
-      link: function(scope, elem, attr, ctrl) {
-        scope.$watch('gradeinput.grade', ctrl.changeGrade);
+      templateUrl: 'components/user/index/grade-input/user.index.grade-input.html',
+      bindings: {
+        change: '&',
+        grade: '<',
+        editable: '<?'
       }
-    };
-  }
+    });
 
 
 
@@ -59,6 +44,7 @@
       }
     };
 
+    $scope.$watch('$ctrl.grade', ctrl.changeGrade);
     ctrl.grade = _.formatGrade(ctrl.grade);
   }
 

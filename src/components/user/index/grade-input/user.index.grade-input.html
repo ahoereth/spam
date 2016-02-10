@@ -5,14 +5,14 @@
     class="input-tiny"
     onclick="select()"
     blur-on-enter
-    ng-model="gradeinput.grade"
+    ng-model="$ctrl.grade"
     ng-model-options="{updateOn: 'blur'}"
-    ng-if="gradeinput.editable">
+    ng-if="$ctrl.editable">
 
   <!-- disabled -->
   <span
     class="input-tiny"
-    ng-if="!gradeinput.editable"
-    ng-bind="gradeinput.grade"
+    ng-if="!$ctrl.editable"
+    ng-bind="$ctrl.grade"
   ></span>
 </div>
