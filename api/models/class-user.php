@@ -198,8 +198,10 @@ class User extends Model {
         'username' => $userhash,
         'password' => $password,
         'uos_ldap' => time(),
-        'special'  => ('demo' === $username),
-        'rank'     => ('demo' === $username) ? 1 : 2, // LDAP users have rank 2
+        'special'  => !empty($data['special']) ? $data['special'] :
+                                                 ('demo' === $username),
+        'rank'     => !empty($data['rank'])  ? $data['rank'] :
+                      (('demo' === $username) ? 1 : 2), // LDAP users have rank 2
       ));
 
       // Check for loop.
