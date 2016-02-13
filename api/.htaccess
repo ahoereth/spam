@@ -1,8 +1,9 @@
-php_flag safe_mode off
-
-RewriteEngine On
 AddOutputFilter DEFLATE php
 
+ServerSignature Off
+
+RewriteEngine On
+
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^ /~SPAM/api/index.php [QSA,L] # Production.
-###RewriteRule ^ /api/index.php [QSA,L] # Development.
+###RewriteRule ^ /~SPAM/api/index.php [QSA,L] # Production.
+RewriteRule ^ /api/index.php [QSA,L] # Development.
