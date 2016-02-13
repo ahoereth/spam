@@ -10,47 +10,42 @@
       'blurOnEnter',
       'spam.user.services.user'
     ])
-    .directive('thesisInput', thesisInputDirective);
+    .controller('ThesisInputController', thesisInputController)
+    .component('thesisInput', {
+      controller: 'ThesisInputController',
+      templateUrl: 'components/user/index/thesis-input/user.index.thesis-input.html'
+    });
 
 
 
 
   /* @ngInject */
-  function thesisInputDirective(User) {
-    return {
-      restrict: 'E',
-      replace: true,
-      scope: true,
-      templateUrl: 'components/user/index/thesis-input/user.index.thesis-input.html',
-      link: function(scope/*, elem, attrs*/) {
-        // Requires user details.
-        if (!User.details) {
-          return false;
-        }
+  function thesisInputController(User) {
+    var ctrl = this;
 
-        scope.thesis = {
-          title: User.details.thesis_title,
-          grade: User.details.thesis_grade
-        };
+    // Requires user details.
+    if (!User.details) {
+      return false;
+    }
 
-        scope.thesis.styled = !scope.thesis.title || !scope.thesis.grade;
+    ctrl.title = User.details.thesis_title;
+    ctrl.grade = User.details.thesis_grade;
+    ctrl.styled = !ctrl.title || !ctrl.grade;
 
-        scope.thesis.blur = function() {
-          scope.thesis.styled = !scope.thesis.title || !scope.thesis.grade;
+    ctrl.blur = function() {
+      ctrl.styled = !ctrl.title || !ctrl.grade;
 
-          if (User.details.thesis.title === scope.thesis.title &&
-              User.details.thesis.grade === scope.thesis.grade
-          ) { return; }
+      if (User.details.thesis_title === ctrl.title &&
+          User.details.thesis_grade === ctrl.grade
+      ) { return; }
 
-          var n = User.updateThesis(scope.thesis.title, scope.thesis.grade);
-          scope.thesis.title = n.thesis_title;
-          scope.thesis.grade = n.thesis_grade;
-        };
+      var n = User.updateThesis(ctrl.title, ctrl.grade);
+      ctrl.title = n.thesis_title;
+      ctrl.grade = n.thesis_grade;
+    };
 
-        scope.thesis.focus = function() {
-          scope.thesis.styled = true;
-        };
-      }
+    ctrl.focus = function() {
+      ctrl.styled = true;
     };
   }
 
