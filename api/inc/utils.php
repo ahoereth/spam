@@ -139,7 +139,7 @@ function array_pick($assoc, $keys) {
   $result = array();
 
   foreach ($keys AS $key) {
-    if (isset($assoc[$key])) {
+    if (array_key_exists($key, $assoc)) {
       $result[$key] = $assoc[$key];
     }
   }
