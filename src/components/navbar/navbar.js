@@ -15,7 +15,8 @@
       'spam.landing',
       'spam.courses',
       'spam.guide',
-      'spam.user'
+      'spam.user',
+      'spam.admin'
     ])
     .directive('navbar', navbarDirective)
     .controller('NavbarController', navbarController);
@@ -79,7 +80,8 @@
       } else {
         ctrl.user = {
           username: user.username,
-          role: user.role
+          role: user.role,
+          rank: user.rank
         };
       }
     }
