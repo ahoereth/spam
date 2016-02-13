@@ -34,11 +34,11 @@
 
         // Default options.
         var defaults = {
-            active: true,
-            allow_cross: false,
-            handle: false,
-            construct: function(/*models*/) {},
-            stop: function(/*model, idx*/) {}
+          active: true,
+          allow_cross: false,
+          handle: false,
+          construct: function(/*models*/) {},
+          stop: function(/*model, idx*/) {}
         };
 
         var sortable = {
