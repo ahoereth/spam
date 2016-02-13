@@ -19,9 +19,11 @@
    * Add the 'data' prefix to the link whitelist
    */
   function textDownloadConfig($compileProvider) {
-    var white = ('' + $compileProvider.aHrefSanitizationWhitelist()).split('|');
-    white.splice(Math.floor(white.length/2), 0, 'data');
-    $compileProvider.aHrefSanitizationWhitelist(white.join('|'));
+    var whitelist = $compileProvider.aHrefSanitizationWhitelist();
+    whitelist = whitelist.toString().slice(1,-1).split('|');
+    whitelist.splice(Math.floor(whitelist.length/2), 0, 'data');
+    whitelist = new RegExp(whitelist.join('|'));
+    $compileProvider.aHrefSanitizationWhitelist(whitelist);
   }
 
 
