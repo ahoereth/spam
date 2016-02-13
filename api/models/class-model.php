@@ -147,10 +147,13 @@ abstract class Model {
       return false;
     }
 
-    $put_data = $this->get_data_for_insert();
+    // Get the data set of updated fields.
     if ($this->from_server && ! empty($this->server_data)) {
       $put_data = array_diff_assoc($this->data, $this->server_data);
     }
+
+    // Format data.
+    $put_data = $this->get_data_for_insert($put_data);
 
     // primary key cannot be changed!
     unset($put_data[ static::get_pk() ]);
@@ -345,15 +348,19 @@ abstract class Model {
    *
    * @return {assoc}}
    */
-  private function get_data_for_insert() {
-    $data = $this->data;
+  private function get_data_for_insert($data = false) {
+    if ($data == false) {
+      $data = $this->data;
+    }
 
-    foreach (static::$table as $key => $value) {
-      if (starts_with($value, 'TIMESTAMP')) {
-        if (!is_numeric($data[$key])) {
-          $data[$key] = strtotime($data[$key]);
+    foreach ($data AS $key => $value) {
+      if (isset(static::$table[$key])) {
+        if (starts_with(static::$table[$key], 'TIMESTAMP')) {
+          if (!is_numeric($data[$key])) {
+            $data[$key] = strtotime($value);
+          }
+          $data[$key] = date(MYSQL_DATE_FORMAT, $value);
         }
-        $data[$key] = date(MYSQL_DATE_FORMAT, $data[$key]);
       }
     }
 
