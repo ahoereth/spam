@@ -56,6 +56,7 @@
       sum: 0
     };
     var foreignCreditsMem = 0;
+    var hasManualGrade = false;
 
 
     /**
@@ -175,19 +176,19 @@
         this[group].percentage_optional = percentage(this[group].optional);
       }, credits);
 
-      // An examination is not possible enough credits have been achieved.
-      if (100 !== credits.passed.percentage) {
-        ctrl.examination = false;
-      }
+      // An examination is only possible with enough credits.
+      ctrl.examination = (100 >= credits.passed.percentage) ? hasManualGrade
+                                                            : false;
 
       // Only update the field's grade and update the user facts if the credits
       // do not include foreign credits. Foreign credit updates are always
       // called after the calculations already ran beforehand.
       if (!foreignCredits) {
-        ctrl.grade = ctrl.examination ? field.grade : calculateGrade();
+        ctrl.grade = hasManualGrade ? _.formatGrade(field.grade)
+                                    : calculateGrade();
 
         User.updateFieldData(field.field_id, {
-          grade: field.grade ? field.grade : calculateGrade(),
+          grade: ctrl.grade,
           overallGrade: calculateGrade(true),
           passedCredits: credits.passed.sum,
           overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
@@ -240,6 +241,7 @@
         (newGrade !== (field.grade||null))
       ) {
         field.grade = newGrade || null;
+        hasManualGrade = !!field.grade;
         field.put();
       }
 
@@ -265,7 +267,8 @@
 
     // Initialize the field data. In general this function will be called
     // from individual courses on data changes.
-    ctrl.examination = !!field.grade;
+    hasManualGrade = !!field.grade;
+    ctrl.examination = hasManualGrade;
     doAnalysis();
   }
 
