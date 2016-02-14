@@ -1,14 +1,22 @@
 <div>
-  <unicorn style='float:right'></unicorn>
+  <unicorn style="float:right"></unicorn>
   <h1>Authorization error</h1>
-  <p class="lead">Our security unicorn says you are currently not authorized to view the page you have requested: <code>{{requested_route}}</code></p>
-  <p><span ng-show="!user.loggedin"><b>You're not logged in!</b><br>Use the login form on the left and try again.</span> {{(user.loggedin)?"Below":"On the right"}} you find a (maybe incomplete) list of routes available to you at the moment.</p>
+  <p class="lead">
+    Our security unicorn says you are currently not authorized to view the page you have requested: <code>{{$ctrl.lastroute}}</code>
+  </p>
+  <p>
+    <span ng-if="!$ctrl.user">
+      <b>You're not logged in!</b><br>
+      Use the login form on the left and try again.
+    </span>
+    {{!!$ctrl.user ? "Below" : "On the right" }} you find a (maybe incomplete) list of routes available to you at the moment.
+  </p>
 </div>
 
 <hr>
 
 <div class="row">
-  <div class="col-md-4"  ng-show="!user.loggedin">
+  <div class="col-md-4" ng-if="!$ctrl.user">
     <h2>Fix this: Login!</h2>
     <loginform></loginform>
   </div>
@@ -21,7 +29,7 @@
       <li><a href="help/">/help</a></li>
     </ul>
   </div>
-  <div class="col-md-4" ng-show="user.loggedin">
+  <div class="col-md-4" ng-if="!!$ctrl.user">
     <h2>Your routes</h2>
     <ul>
       <li><a href="~">/~</a></li>
@@ -29,7 +37,7 @@
       <li><a href="~/logout">/~/logout</a></li>
     </ul>
   </div>
-  <div class="col-md-4" ng-show="user.rank>=16">
+  <div class="col-md-4" ng-if="$ctrl.user.rank>=16">
     <h2>Admin routes</h2>
     <ul>
       <li><a href="admin">/admin</a></li>
@@ -37,5 +45,3 @@
     </ul>
   </div>
 </div>
-
-<hr>
