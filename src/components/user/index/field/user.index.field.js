@@ -41,7 +41,7 @@
 
 
   /* @ngInject */
-  function userIndexFieldController(User, _) {
+  function userIndexFieldController($scope, User, _) {
     var ctrl = _.assign(this, _.pick(this.raw,
       'field', 'field_id', 'field_examination_possible',
       'regulation_id', 'minimized', 'grade'
@@ -184,6 +184,7 @@
       // do not include foreign credits. Foreign credit updates are always
       // called after the calculations already ran beforehand.
       if (!foreignCredits) {
+        // Grade can be the average or manually defined.
         ctrl.grade = hasManualGrade ? _.formatGrade(field.grade)
                                     : calculateGrade();
 
@@ -198,6 +199,8 @@
           examinationPossible: !! field.field_examination_possible,
           examination: ctrl.examination
         });
+      } else {
+        $scope.$digest();
       }
     };
 
@@ -241,10 +244,10 @@
         (newGrade !== (field.grade||null))
       ) {
         field.grade = newGrade || null;
-        hasManualGrade = !!field.grade;
         field.put();
       }
 
+      hasManualGrade = true;
       doAnalysis();
     };
 
