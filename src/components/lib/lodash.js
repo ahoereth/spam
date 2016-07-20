@@ -119,7 +119,7 @@
      * @see _.compact
      * @param object: The object to compact.
      */
-    var compactObject = _.partialRight(_.pick, _.identity);
+    var compactObject = _.partialRight(_.pickBy, _.identity);
 
 
     var mapOnto = function(arrA, arrB, func) {

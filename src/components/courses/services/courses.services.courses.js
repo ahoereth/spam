@@ -109,7 +109,7 @@
      * @return {object}            course with all available information
      */
     self.get = function(regulation, courseId) {
-      return _.findWhere(courses[regulation], {course_id: courseId});
+      return _.find(courses[regulation], {course_id: courseId});
     };
 
 

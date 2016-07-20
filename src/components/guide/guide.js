@@ -44,10 +44,9 @@
         .groupBy(function(course) {
           return course.year + course.term;
         })
-        .each(function(course, k) {
+        .forEach(function(course, k) {
           ctrl.courses[k] = _.groupBy(course, 'singleField');
-        })
-        .value();
+        });
     });
   }
 

@@ -95,13 +95,13 @@
     function calculateGrade(overall) {
       overall = overall || false;
 
-      var graded = _.chain(courses).pick(function(course) {
+      var graded = _.chain(courses).pickBy(function(course) {
         return ! _.isNull(course) && _.isFinite(course.grade);
       });
 
-      var credits = overall ? graded.pluck('credits') : graded.pluck('counts');
+      var credits = overall ? graded.map('credits') : graded.map('counts');
 
-      var grade = graded.pluck('grade').mapOnto(
+      var grade = graded.map('grade').mapOnto(
         credits.value(), _.multiply
       ).sum().value();
 
@@ -133,8 +133,8 @@
       };
 
       // Aggregate the credits from the individual courses.
-      _(courses).pick(_.isObject)
-        .sortByOrder(['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc'])
+      _(courses).pickBy(_.isObject)
+        .orderBy(['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc'])
         .forIn(function(course) {
           var group = course.passed ? 'passed' : 'enrolled';
           var category = course.compulsory ? 'compulsory' : 'optional';
@@ -156,7 +156,7 @@
 
           // Overflowing credits can flow to the open studies module.
           this[group].overflowing += (course.credits - course.counts);
-      }, credits).value();
+      }, credits);
 
       // Account for foreign credits, if any.
       if (foreignCredits) {

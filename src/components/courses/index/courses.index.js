@@ -283,7 +283,7 @@
       .all('regulations')
       .getList()
       .then(function(regulations) {
-        var t = _.findWhere( regulations, { regulation_id : 4 } );
+        var t = _.find( regulations, { regulation_id : 4 } );
         $scope.regulations = _.without( regulations, t );
 
         $scope.regulations.unshift({

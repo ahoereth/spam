@@ -48,7 +48,7 @@
       ) {
         var height = Math.ceil(fields.length / columncount);
         division = _.map(
-          _.trimRight(_.repeat(height + '|', columncount), '|').split('|'),
+          _.trimEnd(_.repeat(height + '|', columncount), '|').split('|'),
           _.parseInt);
       }
 

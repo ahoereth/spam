@@ -71,7 +71,7 @@
         scope.fields = _.filter(course.fields, function(field) {
           return _(field.regulations)
             .map(_.values).flatten()
-            .contains(scope.user.regulation_id);
+            .includes(scope.user.regulation_id);
         });
 
         // If there is one or no regulation there is a way to enroll
@@ -81,7 +81,7 @@
         // Find course in current user's transcript to set enrollment state
         // correctly and in order to unenroll from it if required.
         if (User.courses) {
-          rel = _.findWhere(User.courses, {
+          rel = _.find(User.courses, {
             course_id: course.course_id
           });
 

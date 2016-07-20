@@ -62,14 +62,15 @@
       link: function(scope) {
         if (! scope.fields) { return false; }
 
-        scope.list = _.chain(scope.fields).reduce(function(list, val, key) {
+        scope.list = _.reduce(scope.fields, function(list, val, key) {
+          if (list !== '') { list += ', '; }
           if (val.hasOwnProperty('field')) {
-            return list + ', ' + val.field +
+            return list + val.field +
                    ('PM' === val.course_in_field_type ? ' (PM)' : '');
           } else {
-            return list + ', ' + key + ': ' + val;
+            return list + key + ': ' + val;
           }
-        }, '').trimLeft(', ').value();
+        }, '');
       }
     };
   }

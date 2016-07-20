@@ -55,11 +55,11 @@
 
     var factsCalculation = _.debounce(function() {
       var facts = self.facts;
-      var fields = _.chain(fieldData).sortByAll('grade');
+      var fields = _.chain(fieldData).sortBy('grade');
 
       // TODO: this '5' should be somehow dynamic
       facts.bscFieldsCount = 5;
-      var bscFields = fields.where({
+      var bscFields = fields.filter({
                         examinationPossible: true,
                         completed: true
                       })
@@ -68,10 +68,10 @@
       facts.bscFieldsCompletedCount = bscFields.size().value();
 
       facts.grades = {
-        overall : calculateGrade(fields.pluck('overallPassedCredits'),
-                                 fields.pluck('overallGrade')),
-        bachelor: calculateGrade(bscFields.pluck('passedCredits'),
-                                 bscFields.pluck('grade'))
+        overall : calculateGrade(fields.map('overallPassedCredits'),
+                                 fields.map('overallGrade')),
+        bachelor: calculateGrade(bscFields.map('passedCredits'),
+                                 bscFields.map('grade'))
       };
 
       // Take thesis grade into consideration.
@@ -84,14 +84,14 @@
       }
 
       // TODO: `3` credits per examination should be a database option.
-      facts.examinationCount = fields.pluck('examination').sum().value();
+      facts.examinationCount = fields.map('examination').sum().value();
       facts.examinationCredits = 3 * (facts.examinationCount || 0);
 
       facts.credits = {
-        passed  : fields.pluck('overallPassedCredits').sum().value() +
+        passed  : fields.map('overallPassedCredits').sum().value() +
                   facts.examinationCredits + (thesisGrade ? 12 : 0),
-        //overflow: fields.pluck('overflowPassedCredits').sum().value(),
-        enrolled: fields.pluck('enrolledCredits').sum().value()
+        //overflow: fields.map('overflowPassedCredits').sum().value(),
+        enrolled: fields.map('enrolledCredits').sum().value()
       };
 
       callWatchers();
@@ -211,7 +211,7 @@
       var studentInCourseId = _.isObject(course) ?
         course.student_in_course_id : course;
 
-      course = _.findWhere(self.courses, {
+      course = _.find(self.courses, {
         student_in_course_id: studentInCourseId
       });
 
@@ -262,7 +262,7 @@
         (course.field_id || null);
 
       return self.courses.post(course).then(function(course) {
-        var old = _.findWhere(self.courses, { course_id: course.course_id });
+        var old = _.find(self.courses, { course_id: course.course_id });
 
         if (old && course.course_id) {
           old.enrolled_field_id = course.enrolled_field_id;
@@ -315,7 +315,7 @@
      * @return {object}
      */
     self.getOverflowingCredits = function() {
-      return _.object(_.keys(fieldData), _.pluck(fieldData, 'overflowPassedCredits'));
+      return _.fromPairs(_.keys(fieldData), _.map(fieldData, 'overflowPassedCredits'));
     };
 
 
