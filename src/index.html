@@ -19,12 +19,14 @@
 
   <base href="/">
   <script type="text/javascript">
-  // Handle local servers running with or without /~SPAM base.
+  // Handle local servers running with or without some "spam" base.
   /* global window, document */
+  var BASE = '/';
   (function() { 'use strict';
-    var base = (window.location.pathname || '').substr(0,6);
-    base = (base === '/~SPAM') ? '/~SPAM/' : '/';
-    document.getElementsByTagName('base')[0].href = base;
+    var path = (window.location.pathname || '');
+    var spam = path.toLowerCase().indexOf('spam')
+    BASE = spam > 0 && spam < 3 ? path.substr(0, spam + 5) : BASE;
+    document.getElementsByTagName('base')[0].href = BASE;
   })();
   </script>
 

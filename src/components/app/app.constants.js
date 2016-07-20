@@ -1,5 +1,6 @@
 (function() {
   'use strict';
+  /* global BASE */
 
   /**
    * MODULE: spam.app.constants
@@ -11,6 +12,6 @@
     .module('spam.app.constants', [])
     .constant('TITLE', 'Studyplanning in Cognitive Science')
     .constant('APIURL', 'https://cogsci.uni-osnabrueck.de/~SPAM/api');
-    //.constant('APIURL', 'http://spam.local/api');
+    // .constant('APIURL', BASE + 'api');
 
 })();

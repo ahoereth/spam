@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="translucent-black">
   <meta name="apple-mobile-web-app-title" content="SPAM">
-  <script>document.getElementsByTagName('base')[0].href=(window.location.pathname||'').substr(0,6)==='/~SPAM'?'/~SPAM/':'/';</script>
+  <script>var BASE='/';(function(){var p=(window.location.pathname||''),i=p.toLowerCase().indexOf('spam');BASE=i>0&&i<3?p.substr(0,i+5):'/';document.getElementsByTagName('base')[0].href=BASE})()</script>
   <style>.ng-cloak { display: none !important; }</style>
   <link href="img/spam.png" rel="apple-touch-icon">
   <link href="img/spam.ico" rel="shortcut icon">
