@@ -10,4 +10,5 @@
 /src/**/*compiled.css
 /composer.phar
 *.swp
+*.log
 **.ignore.*

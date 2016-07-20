@@ -9,8 +9,9 @@
   },
   "bugs": "http://github.com/ahoereth/spam/issues",
   "scripts": {
-    "start": "./node_modules/grunt-cli/bin/grunt start",
-    "postinstall": "./node_modules/bower/bin/bower install"
+    "start": "grunt start",
+    "build": "grunt build",
+    "postinstall": "bower install"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
