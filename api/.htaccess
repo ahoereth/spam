@@ -1,9 +1,8 @@
-AddOutputFilter DEFLATE php
+SetOutputFilter DEFLATE
 
 ServerSignature Off
 
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f
-###RewriteRule ^ /~SPAM/api/index.php [QSA,L] # Production.
-RewriteRule ^ /api/index.php [QSA,L] # Development.
+RewriteRule ^ /api/index.php [QSA,L]

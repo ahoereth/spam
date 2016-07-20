@@ -1,14 +1,4 @@
-AddOutputFilterByType DEFLATE text/plain
-AddOutputFilterByType DEFLATE text/font-woff
-AddOutputFilterByType DEFLATE text/html
-AddOutputFilterByType DEFLATE text/xml
-AddOutputFilterByType DEFLATE text/css
-AddOutputFilterByType DEFLATE text/javascript
-AddOutputFilterByType DEFLATE application/xml
-AddOutputFilterByType DEFLATE application/xhtml+xml
-AddOutputFilterByType DEFLATE application/rss+xml
-AddOutputFilterByType DEFLATE application/javascript
-AddOutputFilterByType DEFLATE application/x-javascript
+SetOutputFilter DEFLATE
 
 AddType application/vnd.ms-fontobject    .eot
 AddType application/x-font-opentype      .otf
@@ -21,24 +11,22 @@ IndexIgnore */*
 
 RewriteEngine on
 
-
+# Enforce cogsci subdomain.
 ###RewriteCond %{HTTP_HOST} ^ikw\.uni-osnabrueck\.de$ [NC]
 ###RewriteRule ^(.*) https://cogsci.uos.de/~SPAM/$1 [R=301,L]
 
+# Enforce HTTPS.
 ###RewriteCond %{HTTPS} !=on
 ###RewriteCond %{ENV:HTTPS} !=on
 ###RewriteRule ^(.*) https://cogsci.uni-osnabrueck.de/~SPAM/$1 [R=301,L]
 
-# if a directory or a file exists, use it directly
-RewriteCond %{REQUEST_FILENAME} -s [OR]
-RewriteCond %{REQUEST_FILENAME} -l [OR]
+# If a directory or a file exists, use it directly,
+RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
-# otherwise forward it to index.html
-###RewriteRule ^(.*) /~SPAM/app/#!/$1 [NC,L]
-RewriteRule ^(.*) /src/#!/$1 [NC,L]
-
+# otherwise forward the request to root.
+RewriteRule ^(.*) /#!/$1 [NC,L]
 
 ServerSignature Off
 ###Header set X-Frame-Options "SAMEORIGIN"
