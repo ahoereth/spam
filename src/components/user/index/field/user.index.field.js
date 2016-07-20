@@ -141,40 +141,40 @@
 
           var freeCredits = available[category] - course.credits;
           course.counts = course.credits + (freeCredits < 0 ? freeCredits : 0);
-          available[category]     -= course.counts;
-          this[group][category]   += course.counts;
+          available[category] -= course.counts;
+          credits[group][category] += course.counts;
 
           // If the compulsory part of the module is done, compulsory courses
           // can also flow to the optional part.
           if ('compulsory' === category && course.counts < course.credits) {
             freeCredits = available.optional - course.counts;
             var counts = course.counts + (freeCredits < 0 ? freeCredits : 0);
-            available.optional   -= counts;
-            this[group].optional += counts;
+            available.optional -= counts;
+            credits[group].optional += counts;
             course.counts = course.counts + counts;
           }
 
           // Overflowing credits can flow to the open studies module.
-          this[group].overflowing += (course.credits - course.counts);
-      }, credits);
+          credits[group].overflowing += (course.credits - course.counts);
+      });
 
       // Account for foreign credits, if any.
       if (foreignCredits) {
         var availableNew = available.optional - foreignCredits;
         var counts = foreignCredits + (availableNew < 0 ? availableNew : 0);
         credits.foreign = foreignCredits;
-        available.optional      -= counts;
+        available.optional -= counts;
         credits.passed.optional += counts;
         credits.passed.overflowing += (foreignCredits - counts);
       }
 
       // Calculated the different progress values.
       _.forEach(['passed', 'enrolled', 'available'], function(group) {
-        this[group].sum = this[group].compulsory + this[group].optional;
-        this[group].percentage = percentage(this[group].sum);
-        this[group].percentage_compulsory = percentage(this[group].compulsory);
-        this[group].percentage_optional = percentage(this[group].optional);
-      }, credits);
+        credits[group].sum = credits[group].compulsory + credits[group].optional;
+        credits[group].percentage = percentage(credits[group].sum);
+        credits[group].percentage_compulsory = percentage(credits[group].compulsory);
+        credits[group].percentage_optional = percentage(credits[group].optional);
+      });
 
       // An examination is only possible with enough credits.
       ctrl.examination = (100 >= credits.passed.percentage) ? hasManualGrade
