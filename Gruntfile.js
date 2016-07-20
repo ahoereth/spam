@@ -18,15 +18,20 @@ module.exports = function(grunt) {
     'production database. App auto refreshs on code changes.';
   grunt.task.registerTask('start', description, function(arg) {
     if (arg !== 'demo') {
-      grunt.task.run([
+      var tasks = [
         'clean:dev',
         'less:dev',
         'copy:dev',
         'wiredep',
         'injector',
-        'connect:dev',
         'watch'
-      ]);
+      ];
+
+      if (arg !== 'php') {
+        tasks.splice(-1, 0, 'connect:dev');
+      }
+
+      grunt.task.run(tasks);
     } else {
       grunt.task.run([
         'build',

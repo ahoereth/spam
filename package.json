@@ -9,7 +9,9 @@
   },
   "bugs": "http://github.com/ahoereth/spam/issues",
   "scripts": {
+    "grunt": "grunt",
     "start": "grunt start",
+    "watch": "grunt start:php",
     "build": "grunt build",
     "postinstall": "bower install"
   },
