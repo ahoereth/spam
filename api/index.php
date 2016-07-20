@@ -6,18 +6,18 @@ require_once 'lib/autoload.php';
 use Slim\Slim;
 $app = new \Slim\Slim();
 
-// Initialize HTTP headers
-require_once 'inc/headers.php';
-
 // Initialize class autoloaders.
 require_once 'inc/autoload.php';
 
-// GENERAL UTILITIES
-require_once 'inc/utils.php';
-
-// DATABASE
+// Configuration
 $config = 'ikw';
 require_once 'inc/config_' . $config . '.php';
+
+// Initialize HTTP headers
+require_once 'inc/headers.php';
+
+// GENERAL UTILITIES
+require_once 'inc/utils.php';
 
 // ROUTING
 require_once 'routes/routes.php';
