@@ -1,13 +1,13 @@
 {
   "name": "cogsci-spam",
   "dependencies": {
-    "lodash": "3.x.x",
+    "lodash": "4.x.x",
     "bootstrap": "3.3.x",
     "open-sans-fontface": "1.4.x",
     "angular": "1.5.x",
     "angular-route": "1.5.x",
     "angular-sanitize": "1.5.x",
-    "angular-tooltips": "0.1.x",
+    "angular-tooltips": "1.1.x",
     "angular-utf8-base64": "0.0.x",
     "angular-unicorn-directive": "0.0.x",
     "restangular": "1.5.x"
@@ -18,8 +18,8 @@
     },
     "angular-tooltips": {
       "main": [
-        "src/css/angular-tooltips.css",
-        "src/js/angular-tooltips.js"
+        "dist/angular-tooltips.css",
+        "dist/angular-tooltips.js"
       ]
     }
   },
