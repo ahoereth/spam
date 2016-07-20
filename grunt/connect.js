@@ -4,7 +4,7 @@
 //   connect:dev  - starts the development version from /src
 //   connect:demo - starts the deployed app from /app
 
-var rewriteMiddle = require('grunt-connect-rewrite/lib/utils').rewriteRequest;
+var rewriteModule = require('http-rewrite-middleware');
 var serveStatic = require('serve-static');
 
 /* global module, require */
@@ -18,10 +18,19 @@ module.exports = function(grunt) {
     open: false,
     livereload: true,
     middleware: function(connect, options, middlewares) {
-      middlewares.unshift(rewriteMiddle);
+      middlewares.push(rewriteModule.getMiddleware([{
+        from: '^\/api|(.*)(?!\.html|\.js|\.css|\.svg|\.woff2?|\.eot|\.ttf$)',
+        to: '/#!/$1'
+      }]));
+
+      if (!Array.isArray(options.base)) {
+        options.base = [options.base];
+      }
+
       options.base.forEach(function(base) {
-        middlewares.unshift(serveStatic(base));
+        middlewares.push(serveStatic(base));
       });
+
       return middlewares;
     }
   };
@@ -45,12 +54,4 @@ module.exports = function(grunt) {
 
   grunt.config('connect', connect);
   grunt.loadNpmTasks('grunt-contrib-connect');
-  grunt.loadNpmTasks('grunt-connect-rewrite');
-  grunt.registerTask('server', function(target) {
-    if (target === 'demo') {
-      grunt.task.run(['configureRewriteRules', 'connect:demo']);
-    } else {
-      grunt.task.run(['configureRewriteRules', 'connect:dev']);
-    }
-  });
 };

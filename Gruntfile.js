@@ -24,13 +24,13 @@ module.exports = function(grunt) {
         'copy:dev',
         'wiredep',
         'injector',
-        'server:dev',
+        'connect:dev',
         'watch'
       ]);
     } else {
       grunt.task.run([
         'build',
-        'server:demo',
+        'connect:demo',
         'watch'
       ]);
     }
