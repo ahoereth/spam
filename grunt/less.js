@@ -32,7 +32,7 @@ module.exports = function(grunt) {
       plugins: plugins
     },
     files: {
-      'src/compiled.css': glob
+      'src/components/compiled.css': glob
     }
   };
 
