@@ -1,4 +1,8 @@
 <?php
+// Configuration
+define('ENV', 'ikw');
+require_once 'inc/config_' . ENV . '.php';
+
 // Loads composer dependencies. See /composer.json for details.
 require_once 'lib/autoload.php';
 
@@ -9,9 +13,8 @@ $app = new \Slim\Slim();
 // Initialize class autoloaders.
 require_once 'inc/autoload.php';
 
-// Configuration
-$config = 'ikw';
-require_once 'inc/config_' . $config . '.php';
+// Initialize database connection.
+require_once 'inc/init.php';
 
 // Initialize HTTP headers
 require_once 'inc/headers.php';
