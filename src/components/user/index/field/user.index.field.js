@@ -100,12 +100,9 @@
       });
 
       var credits = overall ? graded.map('credits') : graded.map('counts');
+      var products = graded.map('grade').mergeWith(credits.value(), _.multiply);
 
-      var grade = graded.map('grade').mapOnto(
-        credits.value(), _.multiply
-      ).sum().value();
-
-      return _.formatGrade(grade / credits.sum().value());
+      return _.formatGrade(products.sum().value() / credits.sum().value());
     }
 
 

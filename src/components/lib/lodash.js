@@ -97,19 +97,10 @@
 
 
     /**
-     * Multiplies two numbers with each other.
-     *
-     * @param {Number} a
-     * @param {Number} b
-     */
-    var multiply = function(a, b) { return a * b; };
-
-
-    /**
      * Sums up all elements of an array/object. Useful
      * for shorthand use in reduce functions.
      */
-    var product = _.partialRight(_.reduce, multiply);
+    var product = _.partialRight(_.reduce, _.multiply);
 
 
     /**
@@ -120,13 +111,6 @@
      * @param object: The object to compact.
      */
     var compactObject = _.partialRight(_.pickBy, _.identity);
-
-
-    var mapOnto = function(arrA, arrB, func) {
-      return _.mapValues(arrA, function(val, key) {
-        return func(val, arrB[key]);
-      });
-    };
 
 
     /**
@@ -156,13 +140,11 @@
 
 
     _.mixin({
-      multiply: multiply,
       product: product,
       compactObject: compactObject,
       formatGrade: formatGrade,
       percent: percent,
-      isNumeric: isNumeric,
-      mapOnto: mapOnto
+      isNumeric: isNumeric
     });
 
     return $window._;

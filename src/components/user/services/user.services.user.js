@@ -48,8 +48,8 @@
 
 
     function calculateGrade(credits, grades) {
-      var grade = grades.mapOnto(credits.value(), _.multiply).sum();
-      return _.formatGrade(grade.value() / credits.sum().value());
+      var products = grades.mergeWith(credits.value(), _.multiply);
+      return _.formatGrade(products.sum().value() / credits.sum().value());
     }
 
 
