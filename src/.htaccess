@@ -11,14 +11,14 @@ IndexIgnore */*
 
 RewriteEngine on
 
-# Enforce cogsci subdomain.
-###RewriteCond %{HTTP_HOST} ^ikw\.uni-osnabrueck\.de$ [NC]
-###RewriteRule ^(.*) https://cogsci.uos.de/~SPAM/$1 [R=301,L]
+# Enforce cogsci subdomain. Production only.
+RewriteCond %{HTTP_HOST} ^ikw\.uni-osnabrueck\.de$ [NC]
+RewriteRule ^(.*) https://cogsci.uos.de/~SPAM/$1 [R=301,L]
 
-# Enforce HTTPS.
-###RewriteCond %{HTTPS} !=on
-###RewriteCond %{ENV:HTTPS} !=on
-###RewriteRule ^(.*) https://cogsci.uni-osnabrueck.de/~SPAM/$1 [R=301,L]
+# Enforce HTTPS. Production only.
+RewriteCond %{HTTPS} !=on
+RewriteCond %{ENV:HTTPS} !=on
+RewriteRule ^(.*) https://cogsci.uni-osnabrueck.de/~SPAM/$1 [R=301,L]
 
 # If a directory or a file exists, use it directly,
 RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -26,11 +26,13 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
 # otherwise forward the request to root.
-RewriteRule ^(.*) /#!/$1 [NC,L]
+#RewriteRule ^(.*) /#!/$1 [NC,L]
+RewriteRule ^(.*) /~SPAM/#!/$1 [NC,L]
 
+# Security rules. Production only.
 ServerSignature Off
-###Header set X-Frame-Options "SAMEORIGIN"
-###Header set X-Content-Type-Options "nosniff"
-###Header set Content-Security-Policy "default-src 'self' 'unsafe-inline'"
-###Header set Strict-Transport-Security "max-age=31536000"
-###Header set 'X-XSS-Protection' "1; mode=block"
+Header set X-Frame-Options "SAMEORIGIN"
+Header set X-Content-Type-Options "nosniff"
+Header set Content-Security-Policy "default-src 'self' 'unsafe-inline'"
+Header set Strict-Transport-Security "max-age=31536000"
+Header set 'X-XSS-Protection' "1; mode=block"

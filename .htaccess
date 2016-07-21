@@ -2,5 +2,5 @@ RewriteEngine on
 
 RewriteCond %{REQUEST_URI} !/api
 
-###RewriteRule ^(.*) /~SPAM/app/$1 [L]
-RewriteRule ^(.*) /src/$1 [L]
+#RewriteRule ^(.*) /src/$1 [L]
+RewriteRule ^(.*) /~SPAM/app/$1 [L]
