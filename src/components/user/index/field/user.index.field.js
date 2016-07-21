@@ -232,19 +232,23 @@
      * Student in field grade edited. Redo some calculations and save the
      * changes to the server.
      */
-    ctrl.gradeChange = function(newGrade) {
+    ctrl.gradeChange = function(newGrade, examine) {
+      newGrade = newGrade || null;
+
       if (
         // Grade can't change if no module examination is possible.
         (field.field_examination_possible) &&
         // Field was not passed so a module examination is not possible.
-        (100 === ctrl.credits.passed.percentage) &&
-        (newGrade !== (field.grade||null))
+        (100 === ctrl.credits.passed.percentage)
       ) {
-        field.grade = newGrade || null;
-        field.put();
+        hasManualGrade = !_.isUndefined(examine) ? examine : hasManualGrade;
+        if (newGrade !== (field.grade||null)) {
+          hasManualGrade = newGrade !== null;
+          field.grade = newGrade;
+          field.put();
+        }
       }
 
-      hasManualGrade = true;
       doAnalysis();
     };
 
