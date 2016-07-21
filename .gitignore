@@ -1,7 +1,6 @@
-/api/ikw.php
-/api/lib/
-/api/install/
 /api/inc/config_*.php
+/api/lib/
+/api/ikw.php
 /app/
 /assets/
 /node_modules/
