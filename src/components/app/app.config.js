@@ -18,11 +18,17 @@
 
   /* @ngInject */
   function appConfig(
+    $compileProvider,
     $httpProvider,
     RestangularProvider,
+    DEBUG,
     APIURL
   ) {
-    // intercept http requests for general error handling and loading animation
+    // Enable/disable debugging.
+    // To enable debugging on the fly use `angular.reloadWithDebugInfo()`.
+    $compileProvider.debugInfoEnabled(DEBUG);
+
+    // Intercept http requests for general error handling and loading animation.
     $httpProvider.interceptors.push('httpIntercept');
 
     // Set restangular api base url.
