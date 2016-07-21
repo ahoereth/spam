@@ -14,6 +14,7 @@
       'tickable',
       'iifFilter',
       'spam.user.services.user',
+      'spam.user.services.utils',
       'spam.user.index.grade-input'
     ])
     .directive('field', userIndexFieldDirective)
@@ -41,7 +42,7 @@
 
 
   /* @ngInject */
-  function userIndexFieldController($scope, User, _) {
+  function userIndexFieldController($scope, _, User, UserUtils) {
     var ctrl = _.assign(this, _.pick(this.raw,
       'field', 'field_id', 'field_examination_possible',
       'regulation_id', 'minimized', 'grade'
@@ -101,8 +102,8 @@
 
       var credits = overall ? graded.map('credits') : graded.map('counts');
       var products = graded.map('grade').mergeWith(credits.value(), _.multiply);
-
-      return _.formatGrade(products.sum().value() / credits.sum().value());
+      var grade = products.sum().value() / credits.sum().value();
+      return UserUtils.formatGrade(grade);
     }
 
 
@@ -182,7 +183,7 @@
       // called after the calculations already ran beforehand.
       if (!foreignCredits) {
         // Grade can be the average or manually defined.
-        ctrl.grade = hasManualGrade ? _.formatGrade(field.grade)
+        ctrl.grade = hasManualGrade ? UserUtils.formatGrade(field.grade)
                                     : calculateGrade();
 
         User.updateFieldData(field.field_id, {

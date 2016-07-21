@@ -7,7 +7,8 @@
    */
   angular
     .module('spam.user.index.grade-input', [
-      'blurOnEnter'
+      'blurOnEnter',
+      'spam.user.services.utils'
     ])
     .controller('GradeInputController', gradeInputController)
     .component('gradeInput', {
@@ -24,7 +25,7 @@
 
 
   /* @ngInject */
-  function gradeInputController($scope, _) {
+  function gradeInputController($scope, _, UserUtils) {
     var ctrl = this;
 
     ctrl.changeGrade = function changeGrade(newGrade, oldGrade) {
@@ -35,7 +36,7 @@
         return false;
       }
 
-      ctrl.grade = _.formatGrade(newGrade);
+      ctrl.grade = UserUtils.formatGrade(newGrade);
       if (
         (ctrl.editable && (newGrade || (!newGrade && oldGrade))) || // Special case for fields.
         (!ctrl.editable && !newGrade && oldGrade) // Special case for courses.
@@ -45,7 +46,7 @@
     };
 
     $scope.$watch('$ctrl.grade', ctrl.changeGrade);
-    ctrl.grade = _.formatGrade(ctrl.grade);
+    ctrl.grade = UserUtils.formatGrade(ctrl.grade);
   }
 
 }());

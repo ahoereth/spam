@@ -2,13 +2,14 @@
   'use strict';
 
   /**
-   * MODULE: spam.services.user
+   * MODULE: spam.user.services.user
    * SERVICE: User
    */
   angular
     .module('spam.user.services.user', [
       'restangular',
-      'lodash'
+      'lodash',
+      'spam.user.services.utils'
     ])
     .factory('User', userFactory);
 
@@ -24,7 +25,8 @@
     $log,
     $q,
     Restangular,
-    _
+    _,
+    UserUtils
   ) {
     var webstorage = angular.isDefined(Storage) ? true : false;
 
@@ -48,8 +50,8 @@
 
 
     function calculateGrade(credits, grades) {
-      var products = grades.mergeWith(credits.value(), _.multiply);
-      return _.formatGrade(products.sum().value() / credits.sum().value());
+      var acc = grades.mergeWith(credits.value(), _.multiply).sum();
+      return UserUtils.formatGrade(acc.value() / credits.sum().value());
     }
 
 
@@ -78,7 +80,7 @@
       // TODO: The weight relation should be information taken from the api.
       var thesisGrade = parseFloat(self.details.thesis_grade);
       if (thesisGrade >= 1 && thesisGrade <= 4) {
-        facts.grades.bachelor = _.formatGrade(
+        facts.grades.bachelor = UserUtils.formatGrade(
           (parseFloat(facts.grades.bachelor) * 2 + thesisGrade) / 3
         );
       }
@@ -183,7 +185,7 @@
     self.updateThesis = function(title, grade) {
       var details = self.details;
       details.thesis_title = title;
-      details.thesis_grade = _.formatGrade(grade);
+      details.thesis_grade = UserUtils.formatGrade(grade);
       var thesis = _.pick(details, 'thesis_title', 'thesis_grade');
       details.one('regulations', details.regulation_id).customPUT(thesis);
       factsCalculation();
@@ -348,7 +350,7 @@
           self.fields  = data.fields;
         }
 
-        data.thesis_grade = _.formatGrade(data.thesis_grade);
+        data.thesis_grade = UserUtils.formatGrade(data.thesis_grade);
         self.details = _.omit(data, ['fields', 'courses']);
       }
 

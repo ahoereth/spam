@@ -13,6 +13,7 @@
       'tickable',
       '720kb.tooltips',
       'spam.user.services.user',
+      'spam.user.services.utils',
       'spam.user.index.field',
       'spam.user.index.grade-input'
     ])
@@ -22,7 +23,7 @@
 
 
   /* @ngInject */
-  function courseDirective(User, _) {
+  function courseDirective(_, User, UserUtils) {
     return {
       require: '^^field',
       restrict: 'E',
@@ -35,7 +36,7 @@
         var course = scope.course;
 
         scope.grade = function(newGrade) {
-          course.grade = _.formatGrade(newGrade);
+          course.grade = UserUtils.formatGrade(newGrade);
 
           course.passed = (
             (course.grade >= 1 && course.grade <= 4) ||
@@ -71,9 +72,8 @@
           fieldCtrl.courseChange(course, true);
         };
 
-        // course.grade = course.oldGrade = _.formatGrade(course.grade);
         course.term_abbr = course.term + course.year;
-        course.oldGrade = _.formatGrade(course.grade);
+        course.oldGrade = UserUtils.formatGrade(course.grade);
         scope.grade(course.grade);
       }
     };
