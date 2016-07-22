@@ -187,7 +187,7 @@
                                     : calculateGrade();
 
         User.updateFieldData(field.field_id, {
-          grade: ctrl.grade,
+          grade: ctrl.grade || calculateGrade(),
           overallGrade: calculateGrade(true),
           passedCredits: credits.passed.sum,
           overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
