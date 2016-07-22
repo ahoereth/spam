@@ -1,7 +1,7 @@
 <?php
 // Configuration
-define('ENV', 'ikw');
-require_once 'inc/config_' . ENV . '.php';
+define('ENV', 'prod');
+require_once sprintf('config/%s.php', ENV);
 
 // Loads composer dependencies. See /composer.json for details.
 require_once 'lib/autoload.php';

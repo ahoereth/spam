@@ -1,7 +1,7 @@
 <?php
 // Configuration
-define('ENV', 'local')
-require_once '../inc/config_' . ENV . '.php';
+define('ENV', '');
+require_once sprintf('../config/%s.php', ENV);
 
 // Initialize database connection.
 $server = DB_TYPE . ':host=' . DB_HOST . ';dbname=' . DB_NAME; // ; port=####

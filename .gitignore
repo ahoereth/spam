@@ -1,4 +1,5 @@
-/api/inc/config_*.php
+/api/config/
+!/api/config/sample.php
 /api/lib/
 /api/ikw.php
 /app/
