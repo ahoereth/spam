@@ -1,7 +1,6 @@
 /api/config/
 !/api/config/sample.php
 /api/lib/
-/api/ikw.php
 /app/
 /assets/
 /node_modules/
