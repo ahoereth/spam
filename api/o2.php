@@ -232,10 +232,10 @@ function normtitle( $str ) {
   //KOGW-MWPM-CL
   $pattern = array(
     "\(auch ",
-    "\((?:?KP?O?W?G?W?-)?(MPM|MWPM|PM|WPM|WM|PWB|PBW)-?(LOG|MAT|SD|NW|CL|KI|PHIL|INF|NIR|KNP|AWA|KNP|IDK|NI|SP,? ?)?\)?",
+    "(\(?(:?KP?O?W?G?W?-)?(MPM|MWPM|PM|WPM|WM|PWB|PBW)-?(LOG|MAT|SD|NW|CL|KI|PHIL|INF|NIR|KNP|AWA|KNP|IDK|NI|SP)?,? ?\)?)*",
     "\((Lecture|Vorlesung) (and|\+|&) (Practice|Tutorial|.bung)\)",
     "\(V\+.\)",
-    "\(Weitere Lehrende: .*\)",
+    "\(Weiterer? (Lehrender?|Mitwirkender?): [^\)]*\)", // TODO: Move those to teachers!
   );
   $str = preg_replace('/' . implode($pattern, '|') . '/i', '', $str);
 
