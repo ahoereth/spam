@@ -1,6 +1,4 @@
-<h1>
-  IKW &rarr; SPAM migration
-</h1>
+<h1>IKW o2 &rarr; SPAM course migration</h1>
 
 
 <form class="form-inline" ng-submit="migrate.fetch()" ng-if="!migrate.selected">
@@ -48,11 +46,11 @@
   <p class="lead">{{migrate.courses.length}} courses grabbed</p>
 
   <p>
-    Showing
+    Showing&nbsp;
     <inline-selectable-group ng-model="migrate.sieve.course_id">
       <inline-selectable value="">all</inline-selectable>&nbsp;
       <inline-selectable value="'!'">new</inline-selectable>&nbsp;
-      <inline-selectable value="'!!'">existing</inline-selectable>
+      <inline-selectable value="'!!'">existing</inline-selectable>&nbsp;
     </inline-selectable-group>
     courses.
   </p>
@@ -70,11 +68,11 @@
   <div class="col-sm-1 col-xs-2">Results</div>
 </div>
 
-<!-- ngRepeat for the course list -->
+<!-- course list -->
 <courserow
   ng-repeat="course in migrate.courses | filter:migrate.sieve track by course.o3_id"
   ng-if="!course.accepted"
   course="course"
   action="migrate.acceptCourse(course)"
   expanded
-></courserow><!-- end of ngRepeat -->
+></courserow>
