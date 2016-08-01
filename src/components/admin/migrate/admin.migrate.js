@@ -50,17 +50,25 @@
   ) {
     var ctrl = this;
     var params = $routeParams;
+    var d = new Date(), m = d.getMonth(), y = d.getFullYear();
 
-    ctrl = _.extend(ctrl, {
-      year   : parseInt(params.year, 10) || null,
-      term   : params.term || null,
+    _.assign(ctrl, {
+      year   : parseInt(params.year, 10) || (m < 5) ? y : y + 1,
+      term   : params.term || (m > 11 || m < 5) ? 'S' : 'W',
       courses: [],
       sieve  : {}
     });
 
+
+    /**
+     * Check the SPAM API for whether courses retrieved from the custom IKW o2
+     * API already exist.
+     *
+     * @param {array} courses Array of raw courses from the foreign API.
+     */
     function fetched(courses) {
       var finders = _.map(courses, function(course, key) {
-        return _.extend(_.pick(course, [
+        return _.assignIn(_.pick(course, [
           'year',
           'term',
           'code',
@@ -68,13 +76,13 @@
           'ects',
           'hours',
           'o3_id'
-        ]), {key: key});
+        ]), { key: key });
       });
 
       Restangular.one('courses', 'find').customPOST(finders).then(function(ids) {
         courses = _.map(courses, function(course, key) {
-          if (! ids.hasOwnProperty(key)) { return course; }
-          return _.extend(course, {course_id: ids[key] });
+          if (!ids.hasOwnProperty(key)) { return course; }
+          return _.assignIn(course, { course_id: ids[key] });
         });
 
         ctrl.fetching = false;
@@ -84,6 +92,10 @@
       });
     }
 
+
+    /**
+     * Fetch courses from the custom IKW o2 API.
+     */
     ctrl.fetch = _.debounce(function() {
       ctrl.selected = true;
       ctrl.fetching = true;
@@ -99,15 +111,16 @@
       }).then(fetched);
     }, 500);
 
+
+    /**
+     * Accepts a o2 course and posts it to the SPAM API.
+     *
+     * @param  {course} course Course to accept.
+     */
     ctrl.acceptCourse = function(course) {
       course.accepted = true;
       course.post();
     };
-
-    // init
-    if (ctrl.year && ctrl.term) {
-      ctrl.fetch();
-    }
   }
 
 })();
