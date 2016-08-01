@@ -43,7 +43,7 @@ function migrator($year = null, $term = null) {
     '%s:host=%s;port=%s;dbname=%s',
     DB_TYPE, DB_HOST, DB_PORT, DB_NAME
   );
-  $db = new PDO($server, DB:USER, DB_PASSWORD);
+  $db = new PDO($server, DB_USER, DB_PASSWORD);
   $prefix = '';
 
   if (DEBUG) {
@@ -267,7 +267,7 @@ function normcode($code) {
 
 
 function normteacher($str) {
-  $patterns = array(
+  $pattern = array(
     'apl. Prof. Dr.',
     ',?M\. ?Sc\.',
     'N\.'
