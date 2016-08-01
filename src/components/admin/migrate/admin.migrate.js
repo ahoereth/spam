@@ -45,10 +45,10 @@
     $routeParams,
     Restangular,
     _,
-    APIURL
+    APIURL,
+    O2URL
   ) {
     var ctrl = this;
-    var ikwProvider = APIURL + '/ikw.php';
     var params = $routeParams;
 
     ctrl = _.extend(ctrl, {
@@ -93,7 +93,7 @@
       params.term = ctrl.term;
       $location.search(params);
 
-      Restangular.allUrl('ikw', ikwProvider).getList({
+      Restangular.allUrl('o2', O2URL).getList({
         year: ctrl.year,
         term: ctrl.term
       }).then(fetched);
