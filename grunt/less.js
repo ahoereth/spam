@@ -18,9 +18,10 @@ module.exports = function(grunt) {
   });
 
   var glob = [
-    'src/**/*.less',
+    'src/components/**/*.less',
     'src/components/**/*.css',
-    '!src/**/*.ignore.less',
+    '!src/components/compiled.css',
+    '!src/**/*.ignore.*',
     '!src/**/_*.less',
     '!src/lib/**',
   ].concat(dependencies.css);
