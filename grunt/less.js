@@ -10,7 +10,8 @@ module.exports = function(grunt) {
   var less = grunt.config('less') ||  {};
 
   var plugins = [
-    new (require('less-plugin-autoprefix'))({browsers: ['last 2 versions']})
+    new (require('less-plugin-autoprefix'))({browsers: ['last 2 versions']}),
+    new (require('less-plugin-clean-css'))({})
   ];
 
   var dependencies = require('wiredep')({
@@ -39,8 +40,6 @@ module.exports = function(grunt) {
 
   less.build = { // minified for production
     options: {
-      cleancss: false,
-      compress: false,
       plugins: plugins
     },
     files: {

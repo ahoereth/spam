@@ -33,6 +33,7 @@
     "grunt-wiredep": "3.0.x",
     "http-rewrite-middleware": "^0.1.6",
     "less-plugin-autoprefix": "1.5.x",
+    "less-plugin-clean-css": "^1.5.1",
     "serve-static": "^1.11.1",
     "wiredep": "4.0.x"
   },
