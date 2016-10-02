@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'restangular';
 import { isEmpty, isUndefined, isNumber } from 'lodash-es';
 import base64 from 'angular-utf8-base64';
 
@@ -11,7 +10,7 @@ import userService from './user';
  * SERVICE: Auth
  */
 export default angular
-  .module('spam.user.services.auth', ['restangular', base64, userService])
+  .module('spam.user.services.auth', [restangular, userService])
   .factory('Auth', authFactory)
   .name;
 
@@ -21,9 +20,9 @@ export default angular
 /* @ngInject */
 function authFactory(
   $rootScope,
+  $window,
   $http,
   $q,
-  base64,
   Restangular,
   User
 ) {
@@ -56,7 +55,7 @@ function authFactory(
 
   return {
     init: function(username, password, useLocalStorage) {
-      var authdata = base64.encode(username + ':' + password);
+      var authdata = $window.btoa(username + ':' + password);
       User.setLogininfo(username, authdata, useLocalStorage);
       return login();
     },

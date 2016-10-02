@@ -7,7 +7,7 @@ import angular from 'angular';
  * DIRECTIVE: textDownload
  */
 export default angular
-  .module('textDownload', ['ab-base64'])
+  .module('textDownload', [])
   .config(textDownloadConfig)
   .filter('textDownload', textDownloadFilter)
   .directive('textDownload', textDownloadDirective)
@@ -31,10 +31,10 @@ function textDownloadConfig($compileProvider) {
 
 
 /* @ngInject */
-function textDownloadFilter(base64) {
+function textDownloadFilter($window) {
   return function(text) {
     return 'data:application/octet-stream;charset=utf-16le;base64,' +
-           base64.encode(text);
+            $window.btoa(text);
   };
 }
 
@@ -42,7 +42,7 @@ function textDownloadFilter(base64) {
 
 
 /* @ngInject */
-function textDownloadDirective(base64) {
+function textDownloadDirective($window) {
   return {
     restrict: 'A',
     scope: {
@@ -52,7 +52,7 @@ function textDownloadDirective(base64) {
       scope.$watch('textDownload', function(text) {
         elem.attr('href',
           'data:application/octet-stream;charset=utf-16le;base64,' +
-          base64.encode(text)
+          $window.btoa(text)
         );
       });
     }
