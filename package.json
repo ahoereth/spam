@@ -9,15 +9,11 @@
   },
   "bugs": "http://github.com/ahoereth/spam/issues",
   "scripts": {
-    "grunt": "grunt",
-    "start": "grunt start",
-    "watch": "grunt start:php",
-    "build": "grunt build",
-    "postinstall": "bower install"
+    "build": "rollup -c --environment NODE_ENV:production",
+    "watch": "rollup -c -w"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
-    "bower": "1.7.x",
     "grunt": "1.0.x",
     "grunt-angular-templates": "1.1.x",
     "grunt-bump": "0.8.x",
@@ -34,8 +30,24 @@
     "http-rewrite-middleware": "^0.1.6",
     "less-plugin-autoprefix": "1.5.x",
     "less-plugin-clean-css": "^1.5.1",
+    "rollup": "^0.36.1",
+    "rollup-plugin-commonjs": "^5.0.4",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-watch": "^2.5.0",
     "serve-static": "^1.11.1",
     "wiredep": "4.0.x"
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "angular-sanitize": "^1.5.8",
+    "angular-tooltips": "^1.1.7",
+    "angular-utf8-base64": "0.0.5",
+    "bootstrap": "^3.3.7",
+    "lodash": "^4.15.0",
+    "lodash-es": "^4.16.2",
+    "open-sans-fontface": "^1.4.0",
+    "restangular": "^1.5.2"
+  }
 }
