@@ -1,8 +1,8 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
-import 'restangular';
 
 import urlencode from '../../lib/urlencode';
+import restangular from '../../lib/restangular';
 import routes from '../../app/services/routes';
 import userService from '../../user/services/user';
 import controller from './controller';
@@ -16,7 +16,7 @@ import controller from './controller';
 export default angular
   .module('spam.courses.single', [
     ngRoute, // $routeParams
-    'restangular',
+    restangular,
     urlencode,
     routes,
     userService

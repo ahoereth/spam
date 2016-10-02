@@ -1,5 +1,4 @@
 import angular from 'angular';
-import 'restangular';
 import { assign, assignIn, map, pick, debounce } from 'lodash-es';
 
 import { APIURL, O2URL } from '../../app/constants';
@@ -7,6 +6,7 @@ import routes from '../../app/services/routes';
 import courseRow from '../../courses/row';
 import instafocus from '../../lib/instafocus';
 import inlineSelectables from '../../lib/inline-selectables';
+import restangular from '../../lib/restangular';
 import buttons from '../../lib/buttons';
 import year from '../../lib/year';
 
@@ -17,7 +17,7 @@ import year from '../../lib/year';
  */
 export default angular
   .module('spam.admin.migrate', [
-    'restangular',
+    restangular,
     instafocus,
     inlineSelectables,
     buttons,

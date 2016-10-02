@@ -1,14 +1,14 @@
 import angular from 'angular';
-import 'restangular';
 
 import { DEBUG, APIURL } from './constants';
+import restangular from '../lib/restangular';
 
 
 /**
  * MODULE: spam.app.config
  */
 export default angular
-  .module('spam.app.config', ['restangular'])
+  .module('spam.app.config', [restangular])
   .config(appConfig)
   .run(appConfigRun)
   .name;

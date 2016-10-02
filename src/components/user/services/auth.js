@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { isEmpty, isUndefined, isNumber } from 'lodash-es';
-import base64 from 'angular-utf8-base64';
 
+import restangular from '../../lib/restangular';
 import userService from './user';
 
 

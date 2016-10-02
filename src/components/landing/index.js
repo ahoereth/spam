@@ -1,7 +1,7 @@
 import angular from 'angular';
-import 'restangular';
 
 import iif from '../lib/iif';
+import restangular from '../lib/restangular';
 import routes from '../app/services/routes';
 import userService from '../user/services/user';
 import loginform from '../user/login/form';
@@ -13,7 +13,7 @@ import loginform from '../user/login/form';
  */
 export default angular
   .module('spam.landing', [
-    'restangular',
+    restangular,
     iif,
     routes,
     userService,

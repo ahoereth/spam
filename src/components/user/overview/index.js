@@ -1,9 +1,9 @@
 import angular from 'angular';
-import 'restangular';
 import { forEach, get } from 'lodash-es';
 
 import iif from '../../lib/iif';
 import tooltips from '../../lib/tooltips';
+import restangular from '../../lib/restangular';
 import routes from '../../app/services/routes';
 import userService from '../services/user';
 import columns from './columns';
@@ -21,7 +21,7 @@ import matriculationSetter from '../settings/matriculation-setter';
  */
 export default angular
   .module('spam.user.overview', [
-    'restangular',
+    restangular,
     tooltips,
     iif,
     routes,

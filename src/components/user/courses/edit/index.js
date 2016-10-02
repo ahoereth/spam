@@ -1,9 +1,9 @@
 import angular from 'angular';
-import 'restangular';
 import { defaults, isEmpty } from 'lodash-es';
 
 import instafocus from '../../../lib/instafocus';
 import iif from '../../../lib/iif';
+import restangular from '../../../lib/restangular';
 import userService from '../../services/user';
 import routes from '../../../app/services/routes';
 
@@ -17,7 +17,7 @@ import routes from '../../../app/services/routes';
  */
 export default angular
   .module('spam.user.course.edit', [
-    'restangular',
+    restangular,
     instafocus,
     iif,
     routes,

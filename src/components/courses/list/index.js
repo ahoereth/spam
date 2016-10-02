@@ -1,6 +1,5 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
-import 'restangular';
 import {
   extend, isUndefined, compact, trim, isEmpty, get, find, without, pickBy
 } from 'lodash-es';
@@ -10,6 +9,7 @@ import scroll from '../../lib/scroll';
 import infiniteScroll from '../../lib/infinite-scroll';
 import buttons from '../../lib/buttons';
 import tooltips from '../../lib/tooltips';
+import restangular from '../../lib/restangular';
 import routes from '../../app/services/routes';
 import coursesService from '../services/courses';
 import courseFilter from '../filters/course';
@@ -27,7 +27,7 @@ import row from '../row';
 export default angular
   .module('spam.courses.list', [
     ngRoute, // $routeParams
-    'restangular',
+    restangular,
     tooltips,
     iif,
     scroll,

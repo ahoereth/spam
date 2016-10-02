@@ -1,10 +1,10 @@
 import angular from 'angular';
-import 'restangular';
 import {
   forEach, multiply, debounce, chain, attempt, pick, get, isPlainObject,
   find, isUndefined, isNumber, fromPairs, keys, map, omit, findIndex
 } from 'lodash-es';
 
+import restangular from '../../lib/restangular';
 import utils from './utils';
 
 
@@ -13,7 +13,7 @@ import utils from './utils';
  * SERVICE: User
  */
 export default angular
-  .module('spam.user.services.user', ['restangular', utils])
+  .module('spam.user.services.user', [restangular, utils])
   .factory('User', userFactory)
   .name;
 

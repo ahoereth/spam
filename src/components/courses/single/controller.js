@@ -1,5 +1,7 @@
 import { forEach, isUndefined, get } from 'lodash-es';
-import 'restangular';
+
+import restangular from '../../lib/restangular';
+
 
 /* @ngInject */
 export default ($scope, $routeParams, Restangular, User) => {

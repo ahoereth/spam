@@ -1,8 +1,9 @@
 import angular from 'angular';
-import 'restangular';
 import {
   isUndefined, difference, range, isEmpty, union, find
 } from 'lodash-es';
+
+import restangular from '../../lib/restangular';
 
 
 /**
@@ -10,7 +11,7 @@ import {
  * SERVICE: Courses
  */
 export default angular
-  .module('spam.courses.services.courses', ['restangular'])
+  .module('spam.courses.services.courses', [restangular])
   .factory('Courses', CoursesFactory)
   .name;
 

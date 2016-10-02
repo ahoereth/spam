@@ -1,8 +1,8 @@
 import angular from 'angular';
-import 'restangular';
 import _ from 'lodash'; // TODO: refactor
 
 import routes from '../app/services/routes';
+import restangular from '../lib/restangular';
 import course from '../courses/single';
 
 // import 'guide.less';
@@ -14,7 +14,7 @@ import course from '../courses/single';
  * ROUTE: /guide
  */
 export default angular
-  .module('spam.guide', ['restangular', routes, course])
+  .module('spam.guide', [restangular, routes, course])
   .config(guideRouting)
   .controller('GuideController', guideController)
   .name;

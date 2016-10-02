@@ -1,9 +1,9 @@
 import angular from 'angular';
-import 'restangular';
 
 import blurOnEnter from '../../lib/blur-on-enter';
 import textDownload from '../../lib/text-download';
 import tooltips from '../../lib/tooltips';
+import restangular from '../../lib/restangular';
 import routes from '../../app/services/routes';
 import userService from '../services/user';
 import matriculationSetter from './matriculation-setter';
@@ -16,7 +16,7 @@ import matriculationSetter from './matriculation-setter';
  */
 export default angular
   .module('spam.user.settings', [
-    'restangular',
+    restangular,
     tooltips,
     blurOnEnter,
     textDownload,
