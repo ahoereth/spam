@@ -37,7 +37,6 @@ function notificationsDirective() {
 
 
 
-/* @ngInject */
 function notificationsController($scope, httpIntercept) {
   var ctrl = this;
 
@@ -103,3 +102,5 @@ function notificationsController($scope, httpIntercept) {
     ctrl.http = angular.copy(defaultState);
   };
 }
+
+notificationsController.$inject = ['$scope', 'httpIntercept'];

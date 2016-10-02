@@ -1,7 +1,9 @@
 import angular from 'angular';
+import { initial } from 'lodash-es';
 
 import { DEBUG, APIURL } from './constants';
 import restangular from '../lib/restangular';
+import './services/http-intercept';
 
 
 /**
@@ -56,7 +58,7 @@ function appConfigRun(Restangular) {
     ) {
       return elem.student_in_course_id;
     } else {
-      var e = elem[elem.route.slice(0, -1).join('') + '_id'];
+      var e = elem[initial(elem.route).join('') + '_id'];
       return e;
     }
   };

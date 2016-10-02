@@ -8,8 +8,5 @@ import routes from './routes';
  * MODULE: spam.app.services
  */
 export default angular
-  .module('spam.app.services', [
-    'spam.app.services.routes',
-    'spam.app.services.http-intercept'
-  ])
+  .module('spam.app.services', [routes, httpIntercept])
   .name;
