@@ -1,5 +1,5 @@
 import angular from 'angular';
-import _ from 'lodash'; // TODO: refactor
+import { forEach, groupBy } from 'lodash-es';
 
 import routes from '../app/services/routes';
 import restangular from '../lib/restangular';
@@ -40,12 +40,9 @@ function guideController(Restangular) {
   var ctrl = this;
   ctrl.courses = {};
   Restangular.one('guides', 1).getList('courses').then(function(guide) {
-    _(guide)
-      .groupBy(function(course) {
-        return course.year + course.term;
-      })
-      .forEach(function(course, k) {
-        ctrl.courses[k] = _.groupBy(course, 'singleField');
-      });
+    forEach(
+      groupBy(guide, function(course) { return course.year + course.term; }),
+      function(course, k) { ctrl.courses[k] = groupBy(course, 'singleField'); }
+    );
   });
 }

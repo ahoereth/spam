@@ -1,5 +1,8 @@
 import angular from 'angular';
-import _ from 'lodash'; // TODO: refactor
+import {
+  omit, sum, forIn, orderBy, pickBy, isPlainObject, partialRight, pick, assign,
+  isNull, isFinite, map, mergeWith, multiply, clone, forEach, isUndefined
+} from 'lodash-es';
 
 import progress from '../../../lib/progress';
 import dropdown from '../../../lib/dropdown';
@@ -59,7 +62,7 @@ function userIndexFieldDirective() {
 
 /* @ngInject */
 function userIndexFieldController($scope, User, UserUtils) {
-  var ctrl = _.assign(this, _.pick(this.raw,
+  var ctrl = assign(this, pick(this.raw,
     'field', 'field_id', 'field_examination_possible',
     'regulation_id', 'minimized', 'grade'
   ));
@@ -83,9 +86,9 @@ function userIndexFieldController($scope, User, UserUtils) {
    * @param  {int}
    * @return {int}
    */
-  var percentage = _.partialRight(_.percent,
-                                  field.field_pm+field.field_wpm, true);
-
+  var percentage = partialRight(function(a, b) {
+    return (a / b) > 1 ? 100 : (a / b * 100);
+  }, field.field_pm+field.field_wpm);
 
   /**
    * Handler for credits which flow from other fields to this field. Only
@@ -93,7 +96,7 @@ function userIndexFieldController($scope, User, UserUtils) {
    */
   function handleOverflowingCredits() {
     // Omit the open studies field and sum up the credits.
-    var foreignPassedCredits = _(User.getOverflowingCredits()).omit(1).sum();
+    var foreignPassedCredits = sum(omit(User.getOverflowingCredits(), 1));
     var examinationCredits = User.facts.examinationCredits;
 
     // Run the analysis again with those foreign credits.
@@ -112,13 +115,13 @@ function userIndexFieldController($scope, User, UserUtils) {
   function calculateGrade(overall) {
     overall = overall || false;
 
-    var graded = _.chain(courses).pickBy(function(course) {
-      return ! _.isNull(course) && _.isFinite(course.grade);
+    var graded = pickBy(courses, function(course) {
+      return !isNull(course) && isFinite(course.grade);
     });
 
-    var credits = overall ? graded.map('credits') : graded.map('counts');
-    var products = graded.map('grade').mergeWith(credits.value(), _.multiply);
-    var grade = products.sum().value() / credits.sum().value();
+    var credits = overall ? map(graded, 'credits') : map(graded, 'counts');
+    var products = mergeWith(map(graded, 'grade'), credits, multiply);
+    var grade = sum(products) / sum(credits);
     return UserUtils.formatGrade(grade);
   }
 
@@ -136,8 +139,8 @@ function userIndexFieldController($scope, User, UserUtils) {
     }
 
     var credits = ctrl.credits = {
-      passed: _.clone(defaultCreditSet),
-      enrolled: _.clone(defaultCreditSet),
+      passed: clone(defaultCreditSet),
+      enrolled: clone(defaultCreditSet),
       full: field.field_pm + field.field_wpm
     };
 
@@ -147,9 +150,12 @@ function userIndexFieldController($scope, User, UserUtils) {
     };
 
     // Aggregate the credits from the individual courses.
-    _(courses).pickBy(_.isObject)
-      .orderBy(['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc'])
-      .forIn(function(course) {
+    forIn(
+      orderBy(
+        pickBy(courses, isPlainObject),
+        ['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc']
+      ),
+      function(course) {
         var group = course.passed ? 'passed' : 'enrolled';
         var category = course.compulsory ? 'compulsory' : 'optional';
 
@@ -183,7 +189,7 @@ function userIndexFieldController($scope, User, UserUtils) {
     }
 
     // Calculated the different progress values.
-    _.forEach(['passed', 'enrolled', 'available'], function(group) {
+    forEach(['passed', 'enrolled', 'available'], function(group) {
       credits[group].sum = credits[group].compulsory + credits[group].optional;
       credits[group].percentage = percentage(credits[group].sum);
       credits[group].percentage_compulsory = percentage(credits[group].compulsory);
@@ -258,7 +264,7 @@ function userIndexFieldController($scope, User, UserUtils) {
       // Field was not passed so a module examination is not possible.
       (100 === ctrl.credits.passed.percentage)
     ) {
-      hasManualGrade = !_.isUndefined(examine) ? examine : hasManualGrade;
+      hasManualGrade = !isUndefined(examine) ? examine : hasManualGrade;
       if (newGrade !== (field.grade||null)) {
         hasManualGrade = newGrade !== null;
         field.grade = newGrade;

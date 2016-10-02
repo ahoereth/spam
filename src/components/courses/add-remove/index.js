@@ -1,7 +1,13 @@
 import angular from 'angular';
-import _ from 'lodash'; // TODO: refactor
+import { find, flow, filter, get, map, values, flatten, includes } from 'lodash-es';
 
 import userService from '../../user/services/user';
+
+
+const byId = function(id) {
+  return flow(partialRight(map, values), flatten, partialRight(includes(id)));
+}
+
 
 
 /**
@@ -69,25 +75,19 @@ function addRemoveCourseDirective(User) {
 
       // The fields array might contain all fields from all regulations -
       // we only care about the regulations relevant for the current user.
-      scope.fields = _.filter(course.fields, function(field) {
-        return _(field.regulations)
-          .map(_.values).flatten()
-          .includes(scope.user.regulation_id);
-      });
+      scope.fields = filter(course.fields,
+        flow(partialRight(get, 'regulations'), byId(scope.user.regulation_id))
+      );
 
       // If there is one or no regulation there is a way to enroll
       // without opening a dropdown.
-      scope.singleField = _.get(scope, 'fields[0].field_id', null);
+      scope.singleField = get(scope, 'fields[0].field_id');
 
       // Find course in current user's transcript to set enrollment state
       // correctly and in order to unenroll from it if required.
       if (User.courses) {
-        rel = _.find(User.courses, {
-          course_id: course.course_id
-        });
-
-        // Check if user is enrolled in this course.
-        scope.enrolled = !! rel && !! rel.student_in_course_id;
+        rel = find(User.courses, { course_id: course.course_id });
+        scope.enrolled = !!rel && !!rel.student_in_course_id;
       }
     }
   };

@@ -15,11 +15,7 @@ export default angular
 
 
 /* @ngInject */
-function scrollFactory(
-  $timeout,
-  $window,
-  _
-) {
+function scrollFactory($timeout, $window) {
   var _listening = false;
   var _listeners = [];
 

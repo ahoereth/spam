@@ -1,8 +1,7 @@
 import angular from 'angular';
-import _ from 'lodash'; // TODO: refactor
 import {
   range, clone, isArray, sum, map, trimEnd, repeat, parseInt,
-  indexOf, max, partial, flow, add, min
+  indexOf, max, partial, flow, add, min, partialRight, groupBy, sortBy
 } from 'lodash-es';
 
 import sortable from '../../../lib/sortable';
@@ -64,14 +63,14 @@ function userIndexColumnsFactory(
     }
 
     // Create grouped object.
-    var obj = _(fields)
-      .map(function(field) { // Add 'pos' attribute.
+    var obj = flow(
+      partialRight(map, function(field) { // Add 'pos' attribute.
         field.pos = indexOf(order, field.field_id);
         field.pos = -1 !== field.pos ? field.pos : 0;
         return field;
-      })
-      .sortBy('pos') // Sort by position initially.
-      .groupBy(function(field) { // Group intor columns.
+      }),
+      partialRight(sortBy, 'pos'), // Sort by position initially.
+      partialRight(groupBy, function(field) { // Group intor columns.
         var col = field.pos % columncount;
         while (0 >= division[col]) {
           col = (col+1) % columncount;
@@ -80,7 +79,7 @@ function userIndexColumnsFactory(
         division[col] -= 1;
         return col;
       })
-      .value();
+    )(fields);
 
     // Create column array from grouped object.
     columns = map(division, function(n, i) {
