@@ -26,7 +26,8 @@ export default angular
     field,
     gradeInput
   ])
-  .directive('course', courseDirective);
+  .directive('course', courseDirective)
+  .name;
 
 
 

@@ -7,7 +7,8 @@ import angular from 'angular';
  */
 export default angular
   .module('urlencodeFilter', [])
-  .filter('urlencode', urlencodeFilter);
+  .filter('urlencode', urlencodeFilter)
+  .name;
 
 
 
