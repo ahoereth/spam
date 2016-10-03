@@ -3,26 +3,12 @@ import ngRoute from 'angular-route';
 
 import routes from '../app/services/routes';
 import fragment from './help-fragment';
+import HelpController from './HelpController';
 
 // import './help.less';
 
 
-/**
- * MODULE: spam.help
- * CONTROLLER: HelpController
- * ROUTE: /help
- */
-export default angular
-  .module('spam.help', [ngRoute, routes, fragment])
-  .config(helpRouting)
-  .controller('HelpController', helpController)
-  .name;
-
-
-
-
-/* @ngInject */
-function helpRouting(RoutesProvider) {
+const helpRouting = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/help/:subject*?', {
     controller: 'HelpController',
     templateUrl: 'components/help/help.html',
@@ -32,21 +18,16 @@ function helpRouting(RoutesProvider) {
   RoutesProvider.add('/help', {
     redirectTo: '/help/remember'
   });
-}
+}];
 
 
-
-
-/* @ngInject */
-function helpController(
-  $scope,
-  $location,
-  $routeParams
-) {
-  $scope.opened =  $routeParams.subject || '';
-
-  $scope.open = function(subject) {
-    subject = ($scope.opened !== subject) ? subject : '';
-    $location.path('/help/' + subject);
-  };
-}
+/**
+ * MODULE: spam.help
+ * CONTROLLER: HelpController
+ * ROUTE: /help
+ */
+export default angular
+  .module('spam.help', [ngRoute, routes, fragment])
+  .controller('HelpController', HelpController)
+  .config(helpRouting)
+  .name;
