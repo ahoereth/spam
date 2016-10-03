@@ -5,29 +5,9 @@ import restangular from '../lib/restangular';
 import routes from '../app/services/routes';
 import userService from '../user/services/user';
 import loginform from '../user/login/form';
+import LandingController from './LandingController';
 
-
-/**
- * MODULE: spam.landing
- * ROUTE: /
- */
-export default angular
-  .module('spam.landing', [
-    restangular,
-    iif,
-    routes,
-    userService,
-    loginform
-  ])
-  .config(landingRouting)
-  .controller('LandingController', landingController)
-  .name;
-
-
-
-
-/* @ngInject */
-function landingRouting(RoutesProvider) {
+const landingRouting = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/', {
     templateUrl: 'components/landing/landing.html',
     controller: 'LandingController',
@@ -41,28 +21,15 @@ function landingRouting(RoutesProvider) {
   RoutesProvider.add('*', {
     redirectTo: '/'
   });
-}
+}];
 
 
-
-
-/* @ngInject */
-function landingController($scope, Restangular, User) {
-  var ctrl = this;
-
-  function userConstruct(event, user) {
-    if (!user) {
-      ctrl.loggedin = false;
-      ctrl.username = '';
-    } else {
-      ctrl.loggedin = true;
-      ctrl.username = user.username;
-    }
-  }
-
-  ctrl.stats = Restangular.one('/stats').get().$object;
-
-  $scope.$on('user-construct', userConstruct);
-  userConstruct(null, User.details);
-  ctrl.loginloading = false;
-}
+/**
+ * MODULE: spam.landing
+ * ROUTE: /
+ */
+export default angular
+  .module('spam.landing', [restangular, iif, routes, userService, loginform])
+  .controller('LandingController', LandingController)
+  .config(landingRouting)
+  .name;
