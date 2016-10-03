@@ -1,21 +1,6 @@
 import angular from 'angular';
 
 
-/**
- * MODULE: highlightFilter
- * FILTER: highlight
- *
- * Hightlights the given needle (using <strong>) in the haystack.
- */
-export default angular
-  .module('highlightFilter', [])
-  .filter('highlight', highlightFilter)
-  .name;
-
-
-
-
-/* @ngInject */
 function highlightFilter() {
   return function (haystack, needle) {
     if (! haystack || ! needle) { return haystack; }
@@ -29,3 +14,15 @@ function highlightFilter() {
     return haystack.replace( new RegExp(needle, 'gi'), '<strong>$&</strong>' );
   };
 }
+
+
+/**
+ * MODULE: highlightFilter
+ * FILTER: highlight
+ *
+ * Hightlights the given needle (using <strong>) in the haystack.
+ */
+export default angular
+  .module('highlightFilter', [])
+  .filter('highlight', highlightFilter)
+  .name;

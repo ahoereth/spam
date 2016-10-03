@@ -1,22 +1,6 @@
 import angular from 'angular';
 
 
-/**
- * MODULE: sortable
- * DIRECTIVE: sortable
- *
- * HTML5 powered sortable.
- *
- * Initially forked from bachvtuan/html5-sortable-angularjs
- */
-export default angular
-  .module('sortable', [])
-  .directive('htmlSortable', sortableDirective)
-  .name;
-
-
-
-
 function sortableDirective() {
   var draggedelement, sourcemodel;
 
@@ -25,7 +9,7 @@ function sortableDirective() {
     require: 'ngModel',
     scope: {
       options: '=htmlSortable',
-      ngModel : '='
+      ngModel: '=',
     },
     link: function(scope, element, attrs, ngModel) {
       // Check for `draggable` feature availability.
@@ -266,3 +250,17 @@ function sortableDirective() {
     }
   };
 }
+
+
+/**
+ * MODULE: sortable
+ * DIRECTIVE: sortable
+ *
+ * HTML5 powered sortable.
+ *
+ * Initially forked from bachvtuan/html5-sortable-angularjs
+ */
+export default angular
+  .module('sortable', [])
+  .directive('htmlSortable', sortableDirective)
+  .name;

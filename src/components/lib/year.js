@@ -9,15 +9,5 @@ import angular from 'angular';
  */
 export default angular
   .module('yearFilter', [])
-  .filter('year', yearFilter)
+  .filter('year', () => (year) => ('0' + year % 100).slice(-2))
   .name;
-
-
-
-
-/* @ngInject */
-function yearFilter() {
-  return function(year) {
-    return ('0' + year % 100).slice(-2);
-  };
-}

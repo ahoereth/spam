@@ -25,22 +25,18 @@ function inlineSelectableGroupDirective() {
     scope: {
       model: '=ngModel'
     },
-    /* @ngInject */
-    controller: function($scope) {
-      var ctrl = this;
-
-      ctrl.setValue = function(value) {
-        ctrl.selected = value;
+    controller: ['$scope', function($scope) {
+      this.setValue = (value) => {
+        this.selected = value;
         $scope.model = value;
       };
-    }
+    }]
   };
 }
 
 
 
 
-/* @ngInject */
 function inlineSelectableDirective() {
   return {
     restrict: 'E',

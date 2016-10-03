@@ -1,28 +1,6 @@
 import angular from 'angular';
 
 
-/**
- * MODULE: buttons
- * DIRECTIVES:
- *   checkboxButtonGroup
- *   checkboxButton
- *   radioButtonGroup
- *   radioButton
- * PROVIDER: ButtonsProvider
- */
-export default angular
-  .module('buttons', [])
-  .provider('Buttons', buttonsProvider)
-  .directive('checkboxButtonGroup', checkboxButtonGroupDirective)
-  .directive('checkboxButton', checkboxButtonDirective)
-  .directive('radioButtonGroup', radioButtonGroupDirective)
-  .directive('radioButton', radioButtonDirective)
-  .name;
-
-
-
-
-/* @ngInject */
 function buttonsProvider() {
   this.defaults = {
     activeClass: 'active',
@@ -37,9 +15,6 @@ function buttonsProvider() {
 }
 
 
-
-
-/* @ngInject */
 function checkboxButtonGroupDirective() {
   return {
     restrict: 'A',
@@ -58,10 +33,7 @@ function checkboxButtonGroupDirective() {
 }
 
 
-
-
-/* @ngInject */
-function checkboxButtonDirective(Buttons, $$rAF) {
+const checkboxButtonDirective = ['Buttons', '$$rAF', (Buttons, $$rAF) => {
   var defaults = Buttons.defaults;
   var constantValueRegExp = /^(true|false|\d+)$/;
 
@@ -128,12 +100,9 @@ function checkboxButtonDirective(Buttons, $$rAF) {
       });
     }
   };
-}
+}];
 
 
-
-
-/* @ngInject */
 function radioButtonGroupDirective() {
   return {
     restrict: 'A',
@@ -151,10 +120,7 @@ function radioButtonGroupDirective() {
 }
 
 
-
-
-/* @ngInject */
-function radioButtonDirective(Buttons, $$rAF) {
+const radioButtonDirective = ['Buttons', '$$rAF', (Buttons, $$rAF) => {
   var defaults = Buttons.defaults;
   var constantValueRegExp = /^(true|false|\d+)$/;
 
@@ -193,4 +159,23 @@ function radioButtonDirective(Buttons, $$rAF) {
       });
     }
   };
-}
+}];
+
+
+/**
+ * MODULE: buttons
+ * DIRECTIVES:
+ *   checkboxButtonGroup
+ *   checkboxButton
+ *   radioButtonGroup
+ *   radioButton
+ * PROVIDER: ButtonsProvider
+ */
+export default angular
+  .module('buttons', [])
+  .provider('Buttons', buttonsProvider)
+  .directive('checkboxButtonGroup', checkboxButtonGroupDirective)
+  .directive('checkboxButton', checkboxButtonDirective)
+  .directive('radioButtonGroup', radioButtonGroupDirective)
+  .directive('radioButton', radioButtonDirective)
+  .name;

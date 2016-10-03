@@ -3,20 +3,19 @@ import angular from 'angular';
 // import 'tickable.less';
 
 
-/**
- * MODULE: tickable
- * DIRECTIVE: tickable
- */
-export default angular
-  .module('tickable', [])
-  .directive('tickable', tickableDirective) // TODO: component
-  .name;
+function tickableLink(scope) {
+  // Calling the ngChange function directly in the template resulted in it
+  // being called before the value actually changed.
+  scope.change = function() {
+    var self = this;
+    $timeout(function() {
+      scope.changeTarget(self);
+    }, 0);
+  };
+}
 
 
-
-
-/* @ngInject */
-function tickableDirective($timeout) {
+const tickableDirective = ['$timeout', function tickableDirective($timeout) {
   return {
     restrict: 'E',
     replace: true,
@@ -31,15 +30,16 @@ function tickableDirective($timeout) {
         '<input type="checkbox" ng-model="model" ng-change="change()">' +
         '<span class="glyphicon glyphicon-ok"></span>' +
       '</label>',
-    link: function(scope) {
-      // Calling the ngChange function directly in the template resulted in it
-      // being called before the value actually changed.
-      scope.change = function() {
-        var self = this;
-        $timeout(function() {
-          scope.changeTarget(self);
-        }, 0);
-      };
-    }
+    link: tickableLink
   };
-}
+}];
+
+
+/**
+ * MODULE: tickable
+ * DIRECTIVE: tickable
+ */
+export default angular
+  .module('tickable', [])
+  .directive('tickable', tickableDirective)
+  .name;

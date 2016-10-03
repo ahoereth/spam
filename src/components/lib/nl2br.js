@@ -1,6 +1,13 @@
 import angular from 'angular';
 
 
+function nl2brFilter() {
+  return function(text) {
+    return text.replace(/\n/g, '<br>');
+  };
+}
+
+
 /**
  * MODULE: nl2brFilter
  * FILTER: nl2br
@@ -11,13 +18,3 @@ export default angular
   .module('nl2brFilter', [])
   .filter('nl2br', nl2brFilter)
   .name;
-
-
-
-
-/* @ngInject */
-function nl2brFilter() {
-  return function(text) {
-    return text.replace(/\n/g, '<br>');
-  };
-}

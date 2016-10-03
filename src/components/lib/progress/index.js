@@ -3,36 +3,12 @@ import angular from 'angular';
 // import 'progress.css';
 
 
-/**
- * MODULE: progress
- * DIRECTIVES:
- *   progress
- *   progressbar
- */
-export default angular
-  .module('progress', [])
-  .directive('progress', progressDirective) // TODO: component
-  .directive('progressbar', progressbarDirective) // TODO: component
-  .name;
+const progressComponent = {
+  transclude: true,
+  template: '<div class="progress" ng-transclude></div>'
+};
 
 
-
-
-/* @ngInject */
-function progressDirective() {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: true,
-    transclude: true,
-    template: '<div class="progress" ng-transclude></div>'
-  };
-}
-
-
-
-
-/* @ngInject */
 function progressbarDirective() {
   return {
     restrict: 'E',
@@ -48,3 +24,16 @@ function progressbarDirective() {
                 'ng-show="value"></div>'
   };
 }
+
+
+/**
+ * MODULE: progress
+ * DIRECTIVES:
+ *   progress
+ *   progressbar
+ */
+export default angular
+  .module('progress', [])
+  .component('progress', progressComponent)
+  .directive('progressbar', progressbarDirective)
+  .name;

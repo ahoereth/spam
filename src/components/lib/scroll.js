@@ -2,20 +2,7 @@ import angular from 'angular';
 import { throttle } from 'lodash-es';
 
 
-/**
- * MODULE: scroll
- * SERVICE: Scroll
- */
-export default angular
-  .module('scroll', [])
-  .factory('Scroll', scrollFactory)
-  .name;
-
-
-
-
-/* @ngInject */
-function scrollFactory($timeout, $window) {
+const scrollFactory = ['$timeout', '$window', ($timeout, $window) => {
   var _listening = false;
   var _listeners = [];
 
@@ -74,4 +61,14 @@ function scrollFactory($timeout, $window) {
     getClientHeight: getClientHeight,
     getScrolledDistance: getScrolledDistance
   };
-}
+}];
+
+
+/**
+ * MODULE: scroll
+ * SERVICE: Scroll
+ */
+export default angular
+  .module('scroll', [])
+  .factory('Scroll', scrollFactory)
+  .name;
