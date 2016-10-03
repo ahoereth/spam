@@ -1,11 +1,8 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
 
+import { HTML5MODE, HASHPREFIX } from '../constants';
 import authService from '../../user/services/auth';
-
-
-export const HTML5MODE = true;
-export const HASHPREFIX = '!';
 
 
 const routesInitialization = [
