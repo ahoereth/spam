@@ -4,7 +4,7 @@ import { reduce } from 'lodash-es';
 import nl2br from '../../lib/nl2br';
 import year from '../../lib/year';
 
-// import 'courses.row.less';
+// import 'row.less';
 
 
 /**
@@ -13,7 +13,6 @@ import year from '../../lib/year';
  *   courserow
  *   courserowFields
  *
- * TODO: controllerAs required?
  * TODO: migrate to components
  */
 export default angular
@@ -25,7 +24,6 @@ export default angular
 
 
 
-/* @ngInject */
 function courserowDirective() {
   return {
     restrict: 'E',
@@ -34,7 +32,7 @@ function courserowDirective() {
       'course': '=',
       'action': '&action'
     },
-    templateUrl: 'components/courses/row/courses.row.html',
+    templateUrl: 'components/courses/row/row.html',
     link: function(scope, elem, attrs) {
       var opt = scope.opt = {};
 
@@ -47,15 +45,13 @@ function courserowDirective() {
         opt.addRemoveCourse = true;
       }
     },
-    controllerAs: 'courserow'
   };
 }
 
 
 
 
-/* @ngInject */
-function courserowFieldsDirective(_) {
+function courserowFieldsDirective() {
   return {
     restrict: 'E',
     replace: true,

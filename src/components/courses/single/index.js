@@ -5,35 +5,28 @@ import urlencode from '../../lib/urlencode';
 import restangular from '../../lib/restangular';
 import routes from '../../app/services/routes';
 import userService from '../../user/services/user';
-import controller from './controller';
+import CourseController from './CourseController';
+
+
+const courseRouting = ['RoutesProvider', RoutesProvider => {
+  RoutesProvider.add('/courses/:courseId', {
+    controller: 'CoursesSingleController',
+    //controllerAs: 'course',
+    templateUrl: 'components/courses/single/single.html',
+    title: ':course',
+  });
+}];
 
 
 /**
  * MODULE: spam.courses.single
- * CONTROLLER: CoursesSingleController
+ * CONTROLLER: CourseController
  * ROUTE: /courses/:course_id
  */
 export default angular
   .module('spam.courses.single', [
-    ngRoute, // $routeParams
-    restangular,
-    urlencode,
-    routes,
-    userService
+    ngRoute, restangular, urlencode, routes, userService,
   ])
-  .config(coursesSingleRouting)
-  .controller('CoursesSingleController', controller)
+  .config(courseRouting)
+  .controller('CourseController', CourseController)
   .name;
-
-
-
-
-/* @ngInject */
-function coursesSingleRouting(RoutesProvider) {
-  RoutesProvider.add('/courses/:courseId', {
-    controller: 'CoursesSingleController',
-    //controllerAs: 'course',
-    templateUrl: 'components/courses/single/courses.single.html',
-    title: ':course'
-  });
-}

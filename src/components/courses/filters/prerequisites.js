@@ -2,6 +2,7 @@ import angular from 'angular';
 import ngSanitize from 'angular-sanitize';
 import { isUndefined, each, trim } from 'lodash-es';
 
+
 /**
  * MODULE: spam.courses.filters.prerequisites
  * FILTER: prerequisites
@@ -16,8 +17,7 @@ export default angular
 
 
 
-/* @ngInject */
-function prerequisitesFilter($sce) {
+const prerequisitesFilter = ['$sce', function prerequisitesFilter($sce) {
   // used for caching the trusted strings
   var trusted = {};
 
@@ -58,4 +58,4 @@ function prerequisitesFilter($sce) {
 
     return trusted[output] || ( trusted[output] = $sce.trustAsHtml( output ) );
   };
-}
+}];

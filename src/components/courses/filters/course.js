@@ -1,19 +1,6 @@
 import angular from 'angular';
 
 
-/**
- * MODULE: spam.courses.filters.course
- * FILTER: courseFilter
- */
-export default angular
-  .module('spam.courses.filters.course', [])
-  .filter('courseFilter', courseFilter)
-  .name;
-
-
-
-
-/* @ngInject */
 function courseFilter() {
   return function (data, obj) {
     var filters = [], k, c, index;
@@ -98,3 +85,13 @@ function courseFilter() {
     return filtered;
   };
 }
+
+
+/**
+ * MODULE: spam.courses.filters.course
+ * FILTER: courseFilter
+ */
+export default angular
+  .module('spam.courses.filters.course', [])
+  .filter('courseFilter', courseFilter)
+  .name;

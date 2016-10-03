@@ -18,6 +18,6 @@ export default angular
     list,
     single,
     row,
-    addRemove
+    addRemove,
   ])
   .name;
