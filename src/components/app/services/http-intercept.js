@@ -18,150 +18,100 @@ import angular from 'angular';
  * @broadcasts http:error:resolved  When a request failed at least once before
  *                                  could be resolved now
  */
-export default angular
-  .module('spam.app.services.http-intercept', [])
-  .factory('httpIntercept', httpInterceptFactory)
-  .name;
+const httpInterceptFactory = [
+  '$injector', '$rootScope', '$q', '$timeout',
+  function httpInterceptFactory($injector, $rootScope, $q, $timeout) {
+    $rootScope.loading = 0;
+    const retriesPerRequest = 2;
+    const retryTimeoutTime = 5000;
+    let buffer = [];
+    let $http; // Initialized later because of circular dependency problem.
+    let retryTimeout;
 
+    // Wrapper for retrying a request.
+    var retryHttpRequest = function (config, deferred) {
+      $http = $http || $injector.get('$http'); // Initialize $http service.
+      $http(config).then(
+        res => deferred.resolve(res),
+        res => deferred.reject(res)
+      );
+    };
 
+    // Retries all the buffered requests clears the buffer.
+    var retryAll = function () {
+      if (buffer.length === 0) { return; }
 
-
-/* @ngInject */
-function httpInterceptFactory(
-  $injector,
-  $rootScope,
-  $q,
-  $timeout
-) {
-  $rootScope.loading = 0;
-
-  /** How often to retry a request. */
-  var retriesPerRequest = 2;
-
-  /** How long to wait for starting the next round of retries. */
-  var retryTimeoutTime = 5000;
-
-  /** Holds all the requests, so they can be re-requested in future. */
-  var buffer = [];
-
-  /** Service initialized later because of circular dependency problem. */
-  var $http;
-
-  /** Holds the retry $timeout for deferring. */
-  var retryTimeout;
-
-  /**
-  * Wrapper for retrying a request. Mostly falls back to its ancestors default behavior.
-  */
-  var retryHttpRequest = function(config, deferred) {
-    function successCallback(response) {
-      deferred.resolve(response);
-    }
-    function errorCallback(response) {
-      deferred.reject(response);
-    }
-
-    // initialize $http service
-    $http = $http || $injector.get('$http');
-
-    // refire request
-    $http(config).then(successCallback, errorCallback);
-  };
-
-  /**
-  * Retries all the buffered requests clears the buffer.
-  */
-  var retryAll = function () {
-    if (buffer.length === 0) { return; }
-
-    var tmp;
-    while (tmp = buffer.shift()) {
-      tmp.config.retry = typeof tmp.config.retry === 'undefined' ? 1 : tmp.config.retry + 1;
-
-      if (tmp.config.retry <= retriesPerRequest) {
-        retryHttpRequest(tmp.config, tmp.deferred);
-
-        // if you do not need to keep track of permanently failed requests remove this
-      } else {
-        $rootScope.$broadcast('http:error:permanent', {
-          config: tmp.config,
-          status: tmp.status
-        });
+      var tmp;
+      while (tmp = buffer.shift()) {
+        tmp.config.retry = (tmp.config.retry || 0) + 1;
+        if (tmp.config.retry <= retriesPerRequest) {
+          retryHttpRequest(tmp.config, tmp.deferred);
+        } else {
+          $rootScope.$broadcast('http:error:permanent', {
+            config: tmp.config,
+            status: tmp.status
+          });
+        }
       }
-    }
-  };
+    };
 
-  return {
-    request: function(config) {
-      // modify config before a request is sent
+    return {
+      request: function (config) {
+        $rootScope.loading++;
+        return config || $q.when(config);
+      },
 
-      $rootScope.loading++;
-
-      return config || $q.when(config);
-    },
-
-    /*
-    requestError: function (rejection) {
-      // do something on request error
-
-      return $q.reject(rejection);
-    },*/
-
-    response: function(response) {
-      // do something on response success
-
-      $rootScope.loading--;
-
-      if (typeof response.config.retries !== 'undefined') {
-        $rootScope.$broadcast('http:error:resolved', {
-          config: response.config,
-          status: response.status
-        });
-      }
-
-      return response || $q.when(response);
-    },
-
-    responseError: function(rejection) {
-      // do something on response error
-
-      $rootScope.loading--;
-      var deferred = $q.defer();
-
-      buffer.push({
-        config: rejection.config,
-        deferred: deferred
-      });
-
-      if (rejection.status === 401 || rejection.status === 403) {
-        // No redirection here because we might try to authenticate the user
-        // even for routes for which he does not necessarily needs to be
-        // authenticated.
-        //$location.path('/login');
+      /*
+      requestError: function (rejection) {
+        // do something on request error
 
         return $q.reject(rejection);
-      } else if (rejection.status >= 404 ) {
-        $rootScope.$broadcast('http:error', {
+      },*/
+
+      response: function (response) { // success
+        $rootScope.loading--;
+        if (typeof response.config.retries !== 'undefined') {
+          $rootScope.$broadcast('http:error:resolved', {
+            config: response.config,
+            status: response.status
+          });
+        }
+        return response || $q.when(response);
+      },
+
+      responseError: function (rejection) { // error
+        $rootScope.loading--;
+        var deferred = $q.defer();
+        buffer.push({
           config: rejection.config,
-          status: rejection.status
+          deferred: deferred
         });
-
-        $timeout.cancel( retryTimeout );
-        retryTimeout = $timeout( function() {
-          retryAll();
-
-        }, retryTimeoutTime);
-
-        // TODO: do we really want to do this??
+        if (rejection.status === 401 || rejection.status === 403) {
+          // No redirection here because we might try to authenticate the user
+          // even for routes for which which not necessarily require auth.
+          // $location.path('/login');
+          return $q.reject(rejection);
+        } else if (rejection.status >= 404) {
+          $rootScope.$broadcast('http:error', {
+            config: rejection.config,
+            status: rejection.status
+          });
+          $timeout.cancel(retryTimeout);
+          retryTimeout = $timeout(() => retryAll(), retryTimeoutTime);
+          return $q.reject(rejection);
+        }
         return $q.reject(rejection);
+      },
+
+      clear: function () {
+        buffer = [];
       }
+    };
+  }
+];
 
-      // otherwise: default behaviour
-      return $q.reject(rejection);
-    },
 
-    clear: function () {
-      buffer = [];
-    }
-  };
-}
+export default angular
+ .module('spam.app.services.http-intercept', [])
+ .factory('httpIntercept', httpInterceptFactory)
+ .name;

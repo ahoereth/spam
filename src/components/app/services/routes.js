@@ -1,79 +1,53 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
 
-
-/**
- * MODULE: spam.app.services.routes
- * SERVICE: Routes
- * CONSTANTS:
- *   HTML5MODE
- *   HASHPREFIX
- */
-export default angular
-  .module('spam.app.services.routes', [
-    ngRoute,
-    'spam.user.services.auth'
-  ])
-  .provider('Routes', routesProvider)
-  .run(routesInitialization)
-  .config(routesProviderInit)
-  .constant('HTML5MODE', true)
-  .constant('HASHPREFIX', '!')
-  .name;
+import authService from '../../user/services/auth';
 
 
+export const HTML5MODE = true;
+export const HASHPREFIX = '!';
 
 
-/* @ngInject */
-function routesInitialization(
-  $location,
-  $rootScope,
-  $route // Required for initializing the root route.
- ) {
-  // Handle errors occurring on route changing. This is called when one of the
-  // promises to be resolved before visiting the route is rejected.
-  $rootScope.$on('$routeChangeError', function(
-    event, current, previous, rejection
-  ) {
-    if ('not_authenticated' === rejection) {
-      var requested = $location.path();
-      $location.path('/401').search('path', requested);
-    } else {
-      $location.path('/login');
-    }
-  });
+const routesInitialization = [
+  '$location', '$rootScope', '$route',
+  function routesInitialization($location, $rootScope, $route) {
+    // Handle errors occurring on route changing. This is called when one of the
+    // promises to be resolved before visiting the route is rejected.
+    $rootScope.$on('$routeChangeError', (event, current, previous, rejection) => {
+      if ('not_authenticated' === rejection) {
+        var requested = $location.path();
+        $location.path('/401').search('path', requested);
+      } else {
+        $location.path('/login');
+      }
+    });
 
-  // Called on every route change for user authentication verification and
-  // possible redirecting.
-  $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
-    if (!current) { return; }
+    // Called on every route change for user authentication verification and
+    // possible redirecting.
+    $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+      if (!current) { return; }
 
-    // Don't allow entering the page on /401
-    if (current.originalPath === '/401' && !previous) {
-      $location.path('/').search({});
-      return;
-    }
+      // Don't allow entering the page on /401
+      if (current.originalPath === '/401' && !previous) {
+        $location.path('/').search({});
+        return;
+      }
 
-    // Handle page title.
-    $rootScope.$broadcast('title', current.title, true);
-  });
-}
-
-
+      // Handle page title.
+      $rootScope.$broadcast('title', current.title, true);
+    });
+  }
+];
 
 
 function routesProvider() {
-  var $routeProvider;
-
-  /* @ngInject */
-  var authentication = function($route, Auth) {
+  let $routeProvider;
+  const authentication = ['$route', 'Auth', ($route, Auth) => {
     return Auth.authenticate($route.current.access);
-  };
+  }];
 
   // Store $routeProvider during config phase for later use.
-  this.setRouteProvider = function($rp) {
-    $routeProvider = $rp;
-  };
+  this.setRouteProvider = $rp => { $routeProvider = $rp; };
 
   // Adds routes to the actual router.
   this.add = function(path, options) {
@@ -82,15 +56,10 @@ function routesProvider() {
     }
 
     if (!options.redirectTo) {
-      // Add authentication resolve function.
       options.resolve = options.resolve || {};
       options.resolve.auth = authentication;
-
-      // Default access is public.
-      options.access = options.access || 0;
-
-      // Default title is empty.
-      options.title = options.title || '';
+      options.access = options.access || 0; // Default access is public.
+      options.title = options.title || ''; // Default title is empty.
     }
 
     if ('*' === path) {
@@ -112,16 +81,22 @@ function routesProvider() {
 
 
 // Store $routeProvider for later use and set $locationProvider options.
-function routesProviderInit(
-  $routeProvider,
-  $locationProvider,
-  RoutesProvider,
-  HTML5MODE,
-  HASHPREFIX
-) {
-  RoutesProvider.setRouteProvider($routeProvider);
+const routesProviderInit = [
+  '$routeProvider', '$locationProvider', 'RoutesProvider',
+  ($routeProvider, $locationProvider, RoutesProvider) => {
+    RoutesProvider.setRouteProvider($routeProvider);
+    $locationProvider.html5Mode(HTML5MODE).hashPrefix(HASHPREFIX);
+  }
+];
 
-  $locationProvider
-    .html5Mode(HTML5MODE)
-    .hashPrefix(HASHPREFIX);
-}
+
+/**
+ * MODULE: spam.app.services.routes
+ * SERVICE: Routes
+ */
+export default angular
+  .module('spam.app.services.routes', [ngRoute, authService])
+  .provider('Routes', routesProvider)
+  .run(['$location', '$rootScope', '$route', routesInitialization])
+  .config(routesProviderInit)
+  .name;
