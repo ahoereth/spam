@@ -1,8 +1,5 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
-import {
-  extend, isUndefined, compact, trim, isEmpty, get, find, without, pickBy
-} from 'lodash-es';
 
 import iif from '../../lib/iif';
 import scroll from '../../lib/scroll';

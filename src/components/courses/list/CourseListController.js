@@ -1,3 +1,7 @@
+import {
+  extend, isUndefined, compact, trim, isEmpty, get, find, without, pickBy
+} from 'lodash-es';
+
 
 export default class CourseListController {
   static $inject = [

@@ -42,14 +42,14 @@ const coursesFactory = [
         courses[reg] = [];
       }
 
-      var range = difference(range(lower, upper+1), fetchedYears[reg]);
+      const years = difference(range(lower, upper+1), fetchedYears[reg]);
 
       // needs some fixing. What about when we already pulled years inbetween?
-      var upperDb = range[range.length-1];
-      var lowerDb = range[0];
+      const upperDb = years[years.length-1];
+      const lowerDb = years[0];
 
-      if (! isEmpty(range)) {
-        fetchedYears[reg] = union(fetchedYears[reg], range);
+      if (!isEmpty(years)) {
+        fetchedYears[reg] = union(fetchedYears[reg], years);
 
         // replace with getList() aso soon as we fixed the sql speed on this one problems...
         Restangular.all('courses').customGET('', {

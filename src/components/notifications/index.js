@@ -3,9 +3,17 @@ import angular from 'angular';
 import httpIntercept from '../app/services/http-intercept';
 import NotificationsController from './NotificationsController';
 
+
+const notificationsComponent = {
+  templateUrl: 'components/navbar/navbar.html',
+  controller: 'NotificationsController',
+  controllerAs: 'notifications'
+};
+
+
 /**
  * MODULE: spam.notifications
- * DIRECTIVE: notifications
+ * COMPONENT: notifications
  *
  * Currently this is just a notification about HTTP request/connection
  * errors. Idea here is to expand this into a more general notification
@@ -13,21 +21,6 @@ import NotificationsController from './NotificationsController';
  */
 export default angular
   .module('spam.notifications', [httpIntercept])
-  .controller('NotificationsController', NotificationsController) // TODO: component
-  .directive('notifications', notificationsDirective) // TODO: component
+  .controller('NotificationsController', NotificationsController)
+  .component('notifications', notificationsComponent)
   .name;
-
-
-
-
-/* @ngInject */
-function notificationsDirective() {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: true,
-    templateUrl: 'components/navbar/navbar.html',
-    controller: 'NotificationsController',
-    controllerAs: 'notifications'
-  };
-}

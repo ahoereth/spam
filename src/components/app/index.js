@@ -18,13 +18,6 @@ import notfound from '../401';
  */
 export default angular
   .module('spam.app', [
-    config,
-    constants,
-    title,
-    services,
-    navbar,
-    content,
-    footer,
-    notfound
+    config, constants, title, services, navbar, content, footer, notfound,
   ])
   .name;

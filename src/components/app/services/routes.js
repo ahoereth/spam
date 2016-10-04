@@ -94,6 +94,6 @@ const routesProviderInit = [
 export default angular
   .module('spam.app.services.routes', [ngRoute, authService])
   .provider('Routes', routesProvider)
-  .run(['$location', '$rootScope', '$route', routesInitialization])
+  .run(routesInitialization)
   .config(routesProviderInit)
   .name;
