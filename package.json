@@ -10,8 +10,10 @@
   "bugs": "http://github.com/ahoereth/spam/issues",
   "scripts": {
     "build": "rollup -c --environment NODE_ENV:production",
-    "watch": "rollup -c -w",
-    "start": "http-server src"
+    "servdev": "http-server src --push-state",
+    "watch": "rollup -c --watch",
+    "reload": "livereload 'src/' -d",
+    "start": "npm-run-all --parallel reload watch"
   },
   "engine": "node >= 0.10.0",
   "devDependencies": {
@@ -34,13 +36,15 @@
     "grunt-ng-annotate": "2.0.x",
     "grunt-wiredep": "3.0.x",
     "http-rewrite-middleware": "^0.1.6",
-    "http-server": "^0.9.0",
     "less-plugin-autoprefix": "1.5.x",
     "less-plugin-clean-css": "^1.5.1",
+    "livereload": "^0.5.0",
+    "npm-run-all": "^3.1.0",
     "rollup": "^0.36.1",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-commonjs": "^5.0.4",
     "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-replace": "^1.1.1",
     "rollup-watch": "^2.5.0",
     "serve-static": "^1.11.1",
     "wiredep": "4.0.x"
