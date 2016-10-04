@@ -1,22 +1,22 @@
-<div ng-show="user.loggedin">
+<div ng-show="$ctrl.user.loggedin">
 
   <!-- add course to one of multiple fields -->
   <div
     dropdown
     class="btn-group dropdown"
-    ng-class="{disabled: busy}"
+    ng-class="{ disabled: $ctrl.busy }"
     style="display: block;"
-    ng-disabled="busy"
-    ng-if="fields.length>1 && !enrolled"
+    ng-disabled="$ctrl.busy"
+    ng-if="$ctrl.fields.length>1 && !$ctrl.enrolled"
   >
-    <a dropdown-toggle class="btn btn-success dropdown-toggle {{btnClass}}">
+    <a dropdown-toggle class="btn btn-success dropdown-toggle {{$ctrl.btnClass}}">
       <span class="glyphicon glyphicon-plus"></span>
     </a>
     <ul class="dropdown-menu pull-right">
-      <li ng-repeat="field in ::fields track by field.field_id">
+      <li ng-repeat="field in $ctrl.fields track by field.field_id">
         <a
           style="cursor: pointer;"
-          ng-click="add(field.field_id)"
+          ng-click="$ctrl.add(field.field_id)"
           ng-bind="::field.field"
         ></a>
       </li>
@@ -25,22 +25,22 @@
 
   <!-- add course to the only possible field -->
   <a
-    class="btn btn-success {{btnClass}}"
+    class="btn btn-success {{$ctrl.btnClass}}"
     ng-class="{disabled: busy}"
     ng-disabled="busy"
-    ng-if="fields.length<=1 && !enrolled"
-    ng-click="add(singleField)"
+    ng-if="$ctrl.fields.length<=1 && !$ctrl.enrolled"
+    ng-click="$ctrl.add($ctrl.singleField)"
   >
     <span class="glyphicon glyphicon-plus"></span>
   </a>
 
   <!-- remove course -->
   <a
-    class="btn btn-danger {{btnClass}}"
-    ng-class="{disabled: busy}"
-    ng-disabled="busy"
-    ng-show="enrolled"
-    ng-click="remove()"
+    class="btn btn-danger {{$ctrl.btnClass}}"
+    ng-class="{ disabled: $ctrl.busy }"
+    ng-disabled="$ctrl.busy"
+    ng-show="$ctrl.enrolled"
+    ng-click="$ctrl.remove()"
   >
     <span class="glyphicon glyphicon-minus"></span>
   </a>

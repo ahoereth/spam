@@ -256,8 +256,7 @@ function userFactory(
     }
 
     // Fill in field_id.
-    course.field_id = isNumber(fieldId) ? fieldId :
-      (course.field_id || null);
+    course.field_id = isNumber(fieldId) ? fieldId : (course.field_id || null);
 
     return self.courses.post(course).then(function(course) {
       var old = find(self.courses, { course_id: course.course_id });
@@ -270,7 +269,7 @@ function userFactory(
       }
 
       $log.info('Added: ' + course.course);
-      return old;
+      return course;
     });
   };
 
