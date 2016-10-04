@@ -1,5 +1,4 @@
 import angular from 'angular';
-import { forEach, groupBy } from 'lodash-es';
 
 import routes from '../app/services/routes';
 import restangular from '../lib/restangular';

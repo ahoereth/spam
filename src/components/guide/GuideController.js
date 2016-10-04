@@ -1,3 +1,6 @@
+import { map, forEach, groupBy } from 'lodash-es';
+
+
 export default class GuideController {
   static $inject = ['Restangular'];
 
@@ -6,7 +9,7 @@ export default class GuideController {
     Restangular.one('guides', 1).getList('courses').then(guide => {
       forEach(
         groupBy(guide, course => (course.year + course.term)),
-        (course, k) => { ctrl.courses[k] = groupBy(course, 'singleField'); }
+        (course, k) => { this.courses[k] = groupBy(course, 'singleField'); }
       );
     });
   }
