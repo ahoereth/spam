@@ -3,23 +3,9 @@ import ngRoute from 'angular-route';
 
 import iif from '../../../lib/iif';
 import auth from '../../services/auth';
+import LoginformController from './LoginformController';
 
 
-/**
- * MODULE: spam.user.login.form
- * DIRECTIVE: loginform
- * CONTROLLER: LoginformController
- */
-export default angular
-  .module('spam.user.login.form', [ngRoute, iif, auth])
-  .directive('loginform', loginformDirective)
-  .controller('LoginformController', loginformController)
-  .name;
-
-
-
-
-/* @ngInject */
 function loginformDirective() {
   return {
     restrict: 'E',
@@ -36,32 +22,13 @@ function loginformDirective() {
 }
 
 
-
-
-/* @ngInject */
-function loginformController(
-  $location,
-  $routeParams,
-  Auth
-) {
-  var ctrl = this;
-
-  ctrl.login = function() {
-    var self = this;
-
-    Auth.init(
-      self.username,
-      self.password,
-      self.remember
-    ).then(function() {
-      var path = $routeParams.path || '/~';
-      $location.path(path).search({});
-    }, function() {
-      $location.path('/login').search({username: self.username});
-    });
-  };
-
-  if ('' === ctrl.username) {
-    ctrl.username = $routeParams.username || '';
-  }
-}
+/**
+ * MODULE: spam.user.login.form
+ * COMPONENT: loginform
+ * CONTROLLER: LoginformController
+ */
+export default angular
+  .module('spam.user.login.form', [ngRoute, iif, auth])
+  .controller('LoginformController', LoginformController)
+  .directive('loginform', loginformDirective) // TODO: component
+  .name;

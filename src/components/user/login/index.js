@@ -5,6 +5,25 @@ import loginform from './form';
 import routes from '../../app/services/routes';
 
 
+class UserLoginController {
+  static $inject = ['$scope', '$routeParams'];
+  constructor($scope, $routeParams) {
+    this.params = $routeParams;
+  }
+}
+
+
+const routing = ['RoutesProvider', RoutesProvider => {
+  RoutesProvider.add('/login', {
+    controller: 'UserLoginController',
+    controllerAs: 'login',
+    templateUrl: 'components/user/login/login.html',
+    title: 'Login'
+  });
+}];
+
+
+
 /**
  * MODULE: spam.user.login
  * ROUTE: /login
@@ -12,30 +31,6 @@ import routes from '../../app/services/routes';
  */
 export default angular
   .module('spam.user.login', [ngRoute, routes, loginform])
-  .config(userLoginRouting)
-  .controller('UserLoginController', userLoginController)
+  .controller('UserLoginController', UserLoginController)
+  .config(routing)
   .name;
-
-
-
-
-/* @ngInject */
-function userLoginRouting(RoutesProvider) {
-  RoutesProvider.add('/login', {
-    controller: 'UserLoginController',
-    controllerAs: 'login',
-    templateUrl: 'components/user/login/login.html',
-    title: 'Login'
-  });
-}
-
-
-
-
-/* @ngInject */
-function userLoginController(
-  $scope,
-  $routeParams
-) {
-  this.params = $routeParams;
-}

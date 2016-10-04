@@ -5,7 +5,7 @@ import {
 } from 'lodash-es';
 
 import restangular from '../../lib/restangular';
-import utils from './utils';
+import formatGrade from '../formatGrade';
 
 
 /**
@@ -13,7 +13,7 @@ import utils from './utils';
  * SERVICE: User
  */
 export default angular
-  .module('spam.user.services.user', [restangular, utils])
+  .module('spam.user.services.user', [restangular])
   .factory('User', userFactory)
   .name;
 
@@ -22,14 +22,7 @@ export default angular
 
 /* @ngInject */
 function userFactory(
-  $cacheFactory,
-  $rootScope,
-  $location,
-  $http,
-  $log,
-  $q,
-  Restangular,
-  UserUtils
+  $cacheFactory, $rootScope, $location, $http, $log, $q, Restangular
 ) {
   var webstorage = angular.isDefined(Storage) ? true : false;
 
@@ -54,7 +47,7 @@ function userFactory(
 
   function calculateGrade(credits, grades) {
     var acc = grades.mergeWith(credits.value(), multiply).sum();
-    return UserUtils.formatGrade(acc.value() / credits.sum().value());
+    return formatGrade(acc.value() / credits.sum().value());
   }
 
 
@@ -83,7 +76,7 @@ function userFactory(
     // TODO: The weight relation should be information taken from the api.
     var thesisGrade = parseFloat(self.details.thesis_grade);
     if (thesisGrade >= 1 && thesisGrade <= 4) {
-      facts.grades.bachelor = UserUtils.formatGrade(
+      facts.grades.bachelor = formatGrade(
         (parseFloat(facts.grades.bachelor) * 2 + thesisGrade) / 3
       );
     }
@@ -188,7 +181,7 @@ function userFactory(
   self.updateThesis = function(title, grade) {
     var details = self.details;
     details.thesis_title = title;
-    details.thesis_grade = UserUtils.formatGrade(grade);
+    details.thesis_grade = formatGrade(grade);
     var thesis = pick(details, 'thesis_title', 'thesis_grade');
     details.one('regulations', details.regulation_id).customPUT(thesis);
     factsCalculation();
@@ -277,6 +270,7 @@ function userFactory(
       }
 
       $log.info('Added: ' + course.course);
+      return old;
     });
   };
 
@@ -353,7 +347,7 @@ function userFactory(
         self.fields  = data.fields;
       }
 
-      data.thesis_grade = UserUtils.formatGrade(data.thesis_grade);
+      data.thesis_grade = formatGrade(data.thesis_grade);
       self.details = omit(data, ['fields', 'courses']);
     }
 

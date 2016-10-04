@@ -6,34 +6,12 @@ import dropdown from '../../../lib/dropdown';
 import tickable from '../../../lib/tickable';
 import tooltips from '../../../lib/tooltips';
 import userService from '../../services/user';
-import utilsService from '../../services/utils';
 import field from '../field';
 import gradeInput from '../grade-input';
+import formatGrade from '../../formatGrade';
 
 
-/**
- * MODULE: spam.user.overview.course
- * DIRECTIVE: course
- */
-export default angular
-  .module('spam.user.overview.course', [
-    blurOnEnter,
-    dropdown,
-    tickable,
-    tooltips,
-    userService,
-    utilsService,
-    field,
-    gradeInput
-  ])
-  .directive('course', courseDirective)
-  .name;
-
-
-
-
-/* @ngInject */
-function courseDirective(User, UserUtils) {
+const courseDirective = ['User', User => {
   return {
     require: '^^field',
     restrict: 'E',
@@ -42,11 +20,11 @@ function courseDirective(User, UserUtils) {
       'course': '='
     },
     templateUrl: 'components/user/overview/course/course.html',
-    link: function(scope, elem, attrs, fieldCtrl) {
+    link: function courseDirectiveLink(scope, elem, attrs, fieldCtrl) {
       var course = scope.course;
 
       scope.grade = function(newGrade) {
-        course.grade = UserUtils.formatGrade(newGrade);
+        course.grade = formatGrade(newGrade);
 
         course.passed = (
           (course.grade >= 1 && course.grade <= 4) ||
@@ -83,8 +61,20 @@ function courseDirective(User, UserUtils) {
       };
 
       course.term_abbr = course.term + course.year;
-      course.oldGrade = UserUtils.formatGrade(course.grade);
+      course.oldGrade = formatGrade(course.grade);
       scope.grade(course.grade);
     }
   };
-}
+}];
+
+
+/**
+ * MODULE: spam.user.overview.course
+ * DIRECTIVE: course
+ */
+export default angular
+  .module('spam.user.overview.course', [
+    blurOnEnter, dropdown, tickable, tooltips, userService, field, gradeInput,
+  ])
+  .directive('course', courseDirective)
+  .name;

@@ -5,20 +5,7 @@ import buttons from '../../../lib/buttons';
 import userService from '../../services/user';
 
 
-/**
- * MODULE: spam.user.settings.matriculation-setter
- * DIRECTIVE: matriculation-setter
- */
-export default angular
-  .module('spam.user.settings.matriculation-setter', [buttons, userService])
-  .directive('matriculationSetter', userMatriculationSetterDirective)
-  .name;
-
-
-
-
-/* @ngInject */
-function userMatriculationSetterDirective(User) {
+const userMatriculationSetterDirective = ['User', User => {
   return {
     restrict: 'E',
     replace: true,
@@ -53,4 +40,14 @@ function userMatriculationSetterDirective(User) {
       };
     }
   };
-}
+}];
+
+
+/**
+ * MODULE: spam.user.settings.matriculation-setter
+ * DIRECTIVE: matriculation-setter
+ */
+export default angular
+  .module('spam.user.settings.matriculation-setter', [buttons, userService])
+  .directive('matriculationSetter', userMatriculationSetterDirective)
+  .name;

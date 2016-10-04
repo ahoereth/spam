@@ -2,6 +2,7 @@ import angular from 'angular';
 
 import blurOnEnter from '../../../lib/blur-on-enter';
 import userService from '../../services/user';
+import formatGrade from '../../formatGrade';
 
 // import 'grade-input.css';
 
@@ -28,7 +29,7 @@ export default angular
 
 
 /* @ngInject */
-function gradeInputController($scope, UserUtils) {
+function gradeInputController($scope) {
   var ctrl = this;
 
   ctrl.changeGrade = function changeGrade(newGrade, oldGrade) {
@@ -39,7 +40,7 @@ function gradeInputController($scope, UserUtils) {
       return false;
     }
 
-    ctrl.grade = UserUtils.formatGrade(newGrade);
+    ctrl.grade = formatGrade(newGrade);
     if (
       (ctrl.editable && (newGrade || (!newGrade && oldGrade))) || // Special case for fields.
       (!ctrl.editable && !newGrade && oldGrade) // Special case for courses.
@@ -49,5 +50,5 @@ function gradeInputController($scope, UserUtils) {
   };
 
   $scope.$watch('$ctrl.grade', ctrl.changeGrade);
-  ctrl.grade = UserUtils.formatGrade(ctrl.grade);
+  ctrl.grade = formatGrade(ctrl.grade);
 }

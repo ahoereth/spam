@@ -12,30 +12,7 @@ import course from '../course';
 // import './columns.less';
 
 
-/**
- * MODULE: spam.user.overview.field
- * DIRECTIVE: field
- * CONTROLLER: UserIndexFieldController
- */
-export default angular
-  .module('spam.user.overview.columns', [
-    sortable,
-    userService,
-    field,
-    course
-  ])
-  .directive('overviewColumns', userIndexColumnsDirective)
-  .factory('UserIndexColumns', userIndexColumnsFactory)
-  .name;
-
-
-
-
-/* @ngInject */
-function userIndexColumnsFactory(
-  $window,
-  User
-) {
+const userOverviewColumnsFactory = ['$window', 'User', ($window, User) => {
   var breakpoints = [750, 970, 1170];
   var columns;
 
@@ -117,61 +94,73 @@ function userIndexColumnsFactory(
     refresh: refreshOrder,
     breakpoints: breakpoints
   };
-}
+}];
 
 
+const userOverviewColumnsDirective = [
+  '$window', 'UserOverviewColumns',
+  function userOverviewColumnsDirective($window, UserOverviewColumns) {
+    return {
+      restrict: 'E',
+      replace: false,
+      scope: {
+        fields: '=',
+        courses: '='
+      },
+      templateUrl: 'components/user/overview/columns/columns.html',
+      controller: function userOverviewColumnsController() {},
+      controllerAs: 'columns',
+      bindToController: true,
+      link: function userOverviewColumnsLink(scope, elem, attrs, ctrl) {
+        var columncount = null;
 
-
-/* @ngInject */
-function userIndexColumnsDirective($window, _, UserIndexColumns) {
-  return {
-    restrict: 'E',
-    replace: false,
-    scope: {
-      fields: '=',
-      courses: '='
-    },
-    templateUrl: 'components/user/overview/columns/columns.html',
-    controller: function userIndexColumnsController() {},
-    controllerAs: 'columns',
-    bindToController: true,
-    link: function(scope, elem, attrs, ctrl) {
-      var columncount = null;
-
-      function resize() {
-        var width = $window.document.documentElement.clientWidth;
-        var calc = partial(flow(add, Math.abs), (-1 * width));
-        var points = map(UserIndexColumns.breakpoints, calc);
-        var newColumncount = indexOf(points, min(points)) + 1;
-        if (newColumncount !== columncount) {
-          ctrl.set = UserIndexColumns.build(ctrl.fields, newColumncount);
-          ctrl.sortable.active = (newColumncount >= 2);
-          if (columncount !== null) {
-            scope.$apply();
+        function resize() {
+          var width = $window.document.documentElement.clientWidth;
+          var calc = partial(flow(add, Math.abs), (-1 * width));
+          var points = map(UserOverviewColumns.breakpoints, calc);
+          var newColumncount = indexOf(points, min(points)) + 1;
+          if (newColumncount !== columncount) {
+            ctrl.set = UserOverviewColumns.build(ctrl.fields, newColumncount);
+            ctrl.sortable.active = (newColumncount >= 2);
+            if (columncount !== null) {
+              scope.$apply();
+            }
+            columncount = newColumncount;
           }
-          columncount = newColumncount;
         }
+
+        angular.element($window).bind('resize', resize);
+        scope.$on('$destroy', function() {
+          angular.element($window).unbind('resize', resize);
+        });
+
+        ctrl.sortable = {
+          active: false,
+          allow_cross: true,
+          handle: '.panel-heading',
+          stop: function() {
+            var order = UserOverviewColumns.refresh(ctrl.set);
+            angular.forEach(ctrl.fields, function(field) {
+              field.pos = indexOf(order, field.field_id);
+            });
+          }
+        };
+
+        // Initialize.
+        resize();
       }
+    };
+  }
+];
 
-      angular.element($window).bind('resize', resize);
-      scope.$on('$destroy', function() {
-        angular.element($window).unbind('resize', resize);
-      });
 
-      ctrl.sortable = {
-        active: false,
-        allow_cross: true,
-        handle: '.panel-heading',
-        stop: function() {
-          var order = UserIndexColumns.refresh(ctrl.set);
-          angular.forEach(ctrl.fields, function(field) {
-            field.pos = order.indexOf(field.field_id);
-          });
-        }
-      };
-
-      // Initialize.
-      resize();
-    }
-  };
-}
+/**
+ * MODULE: spam.user.overview.columns
+ * DIRECTIVE overviewColumns
+ * FACTORY: UserOverviewColumns
+ */
+export default angular
+  .module('spam.user.overview.columns', [sortable, userService, field, course])
+  .directive('overviewColumns', userOverviewColumnsDirective)
+  .factory('UserOverviewColumns', userOverviewColumnsFactory)
+  .name;

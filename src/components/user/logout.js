@@ -3,6 +3,28 @@ import angular from 'angular';
 import routes from '../app/services/routes';
 import userService from './services/user';
 
+
+const routing = ['RoutesProvider', RoutesProvider => {
+  RoutesProvider.add('/~/logout', {
+    controller: 'UserLogoutController',
+    template: '',
+    title : 'Logout',
+    access: 1,
+  });
+}];
+
+
+class UserLogoutController {
+  static $inject = ['$scope', '$location', 'User'];
+
+  constructor($scope, $location, User) {
+    User.logout().then(() => {
+      $location.path('/login').search({ loggedout: true }).replace();
+    });
+  }
+}
+
+
 /**
  * MODULE: spam.user.logout
  * ROUTE: /~/logout
@@ -10,38 +32,6 @@ import userService from './services/user';
  */
 export default angular
   .module('spam.user.logout', [routes, userService])
-  .config(userLogoutRouting)
-  .controller('UserLogoutController', userLogoutController)
+  .config(routing)
+  .controller('UserLogoutController', UserLogoutController)
   .name;
-
-
-
-
-/* @ngInject */
-function userLogoutRouting(RoutesProvider) {
-  RoutesProvider.add('/~/logout', {
-    controller: 'UserLogoutController',
-    template: '',
-    title : 'Logout',
-    access: 1
-  });
-}
-
-
-
-
-/* @ngInject */
-function userLogoutController(
-  $scope,
-  $location,
-  User
-) {
-  // 1. Logout.
-  User.logout().then(function() {
-    // 2. Redirect.
-    $location
-      .path('/login')
-      .search({loggedout: true})
-      .replace();
-  });
-}
