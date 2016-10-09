@@ -12,7 +12,8 @@ import replace from 'rollup-plugin-replace';
 import less from 'rollup-plugin-less';
 
 import lessNpmImport from 'less-plugin-npm-import';
-
+import lessAutoprefix from 'less-plugin-autoprefix';
+import lessCleanCss from 'less-plugin-clean-css';
 
 const rfs = partialRight(readFileSync, { encoding: 'utf8' });
 const ENV = process.env.NODE_ENV || 'development';
@@ -35,10 +36,22 @@ export default {
       output: `${dst}/bundle.css`,
       // https://github.com/xiaofuzi/rollup-plugin-less/pull/3
       include: [ '**/*.less', '**/*.css' ],
+      exclude: '',
       // https://github.com/xiaofuzi/rollup-plugin-less/pull/5
       insert: false,
       // https://github.com/xiaofuzi/rollup-plugin-less/pull/4
-      option: { plugins: [ new lessNpmImport({}) ] },
+      option: {
+        plugins: [
+          new lessNpmImport({}),
+          new lessAutoprefix({ browsers: ['last 2 versions'] }),
+          new lessCleanCss({
+            advanced: true,
+            keepSpecialComments: false,
+            rebase: true,
+            target: dst,
+          }),
+        ],
+      },
     }),
     babel({ exclude: ['node_modules/**', 'src/**/*.css', 'src/**/*.less'] }),
     nodeResolve({ jsnext: true }),
