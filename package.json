@@ -9,10 +9,10 @@
   },
   "bugs": "http://github.com/ahoereth/spam/issues",
   "scripts": {
-    "build": "rollup -c --environment NODE_ENV:production",
-    "servdev": "http-server src --push-state",
-    "watch": "rollup -c --watch",
-    "reload": "livereload 'src/' -d",
+    "build": "mkdir -p app && rollup -c --environment NODE_ENV:production",
+    "servdev": "http-server dev --push-state",
+    "watch": "mkdir -p dev && rollup -c --watch",
+    "reload": "livereload 'dev/' -d",
     "start": "npm-run-all --parallel reload watch"
   },
   "engine": "node >= 0.10.0",
