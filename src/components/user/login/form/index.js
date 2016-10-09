@@ -3,23 +3,24 @@ import ngRoute from 'angular-route';
 
 import iif from '../../../lib/iif';
 import auth from '../../services/auth';
-import LoginformController from './LoginformController';
+
+import controller from './LoginformController';
+import template from './form.html';
 
 
-function loginformDirective() {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: {
-      username: '=?',
-      loading: '=?'
-    },
-    templateUrl: 'components/user/login/form/form.html',
-    controller: 'LoginformController',
-    controllerAs: 'loginform',
-    bindToController: true
-  };
-}
+// TODO: component
+const loginformDirective = () => ({
+  template,
+  controller,
+  controllerAs: 'loginform',
+  restrict: 'E',
+  replace: true,
+  scope: {
+    username: '=?',
+    loading: '=?'
+  },
+  bindToController: true,
+});
 
 
 /**
@@ -29,6 +30,5 @@ function loginformDirective() {
  */
 export default angular
   .module('spam.user.login.form', [ngRoute, iif, auth])
-  .controller('LoginformController', LoginformController)
-  .directive('loginform', loginformDirective) // TODO: component
+  .directive('loginform', loginformDirective)
   .name;

@@ -12,16 +12,17 @@ import coursesService from '../services/courses';
 import courseFilter from '../filters/course';
 import courseSingle from '../single';
 import row from '../row';
-import CourseListController from './CourseListController';
 
+import controller from './CourseListController';
+import template from './list.html';
 import './list.css';
 
 
 const courseListRouting = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/courses', {
-    controller: 'CourseListController',
+    template,
+    controller,
     //controllerAs: 'index',
-    templateUrl: 'components/courses/list/list.html',
     title: 'Courses',
     reloadOnSearch: false
   });
@@ -48,6 +49,5 @@ export default angular
     courseSingle,
     row
   ])
-  .controller('CourseListController', CourseListController)
   .config(courseListRouting)
   .name;

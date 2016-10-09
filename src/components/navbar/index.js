@@ -8,28 +8,24 @@ import courses from '../courses';
 import guide from '../guide';
 import user from '../user';
 import admin from '../admin';
-import NavbarController from './NavbarController';
 
+import controller from './NavbarController';
+import template from './navbar.html';
 import './navbar.less';
 import './loader.less';
-
-
-const navbarComponent = {
-  templateUrl: 'components/navbar/navbar.html',
-  controller: 'NavbarController',
-  controllerAs: 'navbar',
-};
 
 
 /**
  * MODULE: spam.navbar
  * COMPONENT: navbar
- * CONTROLLER: NavbarController
  */
 export default angular
   .module('spam.navbar', [
     highlight, iif, year, landing, courses, guide, user, admin,
   ])
-  .component('navbar', navbarComponent)
-  .controller('NavbarController', NavbarController)
+  .component('navbar', {
+    template,
+    controller,
+    controllerAs: 'navbar',
+  })
   .name;

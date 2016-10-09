@@ -7,14 +7,16 @@ import restangular from '../../lib/restangular';
 import routes from '../../app/services/routes';
 import userService from '../services/user';
 import matriculationSetter from './matriculation-setter';
-import UserSettingsController from './UserSettingsController';
+
+import controller from './UserSettingsController';
+import template from './settings.html';
 
 
 const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/~/settings', {
-    controller: 'UserSettingsController',
+    template,
+    controller,
     controllerAs: 'settings',
-    templateUrl: 'components/user/settings/settings.html',
     title: ':username\'s settings',
     access: 1,
   });
@@ -31,6 +33,5 @@ export default angular
     restangular, tooltips, blurOnEnter, textDownload, routes, userService,
     matriculationSetter,
   ])
-  .controller('UserSettingsController', UserSettingsController)
   .config(routing)
   .name;

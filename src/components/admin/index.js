@@ -1,11 +1,12 @@
 import angular from 'angular';
 
 import migrate from './migrate';
+import template from './admin.html';
 
 
-const adminRouting = ['RoutesProvider', RoutesProvider => {
+const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/admin', {
-    templateUrl: 'components/admin/overview/overview.html',
+    template,
     title: 'Administration',
     access: 32,
   });
@@ -20,5 +21,5 @@ const adminRouting = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.admin', [migrate])
-  .config(adminRouting)
+  .config(routing)
   .name;

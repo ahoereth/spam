@@ -10,19 +10,20 @@ import columns from './columns';
 import thesisInput from './thesis-input';
 import gradeInput from './grade-input';
 import matriculationSetter from '../settings/matriculation-setter';
-import UserOverviewController from './UserOverviewController';
 
-// import 'overview.less';
+import controller from './UserOverviewController';
+import template from './overview.html';
+import './overview.less';
 
 
 const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/~', {
-    controller: 'UserOverviewController',
+    template,
+    controller,
     controllerAs: 'overview',
-    templateUrl: 'components/user/overview/overview.html',
     title: ':username',
     reloadOnSearch: false,
-    access: 1
+    access: 1,
   });
 }];
 
@@ -38,5 +39,4 @@ export default angular
     gradeInput, matriculationSetter,
   ])
   .config(routing)
-  .controller('UserOverviewController', UserOverviewController)
   .name;

@@ -1,14 +1,9 @@
 import angular from 'angular';
 
 import httpIntercept from '../app/services/http-intercept';
-import NotificationsController from './NotificationsController';
 
-
-const notificationsComponent = {
-  templateUrl: 'components/navbar/navbar.html',
-  controller: 'NotificationsController',
-  controllerAs: 'notifications'
-};
+import controller from './NotificationsController';
+import template from './notifications.html';
 
 
 /**
@@ -21,6 +16,9 @@ const notificationsComponent = {
  */
 export default angular
   .module('spam.notifications', [httpIntercept])
-  .controller('NotificationsController', NotificationsController)
-  .component('notifications', notificationsComponent)
+  .component('notifications', {
+    template,
+    controller,
+    controllerAs: 'notifications',
+  })
   .name;

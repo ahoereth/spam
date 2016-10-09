@@ -3,16 +3,17 @@ import angular from 'angular';
 import routes from '../app/services/routes';
 import restangular from '../lib/restangular';
 import course from '../courses/single';
-import GuideController from './GuideController';
 
+import template from './guide.html';
+import controller from './GuideController';
 import './guide.less';
 
 
 const guideRouting = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/guide', {
-    controller: 'GuideController',
+    template,
+    controller,
     controllerAs: 'guide',
-    templateUrl: 'components/guide/guide.html',
     title: 'Guide',
   });
 }];
@@ -26,5 +27,4 @@ const guideRouting = ['RoutesProvider', RoutesProvider => {
 export default angular
   .module('spam.guide', [restangular, routes, course])
   .config(guideRouting)
-  .controller('GuideController', GuideController)
   .name;

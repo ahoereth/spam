@@ -3,14 +3,9 @@ import ngRoute from 'angular-route';
 
 import scroll from '../lib/scroll';
 import notifications from '../notifications';
-import ContentController from './ContentController';
 
-
-const contentComponent = {
-  templateUrl: 'components/content/content.html',
-  controller: 'ContentController',
-  controllerAs: 'content'
-};
+import controller from './ContentController';
+import template from './content.html';
 
 
 /**
@@ -20,6 +15,9 @@ const contentComponent = {
  */
 export default angular
   .module('spam.content', [ngRoute, scroll, notifications])
-  .controller('ContentController', ContentController)
-  .component('content', contentComponent)
+  .component('content', {
+    template,
+    controller,
+    controllerAs: 'content',
+  })
   .name;

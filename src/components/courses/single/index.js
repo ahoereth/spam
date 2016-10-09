@@ -5,14 +5,16 @@ import urlencode from '../../lib/urlencode';
 import restangular from '../../lib/restangular';
 import routes from '../../app/services/routes';
 import userService from '../../user/services/user';
-import CourseController from './CourseController';
+
+import controller from './CourseController';
+import template from './single.html';
 
 
-const courseRouting = ['RoutesProvider', RoutesProvider => {
+const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/courses/:courseId', {
-    controller: 'CoursesSingleController',
+    template,
+    controller,
     //controllerAs: 'course',
-    templateUrl: 'components/courses/single/single.html',
     title: ':course',
   });
 }];
@@ -27,6 +29,5 @@ export default angular
   .module('spam.courses.single', [
     ngRoute, restangular, urlencode, routes, userService,
   ])
-  .config(courseRouting)
-  .controller('CourseController', CourseController)
+  .config(routing)
   .name;

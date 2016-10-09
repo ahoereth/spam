@@ -1,5 +1,6 @@
 import angular from 'angular';
 
+import template from './help-fragment.html';
 
 function helpFragmentLink(scope, elem, attrs) {
   scope.slug  = attrs.slug;
@@ -7,16 +8,14 @@ function helpFragmentLink(scope, elem, attrs) {
 }
 
 
-function helpFragmentDirective() {
-  return {
-    restrict: 'E',
-    replace: true,
-    scope: true,
-    transclude: true,
-    templateUrl: 'components/help/fragment.html',
-    link: helpFragmentLink
-  };
-}
+const helpFragmentDirective = () => ({
+  template,
+  restrict: 'E',
+  replace: true,
+  scope: true,
+  transclude: true,
+  link: helpFragmentLink,
+});
 
 
 /**

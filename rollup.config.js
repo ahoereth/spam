@@ -10,6 +10,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import less from 'rollup-plugin-less';
+import html from 'rollup-plugin-html';
 
 import lessNpmImport from 'less-plugin-npm-import';
 import lessAutoprefix from 'less-plugin-autoprefix';
@@ -51,6 +52,19 @@ export default {
             target: dst,
           }),
         ],
+      },
+    }),
+    html({
+      include: '**/*.html',
+      htmlMinifierOptions: {
+        collapseBooleanAttributes: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        removeScriptTypeAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        removeComments: true,
       },
     }),
     babel({ exclude: ['node_modules/**', 'src/**/*.css', 'src/**/*.less'] }),

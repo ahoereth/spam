@@ -9,6 +9,7 @@ import userService from '../../services/user';
 import field from '../field';
 import course from '../course';
 
+import template from './columns.html';
 import './columns.less';
 
 
@@ -101,13 +102,13 @@ const userOverviewColumnsDirective = [
   '$window', 'UserOverviewColumns',
   function userOverviewColumnsDirective($window, UserOverviewColumns) {
     return {
+      template,
       restrict: 'E',
       replace: false,
       scope: {
         fields: '=',
         courses: '='
       },
-      templateUrl: 'components/user/overview/columns/columns.html',
       controller: function userOverviewColumnsController() {},
       controllerAs: 'columns',
       bindToController: true,

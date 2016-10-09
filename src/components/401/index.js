@@ -4,11 +4,11 @@ import unicorn from '../lib/unicorn';
 import routes from '../app/services/routes';
 import userLoginForm from '../user/login/form';
 import NotAuthorizedController from './NotAuthorizedController';
-
+import template from './401.html';
 
 const notAuthorizedRouting = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/401', {
-    templateUrl: 'components/401/401.html',
+    template,
     controller: 'NotAuthorizedController',
     controllerAs: '$ctrl',
     title: 'Not authorized.',

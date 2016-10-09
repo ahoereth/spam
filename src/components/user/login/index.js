@@ -4,6 +4,8 @@ import ngRoute from 'angular-route';
 import loginform from './form';
 import routes from '../../app/services/routes';
 
+import template from './login.html';
+
 
 class UserLoginController {
   static $inject = ['$scope', '$routeParams'];
@@ -15,9 +17,9 @@ class UserLoginController {
 
 const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/login', {
+    template,
     controller: 'UserLoginController',
     controllerAs: 'login',
-    templateUrl: 'components/user/login/login.html',
     title: 'Login'
   });
 }];

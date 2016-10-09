@@ -3,16 +3,17 @@ import ngRoute from 'angular-route';
 
 import routes from '../app/services/routes';
 import fragment from './help-fragment';
-import HelpController from './HelpController';
 
+import controller from './HelpController';
+import template from './help.html';
 import './help.less';
 
 
-const helpRouting = ['RoutesProvider', RoutesProvider => {
+const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/help/:subject*?', {
-    controller: 'HelpController',
-    templateUrl: 'components/help/help.html',
-    title: 'Help'
+    template,
+    controller,
+    title: 'Help',
   });
 
   RoutesProvider.add('/help', {
@@ -28,6 +29,5 @@ const helpRouting = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.help', [ngRoute, routes, fragment])
-  .controller('HelpController', HelpController)
-  .config(helpRouting)
+  .config(routing)
   .name;

@@ -5,13 +5,16 @@ import restangular from '../lib/restangular';
 import routes from '../app/services/routes';
 import userService from '../user/services/user';
 import loginform from '../user/login/form';
-import LandingController from './LandingController';
 
-const landingRouting = ['RoutesProvider', RoutesProvider => {
+import controller from './LandingController';
+import template from './landing.html';
+
+
+const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/', {
-    templateUrl: 'components/landing/landing.html',
-    controller: 'LandingController',
-    controllerAs: 'landing'
+    template,
+    controller,
+    controllerAs: 'landing',
   });
 
   RoutesProvider.add('/.', {
@@ -30,6 +33,5 @@ const landingRouting = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.landing', [restangular, iif, routes, userService, loginform])
-  .controller('LandingController', LandingController)
-  .config(landingRouting)
+  .config(routing)
   .name;

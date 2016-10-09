@@ -9,14 +9,16 @@ import inlineSelectables from '../../lib/inline-selectables';
 import restangular from '../../lib/restangular';
 import buttons from '../../lib/buttons';
 import year from '../../lib/year';
-import AdminMigrateController from './AdminMigrateController';
+
+import controller from './AdminMigrateController';
+import template from './migrate.html';
 
 
-const adminMigrateRouting = ['RoutesProvider', RoutesProvider => {
+const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/admin/migrate', {
-    controller: 'AdminMigrateController',
+    template,
+    controller,
     controllerAs: 'migrate',
-    templateUrl: 'components/admin/migrate/admin.migrate.html',
     title: 'IKW DB Migration',
     reloadOnSearch: false,
     access: 32,
@@ -38,6 +40,5 @@ export default angular
     courseRow,
     routes,
   ])
-  .controller('AdminMigrateController', AdminMigrateController)
-  .config(adminMigrateRouting)
+  .config(routing)
   .name;

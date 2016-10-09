@@ -1,17 +1,9 @@
 import angular from 'angular';
 
 import userService from '../../user/services/user';
-import AddRemoveCourseController from './AddRemoveCourseController';
 
-
-const addRemoveCourseComponent = {
-  bindings: {
-    course: '<course',
-    btnClass: '@'
-  },
-  templateUrl: 'components/courses/add-remove/add-remove.html',
-  controller: 'AddRemoveCourseController',
-};
+import controller from './AddRemoveCourseController';
+import template from './add-remove.html';
 
 
 /**
@@ -20,6 +12,12 @@ const addRemoveCourseComponent = {
  */
 export default angular
   .module('spam.courses.add-remove', [userService])
-  .controller('AddRemoveCourseController', AddRemoveCourseController)
-  .component('addRemoveCourse', addRemoveCourseComponent)
+  .component('addRemoveCourse', {
+    template,
+    controller,
+    bindings: {
+      course: '<course',
+      btnClass: '@'
+    },
+  })
   .name;
