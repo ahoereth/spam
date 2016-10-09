@@ -1,20 +1,15 @@
-import {
-  createReadStream as crs, createWriteStream as cws,
-  readFileSync, writeFileSync as wfs,
-} from 'fs';
-
+import { copySync as copy, readFileSync, writeFileSync as wfs } from 'fs-extra';
 import { partialRight } from 'lodash';
-
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
 import replace from 'rollup-plugin-replace';
 import less from 'rollup-plugin-less';
 import html from 'rollup-plugin-html';
-
 import lessNpmImport from 'less-plugin-npm-import';
 import lessAutoprefix from 'less-plugin-autoprefix';
 import lessCleanCss from 'less-plugin-clean-css';
+
 
 const rfs = partialRight(readFileSync, { encoding: 'utf8' });
 const ENV = process.env.NODE_ENV || 'development';
@@ -23,9 +18,11 @@ const dst = ENV !== 'production' ? 'dev' : 'app';
 
 const pattern = ENV !== 'production' ? /#DEV#\s*/g : /#PROD#\s*/g;
 const htmlext = ENV !== 'production' ? '' : '-ship';
-crs(`src/index${htmlext}.html`).pipe(cws(`${dst}/index.html`));
-crs(`src/robots.txt`).pipe(cws(`${dst}/robots.txt`));
 wfs(`${dst}/.htaccess`, rfs(`src/.htaccess`).replace(pattern, ''));
+copy(`src/index${htmlext}.html`, `${dst}/index.html`);
+copy(`src/robots.txt`, `${dst}/robots.txt`);
+copy(`node_modules/bootstrap/fonts`, `${dst}/fonts/glyphicons`);
+copy(`node_modules/open-sans-fontface/fonts`, `${dst}/fonts/opensans`);
 
 
 export default {

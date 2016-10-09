@@ -22,6 +22,7 @@
     "babel-plugin-transform-class-properties": "^6.16.0",
     "babel-plugin-transform-object-rest-spread": "^6.16.0",
     "babel-preset-es2015": "^6.16.0",
+    "fs-extra": "^0.30.0",
     "grunt": "1.0.x",
     "grunt-angular-templates": "1.1.x",
     "grunt-bump": "0.8.x",
