@@ -19,10 +19,11 @@ const ENV = process.env.NODE_ENV || 'development';
 const dst = ENV !== 'production' ? 'dev' : 'app';
 
 
+const pattern = ENV !== 'production' ? /#DEV#\s*/g : /#PROD#\s*/g;
 const htmlext = ENV !== 'production' ? '' : '-ship';
 crs(`src/index${htmlext}.html`).pipe(cws(`${dst}/index.html`));
 crs(`src/robots.txt`).pipe(cws(`${dst}/robots.txt`));
-crs(`src/.htaccess.txt`).pipe(cws(`${dst}/.htaccess`));
+wfs(`${dst}/.htaccess`, rfs(`src/.htaccess`).replace(pattern, ''));
 
 
 export default {
