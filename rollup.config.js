@@ -17,9 +17,9 @@ const dst = ENV !== 'production' ? 'dev' : 'app';
 
 
 const pattern = ENV !== 'production' ? /#DEV#\s*/g : /#PROD#\s*/g;
-const htmlext = ENV !== 'production' ? '' : '-ship';
+const index = ENV !== 'production' ? 'index.html' : 'index-ship.html';
 wfs(`${dst}/.htaccess`, rfs(`src/.htaccess`).replace(pattern, ''));
-copy(`src/index${htmlext}.html`, `${dst}/index.html`);
+wfs(`${dst}/index.html`, rfs(`src/${index}`).replace(/VER/g, Date.now()));
 copy(`src/robots.txt`, `${dst}/robots.txt`);
 copy(`node_modules/bootstrap/fonts`, `${dst}/fonts/glyphicons`);
 copy(`node_modules/open-sans-fontface/fonts`, `${dst}/fonts/opensans`);
