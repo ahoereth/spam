@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-// import 'tickable.less';
+import './tickable.less';
 
 
 function tickableLink(scope) {

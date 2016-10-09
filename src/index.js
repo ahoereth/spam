@@ -1,3 +1,4 @@
+import './style';
 import './components/app';
 
 if (ENV !== 'production') {

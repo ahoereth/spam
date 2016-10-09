@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-// import 'progress.css';
+import './progress.css';
 
 
 const progressComponent = {

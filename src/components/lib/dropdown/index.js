@@ -2,7 +2,7 @@ import angular from 'angular';
 
 import DropdownController from './DropdownController';
 
-// import 'dropdown.css';
+import './dropdown.css';
 
 
 const dropdownService = ['$document', function dropdownService($document) {

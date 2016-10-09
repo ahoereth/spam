@@ -5,7 +5,7 @@ import restangular from '../lib/restangular';
 import course from '../courses/single';
 import GuideController from './GuideController';
 
-// import 'guide.less';
+import './guide.less';
 
 
 const guideRouting = ['RoutesProvider', RoutesProvider => {

@@ -10,7 +10,7 @@ import navbar from '../navbar';
 import footer from '../footer';
 import notfound from '../401';
 
-// import './app.layout.css';
+import './layout.css';
 
 
 /**

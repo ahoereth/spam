@@ -14,7 +14,7 @@ import courseSingle from '../single';
 import row from '../row';
 import CourseListController from './CourseListController';
 
-// import './list.css';
+import './list.css';
 
 
 const courseListRouting = ['RoutesProvider', RoutesProvider => {

@@ -4,7 +4,7 @@ import blurOnEnter from '../../../lib/blur-on-enter';
 import userService from '../../services/user';
 import formatGrade from '../../formatGrade';
 
-// import 'grade-input.css';
+import './grade-input.css';
 
 
 /**

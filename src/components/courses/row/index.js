@@ -4,7 +4,7 @@ import { reduce } from 'lodash-es';
 import nl2br from '../../lib/nl2br';
 import year from '../../lib/year';
 
-// import 'row.less';
+import './row.less';
 
 
 /**

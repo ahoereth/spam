@@ -10,8 +10,8 @@ import user from '../user';
 import admin from '../admin';
 import NavbarController from './NavbarController';
 
-// import 'navbar.less';
-// import 'loader.less';
+import './navbar.less';
+import './loader.less';
 
 
 const navbarComponent = {

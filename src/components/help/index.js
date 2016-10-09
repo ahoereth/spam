@@ -5,7 +5,7 @@ import routes from '../app/services/routes';
 import fragment from './help-fragment';
 import HelpController from './HelpController';
 
-// import './help.less';
+import './help.less';
 
 
 const helpRouting = ['RoutesProvider', RoutesProvider => {

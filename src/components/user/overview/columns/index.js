@@ -9,7 +9,7 @@ import userService from '../../services/user';
 import field from '../field';
 import course from '../course';
 
-// import './columns.less';
+import './columns.less';
 
 
 const userOverviewColumnsFactory = ['$window', 'User', ($window, User) => {
