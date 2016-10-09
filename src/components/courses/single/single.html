@@ -1,14 +1,14 @@
-<div class="alert alert-danger" ng-if="course.preliminary" ng-hide="course.sidebyside">
+<div class="alert alert-danger" ng-if="::$ctrl.course.preliminary">
   <strong>Watch out!</strong>
   This course is <strong>preliminary</strong> and is not listed in the public database!
-  <span ng-if="course.parent_course_id">The data on this page is a proposed update for <a ng-href="courses/{{course.parent_course_id}}">#{{course.parent_course_id}}</a>.</span>
+  <span ng-if="::$ctrl.course.parent_course_id">The data on this page is a proposed update for <a ng-href="courses/{{::$ctrl.course.parent_course_id}}">#{{::$ctrl.course.parent_course_id}}</a>.</span>
 </div>
 
 
 <h1>
-  {{course.course}}
-  <small>{{course.term}}{{course.year}}</small>
-  <code class="pull-right">{{course.code}}</code>
+  {{::$ctrl.course.course}}
+  <small>{{::$ctrl.course.term}}{{::$ctrl.course.year}}</small>
+  <code class="pull-right">{{::$ctrl.course.code}}</code>
   <img src="img/loading.gif" alt="loading" ng-if="loading.course||loading.fields" class="pull-right" />
 </h1>
 
@@ -19,41 +19,40 @@
 </div>
 
 <p class="lead pull-right">
-  <span ng-if="course.ects">
-    <span class="bold">ECTS:</span> {{course.ects}}<span ng-if="course.language">,</span>
+  <span ng-if="::$ctrl.course.ects">
+    <span class="bold">ECTS:</span> {{::$ctrl.course.ects}}<span ng-if="::$ctrl.course.language">,</span>
   </span>
-  <span ng-if="course.language">
-    <span class="bold">Language:</span> {{course.language}}<span ng-if="course.type">,</span>
+  <span ng-if="::$ctrl.course.language">
+    <span class="bold">Language:</span> {{::$ctrl.course.language}}<span ng-if="::$ctrl.course.type">,</span>
   </span>
-  <span ng-if="course.type">
-    <span class="bold">Type:</span> {{course.type}}
+  <span ng-if="::$ctrl.course.type">
+    <span class="bold">Type:</span> {{::$ctrl.course.type}}
   </span>
 </p>
-<p class="lead" ng-if="course.teachers">
-  <a href="courses?teacher={{teacher.teacher | urlencode}}" ng-repeat-start="teacher in course.teachers">{{teacher.teacher}}</a><span ng-repeat-end ng-hide="$last">,&nbsp;</span>
+<p class="lead" ng-if="::$ctrl.course.teachers">
+  <a ng-href="courses?teacher={{::$ctrl.teacher.teacher | urlencode}}" ng-repeat-start="teacher in ::$ctrl.course.teachers">{{teacher.teacher}}</a><span ng-repeat-end ng-hide="$last">,&nbsp;</span>
 </p>
 
-<div class="alert alert-warning" ng-if="course.course_comment">
+<div class="alert alert-warning" ng-if="::$ctrl.course.course_comment">
   <strong>Important Notice</strong>
-  {{course.course_comment}}
+  {{::$ctrl.course.course_comment}}
 </div>
 
 <div class="row">
-
-  <div class="col-md-6" ng-if="course.course_desc">
+  <div class="col-md-6" ng-if="::$ctrl.course.course_desc">
     <div class="panel panel-default">
       <div class="panel-heading"><h2 style="margin-bottom: 0;">Description</h2></div>
-      <div class="panel-body" ng-bind-html="course.course_desc | prerequisites"></div>
+      <div class="panel-body" ng-bind-html="::$ctrl.course.course_desc | prerequisites"></div>
     </div>
   </div>
 
-  <div class="col-md-6" ng-if="course.fields.length">
+  <div class="col-md-6" ng-if="::$ctrl.course.fields.length">
     <div class="panel panel-default">
       <div class="panel-heading"><h2 style="margin-bottom: 0;">Fields</h2></div>
       <div class="panel-body">
         <ul class="list-unstyled">
-          <li ng-repeat="(regulation, fields) in course.fields_by_regulations">
-            {{regulation}}
+          <li ng-repeat="(regulation, fields) in ::$ctrl.course.fields_by_regulations">
+            {{::regulation}}
             <ul>
               <li ng-repeat="field in fields">
                 <a ng-href="{{field.search}}">{{field.field}}</a>
@@ -71,6 +70,6 @@
 <hr>
 
 <div class="pull-right">
-  <a class="btn btn-info" ng-href="{{course.course_url}}" ng-if="course.course_url" target="_blank">External</a>
-  <a class="btn btn-primary" ng-href="{{course.studip_url}}" ng-if="course.studip_url" target="_blank">StudIP</a>
+  <a class="btn btn-info" ng-href="{{::$ctrl.course.course_url}}" ng-if="::$ctrl.course.course_url" target="_blank" rel="noopener noreferrer">External</a>
+  <a class="btn btn-primary" ng-href="{{::$ctrl.course.studip_url}}" ng-if="::$ctrl.course.studip_url" target="_blank" rel="noopener noreferrer">StudIP</a>
 </div>

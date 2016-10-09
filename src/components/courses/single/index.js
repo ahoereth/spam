@@ -14,7 +14,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/courses/:courseId', {
     template,
     controller,
-    //controllerAs: 'course',
+    controllerAs: '$ctrl',
     title: ':course',
   });
 }];
