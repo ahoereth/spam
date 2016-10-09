@@ -1,4 +1,6 @@
-import { copySync as copy, readFileSync, writeFileSync as wfs } from 'fs-extra';
+import {
+  copySync as copy, readFileSync, writeFileSync as wfs, mkdirpSync as mkdirp,
+} from 'fs-extra';
 import { partialRight } from 'lodash';
 import nodeResolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
@@ -19,6 +21,7 @@ const dst = ENV !== 'production' ? 'dev' : 'app';
 
 const pattern = ENV !== 'production' ? /#DEV#\s*/g : /#PROD#\s*/g;
 const index = ENV !== 'production' ? 'index.html' : 'index-ship.html';
+mkdirp(dst);
 wfs(`${dst}/.htaccess`, rfs(`src/.htaccess`).replace(pattern, ''));
 wfs(`${dst}/index.html`, rfs(`src/${index}`).replace(/VER/g, Date.now()));
 copy(`src/robots.txt`, `${dst}/robots.txt`);
