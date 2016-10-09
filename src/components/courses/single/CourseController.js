@@ -1,7 +1,5 @@
 import { forEach, isUndefined, get } from 'lodash-es';
 
-import restangular from '../../lib/restangular';
-
 
 export default class CourseController {
   static $inject = ['$scope', '$routeParams', 'Restangular', 'User'];

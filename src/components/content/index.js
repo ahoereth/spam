@@ -11,7 +11,6 @@ import template from './content.html';
 /**
  * MODULE: spam.content
  * COMPONENT: content
- * CONTROLLER: ContentController
  */
 export default angular
   .module('spam.content', [ngRoute, scroll, notifications])

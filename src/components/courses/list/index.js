@@ -18,7 +18,7 @@ import template from './list.html';
 import './list.css';
 
 
-const courseListRouting = ['RoutesProvider', RoutesProvider => {
+const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/courses', {
     template,
     controller,
@@ -31,23 +31,12 @@ const courseListRouting = ['RoutesProvider', RoutesProvider => {
 
 /**
  * MODULE: spam.courses.list
- * CONTROLLER: CourseListController
  * ROUTE: /courses
  */
 export default angular
   .module('spam.courses.list', [
-    ngRoute, // $routeParams
-    restangular,
-    tooltips,
-    iif,
-    scroll,
-    infiniteScroll,
-    buttons,
-    routes,
-    coursesService,
-    courseFilter,
-    courseSingle,
-    row
+    ngRoute, restangular, tooltips, iif, scroll, infiniteScroll, buttons,
+    routes, coursesService, courseFilter, courseSingle, row,
   ])
-  .config(courseListRouting)
+  .config(routing)
   .name;

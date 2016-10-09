@@ -9,7 +9,7 @@ import controller from './GuideController';
 import './guide.less';
 
 
-const guideRouting = ['RoutesProvider', RoutesProvider => {
+const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/guide', {
     template,
     controller,
@@ -21,10 +21,9 @@ const guideRouting = ['RoutesProvider', RoutesProvider => {
 
 /**
  * MODULE: spam.guide
- * CONTROLLER: GuideController
  * ROUTE: /guide
  */
 export default angular
   .module('spam.guide', [restangular, routes, course])
-  .config(guideRouting)
+  .config(routing)
   .name;

@@ -10,62 +10,62 @@ import field from '../field';
 import gradeInput from '../grade-input';
 import formatGrade from '../../formatGrade';
 
+import template from './course.html';
 
-const courseDirective = ['User', User => {
-  return {
-    require: '^^field',
-    restrict: 'E',
-    replace: true,
-    scope: {
-      'course': '='
-    },
-    templateUrl: 'components/user/overview/course/course.html',
-    link: function courseDirectiveLink(scope, elem, attrs, fieldCtrl) {
-      var course = scope.course;
 
-      scope.grade = function(newGrade) {
-        course.grade = formatGrade(newGrade);
+const courseDirective = ['User', User => ({
+  template,
+  require: '^^field',
+  restrict: 'E',
+  replace: true,
+  scope: {
+    'course': '='
+  },
+  link: function courseDirectiveLink(scope, elem, attrs, fieldCtrl) {
+    var course = scope.course;
 
-        course.passed = (
-          (course.grade >= 1 && course.grade <= 4) ||
-          (course.passed && course.grade === course.oldGrade)
-        );
-        course.failed = !course.passed && 5 <= course.grade;
-        fieldCtrl.courseChange(course);
+    scope.grade = function(newGrade) {
+      course.grade = formatGrade(newGrade);
 
-        if (course.grade === course.oldGrade) { return; }
-        course.oldGrade = course.grade;
-        course.customPUT({
-          grade: course.grade,
-          passed: course.passed
-        });
-      };
+      course.passed = (
+        (course.grade >= 1 && course.grade <= 4) ||
+        (course.passed && course.grade === course.oldGrade)
+      );
+      course.failed = !course.passed && 5 <= course.grade;
+      fieldCtrl.courseChange(course);
 
-      scope.mute = function() {
-        fieldCtrl.courseChange(course);
-        course.customPUT({
-          muted: course.muted
-        });
-      };
+      if (course.grade === course.oldGrade) { return; }
+      course.oldGrade = course.grade;
+      course.customPUT({
+        grade: course.grade,
+        passed: course.passed
+      });
+    };
 
-      scope.remove = function() {
-        course.muted = true;
-        fieldCtrl.courseChange(course);
-        User.removeCourse(course);
-      };
+    scope.mute = function() {
+      fieldCtrl.courseChange(course);
+      course.customPUT({
+        muted: course.muted
+      });
+    };
 
-      scope.move = function(fieldId) {
-        course.enrolled_field_id = fieldId;
-        course.customPUT(pick(course, 'enrolled_field_id'));
-        fieldCtrl.courseChange(course, true);
-      };
+    scope.remove = function() {
+      course.muted = true;
+      fieldCtrl.courseChange(course);
+      User.removeCourse(course);
+    };
 
-      course.term_abbr = course.term + course.year;
-      course.oldGrade = formatGrade(course.grade);
-      scope.grade(course.grade);
-    }
-  };
-}];
+    scope.move = function(fieldId) {
+      course.enrolled_field_id = fieldId;
+      course.customPUT(pick(course, 'enrolled_field_id'));
+      fieldCtrl.courseChange(course, true);
+    };
+
+    course.term_abbr = course.term + course.year;
+    course.oldGrade = formatGrade(course.grade);
+    scope.grade(course.grade);
+  }
+})];
 
 
 /**

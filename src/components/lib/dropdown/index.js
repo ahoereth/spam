@@ -1,7 +1,6 @@
 import angular from 'angular';
 
-import DropdownController from './DropdownController';
-
+import controller from './DropdownController';
 import './dropdown.css';
 
 
@@ -53,41 +52,37 @@ const dropdownService = ['$document', function dropdownService($document) {
 }];
 
 
-function dropdownDirective() {
-  return {
-    controller: 'DropdownController',
-    link: function(scope, element, attrs, dropdownController) {
-      dropdownController.init(element);
-    }
-  };
-}
+const dropdownDirective = () => ({
+  controller,
+  link: function(scope, element, attrs, dropdownController) {
+    dropdownController.init(element);
+  }
+});
 
 
-function dropdownToggleDirective() {
-  return {
-    require: '^^dropdown',
-    link: function(scope, element, attrs, dropdownController) {
-    //  if (! dropdownController) { return; }
-      dropdownController.toggleElement = element;
+const dropdownToggleDirective = () => ({
+  require: '^^dropdown',
+  link: function(scope, element, attrs, dropdownController) {
+  //  if (! dropdownController) { return; }
+    dropdownController.toggleElement = element;
 
-      var toggleDropdown = function(event) {
-        event.preventDefault();
+    var toggleDropdown = function(event) {
+      event.preventDefault();
 
-        if (! element.hasClass('disabled') && ! attrs.disabled) {
-          scope.$apply(function() {
-            dropdownController.toggle();
-          });
-        }
-      };
+      if (! element.hasClass('disabled') && ! attrs.disabled) {
+        scope.$apply(function() {
+          dropdownController.toggle();
+        });
+      }
+    };
 
-      element.bind('click', toggleDropdown);
+    element.bind('click', toggleDropdown);
 
-      scope.$on('$destroy', function() {
-        element.unbind('click', toggleDropdown);
-      });
-    }
-  };
-}
+    scope.$on('$destroy', function() {
+      element.unbind('click', toggleDropdown);
+    });
+  }
+});
 
 
 /**
@@ -96,13 +91,11 @@ function dropdownToggleDirective() {
  *   dropdown
  *   dropdownToggle
  * SERVICE: DropdownService
- * CONTROLLER: DropdownController
  *
  * @see https://github.com/angular-ui/bootstrap
  */
 export default angular.module('dropdown', [])
   .service('DropdownService', dropdownService)
-  .controller('DropdownController', DropdownController)
   .directive('dropdown', dropdownDirective)
   .directive('dropdownToggle', dropdownToggleDirective)
   .name;

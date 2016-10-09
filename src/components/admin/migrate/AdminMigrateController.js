@@ -11,8 +11,8 @@ export default class AdminMigrateController {
     this.fetch = debounce(this.fetch, 500);
     const d = new Date(), m = d.getMonth(), y = d.getFullYear();
     assign(this, {
-      year   : parseInt(params.year, 10) || (m < 5) ? y : y + 1,
-      term   : params.term || (m > 11 || m < 5) ? 'S' : 'W',
+      year   : parseInt(this.params.year, 10) || (m < 5) ? y : y + 1,
+      term   : this.params.term || (m > 11 || m < 5) ? 'S' : 'W',
       courses: [],
       sieve  : {},
     });
@@ -47,7 +47,7 @@ export default class AdminMigrateController {
     this.fetching = true;
     this.courses  = [];
     this.params = { ...this.params, year: this.year, term: this.term };
-    this.$location.search(params);
+    this.$location.search(this.params);
     this.Restangular.allUrl('o2', O2URL).getList({
       year: this.year, term: this.term
     }).then(this.fetched);

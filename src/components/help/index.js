@@ -24,7 +24,6 @@ const routing = ['RoutesProvider', RoutesProvider => {
 
 /**
  * MODULE: spam.help
- * CONTROLLER: HelpController
  * ROUTE: /help
  */
 export default angular

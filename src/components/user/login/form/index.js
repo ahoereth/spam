@@ -17,7 +17,7 @@ const loginformDirective = () => ({
   replace: true,
   scope: {
     username: '=?',
-    loading: '=?'
+    loading: '=?',
   },
   bindToController: true,
 });
@@ -26,7 +26,6 @@ const loginformDirective = () => ({
 /**
  * MODULE: spam.user.login.form
  * COMPONENT: loginform
- * CONTROLLER: LoginformController
  */
 export default angular
   .module('spam.user.login.form', [ngRoute, iif, auth])

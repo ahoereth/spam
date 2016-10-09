@@ -11,13 +11,8 @@ import template from './footer.html';
 /**
  * MODULE: spam.footer
  * COMPONENT: footer
- * CONTROLLER: FooterController
  */
 export default angular
   .module('spam.footer', [help, settings, logout])
-  .component('footer', {
-    template,
-    controller,
-    controllerAs: 'footer',
-  })
+  .component('footer', { template, controller, controllerAs: 'footer' })
   .name;

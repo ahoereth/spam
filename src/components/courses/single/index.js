@@ -22,7 +22,6 @@ const routing = ['RoutesProvider', RoutesProvider => {
 
 /**
  * MODULE: spam.courses.single
- * CONTROLLER: CourseController
  * ROUTE: /courses/:course_id
  */
 export default angular
