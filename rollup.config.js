@@ -9,6 +9,7 @@ import html from 'rollup-plugin-html';
 import lessNpmImport from 'less-plugin-npm-import';
 import lessAutoprefix from 'less-plugin-autoprefix';
 import lessCleanCss from 'less-plugin-clean-css';
+import uglify from 'rollup-plugin-uglify';
 
 
 const rfs = partialRight(readFileSync, { encoding: 'utf8' });
@@ -29,6 +30,7 @@ export default {
   entry: 'src/index.js',
   dest: `${dst}/bundle.js`,
   sourceMap: true,
+  format: 'cjs',
   plugins: [
     less({
       output: `${dst}/bundle.css`,
@@ -64,11 +66,12 @@ export default {
         removeComments: true,
       },
     }),
-    babel({ exclude: ['node_modules/**', 'src/**/*.css', 'src/**/*.less'] }),
+    babel({ exclude: ['node_modules/!(lodash-es)/**', 'src/**/*.css', 'src/**/*.less'] }),
     nodeResolve({ jsnext: true }),
     commonjs(),
     replace({
       ENV: JSON.stringify(ENV),
     }),
+    ENV === 'production' ? uglify() : () => {},
   ]
 };
