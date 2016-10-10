@@ -40,12 +40,7 @@ export default {
     eslint({ ignorePath: '.gitignore', include: 'src/**/*.js' }),
     less({
       output: `${dst}/bundle.css`,
-      // https://github.com/xiaofuzi/rollup-plugin-less/pull/3
-      include: ['**/*.less', '**/*.css'],
       exclude: '',
-      // https://github.com/xiaofuzi/rollup-plugin-less/pull/5
-      insert: false,
-      // https://github.com/xiaofuzi/rollup-plugin-less/pull/4
       option: {
         plugins: [
           new LessNpmImport({}),
