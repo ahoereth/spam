@@ -1,7 +1,8 @@
 import angular from 'angular';
 import {
-  forEach, multiply, debounce, chain, attempt, get, isPlainObject,
-  find, isUndefined, isNumber, fromPairs, keys, map, omit, findIndex,
+  forEach, multiply, debounce, attempt, get, isPlainObject, mergeWith,
+  find, isUndefined, isNumber, fromPairs, keys, map, omit, findIndex, sum, take,
+  filter, size, sortBy,
 } from 'lodash-es';
 
 import restangular from '../../lib/restangular';
@@ -32,29 +33,29 @@ function userFactoryFun(
 
 
   function calculateGrade(credits, grades) {
-    const acc = grades.mergeWith(credits.value(), multiply).sum();
-    return formatGrade(acc.value() / credits.sum().value());
+    const acc = sum(mergeWith(grades, credits, multiply));
+    return formatGrade(acc / sum(credits));
   }
 
 
   const factsCalculation = debounce(() => {
     const facts = self.facts;
-    const fields = chain(fieldData).sortBy('grade');
+    const fields = sortBy(fieldData, 'grade');
 
     // TODO: this '5' should be somehow dynamic
     facts.bscFieldsCount = 5;
-    const bscFields = fields.filter({
+    const bscFields = take(filter(fields, {
       examinationPossible: true,
       completed: true,
-    }).take(facts.bscFieldsCount);
+    }), facts.bscFieldsCount);
 
-    facts.bscFieldsCompletedCount = bscFields.size().value();
+    facts.bscFieldsCompletedCount = size(bscFields);
 
     facts.grades = {
-      overall: calculateGrade(fields.map('overallPassedCredits'),
-                              fields.map('overallGrade')),
-      bachelor: calculateGrade(bscFields.map('passedCredits'),
-                               bscFields.map('grade')),
+      overall: calculateGrade(map(fields, 'overallPassedCredits'),
+                              map(fields, 'overallGrade')),
+      bachelor: calculateGrade(map(bscFields, 'passedCredits'),
+                               map(bscFields, 'grade')),
     };
 
     // Take thesis grade into consideration.
@@ -67,16 +68,15 @@ function userFactoryFun(
     }
 
     // TODO: `3` credits per examination should be a database option.
-    facts.examinationCount = fields.map('examination').sum().value();
+    facts.examinationCount = sum(map(fields, 'examination'));
     facts.examinationCredits = 3 * (facts.examinationCount || 0);
 
     facts.credits = {
-      passed: fields.map('overallPassedCredits').sum().value() +
+      passed: sum(map(fields, 'overallPassedCredits')) +
               facts.examinationCredits + (thesisGrade ? 12 : 0),
       // overflow: fields.map('overflowPassedCredits').sum().value(),
-      enrolled: fields.map('enrolledCredits').sum().value(),
+      enrolled: sum(map(fields, 'enrolledCredits')),
     };
-
     callWatchers();
   }, 200);
 

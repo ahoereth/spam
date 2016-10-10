@@ -26,7 +26,6 @@ const courseDirective = ['User', User => ({
 
     scope.grade = newGrade => {
       course.grade = formatGrade(newGrade);
-
       course.passed = (
         (course.grade >= 1 && course.grade <= 4) ||
         (course.passed && course.grade === course.oldGrade)

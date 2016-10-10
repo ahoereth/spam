@@ -5,7 +5,7 @@ export default class gradeInputController {
   static $inject = ['$scope'];
 
   constructor($scope) {
-    $scope.$watch('$ctrl.grade', this.changeGrade);
+    $scope.$watch('$ctrl.grade', (n, o) => this.changeGrade(n, o));
     this.grade = formatGrade(this.grade);
   }
 

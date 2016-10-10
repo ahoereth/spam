@@ -6,7 +6,7 @@ export default class UserOverviewController {
 
   constructor($scope, Restangular, User) {
     assign(this, {
-      Restangular,
+      Restangular, $scope,
       UserService: User,
       user: User.details,
       facts: User.facts,
@@ -14,9 +14,12 @@ export default class UserOverviewController {
       courses: User.courses,
       thesisinput: !!(User.details.thesis_title || User.details.thesis_grade),
     });
-
     // Forces a $scope.$apply when relevant user data changes out-of-cycle.
-    User.addWatcher(() => $scope.apply());
+    User.addWatcher(() => this.apply);
+  }
+
+  apply() {
+    this.$scope.apply();
   }
 
   /**

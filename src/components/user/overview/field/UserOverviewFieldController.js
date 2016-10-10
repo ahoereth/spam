@@ -4,8 +4,11 @@ import {
 } from 'lodash-es';
 import formatGrade from '../../formatGrade';
 
+function isNumeric(x) {
+  return !(isNaN(x)) && (typeof x !== 'object') &&
+    (x !== Number.POSITIVE_INFINITY) && (x !== Number.NEGATIVE_INFINITY);
+}
 
-const isNumeric = n => (!isNaN(parseFloat(n)) && isFinite(n));
 const percent = (a, b) => ((a / b) > 1 ? 100 : ((a / b) * 100));
 
 
@@ -36,8 +39,10 @@ export default class UserOverviewFieldController {
       'field', 'field_id', 'field_examination_possible',
       'regulation_id', 'minimized', 'grade',
     ]), {
-      courses: {}, foreignCreditsMem: 0, hasManualGrade: false,
       $scope, User,
+      courses: this.courses || {},
+      foreignCreditsMem: 0,
+      hasManualGrade: false,
     });
     const field = this.raw;
 
