@@ -6,7 +6,10 @@
 
 // https://github.com/btford/angular-unicorn-directive/blob/master/unicorn.js
 
+/* eslint-disable */
+
 import angular from 'angular';
+
 
 export default angular
   .module('unicorn-directive', [])
@@ -42,7 +45,7 @@ export default angular
       ctx.save();
       ctx.translate(xr*-13.44662,yr*-12.909571);
       ctx.save();
-      g=ctx.createLinearGradient(xr*52.086075,yr*43.064625,xr*237.03638,yr*108.04962);
+      var g = ctx.createLinearGradient(xr*52.086075,yr*43.064625,xr*237.03638,yr*108.04962);
       g.addColorStop(0,options.color);
       g.addColorStop(0.11504425,options.color);
       g.addColorStop(0.28733653,options.color);
@@ -225,12 +228,12 @@ export default angular
           scale:  attr.scale  || 1.0,
           width:  attr.width  || baseWidth,
           height: attr.height || baseHeight,
-          color:  attr.color  || "rgba(255, 192, 203, 1)"
+          color:  attr.color  || "rgba(255, 192, 203, 1)",
         };
         canvas.width = options.width * options.scale;
         canvas.height = options.height * options.scale;
         draw(context, options);
-      }
+      },
     };
   })
   .name;

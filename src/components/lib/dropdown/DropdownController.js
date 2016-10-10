@@ -1,70 +1,77 @@
+import { isUndefined, assign } from 'lodash-es';
+
+
 export default class DropdownController {
   static $inject = [
-    '$scope', '$attrs', '$parse', 'DropdownService', '$animate'
+    '$scope', '$attrs', '$parse', 'DropdownService', '$animate',
   ];
 
+  // TODO: split into instance methods and controller as style
   constructor($scope, $attrs, $parse, DropdownService, $animate) {
-    var self = this,
-        scope = $scope.$new(),
-        openClass = 'open',
-        getIsOpen,
-        setIsOpen = angular.noop,
-        toggleInvoker = $attrs.onToggle ? $parse($attrs.onToggle) : angular.noop;
+    const self = this;
+    assign(this, {
+      $attrs,
+      $scope,
+      $parse,
+      scope: $scope.$new(),
+      getIsOpen: undefined,
+      setIsOpen: () => {},
+    });
+    const openClass = 'open';
+    const toggleInvoker = $attrs.onToggle ? $parse($attrs.onToggle) : () => {};
 
-    this.init = function(element) {
-      self.$element = element;
+    this.scope.getToggleElement = () => this.toggleElement;
 
-      if ($attrs.isOpen) {
-        getIsOpen = $parse($attrs.isOpen);
-        setIsOpen = getIsOpen.assign;
-
-        $scope.$watch(getIsOpen, function(value) {
-          scope.isOpen = !!value;
-        });
+    this.scope.focusToggleElement = () => {
+      if (this.toggleElement) {
+        this.toggleElement[0].focus();
       }
     };
 
-    this.toggle = function(open) {
-      return scope.isOpen = arguments.length ? !!open : !scope.isOpen;
-    };
-
-    // Allow other directives to watch status
-    this.isOpen = function() {
-      return scope.isOpen;
-    };
-
-    scope.getToggleElement = function() {
-      return self.toggleElement;
-    };
-
-    scope.focusToggleElement = function() {
-      if (self.toggleElement) {
-        self.toggleElement[0].focus();
-      }
-    };
-
-    scope.$watch('isOpen', function(isOpen, wasOpen) {
+    this.scope.$watch('isOpen', (isOpen, wasOpen) => {
       $animate[isOpen ? 'addClass' : 'removeClass'](self.$element, openClass);
 
       if (isOpen) {
-        scope.focusToggleElement();
-        DropdownService.open( scope );
+        this.scope.focusToggleElement();
+        DropdownService.open(this.scope);
       } else {
-        DropdownService.close( scope );
+        DropdownService.close(this.scope);
       }
 
-      setIsOpen($scope, isOpen);
-      if (angular.isDefined(isOpen) && isOpen !== wasOpen) {
+      this.setIsOpen(this.$scope, isOpen);
+      if (!isUndefined(isOpen) && isOpen !== wasOpen) {
         toggleInvoker($scope, { open: !!isOpen });
       }
     });
 
-    $scope.$on('$locationChangeSuccess', function() {
-      scope.isOpen = false;
+    this.$scope.$on('$locationChangeSuccess', () => {
+      this.scope.isOpen = false;
     });
 
-    $scope.$on('$destroy', function() {
-      scope.$destroy();
+    this.$scope.$on('$destroy', () => {
+      this.scope.$destroy();
     });
+  }
+
+  init(element) {
+    this.$element = element;
+
+    if (this.$attrs.isOpen) {
+      this.getIsOpen = this.$parse(this.$attrs.isOpen);
+      this.setIsOpen = this.getIsOpen.assign;
+      this.$scope.$watch(this.getIsOpen, value => {
+        this.scope.isOpen = !!value;
+      });
+    }
+  }
+
+  toggle(open) {
+    this.scope.isOpen = arguments.length ? !!open : !this.scope.isOpen;
+    return this.scope.isOpen;
+  }
+
+  // Allow other directives to watch status
+  isOpen() {
+    return this.scope.isOpen;
   }
 }

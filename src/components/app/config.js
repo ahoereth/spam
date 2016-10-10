@@ -17,20 +17,20 @@ const appConfig = [
     RestangularProvider.setBaseUrl(APIURL);
     // Send empty payload on `DELETE` requests.
     RestangularProvider.setRequestInterceptor(
-      (elem, operation) => ('remove' === operation) ? null : elem
+      (elem, operation) => ((operation === 'remove') ? null : elem)
     );
-  }
-]
+  },
+];
 
 
 const appConfigRun = ['Restangular', function appConfigRun(Restangular) {
-  Restangular.configuration.getIdFromElem = function(elem) {
+  Restangular.configuration.getIdFromElem = function getIdFromElem(elem) {
     const { id, route, username } = elem;
-    const { parentResource: par, student_in_course_id: sic_id } = elem;
+    const { parentResource: par, student_in_course_id: sicId } = elem;
     if (id) { return id; }
     if (route === 'users') { return username; }
-    if (route === 'courses' && par && par.route === 'users') { return sic_id; }
-    return elem[initial(route).join('') + '_id'];
+    if (route === 'courses' && par && par.route === 'users') { return sicId; }
+    return elem[`${initial(route).join('')}_id`];
   };
 }];
 

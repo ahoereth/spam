@@ -12,12 +12,5 @@ import addRemove from './add-remove';
  * MODULE: spam.courses
  */
 export default angular
-  .module('spam.courses', [
-    filters,
-    services,
-    list,
-    single,
-    row,
-    addRemove,
-  ])
+  .module('spam.courses', [filters, services, list, single, row, addRemove])
   .name;

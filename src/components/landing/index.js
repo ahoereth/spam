@@ -18,11 +18,11 @@ const routing = ['RoutesProvider', RoutesProvider => {
   });
 
   RoutesProvider.add('/.', {
-    redirectTo: '/'
+    redirectTo: '/',
   });
 
   RoutesProvider.add('*', {
-    redirectTo: '/'
+    redirectTo: '/',
   });
 }];
 

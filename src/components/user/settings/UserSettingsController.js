@@ -6,14 +6,14 @@ export default class UserSettingsController {
     this.UserService = User;
     $scope.$watchGroup(['user.firstname', 'user.lastname'], (n, o) => {
       if (n === o) { return; }
-      const [ firstname, lastname ] = n;
+      const [firstname, lastname] = n;
       User.updateUser({ firstname, lastname }, true);
     });
   }
 
   deleteUser() {
     this.UserService.deleteUser();
-  };
+  }
 
   export = {
     loading: false,
@@ -24,6 +24,6 @@ export default class UserSettingsController {
         this.export.data = JSON.stringify(data.plain(), null, '  ');
         this.export.loading = false;
       });
-    }
+    },
   }
 }

@@ -1,4 +1,4 @@
-import { assign } from 'lodash-es';
+import { assign, forEach, get } from 'lodash-es';
 
 
 export default class UserOverviewController {
@@ -6,8 +6,8 @@ export default class UserOverviewController {
 
   constructor($scope, Restangular, User) {
     assign(this, {
+      Restangular,
       UserService: User,
-      Restangular: Restangular,
       user: User.details,
       facts: User.facts,
       fields: User.fields,
@@ -26,14 +26,14 @@ export default class UserOverviewController {
   headstart() {
     this.Restangular.one('guides', 1).getList('courses', {
       semester: 1,
-      year    : this.UserService.details.mat_year,
-      term    : this.UserService.details.mat_term
+      year: this.UserService.details.mat_year,
+      term: this.UserService.details.mat_term,
     }).then(guide => {
       forEach(guide, course => {
-        const field_id = !!course.singleField ? course.singleField :
+        const fieldId = course.singleField ? course.singleField :
           get(course, 'fields[0].field_id', null);
-        this.User.addCourse(course, field_id);
+        this.User.addCourse(course, fieldId);
       });
     });
-  };
+  }
 }

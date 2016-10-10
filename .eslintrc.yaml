@@ -1,0 +1,26 @@
+parser: babel-eslint
+extends: airbnb-base
+parserOptions:
+  ecmaVersion: 6
+  sourceType: module
+  impliedStrict: true
+  experimentalObjectRestSpread: true
+env:
+  browser: true
+  es6: true
+globals:
+  ENV: true
+rules:
+  arrow-parens:
+    - warn
+    - as-needed
+    - requireForBlockBody: false
+  one-var: off
+  one-var-declaration-per-line: off
+  class-methods-use-this: off
+  no-param-reassign: off
+  no-plusplus: off
+  object-property-newline: off
+  no-prototype-builtins: off
+  camelcase: off # lots of stuff from the api is snakecase
+  semi: warn

@@ -1,7 +1,5 @@
 import angular from 'angular';
-import { assign, assignIn, map, pick, debounce } from 'lodash-es';
 
-import { APIURL, O2URL } from '../../app/constants';
 import routes from '../../app/services/routes';
 import courseRow from '../../courses/row';
 import instafocus from '../../lib/instafocus';

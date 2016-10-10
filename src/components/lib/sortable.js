@@ -2,7 +2,8 @@ import angular from 'angular';
 
 
 function sortableDirective() {
-  var draggedelement, sourcemodel;
+  let draggedelement;
+  let sourcemodel;
 
   return {
     restrict: 'A',
@@ -11,29 +12,27 @@ function sortableDirective() {
       options: '=htmlSortable',
       ngModel: '=',
     },
-    link: function(scope, element, attrs, ngModel) {
-      // Check for `draggable` feature availability.
+    link: function sortableLink(scope, element, attrs, ngModel) {
       if (!('draggable' in angular.element('<span>')[0])) {
-        return false;
+        return;
       }
 
-      // Default options.
-      var defaults = {
+      const defaults = {
         active: true,
         allow_cross: false,
         handle: false,
-        construct: function(/*models*/) {},
-        stop: function(/*model, idx*/) {}
+        construct: (/* models */) => {},
+        stop: (/* model, idx */) => {},
       };
 
-      var sortable = {
+      const sortable = {
         is_handle: false,
         in_use: false,
-        options: angular.copy(defaults)
+        options: angular.copy(defaults),
       };
 
       // Start dragging.
-      sortable.handleDragStart = function(e) {
+      sortable.handleDragStart = e => {
         draggedelement = null;
         sourcemodel = null;
 
@@ -59,7 +58,7 @@ function sortableDirective() {
 
 
       // Dragging element over a dropzone - continuously.
-      sortable.handleDragOver = function(e) {
+      sortable.handleDragOver = e => {
         if (e.preventDefault) {
           e.preventDefault(); // Allows us to drop.
         }
@@ -72,17 +71,17 @@ function sortableDirective() {
 
 
       // Dragging element over a dropzone - initial.
-      sortable.handleDragEnter = function(/*e*/) {};
+      sortable.handleDragEnter = () => {};
 
 
       // Dragging element out of a dropzone.
-      sortable.handleDragLeave = function(/*e*/) {
+      sortable.handleDragLeave = () => {
         this.classList.remove('over');
       };
 
 
       // Dropping element into a dropzone.
-      sortable.handleDrop = function(e) {
+      sortable.handleDrop = e => {
         // this/e.target is current target element.
         if (e.stopPropagation) { // Stop redirection.
           e.stopPropagation();
@@ -94,39 +93,36 @@ function sortableDirective() {
           return;
         }
 
-        var draggedmodel = draggedelement.model;
-        var drag_index = ngModel.$modelValue.indexOf(draggedmodel);
-        var drop_index = !angular.isDefined(this.index) ?
+        const draggedmodel = draggedelement.model;
+        const dragIndex = ngModel.$modelValue.indexOf(draggedmodel);
+        const dropIndex = !angular.isDefined(this.index) ?
                            ngModel.$modelValue.length : this.index;
 
-        if (-1 !== drag_index) {
+        if (dragIndex !== -1) {
           // Move inside of one group.
-          ngModel.$modelValue.splice(drag_index, 1);
-          ngModel.$modelValue.splice(drop_index, 0, draggedmodel);
-
+          ngModel.$modelValue.splice(dragIndex, 1);
+          ngModel.$modelValue.splice(dropIndex, 0, draggedmodel);
         } else if (sortable.options.allow_cross) {
           // Move into a new group.
-          ngModel.$modelValue.splice(drop_index, 0, draggedmodel);
-
-          var idx = sourcemodel.$modelValue.indexOf(draggedmodel);
-          if(-1 !== idx) {
+          ngModel.$modelValue.splice(dropIndex, 0, draggedmodel);
+          const idx = sourcemodel.$modelValue.indexOf(draggedmodel);
+          if (idx !== -1) {
             sourcemodel.$modelValue.splice(idx, 1);
           }
-
         } else {
           // Not allowed to move to new group.
           return;
         }
 
-        if (sortable.options &&  angular.isDefined(sortable.options.stop)) {
-          sortable.options.stop(ngModel.$modelValue, drop_index);
+        if (sortable.options && angular.isDefined(sortable.options.stop)) {
+          sortable.options.stop(ngModel.$modelValue, dropIndex);
         }
       };
 
 
       // Dragging stopped, element dropped - whereever.
-      sortable.handleDragEnd = function(/*e*/) {
-        angular.forEach(sortable.cols_, function(col) {
+      sortable.handleDragEnd = () => {
+        angular.forEach(sortable.cols, col => {
           col.classList.remove('over');
           col.classList.remove('moving');
           col.classList.remove('selected');
@@ -136,14 +132,24 @@ function sortableDirective() {
 
 
       // Fired when the specified handle is used for dragging.
-      sortable.activehandle = function() {
+      sortable.activehandle = () => {
         sortable.is_handle = true;
       };
 
 
+      // Required because querySelector is not available during init.
+      function bindHandleBinder() {
+        this.removeEventListener('mouseover', bindHandleBinder, false);
+        const handle = this.querySelector(sortable.options.handle);
+        if (handle) {
+          handle.addEventListener('mousedown', sortable.activehandle, false);
+        }
+      }
+
+
       // Unbind all events.
-      sortable.unbind = function() {
-        angular.forEach(sortable.cols_, function(c) {
+      sortable.unbind = () => {
+        angular.forEach(sortable.cols, c => {
           c.removeAttribute('draggable');
           c.removeEventListener('dragstart', sortable.handleDragStart, false);
           c.removeEventListener('dragenter', sortable.handleDragEnter, false);
@@ -161,18 +167,8 @@ function sortableDirective() {
       };
 
 
-      // Required because querySelector is not available during init.
-      function bindHandleBinder() {
-        this.removeEventListener('mouseover', bindHandleBinder, false);
-        var handle = this.querySelector(sortable.options.handle);
-        if (handle) {
-          handle.addEventListener('mousedown', sortable.activehandle, false);
-        }
-      }
-
-
       // Bind all events.
-      sortable.bind_single = function(elem){
+      sortable.bind_single = elem => {
         elem.addEventListener('drop', sortable.handleDrop, false);
         elem.addEventListener('dragstart', sortable.handleDragStart, false);
         elem.addEventListener('dragenter', sortable.handleDragEnter, false);
@@ -188,20 +184,19 @@ function sortableDirective() {
 
       // Update sortable. Fired for example when a new element is added or
       // removed from the model.
-      sortable.update = function() {
+      sortable.update = () => {
         draggedelement = null;
-        var index = 0;
-        this.cols_ =  element[0].children;
+        let index = 0;
+        this.cols = element[0].children;
 
         // Create drop zone below all other elements if it does not exist yet.
         if (!element[0].querySelector('.dropzone')) {
-          var placeholder =
-            angular.element('<div class="dropzone"><br><br><br></div>')[0];
+          const placeholder = angular.element('<div class="dropzone"><br><br><br></div>')[0];
           element[0].appendChild(placeholder);
         }
 
         // Initialize listeners for each child.
-        angular.forEach(this.cols_, function(col) {
+        angular.forEach(this.cols, col => {
           col.index = index;
           col.model = ngModel.$modelValue[index];
           index++;
@@ -218,10 +213,10 @@ function sortableDirective() {
 
 
       // Watch sortable option for changes.
-      scope.$watch('options', function(options, oldOptions) {
+      scope.$watch('options', options => {
         sortable.options = angular.extend({}, defaults, options);
 
-        if (false === sortable.options.active) {
+        if (sortable.options.active === false) {
           if (sortable.in_use) {
             sortable.unbind();
             sortable.in_use = false;
@@ -239,15 +234,15 @@ function sortableDirective() {
 
 
       // Watch ngModel for changes in order to refresh the DOM listeners.
-      scope.$watch('ngModel', function(n, o) {
+      scope.$watch('ngModel', (n, o) => {
         if (
           n === o || n.length === o.length ||
-          false === sortable.options.active
+          sortable.options.active === false
         ) { return; }
 
         sortable.update();
       }, true);
-    }
+    },
   };
 }
 

@@ -17,11 +17,11 @@ const userOverviewFieldDirective = () => ({
   restrict: 'E',
   replace: false,
   scope: {
-    raw: '=field'
+    raw: '=field',
   },
   transclude: true,
   controllerAs: 'field',
-  bindToController: true
+  bindToController: true,
 });
 
 
@@ -31,7 +31,7 @@ const userOverviewFieldDirective = () => ({
  */
 export default angular
   .module('spam.user.overview.field', [
-    progress, tickable, iif, dropdown, userService, gradeInput
+    progress, tickable, iif, dropdown, userService, gradeInput,
   ])
   .directive('field', userOverviewFieldDirective)
   .name;

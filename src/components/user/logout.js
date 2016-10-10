@@ -8,7 +8,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/~/logout', {
     controller: 'UserLogoutController',
     template: '',
-    title : 'Logout',
+    title: 'Logout',
     access: 1,
   });
 }];

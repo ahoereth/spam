@@ -29,7 +29,7 @@ const httpInterceptFactory = [
     let retryTimeout;
 
     // Wrapper for retrying a request.
-    var retryHttpRequest = function (config, deferred) {
+    const retryHttpRequest = function retryHttpRequest(config, deferred) {
       $http = $http || $injector.get('$http'); // Initialize $http service.
       $http(config).then(
         res => deferred.resolve(res),
@@ -38,25 +38,25 @@ const httpInterceptFactory = [
     };
 
     // Retries all the buffered requests clears the buffer.
-    var retryAll = function () {
+    const retryAll = function retryAll() {
       if (buffer.length === 0) { return; }
 
-      var tmp;
-      while (tmp = buffer.shift()) {
+      let tmp;
+      while (tmp = buffer.shift()) { // eslint-disable-line no-cond-assign
         tmp.config.retry = (tmp.config.retry || 0) + 1;
         if (tmp.config.retry <= retriesPerRequest) {
           retryHttpRequest(tmp.config, tmp.deferred);
         } else {
           $rootScope.$broadcast('http:error:permanent', {
             config: tmp.config,
-            status: tmp.status
+            status: tmp.status,
           });
         }
       }
     };
 
     return {
-      request: function (config) {
+      request(config) {
         $rootScope.loading++;
         return config || $q.when(config);
       },
@@ -68,24 +68,20 @@ const httpInterceptFactory = [
         return $q.reject(rejection);
       },*/
 
-      response: function (response) { // success
+      response(response) { // success
         $rootScope.loading--;
         if (typeof response.config.retries !== 'undefined') {
           $rootScope.$broadcast('http:error:resolved', {
             config: response.config,
-            status: response.status
+            status: response.status,
           });
         }
         return response || $q.when(response);
       },
 
-      responseError: function (rejection) { // error
+      responseError(rejection) { // error
         $rootScope.loading--;
-        var deferred = $q.defer();
-        buffer.push({
-          config: rejection.config,
-          deferred: deferred
-        });
+        buffer.push({ deferred: $q.defer(), config: rejection.config });
         if (rejection.status === 401 || rejection.status === 403) {
           // No redirection here because we might try to authenticate the user
           // even for routes for which which not necessarily require auth.
@@ -94,7 +90,7 @@ const httpInterceptFactory = [
         } else if (rejection.status >= 404) {
           $rootScope.$broadcast('http:error', {
             config: rejection.config,
-            status: rejection.status
+            status: rejection.status,
           });
           $timeout.cancel(retryTimeout);
           retryTimeout = $timeout(() => retryAll(), retryTimeoutTime);
@@ -103,15 +99,15 @@ const httpInterceptFactory = [
         return $q.reject(rejection);
       },
 
-      clear: function () {
+      clear() {
         buffer = [];
-      }
+      },
     };
-  }
+  },
 ];
 
 
 export default angular
- .module('spam.app.services.http-intercept', [])
- .factory('httpIntercept', httpInterceptFactory)
- .name;
+  .module('spam.app.services.http-intercept', [])
+  .factory('httpIntercept', httpInterceptFactory)
+  .name;

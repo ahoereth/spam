@@ -1,4 +1,6 @@
-import { assign, assignIn, map, pick, debounce } from 'lodash-es';
+import { assign, assignIn, map, pick, debounce, has } from 'lodash-es';
+
+import { O2URL } from '../../app/constants';
 
 
 export default class AdminMigrateController {
@@ -11,10 +13,10 @@ export default class AdminMigrateController {
     this.fetch = debounce(this.fetch, 500);
     const d = new Date(), m = d.getMonth(), y = d.getFullYear();
     assign(this, {
-      year   : parseInt(this.params.year, 10) || (m < 5) ? y : y + 1,
-      term   : this.params.term || (m > 11 || m < 5) ? 'S' : 'W',
+      year: parseInt(this.params.year, 10) || (m < 5) ? y : y + 1,
+      term: this.params.term || (m > 11 || m < 5) ? 'S' : 'W',
       courses: [],
-      sieve  : {},
+      sieve: {},
     });
   }
 
@@ -33,7 +35,8 @@ export default class AdminMigrateController {
       this.fetching = false;
       this.courses = this.Restangular.restangularizeCollection(
         null,
-        map(courses, (c, k) => has(ids, key) ? { ...c, course_id: ids[k] } : c), // TODO: Needs assignIn?
+        // TODO: Needs assignIn?
+        map(courses, (c, k) => (has(ids, k) ? { ...c, course_id: ids[k] } : c)),
         'courses'
       );
     });
@@ -45,11 +48,11 @@ export default class AdminMigrateController {
   fetch() {
     this.selected = true;
     this.fetching = true;
-    this.courses  = [];
+    this.courses = [];
     this.params = { ...this.params, year: this.year, term: this.term };
     this.$location.search(this.params);
     this.Restangular.allUrl('o2', O2URL).getList({
-      year: this.year, term: this.term
+      year: this.year, term: this.term,
     }).then(this.fetched);
   }
 

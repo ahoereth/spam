@@ -6,14 +6,13 @@ import authService from '../../user/services/auth';
 
 
 const routesInitialization = [
-  '$location', '$rootScope', '$route',
-  function routesInitialization($location, $rootScope, $route) {
+  '$location', '$rootScope',
+  function routesInitialization($location, $rootScope) {
     // Handle errors occurring on route changing. This is called when one of the
     // promises to be resolved before visiting the route is rejected.
     $rootScope.$on('$routeChangeError', (event, current, previous, rejection) => {
-      if ('not_authenticated' === rejection) {
-        var requested = $location.path();
-        $location.path('/401').search('path', requested);
+      if (rejection === 'not_authenticated') {
+        $location.path('/401').search('path', $location.path());
       } else {
         $location.path('/login');
       }
@@ -21,7 +20,7 @@ const routesInitialization = [
 
     // Called on every route change for user authentication verification and
     // possible redirecting.
-    $rootScope.$on('$routeChangeSuccess', function(event, current, previous) {
+    $rootScope.$on('$routeChangeSuccess', (event, current, previous) => {
       if (!current) { return; }
 
       // Don't allow entering the page on /401
@@ -33,21 +32,21 @@ const routesInitialization = [
       // Handle page title.
       $rootScope.$broadcast('title', current.title, true);
     });
-  }
+  },
 ];
 
 
 function routesProvider() {
   let $routeProvider;
-  const authentication = ['$route', 'Auth', ($route, Auth) => {
-    return Auth.authenticate($route.current.access);
-  }];
+  const authentication = ['$route', 'Auth', ($route, Auth) => (
+    Auth.authenticate($route.current.access)
+  )];
 
   // Store $routeProvider during config phase for later use.
   this.setRouteProvider = $rp => { $routeProvider = $rp; };
 
   // Adds routes to the actual router.
-  this.add = function(path, options) {
+  this.add = function add(path, options) {
     if (!options) {
       return false;
     }
@@ -59,7 +58,7 @@ function routesProvider() {
       options.title = options.title || ''; // Default title is empty.
     }
 
-    if ('*' === path) {
+    if (path === '*') {
       $routeProvider.otherwise(options);
     } else {
       $routeProvider.when(path, options);
@@ -69,12 +68,8 @@ function routesProvider() {
   };
 
   // Return service.
-  this.$get = function() {
-    return {};
-  };
+  this.$get = () => ({});
 }
-
-
 
 
 // Store $routeProvider for later use and set $locationProvider options.
@@ -83,7 +78,7 @@ const routesProviderInit = [
   ($routeProvider, $locationProvider, RoutesProvider) => {
     RoutesProvider.setRouteProvider($routeProvider);
     $locationProvider.html5Mode(HTML5MODE).hashPrefix(HASHPREFIX);
-  }
+  },
 ];
 
 

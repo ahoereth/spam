@@ -3,7 +3,7 @@ import angular from 'angular';
 import template from './help-fragment.html';
 
 function helpFragmentLink(scope, elem, attrs) {
-  scope.slug  = attrs.slug;
+  scope.slug = attrs.slug;
   scope.title = attrs.title;
 }
 

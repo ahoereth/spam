@@ -1,18 +1,16 @@
 import angular from 'angular';
 
 
-function blurOnEnterDirective() {
-  return {
-    restrict: 'A',
-    link: function(scope, elem/*, attrs*/) {
-      elem.on('keypress', function($event) {
-        if ($event.keyCode === 13) {
-          $event.target.blur();
-        }
-      });
-    }
-  };
-}
+const blurOnEnterDirective = () => ({
+  restrict: 'A',
+  link: function blurOnEnterLink(scope, elem) {
+    elem.on('keypress', $event => {
+      if ($event.keyCode === 13) {
+        $event.target.blur();
+      }
+    });
+  },
+});
 
 
 /**

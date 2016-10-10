@@ -1,5 +1,4 @@
 import angular from 'angular';
-import { forEach, get } from 'lodash-es';
 
 import iif from '../../lib/iif';
 import tooltips from '../../lib/tooltips';

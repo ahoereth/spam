@@ -2,7 +2,6 @@ import angular from 'angular';
 
 import blurOnEnter from '../../../lib/blur-on-enter';
 import userService from '../../services/user';
-import formatGrade from '../../formatGrade';
 
 import controller from './GradeInputController';
 import template from './grade-input.html';

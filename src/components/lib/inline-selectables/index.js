@@ -3,19 +3,27 @@ import angular from 'angular';
 import template from './inline-selectable.html';
 
 
+class InlineSelectableGroupController {
+  static $inject = ['$scope'];
+
+  constructor($scope) {
+    this.$scope = $scope;
+  }
+
+  setValue(value) {
+    this.selected = value;
+    this.$scope.model = value;
+  }
+}
+
 const inlineSelectableGroupDirective = () => ({
   restrict: 'E',
   replace: false,
   transclude: false,
   scope: {
-    model: '=ngModel'
+    model: '=ngModel',
   },
-  controller: ['$scope', function($scope) {
-    this.setValue = (value) => {
-      this.selected = value;
-      $scope.model = value;
-    };
-  }]
+  controller: InlineSelectableGroupController,
 });
 
 
@@ -25,21 +33,19 @@ const inlineSelectableDirective = () => ({
   replace: true,
   transclude: true,
   scope: {
-    value: '='
+    value: '=',
   },
   require: '^^inlineSelectableGroup',
-  link: function(scope, elem, attrs, groupCtrl) {
+  link: function inlineSelectableLink(scope, elem, attrs, groupCtrl) {
     scope.$watch(
-      function(){ return groupCtrl.selected; },
-      function(newVal){
-        scope.selected = newVal;
-      }
+      () => groupCtrl.selected,
+      newVal => { scope.selected = newVal; }
     );
 
-    scope.change = function() {
+    scope.change = () => {
       groupCtrl.setValue(scope.value);
     };
-  }
+  },
 });
 
 

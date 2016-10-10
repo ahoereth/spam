@@ -5,7 +5,7 @@ export default class ThesisInputController {
   static $inject = ['User'];
 
   constructor(User) {
-    if (!User.details) { return false; }
+    if (!User.details) { return; }
     const { thesis_title, thesis_grade } = User.details;
     assign(this, {
       User,

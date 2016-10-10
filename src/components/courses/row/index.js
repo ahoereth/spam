@@ -14,11 +14,11 @@ const courserowDirective = () => ({
   restrict: 'E',
   replace: true,
   scope: {
-    'course': '=',
-    'action': '&action'
+    course: '=',
+    action: '&action',
   },
-  link: function(scope, elem, attrs) {
-    var opt = scope.opt = {};
+  link: function courserowLink(scope, elem, attrs) {
+    const opt = scope.opt = {};
 
     if (undefined !== attrs.expanded) {
       opt.initiallyExpanded = true;
@@ -37,22 +37,22 @@ const courserowFieldsDirective = () => ({
   restrict: 'E',
   replace: true,
   scope: {
-    fields: '=fields'
+    fields: '=fields',
   },
   template: '<span>{{::list}}</span>',
-  link: function(scope) {
-    if (! scope.fields) { return false; }
+  link: function courserowFieldsLink(scope) {
+    if (!scope.fields) { return; }
 
-    scope.list = reduce(scope.fields, function(list, val, key) {
+    scope.list = reduce(scope.fields, (list, val, key) => {
       if (list !== '') { list += ', '; }
       if (val.hasOwnProperty('field')) {
         return list + val.field +
-               ('PM' === val.course_in_field_type ? ' (PM)' : '');
-      } else {
-        return list + key + ': ' + val;
+               (val.course_in_field_type === 'PM' ? ' (PM)' : '');
       }
+
+      return `${list} ${key} : ${val}`;
     }, '');
-  }
+  },
 });
 
 

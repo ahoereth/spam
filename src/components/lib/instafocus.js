@@ -1,14 +1,10 @@
 import angular from 'angular';
 
 
-function instafocusDirective() {
-  return {
-    restrict: 'A',
-    link: function(scope, elem/*, attrs*/) {
-      elem[0].focus();
-    }
-  };
-}
+const instafocusDirective = () => ({
+  restrict: 'A',
+  link: (scope, elem) => elem[0].focus(),
+});
 
 
 /**

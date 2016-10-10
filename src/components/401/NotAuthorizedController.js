@@ -14,7 +14,7 @@ export default class NotAuthorizedController {
       this.user = {
         username: user.username,
         role: user.role,
-        rank: user.rank
+        rank: user.rank,
       };
     }
   }

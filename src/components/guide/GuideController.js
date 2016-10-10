@@ -1,4 +1,4 @@
-import { map, forEach, groupBy } from 'lodash-es';
+import { forEach, groupBy } from 'lodash-es';
 
 
 export default class GuideController {

@@ -16,9 +16,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
     title: 'Help',
   });
 
-  RoutesProvider.add('/help', {
-    redirectTo: '/help/remember'
-  });
+  RoutesProvider.add('/help', { redirectTo: '/help/remember' });
 }];
 
 

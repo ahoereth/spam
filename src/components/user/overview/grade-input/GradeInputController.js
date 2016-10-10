@@ -14,7 +14,7 @@ export default class gradeInputController {
       newGrade === oldGrade ||
       parseFloat(newGrade) === parseFloat(oldGrade)
     ) {
-      return false;
+      return;
     }
 
     this.grade = formatGrade(newGrade);
@@ -22,7 +22,7 @@ export default class gradeInputController {
       (this.editable && (newGrade || (!newGrade && oldGrade))) || // Special case for fields.
       (!this.editable && !newGrade && oldGrade) // Special case for courses.
     ) {
-      this.change({newGrade: this.grade});
+      this.change({ newGrade: this.grade });
     }
-  };
+  }
 }

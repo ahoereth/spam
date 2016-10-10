@@ -1,6 +1,6 @@
 import angular from 'angular';
 import {
-  isUndefined, difference, range, isEmpty, union, find
+  isUndefined, difference, range, isEmpty, union, find,
 } from 'lodash-es';
 
 import restangular from '../../lib/restangular';
@@ -9,13 +9,12 @@ import restangular from '../../lib/restangular';
 const coursesFactory = [
   '$q', '$filter', 'Restangular',
   function CoursesFactory($q, $filter, Restangular) {
-    var fetchedYears = {},
-        courses = {},
-        currentYear = new Date().getFullYear(),
-        lowestYear = 2000,
-        promises = [];
-
-    var self = {};
+    const currentYear = new Date().getFullYear();
+    const lowestYear = 2000;
+    const self = {};
+    let fetchedYears = {};
+    let courses = {};
+    let promises = [];
 
 
     /**
@@ -27,14 +26,14 @@ const coursesFactory = [
      * @return {promise}        promise which will contain the whole ranch of
      *                          courses when resolved
      */
-    self.fetch = function(regulation, lower, upper) {
-      var reg = regulation === '' ? 0 : regulation;
+    self.fetch = (regulation, lower, upper) => {
+      const reg = regulation === '' ? 0 : regulation;
 
-      var deferred  = $q.defer();
-      var deferred2 = $q.defer();
+      const deferred = $q.defer();
+      const deferred2 = $q.defer();
       promises.push(deferred.promise);
 
-      lower = isUndefined(lower) ? lowestYear  : lower;
+      lower = isUndefined(lower) ? lowestYear : lower;
       upper = isUndefined(upper) ? currentYear : upper;
 
       if (isUndefined(fetchedYears[reg])) {
@@ -42,10 +41,10 @@ const coursesFactory = [
         courses[reg] = [];
       }
 
-      const years = difference(range(lower, upper+1), fetchedYears[reg]);
+      const years = difference(range(lower, upper + 1), fetchedYears[reg]);
 
       // needs some fixing. What about when we already pulled years inbetween?
-      const upperDb = years[years.length-1];
+      const upperDb = years[years.length - 1];
       const lowerDb = years[0];
 
       if (!isEmpty(years)) {
@@ -56,8 +55,8 @@ const coursesFactory = [
           regulation_id: regulation,
           lower: lowerDb,
           upper: upperDb,
-          limit: 2000
-        }).then(function(newCourses) {
+          limit: 2000,
+        }).then(newCourses => {
           courses[reg] = union(courses[reg], newCourses.data);
           deferred.resolve();
         });
@@ -67,10 +66,10 @@ const coursesFactory = [
 
       // used for cases where there might be many quick responses at once, the current one
       // might need data from one of the others which did not yet finish. Wait for those.
-      $q.all(promises).then(function() {
+      $q.all(promises).then(() => {
         // get the part of interest
         deferred2.resolve($filter('courseFilter')(courses[reg], {
-          'year#<&&year#>': (lower-1)+'&&'+(upper+1)
+          'year#<&&year#>': `${lower - 1}&&${upper + 1}`,
         }));
       });
 
@@ -81,7 +80,7 @@ const coursesFactory = [
     /**
      * Reset the complete local course data cache.
      */
-    self.reset = function() {
+    self.reset = () => {
       fetchedYears = {};
       courses = {};
       promises = [];
@@ -95,13 +94,13 @@ const coursesFactory = [
      * @param  {int}    courseId   course_id to get
      * @return {object}            course with all available information
      */
-    self.get = function(regulation, courseId) {
-      return find(courses[regulation], {course_id: courseId});
-    };
+    self.get = (regulation, courseId) => (
+      find(courses[regulation], { course_id: courseId })
+    );
 
 
     return self;
-  }
+  },
 ];
 
 

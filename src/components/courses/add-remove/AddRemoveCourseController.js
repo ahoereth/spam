@@ -1,5 +1,5 @@
 import {
-  find, flow, filter, get, has, map, values, flatten, includes, partialRight
+  find, filter, get, has, map, values, flatten, includes,
 } from 'lodash-es';
 
 

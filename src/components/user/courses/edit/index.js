@@ -41,7 +41,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.user.course.edit', [
-    restangular, instafocus, iif, routes, userService, routes
+    restangular, instafocus, iif, routes, userService, routes,
   ])
   .config(routing)
   .name;

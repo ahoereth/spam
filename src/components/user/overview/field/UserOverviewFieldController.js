@@ -1,16 +1,16 @@
 import {
   omit, sum, forIn, orderBy, pickBy, isPlainObject, partialRight, pick, assign,
-  isNull, isFinite, map, mergeWith, multiply, clone, forEach, isUndefined
+  isNull, isFinite, map, mergeWith, multiply, clone, forEach, isUndefined,
 } from 'lodash-es';
 import formatGrade from '../../formatGrade';
 
 
-const isNumeric = (n) => (!isNaN(parseFloat(n)) && isFinite(n));
-const percent = (a, b) => ((a / b) > 1 ? 100 : (a / b * 100));
+const isNumeric = n => (!isNaN(parseFloat(n)) && isFinite(n));
+const percent = (a, b) => ((a / b) > 1 ? 100 : ((a / b) * 100));
 
 
 const defaultCreditSet = {
-  overflowing: 0, percentage: 0, compulsory: 0, optional: 0, sum: 0
+  overflowing: 0, percentage: 0, compulsory: 0, optional: 0, sum: 0,
 };
 
 
@@ -37,9 +37,9 @@ export default class UserOverviewFieldController {
       'regulation_id', 'minimized', 'grade',
     ]), {
       courses: {}, foreignCreditsMem: 0, hasManualGrade: false,
-      $scope, User
+      $scope, User,
     });
-    var field = this.raw;
+    const field = this.raw;
 
     /**
      * Handler for credits which flow from other fields to this field. Only
@@ -47,20 +47,20 @@ export default class UserOverviewFieldController {
      */
     function handleOverflowingCredits() {
       // Omit the open studies field and sum up the credits.
-      var foreignPassedCredits = sum(omit(User.getOverflowingCredits(), 1));
-      var examinationCredits = User.facts.examinationCredits;
+      const foreignPassedCredits = sum(omit(User.getOverflowingCredits(), 1));
+      const examinationCredits = User.facts.examinationCredits;
 
       // Run the analysis again with those foreign credits.
       if (this.foreignCreditsMem !== (examinationCredits + foreignPassedCredits)) {
         this.foreignCreditsMem = examinationCredits + foreignPassedCredits;
-        doAnalysis(this.foreignCreditsMem);
+        this.doAnalysis(this.foreignCreditsMem);
       }
     }
 
     // If this field is the open studies field add a watcher which is being
     // called when the user facts have been updated in order to handle
     // credits flowing from other fields to this field.
-    if (1 === field.field_id) {
+    if (field.field_id === 1) {
       this.User.addWatcher(handleOverflowingCredits);
     }
 
@@ -70,7 +70,6 @@ export default class UserOverviewFieldController {
     this.examination = this.hasManualGrade;
     this.doAnalysis();
   }
-
 
 
   /**
@@ -87,17 +86,17 @@ export default class UserOverviewFieldController {
       this.foreignCreditsMem = foreignCredits;
     }
 
-    const percentage = partialRight(percent, field.field_pm+field.field_wpm);
+    const percentage = partialRight(percent, field.field_pm + field.field_wpm);
 
     const credits = this.credits = {
       passed: clone(defaultCreditSet),
       enrolled: clone(defaultCreditSet),
-      full: field.field_pm + field.field_wpm
+      full: field.field_pm + field.field_wpm,
     };
 
     const available = credits.available = {
       compulsory: field.field_pm,
-      optional: field.field_wpm
+      optional: field.field_wpm,
     };
 
     // Aggregate the credits from the individual courses.
@@ -107,27 +106,28 @@ export default class UserOverviewFieldController {
         ['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc']
       ),
       course => {
-        var group = course.passed ? 'passed' : 'enrolled';
-        var category = course.compulsory ? 'compulsory' : 'optional';
+        const group = course.passed ? 'passed' : 'enrolled';
+        const category = course.compulsory ? 'compulsory' : 'optional';
 
-        var freeCredits = available[category] - course.credits;
+        let freeCredits = available[category] - course.credits;
         course.counts = course.credits + (freeCredits < 0 ? freeCredits : 0);
         available[category] -= course.counts;
         credits[group][category] += course.counts;
 
         // If the compulsory part of the module is done, compulsory courses
         // can also flow to the optional part.
-        if ('compulsory' === category && course.counts < course.credits) {
+        if (category === 'compulsory' && course.counts < course.credits) {
           freeCredits = available.optional - course.counts;
-          var counts = course.counts + (freeCredits < 0 ? freeCredits : 0);
+          const counts = course.counts + (freeCredits < 0 ? freeCredits : 0);
           available.optional -= counts;
           credits[group].optional += counts;
-          course.counts = course.counts + counts;
+          course.counts += counts;
         }
 
         // Overflowing credits can flow to the open studies module.
         credits[group].overflowing += (course.credits - course.counts);
-    });
+      }
+    );
 
     // Account for foreign credits, if any.
     if (foreignCredits) {
@@ -148,8 +148,8 @@ export default class UserOverviewFieldController {
     });
 
     // An examination is only possible with enough credits.
-    this.examination = (100 >= credits.passed.percentage) ? this.hasManualGrade
-                                                          : false;
+    this.examination = (credits.passed.percentage === 100) ? this.hasManualGrade
+                                                           : false;
 
     // Only update the field's grade and update the user facts if the credits
     // do not include foreign credits. Foreign credit updates are always
@@ -166,9 +166,9 @@ export default class UserOverviewFieldController {
         overallPassedCredits: credits.passed.sum + credits.passed.overflowing,
         overflowPassedCredits: credits.passed.overflowing,
         enrolledCredits: credits.enrolled.sum,
-        completed: 100 === credits.passed.percentage,
-        examinationPossible: !! field.field_examination_possible,
-        examination: this.examination
+        completed: credits.passed.percentage === 100,
+        examinationPossible: !!field.field_examination_possible,
+        examination: this.examination,
       });
     } else {
       this.$scope.$digest();
@@ -187,19 +187,19 @@ export default class UserOverviewFieldController {
    */
   courseChange(course, removed) {
     // Courses without credits are of no interest.
-    if (! course.ects || course.muted || course.failed || removed) {
-      this.courses[ course.student_in_course_id ] = null;
+    if (!course.ects || course.muted || course.failed || removed) {
+      this.courses[course.student_in_course_id] = null;
     } else {
-      this.courses[ course.student_in_course_id ] = {
+      this.courses[course.student_in_course_id] = {
         grade: isNumeric(course.grade) ? parseFloat(course.grade) : null,
         passed: course.passed,
         credits: course.ects,
-        compulsory: ('PM' === course.enrolled_course_in_field_type)
+        compulsory: course.enrolled_course_in_field_type === 'PM',
       };
     }
 
     this.doAnalysis();
-  };
+  }
 
 
   /**
@@ -213,10 +213,10 @@ export default class UserOverviewFieldController {
       // Grade can't change if no module examination is possible.
       (this.raw.field_examination_possible) &&
       // Field was not passed so a module examination is not possible.
-      (100 === ctrl.credits.passed.percentage)
+      (this.credits.passed.percentage === 100)
     ) {
       this.hasManualGrade = !isUndefined(examine) ? examine : this.hasManualGrade;
-      if (newGrade !== (this.raw.grade||null)) {
+      if (newGrade !== (this.raw.grade || null)) {
         this.hasManualGrade = newGrade !== null;
         this.raw.grade = newGrade;
         this.raw.put();
@@ -224,7 +224,7 @@ export default class UserOverviewFieldController {
     }
 
     this.doAnalysis();
-  };
+  }
 
 
   /**
@@ -233,5 +233,5 @@ export default class UserOverviewFieldController {
   minimize() {
     this.raw.minimized = this.minimized;
     this.raw.put();
-  };
+  }
 }

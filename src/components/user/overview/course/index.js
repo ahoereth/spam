@@ -19,43 +19,43 @@ const courseDirective = ['User', User => ({
   restrict: 'E',
   replace: true,
   scope: {
-    'course': '='
+    course: '=',
   },
   link: function courseDirectiveLink(scope, elem, attrs, fieldCtrl) {
-    var course = scope.course;
+    const course = scope.course;
 
-    scope.grade = function(newGrade) {
+    scope.grade = newGrade => {
       course.grade = formatGrade(newGrade);
 
       course.passed = (
         (course.grade >= 1 && course.grade <= 4) ||
         (course.passed && course.grade === course.oldGrade)
       );
-      course.failed = !course.passed && 5 <= course.grade;
+      course.failed = !course.passed && course.grade >= 5;
       fieldCtrl.courseChange(course);
 
       if (course.grade === course.oldGrade) { return; }
       course.oldGrade = course.grade;
       course.customPUT({
         grade: course.grade,
-        passed: course.passed
+        passed: course.passed,
       });
     };
 
-    scope.mute = function() {
+    scope.mute = () => {
       fieldCtrl.courseChange(course);
       course.customPUT({
-        muted: course.muted
+        muted: course.muted,
       });
     };
 
-    scope.remove = function() {
+    scope.remove = () => {
       course.muted = true;
       fieldCtrl.courseChange(course);
       User.removeCourse(course);
     };
 
-    scope.move = function(fieldId) {
+    scope.move = fieldId => {
       course.enrolled_field_id = fieldId;
       course.customPUT(pick(course, 'enrolled_field_id'));
       fieldCtrl.courseChange(course, true);
@@ -64,7 +64,7 @@ const courseDirective = ['User', User => ({
     course.term_abbr = course.term + course.year;
     course.oldGrade = formatGrade(course.grade);
     scope.grade(course.grade);
-  }
+  },
 })];
 
 

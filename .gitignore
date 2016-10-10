@@ -3,11 +3,9 @@
 /api/lib/
 /app/
 /assets/
+/dev/
 /node_modules/
-/src/fonts/
-/src/lib/
-/src/bundle.*
 /composer.phar
+**/*.ignore.*
 *.swp
 *.log
-**.ignore.*

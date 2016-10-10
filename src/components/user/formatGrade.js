@@ -29,51 +29,50 @@ export default function formatGrade(g, course) {
 
   // round to one decimal behind the full stop
   if (course) {
-    g = Math.round( parseFloat(g) * 10 ) / 10;
+    g = Math.round(parseFloat(g) * 10) / 10;
   } else {
     // field grades are by design floored (examinations office..)
-    g = Math.floor( parseFloat(g) * 10 ) / 10;
+    g = Math.floor(parseFloat(g) * 10) / 10;
   }
 
   // The result should be a number. If its not or if its smaller than 1 we
   // resolve to null.
-  if (! isNumber(g) || isNaN(g) || g < 1) {
+  if (!isNumber(g) || isNaN(g) || g < 1) {
     return null;
   }
 
   // grades bigger 4 normally means failed...
   if (g > 4) {
-    // grade bigger than or equal to 10? Might just be shifted to far. Shift.
     if (g >= 10) {
+      // grade bigger than or equal to 10? Might just be shifted to far. Shift.
       return formatGrade(g / 10);
-
-      // grades bigger than 4 are resolved to 5
-    } else {
-      return parseFloat('5.0').toFixed(1);
     }
+
+    // grades bigger than 4 are resolved to 5
+    return parseFloat('5.0').toFixed(1);
   }
 
   // Only course grades need to be rounded more specifically. For everything
   // else we can return here.
-  if (! course) {
+  if (!course) {
     return g.toFixed(1);
   }
 
   // convert to string again
-  g = g + '';
+  g = String(g);
 
   // get digit before the period
-  var a = g[0];
+  let a = g[0];
 
   // Get number behind the period
-  var b = g.length > 1 ? parseInt( g[ g.length - 1 ] ) : 0;
+  let b = g.length > 1 ? parseInt(g[g.length - 1], 10) : 0;
 
   // format decimal place number
-  if      (b <= 1          ) { b = 0; }
-  else if (b >= 2 && b <= 4) { b = 3; }
-  else if (b >= 5 && b <= 8) { b = 7; }
-  else                       { b = 0; a++; }
+  if (b <= 1) { b = 0; }
+  else if (b >= 2 && b <= 4) { b = 3; } // eslint-disable-line brace-style
+  else if (b >= 5 && b <= 8) { b = 7; } // eslint-disable-line brace-style
+  else { b = 0; a++; } // eslint-disable-line brace-style
 
   // concatenate again
-  return parseFloat(a + '.' + b).toFixed(1);
-};
+  return parseFloat(`${a}.${b}`).toFixed(1);
+}

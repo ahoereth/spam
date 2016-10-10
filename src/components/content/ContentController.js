@@ -11,15 +11,15 @@ export default class ContentController {
     let classnames = {};
 
     function updateContentClass(e, classnamesSet) {
-      var name = kebabCase($location.path().replace('~', 'user'));
-      name = name ? name : 'root';
+      let name = kebabCase($location.path().replace('~', 'user'));
+      name = name || 'root';
       if (currentRouteName !== name) {
         classnames = {};
         currentRouteName = name;
         classnames[name] = true;
       }
 
-      if (e && 'content-classname' === e.name) {
+      if (e && e.name === 'content-classname') {
         classnames = extend(classnames, classnamesSet);
       }
 
@@ -30,13 +30,13 @@ export default class ContentController {
     $scope.$on('content-classname', updateContentClass);
     updateContentClass();
 
-    Scroll.addListener(function() {
+    Scroll.addListener(() => {
       const clientHeight = Scroll.getClientHeight();
       const scrolled = Scroll.getScrolledDistance();
       const bottom = clientHeight + scrolled;
       const bodyHeight = $document[0].body.clientHeight + 20; // + body padding
-      updateContentClass({name: 'content-classname'}, {
-        'scrolled': Scroll.getScrollDistance > 50,
+      updateContentClass({ name: 'content-classname' }, {
+        scrolled: Scroll.getScrollDistance > 50,
         'scroll-bottom': bottom >= bodyHeight,
         'second-page': scrolled > clientHeight,
         'third-page': scrolled > (clientHeight * 2),

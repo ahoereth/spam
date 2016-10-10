@@ -4,19 +4,8 @@ import { forIn, get, isString, isEmpty, isPlainObject } from 'lodash-es';
 import { TITLE } from './constants';
 
 
-/**
- * MODULE: spam.app.title
- *
- * TODO: Refactor this.
- */
-export default angular.module('spam.app.title', []).run(title).name;
-
-
-
-
-/* @ngInject */
-function title($rootScope) {
-  var username;
+const title = ['$rootScope', function title($rootScope) {
+  let username;
 
   /**
    * Construct the page title (<head><title>) from the TITLE constant, the
@@ -26,31 +15,39 @@ function title($rootScope) {
    * @param {string} prefix
    */
   function constructTitle(e, data, clear) {
-    var title = clear ? TITLE : ($rootScope.title || TITLE);
-    if (isString(data) && ! isEmpty(data)) {
-      title = data + ' :: ' + title;
+    let str = clear ? TITLE : ($rootScope.title || TITLE);
+    if (isString(data) && !isEmpty(data)) {
+      str = `${data} :: ${str}`;
     }
 
     // Inject username.
     if (username) {
-      title = title.replace(':username', username);
+      str = str.replace(':username', username);
     }
 
     if (isPlainObject(data)) {
-      forIn(data, function(val, key) {
-        title = title.replace(key, val);
+      forIn(data, (val, key) => {
+        str = str.replace(key, val);
       });
     }
 
-    $rootScope.title = title;
+    $rootScope.str = str;
   }
 
   // Save the current username when it changes.
-  $rootScope.$on('user-construct', function(event, user) {
+  $rootScope.$on('user-construct', (event, user) => {
     username = get(user, 'username');
   });
 
   // Listen for title data change event.
   $rootScope.$on('title', constructTitle);
-  //constructTitle();
-}
+  // constructTitle();
+}];
+
+
+/**
+ * MODULE: spam.app.title
+ *
+ * TODO: Refactor this.
+ */
+export default angular.module('spam.app.title', []).run(title).name;

@@ -6,7 +6,7 @@ export default class LoginformController {
     this.$routeParams = $routeParams;
     this.Auth = Auth;
 
-    if ('' === this.username) {
+    if (!this.username) {
       this.username = $routeParams.username || '';
     }
   }

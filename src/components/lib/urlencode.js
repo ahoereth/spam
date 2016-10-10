@@ -1,11 +1,9 @@
 import angular from 'angular';
 
 
-const urlencodeFilter = ['$window', $window => {
-  return function(unencoded) {
-    return $window.encodeURIComponent(unencoded);
-  };
-}];
+const urlencodeFilter = ['$window', $window => unencoded => (
+  $window.encodeURIComponent(unencoded)
+)];
 
 
 /**

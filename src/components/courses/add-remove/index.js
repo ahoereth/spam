@@ -17,7 +17,7 @@ export default angular
     controller,
     bindings: {
       course: '<course',
-      btnClass: '@'
+      btnClass: '@',
     },
   })
   .name;

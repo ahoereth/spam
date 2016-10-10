@@ -3,42 +3,42 @@ import { throttle } from 'lodash-es';
 
 
 const scrollFactory = ['$timeout', '$window', ($timeout, $window) => {
-  var _listening = false;
-  var _listeners = [];
+  const listeners = [];
+  let listening = false;
 
 
-  function _onScroll() {
-    for (var i = 0; i < _listeners.length; i++) {
-      if (angular.isFunction(_listeners[i])) {
-        _listeners[i]();
+  function onScroll() {
+    for (let i = 0; i < listeners.length; i++) {
+      if (angular.isFunction(listeners[i])) {
+        listeners[i]();
       }
     }
   }
 
 
-  var _onScrollThrottled = throttle(function() {
-    $timeout(_onScroll, 0);
+  const onScrollThrottled = throttle(() => {
+    $timeout(onScroll, 0);
   }, 20);
 
 
   function addListener(func) {
-    _listeners.push(func);
+    listeners.push(func);
 
-    if (!_listening) {
-      angular.element($window).bind('scroll', _onScrollThrottled);
-      _listening = false;
+    if (!listening) {
+      angular.element($window).bind('scroll', onScrollThrottled);
+      listening = false;
     }
 
-    return _listeners.length-1;
+    return listeners.length - 1;
   }
 
 
   function removeListener(idx) {
-    _listeners.splice(idx, 1);
+    listeners.splice(idx, 1);
 
-    if (!_listeners.length) {
-      angular.element($window).unbind('scroll', _onScrollThrottled);
-      _listening = false;
+    if (!listeners.length) {
+      angular.element($window).unbind('scroll', onScrollThrottled);
+      listening = false;
     }
   }
 
@@ -56,10 +56,10 @@ const scrollFactory = ['$timeout', '$window', ($timeout, $window) => {
 
 
   return {
-    addListener: addListener,
-    removeListener: removeListener,
-    getClientHeight: getClientHeight,
-    getScrolledDistance: getScrolledDistance
+    addListener,
+    removeListener,
+    getClientHeight,
+    getScrolledDistance,
   };
 }];
 

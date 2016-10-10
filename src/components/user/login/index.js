@@ -20,10 +20,9 @@ const routing = ['RoutesProvider', RoutesProvider => {
     template,
     controller: 'UserLoginController',
     controllerAs: 'login',
-    title: 'Login'
+    title: 'Login',
   });
 }];
-
 
 
 /**

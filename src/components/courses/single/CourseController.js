@@ -1,4 +1,4 @@
-import { forEach, isUndefined, get } from 'lodash-es';
+import { forEach, isUndefined, get, cloneDeep } from 'lodash-es';
 
 
 export default class CourseController {
@@ -12,13 +12,13 @@ export default class CourseController {
         this.course = course;
         course.fields_by_regulations = {};
         forEach(course.fields, field => {
-          forEach(field.regulations, ({ regulation, regulation_id }) => {
+          forEach(field.regulations, ({ regulation, regulation_id: regId }) => {
             if (isUndefined(course.fields_by_regulations[regulation])) {
               course.fields_by_regulations[regulation] = [];
             }
 
-            const fieldclone = angular.copy(field);
-            fieldclone.search = `courses?regulation=${regulation_id}&field=${fieldclone.field}`;
+            const fieldclone = cloneDeep(field);
+            fieldclone.search = `courses?regulation=${regId}&field=${fieldclone.field}`;
             fieldclone.searchpm = `${fieldclone.search}&pm`;
             course.fields_by_regulations[regulation].push(fieldclone);
           });

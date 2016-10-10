@@ -22,9 +22,9 @@ const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/courses', {
     template,
     controller,
-    //controllerAs: 'index',
+    // controllerAs: 'index',
     title: 'Courses',
-    reloadOnSearch: false
+    reloadOnSearch: false,
   });
 }];
 

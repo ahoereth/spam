@@ -1,5 +1,5 @@
 import {
-  extend, isUndefined, compact, trim, isEmpty, get, find, without, pickBy
+  extend, isUndefined, compact, trim, isEmpty, get, find, without, pickBy,
 } from 'lodash-es';
 
 
@@ -15,44 +15,147 @@ export default class CourseListController {
   ) {
     const originalDisplayLimit = 25;
     const year = new Date().getFullYear();
+    const upperYear = year + 1;
     let lowerYear = year;
-    let upperYear = year + 1;
     let url = {};
     let courses = [];
     let fetching = false;
 
     extend($scope, {
-      coursesPerFetch : 100,
-      courseSelected : 0,
-      fetchNoMore : false,
-      displayLimit : 25,
-      filter : {},
-      filteredCourses : [],
+      coursesPerFetch: 100,
+      courseSelected: 0,
+      fetchNoMore: false,
+      displayLimit: 25,
+      filter: {},
+      filteredCourses: [],
       textModelOptions: {
         updateOn: 'default blur',
-        debounce: { 'default': 200, 'blur': 0 },
+        debounce: { default: 200, blur: 0 },
       },
-      orderBys: {
-        code:        ['code','-year','-term', 'course'],
-        '-code':     ['-code','-year','-term', 'course'],
-        course:      ['course','-year','-term'],
-        '-course':   ['-course','-year','-term'],
-        teachers:    ['teachers_str','-year','-term', 'course'],
-        '-teachers': ['-teachers_str','-year','-term', 'course'],
-        fields:      ['fields_str','-year','-term', 'course'],
-        '-fields':   ['-fields_str','-year','-term', 'course'],
-        time:        ['year','-term', 'course'],
-        '-time':     ['-year', '-term', 'course'],
-      },
+      orderBys: { /* eslint-disable key-spacing, no-multi-spaces */
+        code:        ['code',          '-year', '-term', 'course'],
+        '-code':     ['-code',         '-year', '-term', 'course'],
+        course:      ['course',        '-year', '-term'],
+        '-course':   ['-course',       '-year', '-term'],
+        teachers:    ['teachers_str',  '-year', '-term', 'course'],
+        '-teachers': ['-teachers_str', '-year', '-term', 'course'],
+        fields:      ['fields_str',    '-year', '-term', 'course'],
+        '-fields':   ['-fields_str',   '-year', '-term', 'course'],
+        time:        ['year',          '-term', 'course'],
+        '-time':     ['-year',         '-term', 'course'],
+      },  /* eslint-enable key-spacing, no-multi-spaces */
     });
     $scope.order = $scope.orderBys['-time'];
+
+
+    /**
+     * Extract the url parameters for use in a search query.
+     */
+    const fetchParams = () => {
+      const params = $routeParams;
+
+      $scope.filter = {
+        code: params.code,
+        course: params.course,
+        teachers_str: params.teacher,
+        fields_str: params.field,
+        'fields_str#~': params.pm ? '(PM)' : null,
+      };
+
+      if (!isUndefined(params.timeframe)) {
+        $scope.timeframe = params.timeframe;
+
+        params.timeframe = params.timeframe.toLowerCase();
+        if (params.timeframe.charAt(0) === 'w' || params.timeframe.charAt(0) === 's') {
+          $scope.filter['term#='] = params.timeframe.charAt(0);
+          params.timeframe = params.timeframe.slice(1);
+        }
+
+        // eslint-disable-next-line max-len
+        const pattern = /(?:^(?:20)?(\d{2})$)|(?:(?:20)?(\d{2})([+-])(?:(?:20)?(\d{2}))?)|(?:([WS])S?(?:20)?(\d{2}))|([WS])/i;
+        const r = compact(pattern.exec(trim(params.timeframe)));
+
+        if (!isEmpty(r)) {
+          if (isEmpty(r[2])) {
+            $scope.filter['year#='] = `20${r[1]}`;
+          } else if (r[2] === '+') {
+            // year lower limit
+            $scope.filter['year#<'] = `20${r[1]}`;
+          } else if (r[2] === '-') {
+            if (!isEmpty(r[3])) {
+              // years range
+              $scope.filter['year#<'] = `20${r[1]}`;
+              $scope.filter['year#>'] = `20${r[3]}`;
+            } else {
+              // year upper limit
+              $scope.filter['year#>'] = `20${r[1]}`;
+            }
+          }
+        }
+      }
+
+      $scope.filter = pickBy($scope.filter);
+      $scope.regulation_id = params.regulation ? parseInt(params.regulation, 10) : '';
+    };
+
+
+    /**
+     * Updates all URL parameters using the information from the current filters.
+     */
+    const refreshUrl = () => {
+      const { filter, regulation_id, timeframe } = $scope;
+      const { code, course, teachers_str, fields_str } = filter;
+      url = {
+        regulation: regulation_id, pm: !!filter['fields_str#~'],
+        timeframe, code, course, teacher: teachers_str, fields_str,
+      };
+      url = pickBy(url);
+      $location.search(url);
+    };
+
+
+    /**
+     * Refreshes des course list with the new filters applied.
+     *
+     * TODO: unify with navbar.js
+     */
+    const applyFilter = (justFetch, force) => {
+      const {
+        filter, orderBys, order, displayLimit, filteredCourses, regulation_id,
+      } = $scope;
+      const minYear = get(filter, 'year#=', get(filter, 'year#<', 1995));
+
+      if (!justFetch) {
+        $scope.filteredCourses = $filter('courseFilter')(courses, filter);
+      }
+
+      if (fetching || lowerYear < minYear) {
+        return;
+      }
+
+      if (
+        (order === orderBys.time && lowerYear > minYear) ||
+        displayLimit > (filteredCourses.length - 5) || force
+      ) {
+        fetching = true;
+
+        lowerYear -= 2;
+        Courses
+          .fetch(regulation_id, lowerYear, upperYear, null)
+          .then(newCourses => {
+            courses = newCourses;
+            fetching = false;
+            applyFilter();
+          });
+      }
+    };
 
 
     /**
      * Watches the general filter object. Contains the code, title, teachers and
      * field of study input fields.
      */
-    $scope.$watch('filter', function(next, current) {
+    $scope.$watch('filter', (next, current) => {
       if (next === current) { return; }
       applyFilter();
       refreshUrl();
@@ -62,7 +165,7 @@ export default class CourseListController {
     /**
      * Watches the "obligatory module" checkbox.
      */
-    $scope.$watch('pm', function(next, current) {
+    $scope.$watch('pm', (next, current) => {
       if (isUndefined(next) || next === current) { return; }
 
       if (next) {
@@ -77,7 +180,7 @@ export default class CourseListController {
     /**
     * Watches the timeframe input field.
      */
-    $scope.$watch('timeframe', function(next, current) {
+    $scope.$watch('timeframe', (next, current) => {
       if (isUndefined(next) || next === current) { return; }
       refreshUrl(); // delete does not trigger the filter watch
     });
@@ -86,7 +189,7 @@ export default class CourseListController {
     /**
      * Is triggered when the user changes the regulation input field.
      */
-    $scope.$watch('regulation_id', function(next, current) {
+    $scope.$watch('regulation_id', (next, current) => {
       if (isUndefined(next) || next === current) { return; }
       $scope.displayLimit = originalDisplayLimit;
       lowerYear = year - 1;
@@ -100,7 +203,7 @@ export default class CourseListController {
      * Called when user explicitly clicks the "show more courses" button. This
      * won't be used in most cases because of infinite scrolling.
      */
-    $scope.scrollOn = function(amount) {
+    $scope.scrollOn = amount => {
       if ($scope.displayLimit < $scope.filteredCourses.length) {
         $scope.displayLimit += isUndefined(amount) ? originalDisplayLimit : amount;
       }
@@ -111,141 +214,33 @@ export default class CourseListController {
     };
 
 
-    $scope.orderBy = function(order) {
+    $scope.orderBy = order => {
       $scope.order = ($scope.order === $scope.orderBys[order]) ?
-        $scope.orderBys['-' + order] :
-        $scope.orderBys[order];
-
+        $scope.orderBys[`-${order}`] : $scope.orderBys[order];
       applyFilter(true, true);
-    };
-
-
-    /**
-     * Extract the url parameters for use in a search query.
-     */
-    var fetchParams = function () {
-      var params = $routeParams;
-
-      $scope.filter = {
-        code: params.code,
-        course: params.course,
-        teachers_str: params.teacher,
-        fields_str: params.field,
-        'fields_str#~': params.pm ? '(PM)' : null
-      };
-
-      if (! isUndefined(params.timeframe)) {
-        $scope.timeframe = params.timeframe;
-
-        params.timeframe = params.timeframe.toLowerCase();
-        if (params.timeframe.charAt(0) === 'w' || params.timeframe.charAt(0) === 's') {
-          $scope.filter['term#='] = params.timeframe.charAt(0);
-          params.timeframe = params.timeframe.slice(1);
-        }
-
-        var pattern = /(?:^(?:20)?(\d{2})$)|(?:(?:20)?(\d{2})([+-])(?:(?:20)?(\d{2}))?)|(?:([WS])S?(?:20)?(\d{2}))|([WS])/i;
-        var r = compact(pattern.exec(trim(params.timeframe)));
-
-        if (! isEmpty(r)) {
-          if (isEmpty(r[2])) {
-            $scope.filter['year#='] = '20' + r[1];
-          } else if (r[2] === '+') {
-            // year lower limit
-            $scope.filter['year#<'] = '20' + r[1];
-
-          } else if (r[2] === '-') {
-            if (! isEmpty(r[3])) {
-              // years range
-              $scope.filter['year#<'] = '20' + r[1];
-              $scope.filter['year#>'] = '20' + r[3];
-
-            } else {
-              // year upper limit
-              $scope.filter['year#>'] = '20' + r[1];
-
-            }
-          }
-        }
-      }
-
-      $scope.filter = pickBy($scope.filter);
-      $scope.regulation_id = params.regulation ? parseInt(params.regulation, 10) : '';
-    };
-
-
-    /**
-     * Updates all URL parameters using the information from the current filters.
-     */
-    var refreshUrl = function() {
-      var filter = $scope.filter;
-      url = {
-        regulation : $scope.regulation_id,
-        timeframe : $scope.timeframe,
-        code : filter.code,
-        course : filter.course,
-        teacher : filter.teachers_str,
-        field : filter.fields_str,
-        pm : filter['fields_str#~'] ? true : false
-      };
-      url = pickBy(url);
-      $location.search(url);
     };
 
 
     /**
      * Watch for route updates and refetch the course list if required
      */
-    $scope.$on('$routeUpdate', function(event, route) {
+    $scope.$on('$routeUpdate', (event, route) => {
       if (route.params === url) { return; }
       fetchParams();
     });
-
-
-    /**
-     * Refreshes des course list with the new filters applied.
-     *
-     * TODO: unify with navbar.js
-     */
-    var applyFilter = function(justFetch, force) {
-      if (! justFetch) {
-        $scope.filteredCourses = $filter('courseFilter')(courses, $scope.filter);
-      }
-
-      var minYear = get($scope.filter, 'year#=',
-                    get($scope.filter, 'year#<', 1995));
-      if (fetching || lowerYear < minYear) {
-        return;
-      }
-
-      if (
-        ($scope.order === $scope.orderBys.time && lowerYear > minYear) ||
-        $scope.displayLimit > ($scope.filteredCourses.length - 5) || force
-      ) {
-        fetching = true;
-
-        lowerYear = lowerYear - 2;
-        Courses
-          .fetch($scope.regulation_id, lowerYear, upperYear, null)
-          .then(function(newCourses) {
-            courses = newCourses;
-            fetching = false;
-            applyFilter();
-          });
-      }
-    };
 
 
     // get all regulations
     Restangular
       .all('regulations')
       .getList()
-      .then(function(regulations) {
-        var t = find( regulations, { regulation_id : 4 } );
-        $scope.regulations = without( regulations, t );
+      .then(regulations => {
+        const t = find(regulations, { regulation_id: 4 });
+        $scope.regulations = without(regulations, t);
 
         $scope.regulations.unshift({
-          regulation_id : '',
-          regulation: 'All courses'
+          regulation_id: '',
+          regulation: 'All courses',
         });
         fetchParams();
       });

@@ -2,9 +2,7 @@ import angular from 'angular';
 
 
 function nl2brFilter() {
-  return function(text) {
-    return text.replace(/\n/g, '<br>');
-  };
+  return text => text.replace(/\n/g, '<br>');
 }
 
 

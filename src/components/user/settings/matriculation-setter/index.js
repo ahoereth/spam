@@ -12,26 +12,23 @@ const userMatriculationSetterDirective = ['User', User => ({
   restrict: 'E',
   replace: true,
   scope: true,
-  link: function(scope, elem, attrs) {
-    var d = new Date(), m = d.getMonth(), y = d.getFullYear();
-    var currentYear = (m > 3) ? y : y - 1;
-    scope.verifyButton = ! isUndefined(attrs.verify);
+  link: function matriculationSetterLink(scope, elem, attrs) {
+    const d = new Date(), m = d.getMonth(), y = d.getFullYear();
+    const currentYear = (m > 3) ? y : y - 1;
+    scope.verifyButton = !isUndefined(attrs.verify);
     scope.years = range(currentYear, currentYear - 3, -1);
     scope.user = {
       mat_year: User.details.mat_year,
       mat_term: User.details.mat_term,
     };
 
-    scope.$watchGroup(['user.mat_year', 'user.mat_term'], function(n, o) {
+    scope.$watchGroup(['user.mat_year', 'user.mat_term'], (n, o) => {
       if (n === o) { return; }
-
-      User.updateUser({
-        mat_year: n[0],
-        mat_term: n[1]
-      }, true);
+      const [mat_year, mat_term] = n;
+      User.updateUser({ mat_year, mat_term }, true);
     });
 
-    scope.verify = function() {
+    scope.verify = () => {
       scope.user.mat_verify = 1;
       User.updateUser(pick(scope.user,
         'mat_year',
@@ -39,7 +36,7 @@ const userMatriculationSetterDirective = ['User', User => ({
         'mat_verify'
       ), true);
     };
-  }
+  },
 })];
 
 

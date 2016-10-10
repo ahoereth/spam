@@ -2,9 +2,7 @@ import angular from 'angular';
 
 
 function iifFilter() {
-  return function(input, trueValue, falseValue) {
-    return input ? trueValue : falseValue;
-  };
+  return (input, trueValue, falseValue) => (input ? trueValue : falseValue);
 }
 
 

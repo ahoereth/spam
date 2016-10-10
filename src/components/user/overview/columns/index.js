@@ -1,7 +1,7 @@
 import angular from 'angular';
 import {
   range, clone, isArray, sum, map, trimEnd, repeat, parseInt,
-  indexOf, max, partial, flow, add, min, partialRight, groupBy, sortBy
+  indexOf, max, partial, flow, add, min, partialRight, groupBy, sortBy,
 } from 'lodash-es';
 
 import sortable from '../../../lib/sortable';
@@ -14,45 +14,44 @@ import './columns.less';
 
 
 const userOverviewColumnsFactory = ['$window', 'User', ($window, User) => {
-  var breakpoints = [750, 970, 1170];
-  var columns;
+  const breakpoints = [750, 970, 1170];
 
 
   function buildColumns(fields, columncount) {
     columncount = columncount || 3;
 
     // Order might be set by the user.
-    var order = User.details.overview_order;
-    if (null == order || order.length !== fields.length) {
+    let order = User.details.overview_order;
+    if (order == null || order.length !== fields.length) {
       order = range(0, fields.length);
     }
 
     // Column division might be hard set by the user.
-    var division = clone(User.details.overview_columns);
+    let division = clone(User.details.overview_columns);
     if (
       !isArray(division) ||
       division.length !== columncount ||
       sum(division) !== fields.length
     ) {
-      var height = Math.ceil(fields.length / columncount);
+      const height = Math.ceil(fields.length / columncount);
       division = map(
-        trimEnd(repeat(height + '|', columncount), '|').split('|'),
+        trimEnd(repeat(`${height}|${columncount}`), '|').split('|'),
         parseInt);
     }
 
     // Create grouped object.
-    var obj = flow(
-      partialRight(map, function(field) { // Add 'pos' attribute.
-        field.pos = indexOf(order, field.field_id);
-        field.pos = -1 !== field.pos ? field.pos : 0;
-        return field;
+    const obj = flow(
+      partialRight(map, f => { // Add 'pos' attribute.
+        f.pos = indexOf(order, f.field_id);
+        f.pos = f.pos !== -1 ? field.pos : 0;
+        return f;
       }),
       partialRight(sortBy, 'pos'), // Sort by position initially.
-      partialRight(groupBy, function(field) { // Group intor columns.
-        var col = field.pos % columncount;
-        while (0 >= division[col]) {
-          col = (col+1) % columncount;
-          if (col === (field.pos % columncount)) { break; } // All full.
+      partialRight(groupBy, f => { // Group intor columns.
+        let col = f.pos % columncount;
+        while (division[col] <= 0) {
+          col = (col + 1) % columncount;
+          if (col === (f.pos % columncount)) { break; } // All full.
         }
         division[col] -= 1;
         return col;
@@ -60,21 +59,17 @@ const userOverviewColumnsFactory = ['$window', 'User', ($window, User) => {
     )(fields);
 
     // Create column array from grouped object.
-    columns = map(division, function(n, i) {
-      return obj[i] || [];
-    });
-
-    return columns;
+    return map(division, (n, i) => obj[i] || []);
   }
 
 
   function refreshOrder(columns) {
-    var columnheights = map(columns, 'length');
-    var maxheight = max(columnheights);
+    const columnheights = map(columns, 'length');
+    const maxheight = max(columnheights);
 
-    var order = [];
-    for (var row = 0; row < maxheight; row++) {
-      for (var col = 0; col < columns.length; col++) {
+    const order = [];
+    for (let row = 0; row < maxheight; row++) {
+      for (let col = 0; col < columns.length; col++) {
         if (row < columns[col].length) {
           order.push(columns[col][row].field_id);
         }
@@ -82,8 +77,8 @@ const userOverviewColumnsFactory = ['$window', 'User', ($window, User) => {
     }
 
     User.details.one('regulations', User.details.regulation_id).customPUT({
-      'overview_order': order,
-      'overview_columns': columnheights
+      overview_order: order,
+      overview_columns: columnheights,
     });
 
     return order;
@@ -91,9 +86,9 @@ const userOverviewColumnsFactory = ['$window', 'User', ($window, User) => {
 
 
   return {
+    breakpoints,
     build: buildColumns,
     refresh: refreshOrder,
-    breakpoints: breakpoints
   };
 }];
 
@@ -107,19 +102,19 @@ const userOverviewColumnsDirective = [
       replace: false,
       scope: {
         fields: '=',
-        courses: '='
+        courses: '=',
       },
       controller: function userOverviewColumnsController() {},
       controllerAs: 'columns',
       bindToController: true,
       link: function userOverviewColumnsLink(scope, elem, attrs, ctrl) {
-        var columncount = null;
+        let columncount = null;
 
         function resize() {
-          var width = $window.document.documentElement.clientWidth;
-          var calc = partial(flow(add, Math.abs), (-1 * width));
-          var points = map(UserOverviewColumns.breakpoints, calc);
-          var newColumncount = indexOf(points, min(points)) + 1;
+          const width = $window.document.documentElement.clientWidth;
+          const calc = partial(flow(add, Math.abs), (-1 * width));
+          const points = map(UserOverviewColumns.breakpoints, calc);
+          const newColumncount = indexOf(points, min(points)) + 1;
           if (newColumncount !== columncount) {
             ctrl.set = UserOverviewColumns.build(ctrl.fields, newColumncount);
             ctrl.sortable.active = (newColumncount >= 2);
@@ -131,7 +126,7 @@ const userOverviewColumnsDirective = [
         }
 
         angular.element($window).bind('resize', resize);
-        scope.$on('$destroy', function() {
+        scope.$on('$destroy', () => {
           angular.element($window).unbind('resize', resize);
         });
 
@@ -139,19 +134,19 @@ const userOverviewColumnsDirective = [
           active: false,
           allow_cross: true,
           handle: '.panel-heading',
-          stop: function() {
-            var order = UserOverviewColumns.refresh(ctrl.set);
-            angular.forEach(ctrl.fields, function(field) {
-              field.pos = indexOf(order, field.field_id);
+          stop: () => {
+            const order = UserOverviewColumns.refresh(ctrl.set);
+            angular.forEach(ctrl.fields, f => {
+              f.pos = indexOf(order, f.field_id);
             });
-          }
+          },
         };
 
         // Initialize.
         resize();
-      }
+      },
     };
-  }
+  },
 ];
 
 
