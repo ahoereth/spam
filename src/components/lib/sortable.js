@@ -32,7 +32,7 @@ function sortableDirective() {
       };
 
       // Start dragging.
-      sortable.handleDragStart = e => {
+      sortable.handleDragStart = function handleDragStart(e) {
         draggedelement = null;
         sourcemodel = null;
 
@@ -58,7 +58,7 @@ function sortableDirective() {
 
 
       // Dragging element over a dropzone - continuously.
-      sortable.handleDragOver = e => {
+      sortable.handleDragOver = function handleDragOver(e) {
         if (e.preventDefault) {
           e.preventDefault(); // Allows us to drop.
         }
@@ -71,17 +71,17 @@ function sortableDirective() {
 
 
       // Dragging element over a dropzone - initial.
-      sortable.handleDragEnter = () => {};
+      sortable.handleDragEnter = function handleDragEnter() {};
 
 
       // Dragging element out of a dropzone.
-      sortable.handleDragLeave = () => {
+      sortable.handleDragLeave = function handleDragLeave() {
         this.classList.remove('over');
       };
 
 
       // Dropping element into a dropzone.
-      sortable.handleDrop = e => {
+      sortable.handleDrop = function handleDrop(e) {
         // this/e.target is current target element.
         if (e.stopPropagation) { // Stop redirection.
           e.stopPropagation();
@@ -184,7 +184,7 @@ function sortableDirective() {
 
       // Update sortable. Fired for example when a new element is added or
       // removed from the model.
-      sortable.update = () => {
+      sortable.update = function update() {
         draggedelement = null;
         let index = 0;
         this.cols = element[0].children;

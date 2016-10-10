@@ -4,11 +4,11 @@ export default class LandingController {
   constructor($scope, Restangular, User) {
     this.stats = Restangular.one('/stats').get().$object;
     this.loginloading = false;
-    $scope.$on('user-construct', this.userConstruct);
-    this.userConstruct(null, User.details);
+    $scope.$on('user-construct', (e, user) => this.userConstruct(user));
+    this.userConstruct(User.details);
   }
 
-  userConstruct(event, user) {
+  userConstruct(user) {
     if (!user) {
       this.loggedin = false;
       this.username = '';
