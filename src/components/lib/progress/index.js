@@ -1,26 +1,27 @@
 import angular from 'angular';
 
+import template from './progressbar.html';
 import './progress.css';
 
 
-const progressComponent = {
+const progressDirective = () => ({
+  restrict: 'E',
   transclude: true,
   template: '<div class="progress" ng-transclude></div>',
-};
+});
 
 
 const progressbarDirective = () => ({
-  restrict: 'E',
-  replace: true,
+  template,
+  restrict: 'A',
   require: '^^progress',
   scope: {
     type: '=',
     value: '=',
     text: '=',
   },
-  template: '<div class="progress-bar progress-bar-{{type}}" ' +
-              'ng-style="{width: value + \'%\'}" ng-bind="text" ' +
-              'ng-show="value"></div>',
+  bindToController: true,
+  controllerAs: '$ctrl',
 });
 
 
@@ -29,9 +30,13 @@ const progressbarDirective = () => ({
  * DIRECTIVES:
  *   progress
  *   progressbar
+ *
+ * Note: Cannot use components here because the 'replace' option is deprecated
+ * and Bootstrap does not handle other tags besides 'div' well as progress
+ * and progressbar items.
  */
 export default angular
   .module('progress', [])
-  .component('progress', progressComponent)
+  .directive('progress', progressDirective)
   .directive('progressbar', progressbarDirective)
   .name;

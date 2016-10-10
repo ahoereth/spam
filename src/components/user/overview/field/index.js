@@ -11,18 +11,14 @@ import controller from './UserOverviewFieldController';
 import template from './field.html';
 
 
-const userOverviewFieldDirective = () => ({
+const component = {
   template,
   controller,
-  restrict: 'E',
-  replace: false,
-  scope: {
+  transclude: true,
+  bindings: {
     raw: '=field',
   },
-  transclude: true,
-  controllerAs: 'field',
-  bindToController: true,
-});
+};
 
 
 /**
@@ -33,5 +29,5 @@ export default angular
   .module('spam.user.overview.field', [
     progress, tickable, iif, dropdown, userService, gradeInput,
   ])
-  .directive('field', userOverviewFieldDirective)
+  .component('field', component)
   .name;

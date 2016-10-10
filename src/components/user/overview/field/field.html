@@ -1,25 +1,25 @@
 <div
   class="panel"
-  ng-class="{'panel-success': field.credits.passed.percentage    === 100 &&
-                              field.field_examination_possible,
-             'panel-warning': field.credits.available.compulsory !== 0 ||
-                              field.credits.enrolled.compulsory  !== 0,
-             'panel-default': field.credits.available.compulsory === 0 &&
-                             !field.field_examination_possible}"
+  ng-class="{'panel-success': $ctrl.credits.passed.percentage    === 100 &&
+                              $ctrl.field_examination_possible,
+             'panel-warning': $ctrl.credits.available.compulsory !== 0 ||
+                              $ctrl.credits.enrolled.compulsory  !== 0,
+             'panel-default': $ctrl.credits.available.compulsory === 0 &&
+                             !$ctrl.field_examination_possible}"
 >
 
   <div class="panel-heading">
     <div class="row">
 
       <!-- title -->
-      <h4 class="col-xs-9">{{::field.field}}</h4>
+      <h4 class="col-xs-9">{{::$ctrl.field}}</h4>
 
       <!-- field grade input -->
       <div class="col-xs-2">
         <grade-input
-          grade="field.grade"
-          editable="field.examination"
-          change="field.gradeChange(newGrade)"
+          grade="$ctrl.grade"
+          editable="$ctrl.examination"
+          change="$ctrl.gradeChange(newGrade)"
         ></grade-input>
       </div>
 
@@ -31,14 +31,14 @@
             type="button"
             dropdown-toggle
             class="btn btn-xs btn-block dropdown-toggle"
-            ng-class="{'btn-success': field.credits.available.compulsory == 0,
-                       'btn-warning': field.credits.available.compulsory != 0}">
+            ng-class="{'btn-success': $ctrl.credits.available.compulsory == 0,
+                       'btn-warning': $ctrl.credits.available.compulsory != 0}">
 
             <span
               class="glyphicon"
               ng-class="{
-                'glyphicon-ok'    : field.credits.available.compulsory == 0,
-                'glyphicon-pencil': field.credits.available.compulsory != 0
+                'glyphicon-ok'    : $ctrl.credits.available.compulsory == 0,
+                'glyphicon-pencil': $ctrl.credits.available.compulsory != 0
               }"
             ></span>
 
@@ -47,31 +47,31 @@
           <ul class="dropdown-menu pull-right">
 
             <!-- trigger field examination -->
-            <li ng-if="field.field_examination_possible &&
-                       100 === field.credits.passed.percentage"
+            <li ng-if="$ctrl.field_examination_possible &&
+                       100 === $ctrl.credits.passed.percentage"
             >
               <tickable
-                ng-model="field.examination"
-                ng-change="field.gradeChange(null, field.examination)"
+                ng-model="$ctrl.examination"
+                ng-change="$ctrl.gradeChange(null, $ctrl.examination)"
               >
                 Examination
               </tickable>
             </li>
 
             <li>
-              <a ng-href="~/courses/new?field_id={{::field.field_id}}">
+              <a ng-href="~/courses/new?field_id={{::$ctrl.field_id}}">
                 Add unofficial course
               </a>
             </li>
 
             <li>
-              <tickable ng-model="field.minimized" ng-change="field.minimize()">
-                {{field.minimized | iif : 'Collapsed' : 'Collpase'}}
+              <tickable ng-model="$ctrl.minimized" ng-change="$ctrl.minimize()">
+                {{$ctrl.minimized | iif : 'Collapsed' : 'Collpase'}}
               </tickable>
             </li>
 
             <li>
-              <a ng-href="courses?regulation={{::field.regulation_id}}&field={{::field.field}}">
+              <a ng-href="courses?regulation={{::$ctrl.regulation_id}}&field={{::$ctrl.field}}">
                 Find courses
               </a>
             </li>
@@ -83,51 +83,48 @@
     </div>
   </div><!--/panel-heading-->
 
-  <div class="panel-body" ng-hide="field.minimized">
+  <div class="panel-body" ng-hide="$ctrl.minimized">
     <!-- 'course' directives -->
     <ng-transclude></ng-transclude>
 
     <!-- foreign credits -->
-    <div class="row" ng-if="field.credits.foreign">
+    <div class="row" ng-if="$ctrl.credits.foreign">
       <div class="foreign-credits col-xs-11">
         Overflowing credits from other fields
         <small class="text-info">
-          [{{field.credits.foreign}}]
+          [{{$ctrl.credits.foreign}}]
         </small>
       </div>
     </div>
   </div>
 
   <!-- progress bar panel footer -->
-  <div class="panel-footer" ng-hide="field.minimized">
-    <progress>
-      <progressbar
-        data-type="'success'"
-        data-value="field.credits.passed.percentage"
-        data-text="field.credits.passed.overflowing | iif
-          : (field.credits.passed.sum + field.credits.passed.overflowing) +
-            ' / ' + field.credits.full
-          : field.credits.passed.sum"
-      ></progressbar>
-
-      <progressbar
-        data-type="'info'"
-        data-value="field.credits.enrolled.percentage"
-        data-text="field.credits.enrolled.sum"
-      ></progressbar>
-
-      <progressbar
-        data-type="'required'"
-        data-value="field.credits.available.percentage_compulsory"
-        data-text="field.credits.available.compulsory"
-      ></progressbar>
-
-      <progressbar
-        data-type="'background'"
-        data-value="field.credits.available.percentage_optional"
-        data-text="field.credits.available.optional"
-      ></progressbar>
-    </progress>
+  <div class="panel-footer" ng-hide="$ctrl.minimized">
+    <div progress>
+      <div progressbar
+        type="'success'"
+        value="$ctrl.credits.passed.percentage"
+        text="$ctrl.credits.passed.overflowing | iif
+          : ($ctrl.credits.passed.sum + $ctrl.credits.passed.overflowing) +
+            ' / ' + $ctrl.credits.full
+          : $ctrl.credits.passed.sum"
+      ></div>
+      <div progressbar
+        type="'info'"
+        value="$ctrl.credits.enrolled.percentage"
+        text="$ctrl.credits.enrolled.sum"
+      ></div>
+      <div progressbar
+        type="'required'"
+        value="$ctrl.credits.available.percentage_compulsory"
+        text="$ctrl.credits.available.compulsory"
+      ></div>
+      <div progressbar
+        type="'background'"
+        value="$ctrl.credits.available.percentage_optional"
+        text="$ctrl.credits.available.optional"
+      ></div>
+    </div>
   </div><!-- /panel-footer -->
 
 </div>

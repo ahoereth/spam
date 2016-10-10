@@ -1,0 +1,11 @@
+<div
+  class="progress-bar"
+  ng-class="'progress-bar-' + $ctrl.type"
+  aria-valuenow="{{$ctrl.value}}"
+  aria-valuemin="{{$ctrl.value}}"
+  aria-valuemax="{{$ctrl.value}}"
+  ng-style="{width: $ctrl.value + '%'}"
+  ng-show="$ctrl.value"
+>
+  {{$ctrl.text}}
+</div>
