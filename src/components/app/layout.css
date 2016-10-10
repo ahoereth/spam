@@ -9,7 +9,7 @@ body {
   overflow-y: scroll;
 }
 
-body > .content {
+.content.wrap {
   padding: 60px 0 20px;
 }
 

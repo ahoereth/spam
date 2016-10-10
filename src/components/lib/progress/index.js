@@ -21,6 +21,7 @@ const progressbarDirective = () => ({
     text: '=',
   },
   bindToController: true,
+  controller: () => {},
   controllerAs: '$ctrl',
 });
 
