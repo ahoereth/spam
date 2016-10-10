@@ -1,4 +1,4 @@
-import { kebabCase, extend } from 'lodash-es';
+import { kebabCase, assign } from 'lodash-es';
 
 import '../lib/scroll';
 
@@ -7,40 +7,42 @@ export default class ContentController {
   static $inject = ['$scope', '$location', '$window', '$document', 'Scroll'];
 
   constructor($scope, $location, $window, $document, Scroll) {
-    let currentRouteName;
-    let classnames = {};
+    assign(this, {
+      $location, Scroll, $document,
+      classnames: {},
+      currentRouteName: undefined,
+    });
 
-    function updateContentClass(e, classnamesSet) {
-      let name = kebabCase($location.path().replace('~', 'user'));
-      name = name || 'root';
-      if (currentRouteName !== name) {
-        classnames = {};
-        currentRouteName = name;
-        classnames[name] = true;
-      }
+    $scope.$on('$locationChangeStart', (e, n) => this.updateContentClass(e, n));
+    $scope.$on('content-classname', (e, n) => this.updateContentClass(e, n));
+    this.updateContentClass();
 
-      if (e && e.name === 'content-classname') {
-        classnames = extend(classnames, classnamesSet);
-      }
+    Scroll.addListener(() => this.scrollListener());
+  }
 
-      this.classnames = classnames;
+  updateContentClass(e, classnamesSet) {
+    let name = kebabCase(this.$location.path().replace('~', 'user'));
+    name = name || 'root';
+    if (this.currentRouteName !== name) {
+      this.classnames = { name: true };
+      this.currentRouteName = name;
     }
 
-    $scope.$on('$locationChangeStart', updateContentClass);
-    $scope.$on('content-classname', updateContentClass);
-    updateContentClass();
+    if (e && e.name === 'content-classname') {
+      this.classnames = { ...this.classnames, ...classnamesSet };
+    }
+  }
 
-    Scroll.addListener(() => {
-      const clientHeight = Scroll.getClientHeight();
-      const scrolled = Scroll.getScrolledDistance();
-      const bottom = clientHeight + scrolled;
-      const bodyHeight = $document[0].body.clientHeight + 20; // + body padding
-      updateContentClass({ name: 'content-classname' }, {
-        scrolled: Scroll.getScrollDistance > 50,
-        'scroll-bottom': bottom >= bodyHeight,
-        'second-page': scrolled > clientHeight,
-        'third-page': scrolled > (clientHeight * 2),
-      });
+  scrollListener() {
+    const clientHeight = this.Scroll.getClientHeight();
+    const scrolled = this.Scroll.getScrolledDistance();
+    const bottom = clientHeight + scrolled;
+    const bodyHeight = this.$document[0].body.clientHeight + 20; // + body padding
+    this.updateContentClass({ name: 'content-classname' }, {
+      scrolled: this.Scroll.getScrollDistance > 50,
+      'scroll-bottom': bottom >= bodyHeight,
+      'second-page': scrolled > clientHeight,
+      'third-page': scrolled > (clientHeight * 2),
     });
   }
 }

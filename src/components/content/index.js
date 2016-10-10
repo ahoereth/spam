@@ -17,6 +17,6 @@ export default angular
   .component('content', {
     template,
     controller,
-    controllerAs: 'content',
+    controllerAs: '$ctrl',
   })
   .name;
