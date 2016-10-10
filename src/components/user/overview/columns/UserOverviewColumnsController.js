@@ -22,9 +22,10 @@ export default class UserOverviewColumnsController {
       },
     });
 
-    angular.element($window).bind('resize', this.resize);
+    const resize = () => this.resize();
+    angular.element($window).bind('resize', resize);
     $scope.$on('$destroy', () => {
-      angular.element($window).unbind('resize', this.resize);
+      angular.element($window).unbind('resize', resize);
     });
 
     this.resize();

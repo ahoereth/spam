@@ -11,7 +11,7 @@
     <div ng-repeat="field in column track by field.field_id">
       <field field="field">
         <course
-          ng-repeat="course in columns.courses
+          ng-repeat="course in $ctrl.courses
                      | filter:{enrolled_field_id: field.field_id}:true
                        track by course.student_in_course_id"
           course="course"
