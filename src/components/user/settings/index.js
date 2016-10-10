@@ -16,7 +16,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/~/settings', {
     template,
     controller,
-    controllerAs: 'settings',
+    controllerAs: '$ctrl',
     title: ':username\'s settings',
     access: 1,
   });
