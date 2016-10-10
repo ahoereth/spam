@@ -1,11 +1,11 @@
 <div class="overview-container row">
   <div
     class="overview-column"
-    ng-class="{'col-xs-4' : 3 == columns.set.length,
-               'col-xs-6' : 2 == columns.set.length,
-               'col-xs-12': 1 == columns.set.length}"
-    html-sortable="columns.sortable"
-    ng-repeat="column in columns.set"
+    ng-class="{'col-xs-4' : 3 == $ctrl.set.length,
+               'col-xs-6' : 2 == $ctrl.set.length,
+               'col-xs-12': 1 == $ctrl.set.length}"
+    html-sortable="$ctrl.sortable"
+    ng-repeat="column in $ctrl.set"
     ng-model="column"
   >
     <div ng-repeat="field in column track by field.field_id">
