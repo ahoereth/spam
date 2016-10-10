@@ -1,5 +1,5 @@
 <h1>Help</h1>
-<p class="lead">You might find some useful information here.. But the list is far from complete. Remember: This project is still hot of the press! If you found an issue and want to help fixing it: <a href="mailto:ahoereth@uos.de" target="_blank">Drop me a line</a>.</p>
+<p class="lead">You might find some useful information here.. But the list is far from complete. Remember: This project is still hot of the press! If you found an issue and want to help fixing it: <a href="mailto:ahoereth@uos.de" target="_blank" rel="noopener noreferrer">Drop me a line</a>.</p>
 
 <div class="panel-group faq">
 
@@ -9,8 +9,8 @@
 
 
 <help-fragment slug="privacy" title="Privacy & Security">
-  <p>All connections to the server are <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol_Secure" target="_blank">ssl encrypted</a>. Your login credentials are compared to the official UOS authentication server every 30 minutes and everytime they are entered wrong. This debounced setup is necessary due to the <a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank">REST-API</a> centric layout of the application, which requires user authentication on every request. The RZ-servers don't like too many requests in a short time per user.</p>
-  <p>While this application obviously stores your personal information regarding your courses and grades, it <b>does not</b> store your username or password in clear text. The password is <a href="http://php.net/manual/en/function.crypt.php" target="_blank">encrypted</a> (safe) and the username <a href="http://de1.php.net/manual/en/function.md5.php" target="_blank">hashed</a> (made unreadable, not safe). Grades and other stuff you enter are saved in clear text!</p>
+  <p>All connections to the server are <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol_Secure" target="_blank" rel="noopener noreferrer">ssl encrypted</a>. Your login credentials are compared to the official UOS authentication server every 30 minutes and everytime they are entered wrong. This debounced setup is necessary due to the <a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank" rel="noopener noreferrer">REST-API</a> centric layout of the application, which requires user authentication on every request. The RZ-servers don't like too many requests in a short time per user.</p>
+  <p>While this application obviously stores your personal information regarding your courses and grades, it <b>does not</b> store your username or password in clear text. The password is <a href="http://php.net/manual/en/function.crypt.php" target="_blank" rel="noopener noreferrer">encrypted</a> (safe) and the username <a href="http://de1.php.net/manual/en/function.md5.php" target="_blank" rel="noopener noreferrer">hashed</a> (made unreadable, not safe). Grades and other stuff you enter are saved in clear text!</p>
   <p>Deleting your data <span ng-show="user">(see <a href="/~/settings">/~/settings</a>)</span> will only remove it from the live database. It might persist in backups - like with all other online services.</p>
   <p>Further more the application logs some anonymous information about search queries and page/course views.</p>
 </help-fragment>
@@ -62,10 +62,10 @@
 <help-fragment slug="regulations" title="Regulations">
   <p>All values and calculations in this application are based on the official study regulations:</p>
   <ul>
-    <li><a href="http://www-old.uni-osnabrueck.de/ordnungen/PO-Bachelor-CognitiveScience_2011-09.pdf" target="_blank">Studyregulation 2011 (german)</a></li>
-    <li><a href="http://ikw.uni-osnabrueck.de/de/system/files/Modulbeschreibungen_CognitiveScience-Bachelor_2011-09.pdf" target="_blank">Field descriptions (german)</a></li>
+    <li><a href="http://www-old.uni-osnabrueck.de/ordnungen/PO-Bachelor-CognitiveScience_2011-09.pdf" target="_blank" rel="noopener noreferrer">Studyregulation 2011 (german)</a></li>
+    <li><a href="http://ikw.uni-osnabrueck.de/de/system/files/Modulbeschreibungen_CognitiveScience-Bachelor_2011-09.pdf" target="_blank" rel="noopener noreferrer">Field descriptions (german)</a></li>
   </ul>
-  <p>Course data is periodically pulled from the official Cognitive Science lectures <a href="http://cogsci.uni-osnabrueck.de/en/lectures" target="_blank">database.</p>
+  <p>Course data is periodically pulled from the official Cognitive Science lectures <a href="http://cogsci.uni-osnabrueck.de/en/lectures" target="_blank" rel="noopener noreferrer">database.</p>
 </help-fragment>
 
 </div>
