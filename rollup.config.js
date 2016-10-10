@@ -41,6 +41,8 @@ export default {
     less({
       output: `${dst}/bundle.css`,
       exclude: '',
+      // See https://github.com/xiaofuzi/rollup-plugin-less/pull/7
+      insert: false,
       option: {
         plugins: [
           new LessNpmImport({}),
@@ -49,7 +51,6 @@ export default {
             advanced: true,
             keepSpecialComments: false,
             rebase: true,
-            target: dst,
           }),
         ],
       },
@@ -70,9 +71,16 @@ export default {
     babel({ exclude: ['node_modules/!(lodash-es)/**', 'src/**/*.css', 'src/**/*.less'] }),
     nodeResolve({ jsnext: true }),
     commonjs(),
-    replace({
-      ENV: JSON.stringify(ENV),
+    replace({ ENV: JSON.stringify(ENV) }),
+    ENV !== 'production' ? () => {} : uglify({
+      mangle: { toplevel: true, eval: true },
+      compress: { // only options which are not already enabled by default
+        unsafe: true,
+        unsafe_comps: true,
+        pure_getters: true,
+        drop_console: true,
+        // angular: true, // @ngInject
+      },
     }),
-    ENV === 'production' ? uglify() : () => {},
   ],
 };
