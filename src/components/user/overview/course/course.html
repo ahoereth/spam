@@ -1,23 +1,20 @@
 <div
   class="row course"
-  ng-class="{overflowing: 0 === course.counts ||
-                          course.failed ||
-                          course.muted}"
+  ng-class="{overflowing: 0 === course.counts || course.failed || course.muted}"
 >
 
   <!-- title + ects -->
   <div class="col-xs-9">
     <a
       ng-if="::course.course_id"
-      ng-href="courses/{{::course.course_id}}"
+      href="courses/{{::course.course_id}}"
       tooltips
-      tooltip-title="{{::course.term_abbr}}"
-      ng-bind="::course.course"
-    ></a>
+      tooltip-template="{{::course.term_abbr}}"
+    >{{::course.course}}</a>
     <span
       ng-if="::!course.course_id"
       tooltips
-      tooltip-title="{{::course.term_abbr}}"
+      tooltip-template="{{::course.term_abbr}}"
       ng-bind="::course.course"
     ></span>
     <small ng-show="course.ects" class="text-info">

@@ -61,7 +61,9 @@
     ng-if="!settings.export.data"
     ng-bind="settings.export.loading | iif : 'Preparing...' : 'Export Data'"
     tooltips
-    tooltip-html="Requires a <a href='http://caniuse.com/#feat=download' target='_blank'>modern browser</a>."
+    tooltip-template="Requires a <a href='http://caniuse.com/#feat=download' target='_blank'>modern browser</a>."
+    tooltip-show-trigger="mouseover click"
+    tooltip-hide-trigger="click"
   ></a>
 
   <a
@@ -70,7 +72,7 @@
     download="{{::settings.user.username}}.json"
     ng-href="{{settings.export.data | textDownload}}"
     tooltips
-    tooltip-html="Doesn't work? Get <a href='http://caniuse.com/#feat=download' target='blank'>more info</a>."
+    tooltip-template="Doesn't work? Get <a href='http://caniuse.com/#feat=download' target='blank'>more info</a>."
     tooltip-show-trigger="mouseover click"
     tooltip-hide-trigger="click"
   >
