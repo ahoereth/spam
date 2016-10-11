@@ -1,7 +1,7 @@
 import angular from 'angular';
 import ngRoute from 'angular-route';
 
-import { HTML5MODE, HASHPREFIX } from '../constants';
+import { HTML5MODE, HASHPREFIX } from '../../../config';
 import authService from '../../user/services/auth';
 
 

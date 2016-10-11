@@ -14,7 +14,8 @@
     "servdev": "http-server dev --push-state",
     "watch": "rollup -c --watch",
     "reload": "livereload 'dev/' -d",
-    "start": "npm-run-all --parallel reload watch",
+    "start": "npm-run-all -p reload watch",
+    "start:local": "npm-run-all -p reload 'watch -- --environment API:local'",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {

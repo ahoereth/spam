@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { initial } from 'lodash-es';
 
-import { DEBUG, APIURL } from './constants';
+import { DEBUG, APIURL } from '../../config';
 import restangular from '../lib/restangular';
 import './services/http-intercept';
 

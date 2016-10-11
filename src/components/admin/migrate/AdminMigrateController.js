@@ -1,6 +1,6 @@
 import { assign, assignIn, map, pick, debounce, has } from 'lodash-es';
 
-import { O2URL } from '../../app/constants';
+import { O2URL } from '../../../config';
 
 
 export default class AdminMigrateController {

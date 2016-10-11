@@ -18,6 +18,7 @@ import LessCleanCss from 'less-plugin-clean-css';
 
 const rfs = partialRight(readFileSync, { encoding: 'utf8' });
 const ENV = process.env.NODE_ENV || 'development';
+const API = process.env.API;
 const dst = ENV !== 'production' ? 'dev' : 'app';
 
 
@@ -71,7 +72,10 @@ export default {
     babel({ exclude: ['node_modules/!(lodash-es)/**', 'src/**/*.css', 'src/**/*.less'] }),
     nodeResolve({ jsnext: true }),
     commonjs(),
-    replace({ ENV: JSON.stringify(ENV) }),
+    replace({
+      ENV: JSON.stringify(ENV),
+      API: JSON.stringify(API),
+    }),
     ENV !== 'production' ? () => {} : uglify({
       mangle: { toplevel: true, eval: true },
       compress: { // only options which are not already enabled by default

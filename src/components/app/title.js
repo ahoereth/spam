@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { forIn, get, isString, isEmpty, isPlainObject } from 'lodash-es';
 
-import { TITLE } from './constants';
+import { TITLE } from '../../config';
 
 
 const title = ['$rootScope', function title($rootScope) {
