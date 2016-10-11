@@ -6,24 +6,23 @@ import restangular from '../lib/restangular';
 import './services/http-intercept';
 
 
-const appConfig = [
-  '$compileProvider', '$httpProvider', 'RestangularProvider',
-  function appConfig($compileProvider, $httpProvider, RestangularProvider) {
-    // Enable/disable debugging. Dev-console: `angular.reloadWithDebugInfo()`.
-    $compileProvider.debugInfoEnabled(DEBUG);
-    // Intercept http requests for general error handling and loading animation.
-    $httpProvider.interceptors.push('httpIntercept');
-    // Set restangular api base url.
-    RestangularProvider.setBaseUrl(APIURL);
-    // Send empty payload on `DELETE` requests.
-    RestangularProvider.setRequestInterceptor(
-      (elem, operation) => ((operation === 'remove') ? null : elem)
-    );
-  },
-];
+/* @ngInject */
+function appConfig($compileProvider, $httpProvider, RestangularProvider) {
+  // Enable/disable debugging. Dev-console: `angular.reloadWithDebugInfo()`.
+  $compileProvider.debugInfoEnabled(DEBUG);
+  // Intercept http requests for general error handling and loading animation.
+  $httpProvider.interceptors.push('httpIntercept');
+  // Set restangular api base url.
+  RestangularProvider.setBaseUrl(APIURL);
+  // Send empty payload on `DELETE` requests.
+  RestangularProvider.setRequestInterceptor(
+    (elem, operation) => ((operation === 'remove') ? null : elem)
+  );
+}
 
 
-const appConfigRun = ['Restangular', function appConfigRun(Restangular) {
+/* @ngInject */
+function appConfigRun(Restangular) {
   Restangular.configuration.getIdFromElem = function getIdFromElem(elem) {
     const { id, route, username } = elem;
     const { parentResource: par, student_in_course_id: sicId } = elem;
@@ -32,7 +31,7 @@ const appConfigRun = ['Restangular', function appConfigRun(Restangular) {
     if (route === 'courses' && par && par.route === 'users') { return sicId; }
     return elem[`${initial(route).join('')}_id`];
   };
-}];
+}
 
 
 /**

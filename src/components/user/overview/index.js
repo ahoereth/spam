@@ -19,7 +19,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/~', {
     template,
     controller,
-    controllerAs: 'overview',
+    controllerAs: '$ctrl',
     title: ':username',
     reloadOnSearch: false,
     access: 1,

@@ -7,12 +7,11 @@ export default class AdminMigrateController {
   static $inject = ['$location', '$routeParams', 'Restangular'];
 
   constructor($location, $routeParams, Restangular) {
-    this.params = $routeParams;
-    this.$location = $location;
-    this.Restangular = Restangular;
-    this.fetch = debounce(this.fetch, 500);
     const d = new Date(), m = d.getMonth(), y = d.getFullYear();
     assign(this, {
+      $location, Restangular,
+      params: $routeParams,
+      fetch: debounce(this.fetch, 500),
       year: parseInt(this.params.year, 10) || (m < 5) ? y : y + 1,
       term: this.params.term || (m > 11 || m < 5) ? 'S' : 'W',
       courses: [],

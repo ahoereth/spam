@@ -78,12 +78,12 @@ export default {
     }),
     ENV !== 'production' ? () => {} : uglify({
       mangle: { toplevel: true, eval: true },
-      compress: { // only options which are not already enabled by default
+      compress: {
         unsafe: true,
         unsafe_comps: true,
         pure_getters: true,
         drop_console: true,
-        // angular: true, // @ngInject
+        angular: true,
       },
     }),
   ],

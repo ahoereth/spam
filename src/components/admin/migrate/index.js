@@ -30,12 +30,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.admin.migrate', [
-    restangular,
-    instafocus,
-    inlineSelectables,
-    buttons,
-    year,
-    courseRow,
+    restangular, instafocus, inlineSelectables, buttons, year, courseRow,
     routes,
   ])
   .config(routing)

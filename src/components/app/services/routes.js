@@ -4,36 +4,33 @@ import ngRoute from 'angular-route';
 import { HTML5MODE, HASHPREFIX } from '../../../config';
 import authService from '../../user/services/auth';
 
+/* @ngInject */
+function routesInitialization($location, $rootScope) {
+  // Handle errors occurring on route changing. This is called when one of the
+  // promises to be resolved before visiting the route is rejected.
+  $rootScope.$on('$routeChangeError', (event, current, previous, rejection) => {
+    if (rejection === 'not_authenticated') {
+      $location.path('/401').search('path', $location.path());
+    } else {
+      $location.path('/login');
+    }
+  });
 
-const routesInitialization = [
-  '$location', '$rootScope',
-  function routesInitialization($location, $rootScope) {
-    // Handle errors occurring on route changing. This is called when one of the
-    // promises to be resolved before visiting the route is rejected.
-    $rootScope.$on('$routeChangeError', (event, current, previous, rejection) => {
-      if (rejection === 'not_authenticated') {
-        $location.path('/401').search('path', $location.path());
-      } else {
-        $location.path('/login');
-      }
-    });
+  // Called on every route change for user authentication verification and
+  // possible redirecting.
+  $rootScope.$on('$routeChangeSuccess', (event, current, previous) => {
+    if (!current) { return; }
 
-    // Called on every route change for user authentication verification and
-    // possible redirecting.
-    $rootScope.$on('$routeChangeSuccess', (event, current, previous) => {
-      if (!current) { return; }
+    // Don't allow entering the page on /401
+    if (current.originalPath === '/401' && !previous) {
+      $location.path('/').search({});
+      return;
+    }
 
-      // Don't allow entering the page on /401
-      if (current.originalPath === '/401' && !previous) {
-        $location.path('/').search({});
-        return;
-      }
-
-      // Handle page title.
-      $rootScope.$broadcast('title', current.title, true);
-    });
-  },
-];
+    // Handle page title.
+    $rootScope.$broadcast('title', current.title, true);
+  });
+}
 
 
 function routesProvider() {
@@ -73,13 +70,11 @@ function routesProvider() {
 
 
 // Store $routeProvider for later use and set $locationProvider options.
-const routesProviderInit = [
-  '$routeProvider', '$locationProvider', 'RoutesProvider',
-  ($routeProvider, $locationProvider, RoutesProvider) => {
-    RoutesProvider.setRouteProvider($routeProvider);
-    $locationProvider.html5Mode(HTML5MODE).hashPrefix(HASHPREFIX);
-  },
-];
+/* @ngInject */
+function routesProviderInit($routeProvider, $locationProvider, RoutesProvider) {
+  RoutesProvider.setRouteProvider($routeProvider);
+  $locationProvider.html5Mode(HTML5MODE).hashPrefix(HASHPREFIX);
+}
 
 
 /**

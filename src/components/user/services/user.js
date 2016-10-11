@@ -9,7 +9,8 @@ import restangular from '../../lib/restangular';
 import formatGrade from '../formatGrade';
 
 
-function userFactoryFun(
+/* @ngInject */
+function userFactory(
   $cacheFactory, $rootScope, $location, $http, $log, $q, Restangular
 ) {
   const webstorage = angular.isDefined(Storage);
@@ -345,12 +346,6 @@ function userFactoryFun(
 
   return self;
 }
-
-
-const userFactory = [
-  '$cacheFactory', '$rootScope', '$location', '$http', '$log', '$q', 'Restangular',
-  userFactoryFun,
-];
 
 
 /**

@@ -14,9 +14,5 @@ import template from './content.html';
  */
 export default angular
   .module('spam.content', [ngRoute, scroll, notifications])
-  .component('content', {
-    template,
-    controller,
-    controllerAs: '$ctrl',
-  })
+  .component('content', { template, controller, controllerAs: '$ctrl' })
   .name;

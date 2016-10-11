@@ -7,28 +7,28 @@
 
 <!-- Headline -->
 <h1>
-  {{overview.user.username}}'s overview
+  {{$ctrl.user.username}}'s overview
   <span
     class="glyphicon lead"
-    ng-class="{'glyphicon-heart'       :  overview.facts.bscFieldsCount,
-               'glyphicon-refresh spin': !overview.facts.bscFieldsCount}"
+    ng-class="{'glyphicon-heart'       :  $ctrl.facts.bscFieldsCount,
+               'glyphicon-refresh spin': !$ctrl.facts.bscFieldsCount}"
   ></span>
 </h1>
 
 
 
 <!-- Leading descriptive sentences. -->
-<div ng-if="overview.user.mat_verify">
+<div ng-if="$ctrl.user.mat_verify">
   <!-- already enrolled in some courses -->
-  <p class="lead" ng-if="overview.courses.length">
-    <span ng-show="overview.facts.grades.overall && overview.facts.credits.passed">
-      You earned a total of <strong>{{overview.facts.credits.passed}} credits</strong> with the <strong>average grade {{overview.facts.grades.overall}}</strong>.
+  <p class="lead" ng-if="$ctrl.courses.length">
+    <span ng-show="$ctrl.facts.grades.overall && $ctrl.facts.credits.passed">
+      You earned a total of <strong>{{$ctrl.facts.credits.passed}} credits</strong> with the <strong>average grade {{$ctrl.facts.grades.overall}}</strong>.
     </span>
 
     <!-- enrolled ects -->
-    <span ng-show="overview.facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-template="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise&nbsp;
+    <span ng-show="$ctrl.facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-template="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise&nbsp;
     <ng-pluralize
-      count="overview.facts.credits.enrolled"
+      count="$ctrl.facts.credits.enrolled"
       when="{'1': 'one credit',
              'other': '{} credits'}"
     ></ng-pluralize>.</span>
@@ -38,37 +38,37 @@
     <!-- Add notice about amount of credits to be collected by the end of the second semester -->
 
     <!-- bachelor grade -->
-    <span ng-if="overview.facts.grades.bachelor">
-      Presumably you will have something around a <strong>{{overview.facts.grades.bachelor}} bachelor grade</strong>.
+    <span ng-if="$ctrl.facts.grades.bachelor">
+      Presumably you will have something around a <strong>{{$ctrl.facts.grades.bachelor}} bachelor grade</strong>.
     </span>
 
-    <span ng-if="!overview.thesisinput">
+    <span ng-if="!$ctrl.thesisinput">
       <abbr
         class="undercover"
-        ng-click="overview.thesisinput=!overview.thesisinput"
+        ng-click="$ctrl.thesisinput=!$ctrl.thesisinput"
       >
         You did not yet write your bachelor thesis
       </abbr>{{
-        overview.facts.bscFieldsCount > overview.facts.bscFieldsCompletedCount |
+        $ctrl.facts.bscFieldsCount > $ctrl.facts.bscFieldsCompletedCount |
         iif : ' and ' : '.'
       }}
     </span>
 
-    <span ng-if="overview.facts.bscFieldsCount>overview.facts.bscFieldsCompletedCount">
-      {{overview.thesis.active | iif:'B':'b'}}y now {{overview.thesis.active | iif : 'you ' : ''}} completed {{overview.facts.bscFieldsCompletedCount}} of {{overview.facts.bscFieldsCount}} <abbr tooltips tooltip-template="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
+    <span ng-if="$ctrl.facts.bscFieldsCount>$ctrl.facts.bscFieldsCompletedCount">
+      {{$ctrl.thesis.active | iif:'B':'b'}}y now {{$ctrl.thesis.active | iif : 'you ' : ''}} completed {{$ctrl.facts.bscFieldsCompletedCount}} of {{$ctrl.facts.bscFieldsCount}} <abbr tooltips tooltip-template="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
     </span>
 
       <!-- Module Examinations -->
-      <span ng-if="!overview.facts.examinationCount">
+      <span ng-if="!$ctrl.facts.examinationCount">
         Finally, you still need to pass an oral module examination.
       </span>
   </p>
 
   <!-- no courses yet -->
-  <p class="lead" ng-if="overview.courses.length==0">
+  <p class="lead" ng-if="$ctrl.courses.length==0">
     You have not yet added any courses.
-    To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation={{overview.user.regulation_id}}&timeframe=11%2B}">course index</a> or take a look at the <a href="guide">study guide</a>.
-    Alternatively I can also give you a head start by adding the typical courses for your first semester: <button class="btn btn-primary" ng-click="overview.headstart()">Initialize</button>
+    To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation={{$ctrl.user.regulation_id}}&timeframe=11%2B}">course index</a> or take a look at the <a href="guide">study guide</a>.
+    Alternatively I can also give you a head start by adding the typical courses for your first semester: <button class="btn btn-primary" ng-click="$ctrl.headstart()">Initialize</button>
   </p>
 
   <hr>
@@ -77,7 +77,7 @@
 
 
 <!-- verify enrollment semester -->
-<div ng-if="!overview.user.mat_verify">
+<div ng-if="!$ctrl.user.mat_verify">
   <p class="lead" style="margin-bottom: 0">
     Please verify your matriculation semester:
   </p>
@@ -88,7 +88,7 @@
 
 
 <!-- bachelor thesis row -->
-<div ng-if="overview.thesisinput">
+<div ng-if="$ctrl.thesisinput">
   <thesis-input></thesis-input>
   <hr>
 </div>
@@ -96,14 +96,14 @@
 
 
 <!-- the fields -->
-<overview-columns fields="overview.fields" courses="overview.courses">
+<overview-columns fields="$ctrl.fields" courses="$ctrl.courses">
 </overview-columns>
 
 
 
 <!-- legend -->
 <hr>
-<p class="pull-right" ng-show="overview.user.mat_verify">
+<p class="pull-right" ng-show="$ctrl.user.mat_verify">
   <small>
     <span class="text-primary glyphicon glyphicon-pencil"></span> Current,&nbsp;
     <span class="text-success glyphicon glyphicon-ok"></span> Completed,&nbsp;
@@ -113,6 +113,6 @@
 
 <p class="hidden-xs hidden-sm">
   <small>
-    {{overview.user.regulation}}
+    {{$ctrl.user.regulation}}
   </small>
 </p>

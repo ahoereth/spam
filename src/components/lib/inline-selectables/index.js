@@ -16,6 +16,7 @@ class InlineSelectableGroupController {
   }
 }
 
+
 const inlineSelectableGroupDirective = () => ({
   restrict: 'E',
   replace: false,
