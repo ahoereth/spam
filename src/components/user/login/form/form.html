@@ -1,7 +1,7 @@
 <form
   class="form-horizontal"
-  ng-submit="loginform.login()"
-  ng-class="{'inactive': loginform.loading}"
+  ng-submit="$ctrl.login()"
+  ng-class="{'inactive': $ctrl.loading}"
 >
 
   <!-- username input -->
@@ -13,7 +13,7 @@
         class="form-control"
         id="username"
         placeholder="wwacker"
-        ng-model="loginform.username">
+        ng-model="$ctrl.username">
       <span class="input-group-addon">@uos.de</span>
     </div>
   </div>
@@ -26,11 +26,11 @@
         class="form-control"
         type="password"
         id="password"
-        ng-model="loginform.password">
+        ng-model="$ctrl.password">
       <!-- stay loggedin checkbox -->
       <div class="checkbox">
         <label>
-          <input type="checkbox" ng-model="loginform.remember">
+          <input type="checkbox" ng-model="$ctrl.remember">
           I trust this device
           <a href="help/remember" tabindex="-1">(?)</a>
         </label>
@@ -44,8 +44,8 @@
       <button
         type="submit"
         class="btn btn-primary btn-large btn-block"
-        ng-class="{disabled : loginform.loading}"
-        ng-disabled="loginform.loading"
+        ng-class="{disabled : $ctrl.loading}"
+        ng-disabled="$ctrl.loading"
       >
         {{loading | iif: 'Loading...' : 'Let\'s go!'}}
       </button>

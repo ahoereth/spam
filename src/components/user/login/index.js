@@ -9,6 +9,7 @@ import template from './login.html';
 
 class UserLoginController {
   static $inject = ['$scope', '$routeParams'];
+
   constructor($scope, $routeParams) {
     this.params = $routeParams;
   }
@@ -18,8 +19,8 @@ class UserLoginController {
 const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/login', {
     template,
-    controller: 'UserLoginController',
-    controllerAs: 'login',
+    controller: UserLoginController,
+    controllerAs: '$ctrl',
     title: 'Login',
   });
 }];
@@ -28,10 +29,8 @@ const routing = ['RoutesProvider', RoutesProvider => {
 /**
  * MODULE: spam.user.login
  * ROUTE: /login
- * CONTROLLER: UserLoginController
  */
 export default angular
   .module('spam.user.login', [ngRoute, routes, loginform])
-  .controller('UserLoginController', UserLoginController)
   .config(routing)
   .name;

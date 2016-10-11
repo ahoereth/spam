@@ -8,26 +8,18 @@ import controller from './LoginformController';
 import template from './form.html';
 
 
-// TODO: component
-const loginformDirective = () => ({
-  template,
-  controller,
-  controllerAs: 'loginform',
-  restrict: 'E',
-  replace: true,
-  scope: {
-    username: '=?',
-    loading: '=?',
-  },
-  bindToController: true,
-});
-
-
 /**
  * MODULE: spam.user.login.form
  * COMPONENT: loginform
  */
 export default angular
   .module('spam.user.login.form', [ngRoute, iif, auth])
-  .directive('loginform', loginformDirective)
+  .component('loginform', {
+    template,
+    controller,
+    bindings: {
+      username: '=?',
+      loading: '=?',
+    },
+  })
   .name;
