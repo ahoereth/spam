@@ -6,6 +6,7 @@ import notifications from '../notifications';
 
 import controller from './ContentController';
 import template from './content.html';
+import './content.css';
 
 
 /**

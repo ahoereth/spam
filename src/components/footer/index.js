@@ -6,6 +6,7 @@ import logout from '../user/logout';
 
 import controller from './FooterController';
 import template from './footer.html';
+import './footer.css';
 
 
 /**
