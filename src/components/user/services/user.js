@@ -9,11 +9,17 @@ import restangular from '../../lib/restangular';
 import formatGrade from '../formatGrade';
 
 
+function calculateGrade(credits, grades) {
+  const acc = sum(mergeWith(grades, credits, multiply));
+  return formatGrade(acc / sum(credits));
+}
+
+
 /* @ngInject */
 function userFactory(
   $cacheFactory, $rootScope, $location, $http, $log, $q, Restangular
 ) {
-  const webstorage = angular.isDefined(Storage);
+  const webstorage = !isUndefined(Storage); // browser object
   const self = {
     facts: {},
     fields: {},
@@ -33,38 +39,32 @@ function userFactory(
   }
 
 
-  function calculateGrade(credits, grades) {
-    const acc = sum(mergeWith(grades, credits, multiply));
-    return formatGrade(acc / sum(credits));
-  }
-
-
   const factsCalculation = debounce(() => {
     const facts = self.facts;
     const fields = sortBy(fieldData, 'grade');
 
     // TODO: this '5' should be somehow dynamic
-    facts.bscFieldsCount = 5;
-    const bscFields = take(filter(fields, {
+    facts.examinationFieldsCount = get(self, 'details.examination_fields', 5);
+    const examinationFields = take(filter(fields, {
       examinationPossible: true,
       completed: true,
-    }), facts.bscFieldsCount);
+    }), facts.examinationFieldsCount);
 
-    facts.bscFieldsCompletedCount = size(bscFields);
+    facts.examinationFieldsCompletedCount = size(examinationFields);
 
     facts.grades = {
       overall: calculateGrade(map(fields, 'overallPassedCredits'),
                               map(fields, 'overallGrade')),
-      bachelor: calculateGrade(map(bscFields, 'passedCredits'),
-                               map(bscFields, 'grade')),
+      graduation: calculateGrade(map(examinationFields, 'passedCredits'),
+                                 map(examinationFields, 'grade')),
     };
 
     // Take thesis grade into consideration.
     // TODO: The weight relation should be information taken from the api.
     const thesisGrade = parseFloat(self.details.thesis_grade);
     if (thesisGrade >= 1 && thesisGrade <= 4) {
-      facts.grades.bachelor = formatGrade(
-        ((parseFloat(facts.grades.bachelor) * 2) + thesisGrade) / 3
+      facts.grades.graduation = formatGrade(
+        ((parseFloat(facts.grades.graduation) * 2) + thesisGrade) / 3
       );
     }
 
