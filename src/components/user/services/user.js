@@ -17,7 +17,7 @@ function calculateGrade(credits, grades) {
 
 /* @ngInject */
 function userFactory(
-  $cacheFactory, $rootScope, $location, $http, $log, $q, Restangular
+  $cacheFactory, $rootScope, $location, $http, $log, $q, Restangular,
 ) {
   const webstorage = !isUndefined(Storage); // browser object
   const self = {
@@ -64,7 +64,7 @@ function userFactory(
     const thesisGrade = parseFloat(self.details.thesis_grade);
     if (thesisGrade >= 1 && thesisGrade <= 4) {
       facts.grades.graduation = formatGrade(
-        ((parseFloat(facts.grades.graduation) * 2) + thesisGrade) / 3
+        ((parseFloat(facts.grades.graduation) * 2) + thesisGrade) / 3,
       );
     }
 

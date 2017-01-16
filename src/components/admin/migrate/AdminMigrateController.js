@@ -36,7 +36,7 @@ export default class AdminMigrateController {
         null,
         // TODO: Needs assignIn?
         map(courses, (c, k) => (has(ids, k) ? { ...c, course_id: ids[k] } : c)),
-        'courses'
+        'courses',
       );
     });
   }

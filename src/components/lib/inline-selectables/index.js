@@ -40,7 +40,7 @@ const inlineSelectableDirective = () => ({
   link: function inlineSelectableLink(scope, elem, attrs, groupCtrl) {
     scope.$watch(
       () => groupCtrl.selected,
-      newVal => { scope.selected = newVal; }
+      newVal => { scope.selected = newVal; },
     );
 
     scope.change = () => {

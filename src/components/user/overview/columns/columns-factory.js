@@ -21,7 +21,7 @@ function buildColumns(userdetails, fields, columncount = 3) {
   ) {
     const height = Math.ceil(fields.length / columncount);
     division = map(
-      trimEnd(repeat(`${height}|${columncount}`), '|').split('|'), parseInt
+      trimEnd(repeat(`${height}|${columncount}`), '|').split('|'), parseInt,
     );
   }
 
@@ -41,7 +41,7 @@ function buildColumns(userdetails, fields, columncount = 3) {
       }
       division[col] -= 1;
       return col;
-    })
+    }),
   )(fields);
 
   // Create column array from grouped object.

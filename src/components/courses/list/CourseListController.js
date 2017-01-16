@@ -11,7 +11,7 @@ export default class CourseListController {
 
   constructor(
     $rootScope, $scope, $location, $routeParams,
-    $filter, $q, Restangular, Scroll, Courses
+    $filter, $q, Restangular, Scroll, Courses,
   ) {
     const originalDisplayLimit = 25;
     const year = new Date().getFullYear();

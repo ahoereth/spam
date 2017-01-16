@@ -18,7 +18,6 @@ const infiniteScrollDirective = [
             }
 
             scope.$apply(attrs.infiniteScroll);
-            return;
           }
         }
 

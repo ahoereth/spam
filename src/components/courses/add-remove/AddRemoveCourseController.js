@@ -23,7 +23,7 @@ export default class AddRemoveCourseController {
     // The fields array might contain all fields from all regulations -
     // we only care about the regulations relevant for the current user.
     this.fields = filter(this.course.fields, ({ regulations }) =>
-      includes(flatten(map(regulations, values)), this.user.regulation_id)
+      includes(flatten(map(regulations, values)), this.user.regulation_id),
     );
 
     // If there is one or no regulation there is a way to enroll

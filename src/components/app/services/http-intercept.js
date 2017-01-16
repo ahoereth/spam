@@ -32,7 +32,7 @@ function httpInterceptFactory($injector, $rootScope, $q, $timeout) {
     $http = $http || $injector.get('$http'); // Initialize $http service.
     $http(config).then(
       res => deferred.resolve(res),
-      res => deferred.reject(res)
+      res => deferred.reject(res),
     );
   };
 

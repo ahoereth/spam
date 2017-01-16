@@ -108,7 +108,7 @@ export default class UserOverviewFieldController {
     forIn(
       orderBy(
         pickBy(this.courses, isPlainObject),
-        ['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc']
+        ['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc'],
       ),
       course => {
         const group = course.passed ? 'passed' : 'enrolled';
@@ -131,7 +131,7 @@ export default class UserOverviewFieldController {
 
         // Overflowing credits can flow to the open studies module.
         credits[group].overflowing += (course.credits - course.counts);
-      }
+      },
     );
 
     // Account for foreign credits, if any.

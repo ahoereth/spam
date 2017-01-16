@@ -16,7 +16,7 @@ function appConfig($compileProvider, $httpProvider, RestangularProvider) {
   RestangularProvider.setBaseUrl(APIURL);
   // Send empty payload on `DELETE` requests.
   RestangularProvider.setRequestInterceptor(
-    (elem, operation) => ((operation === 'remove') ? null : elem)
+    (elem, operation) => ((operation === 'remove') ? null : elem),
   );
 }
 

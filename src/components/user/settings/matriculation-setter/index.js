@@ -33,7 +33,7 @@ const userMatriculationSetterDirective = ['User', User => ({
       User.updateUser(pick(scope.user,
         'mat_year',
         'mat_term',
-        'mat_verify'
+        'mat_verify',
       ), true);
     };
   },
