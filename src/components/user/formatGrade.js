@@ -25,7 +25,7 @@ export default function formatGrade(g, course) {
 
   // replace commas with periods
   // remove everything but numbers and periods
-  g = g.replace(',', '.').replace(/[^\d\.]/g, '');
+  g = g.replace(',', '.').replace(/[^\d.]/g, '');
 
   // round to one decimal behind the full stop
   if (course) {

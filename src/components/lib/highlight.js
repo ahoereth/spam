@@ -5,8 +5,8 @@ function highlightFilter() {
   return (haystack, needle) => {
     if (!haystack || !needle) { return haystack; }
 
-    // remove all reserved characters from the needle
-    needle = needle.toString().replace(/[\[\]\/\{\}\(\)\*\+\?\.\\\^\$|]/g, '\\$&'); // but -
+    // remove all reserved characters from the needle, all but "-"
+    needle = needle.toString().replace(/[[\]/{}()*+?.\\^$|]/g, '\\$&');
 
     // treat '-', '_' and ' ' as equal
     needle = needle.replace(/[-_ ]/g, '[_-\\s]');
