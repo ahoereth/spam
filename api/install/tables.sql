@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS regulations (
   regulation_title VARCHAR(3),
   regulation       VARCHAR(255),
   regulation_desc  TEXT,
+  examination_fields TINYINT DEFAULT NULL,
   invisible        BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (regulation_id)
 ) COLLATE utf8_unicode_ci ENGINE=INNODB;

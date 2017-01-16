@@ -85,6 +85,7 @@ class Route_Users extends Route {
         'regulation_title',
         'regulation_abbr',
         'regulation',
+        'examination_fields',
         'thesis_title',
         'thesis_grade',
         'overview_order',

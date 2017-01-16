@@ -2,11 +2,11 @@
 --
 -- VALUES regulations
 --
-INSERT INTO regulations ( invisible, regulation_abbr, regulation_title, regulation ) VALUES
-  ( FALSE, 'uos_cogsci_bsc_11', 'BSc', 'Cognitive Science B.Sc. 2011' ),
-  ( FALSE, 'uos_cogsci_msc_06', 'MSc', 'Cognitive Science M.Sc. 2006' ),
-  ( FALSE, 'uos_cogsci_phd',    'PHD', 'Cognitive Science Doctorate Program' ),
-  ( TRUE,  'uos_cogsci_bsc_00', 'BSc', 'Cognitive Science B.Sc. 2000' );
+INSERT INTO regulations ( invisible, regulation_abbr, regulation_title, regulation, examination_fields ) VALUES
+  ( FALSE, 'uos_cogsci_bsc_11', 'BSc', 'Cognitive Science B.Sc. 2011', 5 ),
+  ( FALSE, 'uos_cogsci_msc_06', 'MSc', 'Cognitive Science M.Sc. 2006', 2 ),
+  ( FALSE, 'uos_cogsci_phd',    'PHD', 'Cognitive Science Doctorate Program', 0 ),
+  ( TRUE,  'uos_cogsci_bsc_00', 'BSc', 'Cognitive Science B.Sc. 2000', 5 );
 
 
 --

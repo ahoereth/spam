@@ -12,6 +12,7 @@ class Regulation extends Model {
     'regulation_title' => 'VARCHAR(3)',
     'regulation'       => 'VARCHAR(255)',
     'regulation_desc'  => 'TEXT',
+    'examination_fields' => 'TINYINT',
     'invisible'        => 'BOOLEAN',
   );
 
