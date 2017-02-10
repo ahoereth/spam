@@ -41,7 +41,8 @@ export default {
     eslint({ ignorePath: '.gitignore', include: 'src/**/*.js' }),
     less({
       output: `${dst}/bundle.css`,
-      exclude: '',
+      include: ['**/*.css', '**/*.less'],
+      exclude: 'nothing', // Wat?! `false`, `null` etc are being overwritten.
       // See https://github.com/xiaofuzi/rollup-plugin-less/pull/7
       insert: false,
       option: {
@@ -71,7 +72,7 @@ export default {
     }),
     babel({ exclude: ['node_modules/!(lodash-es)/**', 'src/**/*.css', 'src/**/*.less'] }),
     nodeResolve({ jsnext: true }),
-    commonjs(),
+    commonjs({ include: 'node_modules/**' }),
     replace({
       ENV: JSON.stringify(ENV),
       API: JSON.stringify(API),
