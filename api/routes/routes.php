@@ -18,3 +18,8 @@ $app->get('/phpinfo', function() use ($app) {
   $app->response->headers->set('Content-Type', 'text/html');
   $app->response->write(phpinfo());
 });
+
+$app->get('/', function() use ($app) {
+  $app->response->setStatus(200);
+  $app->response->write('Questions? 42.');
+});

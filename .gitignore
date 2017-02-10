@@ -3,6 +3,8 @@
 /api/lib/
 /app/
 /assets/
+/docker/mysql/
+/docker/**/*.sql
 /dev/
 /node_modules/
 /composer.phar

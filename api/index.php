@@ -1,6 +1,6 @@
 <?php
 // Configuration
-define('ENV', 'prod');
+define('ENV', 'docker');
 require_once sprintf('config/%s.php', ENV);
 
 // Loads composer dependencies. See /composer.json for details.
