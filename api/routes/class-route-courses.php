@@ -26,7 +26,6 @@ class Route_Courses extends Route {
         'c.course_id',
         'code',
         'course',
-        'course_group',
         'type',
         'ects',
         'term',

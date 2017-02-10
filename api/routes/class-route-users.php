@@ -269,7 +269,7 @@ class Route_Users extends Route {
       'students_in_fields',
       array('username' => md5($username)),
       array('field_id', 'student_in_field_id', 'grade', 'minimized'),
-          //'username', 'regulation_id', 'one_of_five'
+          //'username', 'regulation_id'
       array('style' => 'groupassoc')
     );
 

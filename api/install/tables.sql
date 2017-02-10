@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS fields (
   field_abbr    VARCHAR(4),
   field         VARCHAR(255),
   field_desc    TEXT,
-  field_examination_possible BOOLEAN NOT NULL DEFAULT FALSE
+  field_examination_possible BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (field_id),
   INDEX (field)
 ) COLLATE utf8_unicode_ci ENGINE=INNODB;
@@ -252,6 +252,7 @@ CREATE TABLE IF NOT EXISTS students_in_fields (
   field_id            BIGINT UNSIGNED,
   regulation_id       BIGINT UNSIGNED,
   grade               DECIMAL(2,1) CHECK (grade>=0 AND grade<=5),
+  minimized           BOOLEAN DEFAULT 0,
   PRIMARY KEY (student_in_field_id),
   UNIQUE (username, field_id, regulation_id),
   INDEX (username),
@@ -272,6 +273,8 @@ CREATE TABLE IF NOT EXISTS students_in_regulations (
   regulation_id            BIGINT UNSIGNED,
   thesis_title             TEXT,
   thesis_grade             DECIMAL(2,1) CHECK (grade>=0 AND grade<=5),
+  overview_columns         VARCHAR(64),
+  overview_order           VARCHAR(64),
   PRIMARY KEY (student_in_regulation_id),
   UNIQUE (username, regulation_id),
   INDEX (username),

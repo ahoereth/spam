@@ -103,6 +103,8 @@ class Course extends Model {
    * Courses might be part of a group, this method tries to guess the group of
    * the current instance from the course name.
    *
+   * CURRENTLY UNUSED!
+   *
    * @return {string}
    */
   public function determine_course_group() {
