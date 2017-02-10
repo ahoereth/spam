@@ -61,7 +61,12 @@ export default class AdminMigrateController {
    * @param  {course} course Course to accept.
    */
   acceptCourse(course) {
-    course.accepted = true;
-    course.post();
+    if (course.course_id) {
+      // Course already is in the IKW database, update it.
+      course.save();
+    } else {
+      course.accepted = true;
+      course.post();
+    }
   }
 }
