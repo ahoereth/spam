@@ -3,11 +3,5 @@ SetOutputFilter DEFLATE
 ServerSignature Off
 
 RewriteEngine On
-
 RewriteCond %{REQUEST_FILENAME} !-f
-
-## Switch the comments in the following lines for production. The first one is
-## fit for the local docker development environment, the second for the IKW
-## production instance.
-RewriteRule ^ /index.php [QSA,L]
-#RewriteRule ^ /~SPAM/api/index.php [QSA,L]
+RewriteRule ^ /~SPAM/api/index.php [QSA,L]

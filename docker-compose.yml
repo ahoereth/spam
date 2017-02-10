@@ -12,13 +12,11 @@ services:
       MYSQL_USER: mmuster
       MYSQL_PASSWORD: studyplanning
   php:
-    build:
-      context: ./docker
-      dockerfile: Dockerfile-php
+    build: ./docker/apache
     links:
       - mysql:db
     volumes:
-      - ./api:/var/www/html/
+      - .:/var/www/html/~SPAM/
     environment:
       DB_HOST: db
       DB_NAME: SPAM

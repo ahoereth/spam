@@ -18,7 +18,7 @@ RewriteEngine on
 # Enforce HTTPS. Production only.
 #PROD# RewriteCond %{HTTPS} !=on
 #PROD# RewriteCond %{ENV:HTTPS} !=on
-#PROD# RewriteRule ^(.*) https://cogsci.uni-osnabrueck.de/~SPAM/$1 [R=301,L]
+#PROD# RewriteRule ^(.*) https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
 
 # If a directory or a file exists, use it directly,
 RewriteCond %{REQUEST_FILENAME} -f [OR]
@@ -26,13 +26,12 @@ RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [NC,L]
 
 # otherwise forward the request to root.
-#PROD# RewriteRule ^(.*) /~SPAM/#!/$1 [NC,L]
-#DEV#  RewriteRule ^(.*) /\#!/$1 [NC,L]
+RewriteRule ^(.*) /~SPAM/#!/$1 [NC,L]
 
 # Security rules. Production only.
-#PROD# ServerSignature Off
-#PROD# Header set X-Frame-Options "SAMEORIGIN"
-#PROD# Header set X-Content-Type-Options "nosniff"
+ServerSignature Off
+Header set X-Frame-Options "SAMEORIGIN"
+Header set X-Content-Type-Options "nosniff"
 #PROD# Header set Content-Security-Policy "default-src 'self' 'unsafe-inline'"
-#PROD# Header set Strict-Transport-Security "max-age=31536000"
-#PROD# Header set 'X-XSS-Protection' "1; mode=block"
+Header set Strict-Transport-Security "max-age=31536000"
+Header set 'X-XSS-Protection' "1; mode=block"

@@ -18,15 +18,15 @@ const courserowDirective = () => ({
     action: '&action',
   },
   link: function courserowLink(scope, elem, attrs) {
-    const opt = scope.opt = {};
+    scope.opt = {};
 
     if (undefined !== attrs.expanded) {
-      opt.initiallyExpanded = true;
-      opt.expanded = true;
+      scope.opt.initiallyExpanded = true;
+      scope.opt.expanded = true;
     }
 
     if (undefined !== attrs.addRemoveCourse) {
-      opt.addRemoveCourse = true;
+      scope.opt.addRemoveCourse = true;
     }
   },
 });

@@ -93,16 +93,18 @@ export default class UserOverviewFieldController {
 
     const percentage = partialRight(percent, field.field_pm + field.field_wpm);
 
-    const credits = this.credits = {
+    this.credits = {
       passed: clone(defaultCreditSet),
       enrolled: clone(defaultCreditSet),
       full: field.field_pm + field.field_wpm,
     };
+    const credits = this.credits;
 
-    const available = credits.available = {
+    credits.available = {
       compulsory: field.field_pm,
       optional: field.field_wpm,
     };
+    const available = credits.available;
 
     // Aggregate the credits from the individual courses.
     forIn(

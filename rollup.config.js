@@ -18,29 +18,28 @@ import LessCleanCss from 'less-plugin-clean-css';
 
 const rfs = partialRight(readFileSync, { encoding: 'utf8' });
 const ENV = process.env.NODE_ENV || 'development';
-const API = process.env.API;
-const dst = ENV !== 'production' ? 'dev' : 'app';
+const remoteAPI = 'https://cogsci.uni-osnabrueck.de/~SPAM/api';
+const APIURL = process.env.API === 'remote' ? remoteAPI : '/~SPAM/api';
 
 
 const pattern = ENV !== 'production' ? /#DEV#\s*/g : /#PROD#\s*/g;
-const index = ENV !== 'production' ? 'index.html' : 'index-ship.html';
-mkdirp(dst);
-wfs(`${dst}/.htaccess`, rfs('src/.htaccess').replace(pattern, ''));
-wfs(`${dst}/index.html`, rfs(`src/${index}`).replace(/VER/g, Date.now()));
-copy('src/robots.txt', `${dst}/robots.txt`);
-copy('node_modules/bootstrap/fonts', `${dst}/fonts/glyphicons`);
-copy('node_modules/open-sans-fontface/fonts', `${dst}/fonts/opensans`);
+mkdirp('app');
+wfs('app/.htaccess', rfs('src/.htaccess').replace(pattern, ''));
+wfs('app/index.html', rfs('src/index.html').replace(/VER/g, Date.now()));
+copy('src/robots.txt', 'app/robots.txt');
+copy('node_modules/bootstrap/fonts', 'app/fonts/glyphicons');
+copy('node_modules/open-sans-fontface/fonts', 'app/fonts/opensans');
 
 
 export default {
   entry: 'src/index.js',
-  dest: `${dst}/bundle.js`,
+  dest: 'app/bundle.js',
   sourceMap: true,
   format: 'cjs',
   plugins: [
     eslint({ ignorePath: '.gitignore', include: 'src/**/*.js' }),
     less({
-      output: `${dst}/bundle.css`,
+      output: 'app/bundle.css',
       include: ['**/*.css', '**/*.less'],
       exclude: 'nothing', // Wat?! `false`, `null` etc are being overwritten.
       // See https://github.com/xiaofuzi/rollup-plugin-less/pull/7
@@ -75,7 +74,7 @@ export default {
     commonjs({ include: 'node_modules/**' }),
     replace({
       ENV: JSON.stringify(ENV),
-      API: JSON.stringify(API),
+      APIURL: JSON.stringify(APIURL),
     }),
     ENV !== 'production' ? () => {} : uglify({
       mangle: { toplevel: true, eval: true },

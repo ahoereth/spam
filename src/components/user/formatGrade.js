@@ -68,10 +68,12 @@ export default function formatGrade(g, course) {
   let b = g.length > 1 ? parseInt(g[g.length - 1], 10) : 0;
 
   // format decimal place number
+  /* eslint-disable brace-style */
   if (b <= 1) { b = 0; }
-  else if (b >= 2 && b <= 4) { b = 3; } // eslint-disable-line brace-style
-  else if (b >= 5 && b <= 8) { b = 7; } // eslint-disable-line brace-style
-  else { b = 0; a++; } // eslint-disable-line brace-style
+  else if (b >= 2 && b <= 4) { b = 3; }
+  else if (b >= 5 && b <= 8) { b = 7; }
+  else { b = 0; a++; }
+  /* eslint-enable brace-style */
 
   // concatenate again
   return parseFloat(`${a}.${b}`).toFixed(1);

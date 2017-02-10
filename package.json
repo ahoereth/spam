@@ -15,7 +15,7 @@
     "watch": "rollup -c --watch",
     "reload": "livereload 'dev/' -d",
     "start": "npm-run-all -p reload watch",
-    "start:local": "npm-run-all -p reload 'watch -- --environment API:local'",
+    "start:remote": "npm-run-all -p reload 'watch -- --environment API:remote'",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {

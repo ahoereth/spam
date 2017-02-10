@@ -1,7 +1,7 @@
 import angular from 'angular';
 import { initial } from 'lodash-es';
 
-import { DEBUG, APIURL } from '../../config';
+import { DEBUG, API } from '../../config';
 import restangular from '../lib/restangular';
 import './services/http-intercept';
 
@@ -13,7 +13,7 @@ function appConfig($compileProvider, $httpProvider, RestangularProvider) {
   // Intercept http requests for general error handling and loading animation.
   $httpProvider.interceptors.push('httpIntercept');
   // Set restangular api base url.
-  RestangularProvider.setBaseUrl(APIURL);
+  RestangularProvider.setBaseUrl(API);
   // Send empty payload on `DELETE` requests.
   RestangularProvider.setRequestInterceptor(
     (elem, operation) => ((operation === 'remove') ? null : elem),
