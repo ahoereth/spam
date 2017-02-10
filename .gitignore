@@ -11,3 +11,4 @@
 **/*.ignore.*
 *.swp
 *.log
+yarn.lock
