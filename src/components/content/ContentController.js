@@ -24,7 +24,7 @@ export default class ContentController {
     let name = kebabCase(this.$location.path().replace('~', 'user'));
     name = name || 'root';
     if (this.currentRouteName !== name) {
-      this.classnames = { name: true };
+      this.classnames = { [name]: true };
       this.currentRouteName = name;
     }
 
