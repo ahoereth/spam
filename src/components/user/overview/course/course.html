@@ -5,21 +5,20 @@
 
   <!-- title + ects -->
   <div class="col-xs-9">
-    <a
-      ng-if="::course.course_id"
-      href="courses/{{::course.course_id}}"
-      tooltips
-      tooltip-template="{{::course.term_abbr}}"
-    >{{::course.course}}</a>
     <span
-      ng-if="::!course.course_id"
       tooltips
       tooltip-template="{{::course.term_abbr}}"
-      ng-bind="::course.course"
-    ></span>
-    <small ng-show="course.ects" class="text-info">
-      [{{::course.ects}}]
-    </small>
+    >
+      <span ng-if="::!course.course_id">
+        {{course.course}}
+      </span>
+      <a ng-if="::course.course_id" href="courses/{{::course.course_id}}">
+        {{::course.course}}
+      </a>
+      <small ng-show="course.ects" class="text-info">
+        [{{::course.ects}}]
+      </small>
+    </span>
   </div>
 
   <!-- grade -->
