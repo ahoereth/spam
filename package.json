@@ -13,7 +13,7 @@
     "build": "rollup -c --environment NODE_ENV:production",
     "servdev": "http-server dev --push-state",
     "watch": "rollup -c --watch",
-    "reload": "livereload 'dev/' -d",
+    "reload": "livereload 'app/' -d",
     "start": "npm-run-all -p reload watch",
     "start:remote": "npm-run-all -p reload 'watch -- --environment API:remote'",
     "lint": "eslint --ignore-path .gitignore ."
