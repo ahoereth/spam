@@ -201,6 +201,7 @@ function userFactory(
 
     const promise = course.remove().then(() => {
       $log.info(`Removed: ${title}`);
+      self.courses.splice(findIndex(self.courses, course), 1);
     }, () => {
       $log.info(`Couldn't remove: ${title}`);
       course.enrolled_field_id = enrolledFieldId;
