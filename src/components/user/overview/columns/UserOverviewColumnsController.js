@@ -8,24 +8,29 @@ export default class UserOverviewColumnsController {
   static $inject = ['$scope', '$window', 'UserOverviewColumns'];
 
   constructor($scope, $window, UserOverviewColumns) {
+    this.$scope = $scope;
+    this.$window = $window;
+    this.UserOverviewColumns = UserOverviewColumns;
+  }
+
+  $onInit() {
     assign(this, {
-      $window, UserOverviewColumns, $scope,
       columncount: null,
       sortable: {
         active: false,
         allow_cross: true,
         handle: '.panel-heading',
         stop: () => {
-          const order = UserOverviewColumns.refresh(this.set);
+          const order = this.UserOverviewColumns.refresh(this.set);
           forEach(this.fields, f => { f.pos = indexOf(order, f.field_id); });
         },
       },
     });
 
     const resize = () => this.resize();
-    angular.element($window).bind('resize', resize);
-    $scope.$on('$destroy', () => {
-      angular.element($window).unbind('resize', resize);
+    angular.element(this.$window).bind('resize', resize);
+    this.$scope.$on('$destroy', () => {
+      angular.element(this.$window).unbind('resize', resize);
     });
 
     this.resize();

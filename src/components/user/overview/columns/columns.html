@@ -1,9 +1,9 @@
 <div class="overview-container row">
   <div
     class="overview-column"
-    ng-class="{'col-xs-4' : 3 == $ctrl.set.length,
-               'col-xs-6' : 2 == $ctrl.set.length,
-               'col-xs-12': 1 == $ctrl.set.length}"
+    ng-class="{'col-xs-4' : 3 === $ctrl.columncount,
+               'col-xs-6' : 2 === $ctrl.columncount,
+               'col-xs-12': 1 === $ctrl.columncount}"
     html-sortable="$ctrl.sortable"
     ng-repeat="column in $ctrl.set"
     ng-model="column"
