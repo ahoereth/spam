@@ -5,7 +5,10 @@
              'panel-warning': $ctrl.credits.available.compulsory !== 0 ||
                               $ctrl.credits.enrolled.compulsory  !== 0,
              'panel-default': $ctrl.credits.available.compulsory === 0 &&
-                             !$ctrl.field_examination_possible}"
+                             !$ctrl.field_examination_possible,
+             'auto-grade': !$ctrl.examination,
+             examination: $ctrl.examination
+  }"
 >
 
   <div class="panel-heading">
@@ -18,7 +21,7 @@
       <div class="col-xs-2">
         <grade-input
           grade="$ctrl.grade"
-          editable="$ctrl.examination"
+          active="$ctrl.examination"
           change="$ctrl.gradeChange(newGrade)"
         ></grade-input>
       </div>

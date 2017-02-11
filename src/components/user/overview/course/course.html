@@ -1,23 +1,25 @@
 <div
   class="row course"
-  ng-class="{overflowing: 0 === course.counts || course.failed || course.muted}"
+  ng-class="{
+    overflowing: 0 === course.counts || course.failed || course.muted,
+    passed: course.passed,
+    muted: course.muted,
+    failed: course.failed
+  }"
 >
 
   <!-- title + ects -->
   <div class="col-xs-9">
-    <span
-      tooltips
-      tooltip-template="{{::course.term_abbr}}"
-    >
-      <span ng-if="::!course.course_id">
-        {{course.course}}
-      </span>
-      <a ng-if="::course.course_id" href="courses/{{::course.course_id}}">
+    <span tooltips tooltip-template="{{::course.term_abbr}}">
+      <span class="course-title" ng-if="::!course.course_id">
         {{::course.course}}
-      </a>
-      <small ng-show="course.ects" class="text-info">
-        [{{::course.ects}}]
-      </small>
+      </span>
+      <a
+        class="course-title"
+        ng-if="::course.course_id"
+        ng-href="courses/{{::course.course_id}}"
+      >{{::course.course}}</a>
+      <small ng-show="course.ects" class="text-info">[{{::course.ects}}]</small>
     </span>
   </div>
 
@@ -26,7 +28,7 @@
     class="col-xs-2"
     grade="course.grade"
     change="grade(newGrade)"
-    editable="(!course.passed || course.grade) && !course.muted"
+    active="(!course.passed || course.grade) && !course.muted"
   ></grade-input>
 
   <!-- dropdown button -->

@@ -33,12 +33,15 @@ const courseDirective = ['User', User => ({
       course.failed = !course.passed && course.grade >= 5;
       fieldCtrl.courseChange(course);
 
-      if (course.grade === course.oldGrade) { return; }
-      course.oldGrade = course.grade;
-      course.customPUT({
-        grade: course.grade,
-        passed: course.passed,
-      });
+      if (course.grade !== course.oldGrade) {
+        course.muted = course.muted && !course.grade;
+        course.oldGrade = course.grade;
+        course.customPUT({
+          grade: course.grade,
+          passed: course.passed,
+          muted: course.muted,
+        });
+      }
     };
 
     scope.mute = () => {

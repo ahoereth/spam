@@ -6,6 +6,9 @@ export default class gradeInputController {
 
   constructor($scope) {
     $scope.$watch('$ctrl.grade', (n, o) => this.changeGrade(n, o));
+  }
+
+  $onInit() {
     this.grade = formatGrade(this.grade);
   }
 
@@ -18,10 +21,7 @@ export default class gradeInputController {
     }
 
     this.grade = formatGrade(newGrade);
-    if (
-      (this.editable && (newGrade || (!newGrade && oldGrade))) || // Special case for fields.
-      (!this.editable && !newGrade && oldGrade) // Special case for courses.
-    ) {
+    if (newGrade || (!newGrade && oldGrade)) {
       this.change({ newGrade: this.grade });
     }
   }

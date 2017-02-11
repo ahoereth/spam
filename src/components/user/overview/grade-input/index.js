@@ -20,7 +20,7 @@ export default angular
     bindings: {
       change: '&',
       grade: '<',
-      editable: '<?',
+      active: '<?',
     },
   })
   .name;

@@ -1,5 +1,10 @@
-.grade-input span {
-  display: inline-block;
+.grade-input {
+  background-color: white;
+}
+
+.auto-grade .panel-heading .grade-input,
+.course.passed .grade-input,
+.course.failed .grade-input,
+.course.muted .grade-input {
   background-color: transparent;
-  cursor: default;
 }
