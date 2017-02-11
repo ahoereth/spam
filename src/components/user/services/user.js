@@ -1,6 +1,6 @@
 import angular from 'angular';
 import {
-  forEach, multiply, debounce, attempt, get, isPlainObject, mergeWith,
+  forEach, multiply, debounce, get, isPlainObject, mergeWith,
   find, isUndefined, isNumber, fromPairs, keys, map, omit, findIndex, sum, take,
   filter, size, sortBy,
 } from 'lodash-es';
@@ -35,7 +35,7 @@ function userFactory(
 
 
   function callWatchers() {
-    forEach(self.watchers, attempt);
+    forEach(self.watchers, watcher => watcher());
   }
 
 

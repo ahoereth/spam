@@ -15,11 +15,11 @@ export default class UserOverviewController {
       thesisinput: !!(User.details.thesis_title || User.details.thesis_grade),
     });
     // Forces a $scope.$apply when relevant user data changes out-of-cycle.
-    User.addWatcher(() => this.apply);
+    User.addWatcher(() => this.apply());
   }
 
   apply() {
-    this.$scope.apply();
+    this.$scope.$apply();
   }
 
   /**

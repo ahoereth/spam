@@ -35,11 +35,15 @@ export default class UserOverviewFieldController {
   static $inject = ['$scope', 'User'];
 
   constructor($scope, User) {
+    this.$scope = $scope;
+    this.User = User;
+  }
+
+  $onInit() {
     assign(this, pick(this.raw, [
       'field', 'field_id', 'field_examination_possible',
       'regulation_id', 'minimized', 'grade',
     ]), {
-      $scope, User,
       courses: this.courses || {},
       foreignCreditsMem: 0,
       hasManualGrade: false,
@@ -50,10 +54,11 @@ export default class UserOverviewFieldController {
      * Handler for credits which flow from other fields to this field. Only
      * used by the open studies field which basically acts as a catch-all.
      */
-    function handleOverflowingCredits() {
+    const handleOverflowingCredits = () => {
       // Omit the open studies field and sum up the credits.
-      const foreignPassedCredits = sum(omit(User.getOverflowingCredits(), 1));
-      const examinationCredits = User.facts.examinationCredits;
+      const overflowingCredits = this.User.getOverflowingCredits();
+      const foreignPassedCredits = sum(omit(overflowingCredits, 1));
+      const examinationCredits = this.User.facts.examinationCredits;
 
       // Run the analysis again with those foreign credits.
       if (this.foreignCreditsMem !== (examinationCredits + foreignPassedCredits)) {
@@ -66,7 +71,7 @@ export default class UserOverviewFieldController {
     // called when the user facts have been updated in order to handle
     // credits flowing from other fields to this field.
     if (field.field_id === 1) {
-      this.User.addWatcher(handleOverflowingCredits);
+      this.User.addWatcher(() => handleOverflowingCredits);
     }
 
     // Initialize the field data. In general this function will be called
