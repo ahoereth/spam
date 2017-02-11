@@ -24,17 +24,6 @@
       padding-right: 0;
       text-align: center;
     }
-
-    a,
-    a:active,
-    a:visited {
-      color: #333;
-    }
-
-    a:hover {
-      color: #333;
-      text-decoration: underline;
-    }
   }
 
   .panel-heading,
@@ -51,7 +40,8 @@
   }
 
   .panel-body {
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 
     .row {
       padding-top: 5px; padding-bottom: 5px;
@@ -63,6 +53,21 @@
   .course.overflowing input,
   .course.overflowing button {
     opacity: .4;
+  }
+
+
+  .course-title {
+    color: #333;
+
+    &:active,
+    &:visited {
+      color: #333;
+    }
+
+    &:hover {
+      color: #333;
+      text-decoration: underline;
+    }
   }
 
   h4 {

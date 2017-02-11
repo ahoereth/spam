@@ -65,7 +65,7 @@ export default class UserOverviewFieldController {
         this.foreignCreditsMem = examinationCredits + foreignPassedCredits;
         this.doAnalysis(this.foreignCreditsMem);
       }
-    }
+    };
 
     // If this field is the open studies field add a watcher which is being
     // called when the user facts have been updated in order to handle

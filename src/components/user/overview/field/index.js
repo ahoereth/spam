@@ -4,6 +4,7 @@ import progress from '../../../lib/progress';
 import dropdown from '../../../lib/dropdown';
 import tickable from '../../../lib/tickable';
 import iif from '../../../lib/iif';
+import isEmpty from '../../../lib/isEmpty';
 import userService from '../../services/user';
 import gradeInput from '../grade-input';
 
@@ -17,7 +18,7 @@ import template from './field.html';
  */
 export default angular
   .module('spam.user.overview.field', [
-    progress, tickable, iif, dropdown, userService, gradeInput,
+    progress, tickable, iif, isEmpty, dropdown, userService, gradeInput,
   ])
   .component('field', {
     template,

@@ -1,6 +1,6 @@
 .progress-bar.progress-bar-background {
   color: #000;
-  background-color: transparent;
+  background-color: #ddd;
   -webkit-box-shadow: none;
      -moz-box-shadow: none;
           box-shadow: none;
