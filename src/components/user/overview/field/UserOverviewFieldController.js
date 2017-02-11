@@ -219,9 +219,6 @@ export default class UserOverviewFieldController {
    * changes to the server.
    */
   gradeChange(newGrade, examine) {
-    if (!isUndefined(examine)) {
-      this.examination = examine;
-    }
     newGrade = newGrade || null;
 
     if (

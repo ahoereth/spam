@@ -1,7 +1,7 @@
 import formatGrade from '../../formatGrade';
 
 
-export default class gradeInputController {
+export default class GradeInputController {
   static $inject = ['$scope'];
 
   constructor($scope) {
@@ -21,7 +21,7 @@ export default class gradeInputController {
     }
 
     this.grade = formatGrade(newGrade);
-    if (newGrade || (!newGrade && oldGrade)) {
+    if (this.active && (newGrade || (!newGrade && oldGrade))) {
       this.change({ newGrade: this.grade });
     }
   }
