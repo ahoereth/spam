@@ -1,12 +1,22 @@
-.tickable {
+label.tickable {
+  display: block;
   margin: 0;
+  cursor: pointer;
+  width: 100%;
   padding: 3px 20px;
   font-weight: normal;
-  cursor: pointer;
 
-  &:hover span.glyphicon {
-    display: inline-block;
-    opacity: .5;
+  &:hover {
+    background-color: #f5f5f5;
+
+    ng-transclude {
+      text-decoration: underline;
+    }
+
+    span.glyphicon {
+      display: inline-block;
+      opacity: .5;
+    }
   }
 
   input[type="checkbox"],
