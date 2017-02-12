@@ -17,9 +17,10 @@ import angular from 'angular';
  *                                  amount of times
  * @broadcasts http:error:resolved  When a request failed at least once before
  *                                  could be resolved now
- * @ngInject
  */
 function httpInterceptFactory($injector, $rootScope, $q, $timeout) {
+  "ngInject";
+
   $rootScope.loading = 0;
   const retriesPerRequest = 2;
   const retryTimeoutTime = 5000;

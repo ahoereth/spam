@@ -29,7 +29,7 @@ module.exports = (env = {}) => {
       rules: [
         {
           test: /\.js$/,
-          loaders: [
+          use: [
             'babel-loader?cacheDirectory=tmp/cache',
             'eslint-loader',
           ],

@@ -1,6 +1,0 @@
-{
-  "directory": "src/lib",
-  "scripts": {
-    "postinstall": "grunt wiredep"
-  }
-}

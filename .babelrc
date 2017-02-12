@@ -9,8 +9,10 @@
   ],
   "plugins": [
     "external-helpers",
+    "transform-runtime",
     "transform-class-properties",
     "transform-object-rest-spread",
-    "syntax-trailing-function-commas"
+    "syntax-trailing-function-commas",
+    ["angularjs-annotate", { "explicitOnly": true }]
   ]
 }
