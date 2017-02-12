@@ -1,8 +1,6 @@
 <!doctype html>
-<html lang="en" data-ng-app="spam.app">
+<html lang="en" data-ng-app="spam.app" data-ng-strict-di>
 <head>
-  <style>.ng-cloak { display: none !important; }</style>
-
   <meta charset="utf-8">
   <meta name="fragment" content="!">
   <meta http-equiv="expires" content="-1">
@@ -17,7 +15,7 @@
 
   <title data-ng-bind="title">Studyplanning in Cognitive Science</title>
 
-  <base href="/">
+  <base href="/~SPAM/">
   <script type="text/javascript">
   // Handle local servers running with or without some "spam" base.
   /* global window, document */
@@ -30,14 +28,15 @@
   })();
   </script>
 
+  <style>.ng-cloak { display: none !important; }</style>
   <link href="img/spam.png" rel="apple-touch-icon">
   <link href="img/spam.ico" rel="shortcut icon">
-  <link href="bundle.css" rel="stylesheet">
+  <link href="bundle.css?v=VER" rel="stylesheet">
 </head>
 <body class="ng-cloak">
   <navbar></navbar>
   <content></content>
   <footer></footer>
-  <script src="bundle.js"></script>
+  <script src="bundle.js?v=VER"></script>
 </body>
 </html>
