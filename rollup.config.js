@@ -18,6 +18,7 @@ import LessCleanCss from 'less-plugin-clean-css';
 
 const rfs = partialRight(readFileSync, { encoding: 'utf8' });
 const ENV = process.env.NODE_ENV || 'development';
+const UGLIFY = process.env.UGLIFY === '1';
 const remoteAPI = 'https://cogsci.uni-osnabrueck.de/~SPAM/api';
 const APIURL = process.env.API === 'remote' ? remoteAPI : '/~SPAM/api';
 
@@ -76,15 +77,15 @@ export default {
       ENV: JSON.stringify(ENV),
       APIURL: JSON.stringify(APIURL),
     }),
-    ENV !== 'production' ? () => {} : uglify({
-      mangle: { toplevel: true, eval: true },
+    ENV === 'production' || UGLIFY ? uglify({
+      mangle: false, // { toplevel: true, eval: true },
       compress: {
-        unsafe: true,
+        unsafe: false,
         unsafe_comps: true,
         pure_getters: true,
         drop_console: true,
         angular: true,
       },
-    }),
+    }) : () => {},
   ],
 };

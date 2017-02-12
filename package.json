@@ -16,6 +16,7 @@
     "reload": "livereload 'app/' -d",
     "start": "npm-run-all -p reload watch",
     "start:remote": "npm-run-all -p reload 'watch -- --environment API:remote'",
+    "start:uglify": "npm-run-all -p reload 'watch -- --environment UGLIFY:1'",
     "lint": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
