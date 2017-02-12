@@ -1,5 +1,5 @@
-/api/config/
-!/api/config/sample.php
+/api/config/*
+!/api/config/default.php
 /api/lib/
 /app/
 /assets/

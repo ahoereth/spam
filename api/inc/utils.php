@@ -164,3 +164,12 @@ function prefix_keys($assoc, $prefix) {
 
   return $result;
 }
+
+
+/**
+ * Get environment variable's value, but return a default if not set.
+ */
+function getenv_default($var, $default) {
+  $val = getenv($var);
+  return ($val === FALSE) ? $default  : $val;
+}

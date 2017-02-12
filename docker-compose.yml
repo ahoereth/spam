@@ -22,6 +22,9 @@ services:
       DB_NAME: SPAM
       DB_USER: mmuster
       DB_PASSWORD: studyplanning
+      DEV: 1
+      DEBUG: 1
+      LOCAL: 1
     ports:
       - 8080:80
   phpmyadmin:
