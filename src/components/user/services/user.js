@@ -1,6 +1,6 @@
 import angular from 'angular';
 import {
-  forEach, multiply, debounce, get, isPlainObject, mergeWith,
+  forEach, multiply, debounce, get, isPlainObject, mergeWith, trim, pick,
   find, isUndefined, isNumber, fromPairs, keys, map, omit, findIndex, sum, take,
   filter, size, sortBy,
 } from 'lodash-es';
@@ -159,11 +159,16 @@ function userFactory(
 
 
   self.updateThesis = function updateThesis(title, grade) {
-    const regulationId = self.details.regulation_id;
-    const thesis = { thesis_title: title, thesis_grade: formatGrade(grade) };
-    self.details = { ...self.details, ...thesis };
-    self.details.one('regulations', regulationId).customPUT(thesis);
-    factsCalculation();
+    grade = formatGrade(grade);
+    title = trim(title);
+    let thesis = pick(self.details, 'thesis_title', 'thesis_grade');
+    if (thesis.thesis_title !== title || thesis.thesis_grade !== grade) {
+      const regulationId = self.details.regulation_id;
+      thesis = { thesis_title: title, thesis_grade: grade };
+      self.details.one('regulations', regulationId).customPUT(thesis);
+      self.details = { ...self.details, ...thesis };
+      factsCalculation();
+    }
     return thesis;
   };
 
