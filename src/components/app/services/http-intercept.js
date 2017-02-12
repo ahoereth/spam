@@ -19,7 +19,7 @@ import angular from 'angular';
  *                                  could be resolved now
  */
 function httpInterceptFactory($injector, $rootScope, $q, $timeout) {
-  "ngInject";
+  'ngInject';
 
   $rootScope.loading = 0;
   const retriesPerRequest = 2;

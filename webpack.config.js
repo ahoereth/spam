@@ -15,7 +15,7 @@ module.exports = (env = {}) => {
   const APIURL = env.remote ? remoteAPI : '/~SPAM/api';
 
   return {
-    devtool: PRODUCTION ? 'source-map' : 'eval',
+    devtool: PRODUCTION ? 'source-map' : 'inline-source-map',
     context: path.resolve(__dirname, 'src'),
     entry: {
       app: './index.js',
@@ -81,7 +81,7 @@ module.exports = (env = {}) => {
     plugins: [
       new WebpackExtractText({
         filename: PRODUCTION ? 'styles.[contenthash:6].css' : 'styles.css',
-        disable: !PRODUCTION,
+        // disable: !PRODUCTION, // Breaks web fonts.
       }),
       new WebpackHtml({
         template: 'index.html',
