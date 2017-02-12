@@ -4,7 +4,7 @@ import { forIn, get, isString, isEmpty, isPlainObject } from 'lodash-es';
 import { TITLE } from '../../config';
 
 
-const htmltitle = ['$rootScope', function title($rootScope) {
+const htmltitle = ['$rootScope', function htmltitle($rootScope) {
   let username;
 
   /**

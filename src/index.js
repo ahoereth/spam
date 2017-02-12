@@ -1,6 +1,7 @@
 import './style';
 import './components/app';
 
-if (ENV !== 'production') {
-  document.write(`<script src="http://${location.hostname}:35729/livereload.js?snipver=1"></script>`);
+/* global PRODUCTION, LIVERELOAD_PORT */
+if (!PRODUCTION) {
+  document.write(`<script src="http://localhost:${LIVERELOAD_PORT}/livereload.js"></script>`);
 }
