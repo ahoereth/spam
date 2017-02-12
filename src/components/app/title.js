@@ -4,7 +4,7 @@ import { forIn, get, isString, isEmpty, isPlainObject } from 'lodash-es';
 import { TITLE } from '../../config';
 
 
-const title = ['$rootScope', function title($rootScope) {
+const htmltitle = ['$rootScope', function title($rootScope) {
   let username;
 
   /**
@@ -15,23 +15,23 @@ const title = ['$rootScope', function title($rootScope) {
    * @param {string} prefix
    */
   function constructTitle(e, data, clear) {
-    let str = clear ? TITLE : ($rootScope.title || TITLE);
+    let title = clear ? TITLE : ($rootScope.title || TITLE);
     if (isString(data) && !isEmpty(data)) {
-      str = `${data} :: ${str}`;
+      title = `${data} :: ${title}`;
     }
 
     // Inject username.
     if (username) {
-      str = str.replace(':username', username);
+      title = title.replace(':username', username);
     }
 
     if (isPlainObject(data)) {
       forIn(data, (val, key) => {
-        str = str.replace(key, val);
+        title = title.replace(key, val);
       });
     }
 
-    $rootScope.str = str;
+    $rootScope.title = title;
   }
 
   // Save the current username when it changes.
@@ -50,4 +50,4 @@ const title = ['$rootScope', function title($rootScope) {
  *
  * TODO: Refactor this.
  */
-export default angular.module('spam.app.title', []).run(title).name;
+export default angular.module('spam.app.title', []).run(htmltitle).name;
