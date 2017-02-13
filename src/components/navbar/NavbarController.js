@@ -7,7 +7,7 @@ export default class NavbarController {
     'Courses',
   ];
 
-  static $prefixes = ['W11', 'WS', 'SS2013', 'W1984', 'S12', 'W13', '12'];
+  static prefixes = ['W11', 'WS', 'SS2013', 'W1984', 'S12', 'W13', '12'];
 
   constructor($rootScope, $scope, $location, $filter, $timeout, User, Courses) {
     this.$rootScope = $rootScope;
@@ -30,7 +30,7 @@ export default class NavbarController {
       courses: [],
       states: { mouse: false, input: false, timer: null },
       prefixI: 0,
-      prefix: shuffle(NavbarController.prefixes),
+      prefixes: shuffle(NavbarController.prefixes),
       upperYear: year + 1,
       lowerYear: year - 1,
       fetching: false,
@@ -181,7 +181,7 @@ export default class NavbarController {
     if (this.states.input && !this.search.active) {
       // if input is focused always show the results
       this.search.active = true;
-      this.search.placeholder = `${this.prefix[this.prefixI++ % this.prefix.length]}: Try prepending a term and/or year`;
+      this.search.placeholder = `${this.prefixes[this.prefixI++ % this.prefixes.length]}: Try prepending a term and/or year`;
     } else if (!this.states.input && !this.states.mouse) {
       // if input is not focused and mouse is not hovering the
       // dont hide it directly
