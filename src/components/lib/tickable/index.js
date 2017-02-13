@@ -1,5 +1,7 @@
 import angular from 'angular';
 
+import icon from '../icon';
+
 import TickableController from './TickableController';
 import template from './tickable.html';
 import './tickable.less';
@@ -21,6 +23,6 @@ const tickableComponent = {
  * COMPONENT: tickable
  */
 export default angular
-  .module('tickable', [])
+  .module('tickable', [icon])
   .component('tickable', tickableComponent)
   .name;

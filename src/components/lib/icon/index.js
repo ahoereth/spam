@@ -1,5 +1,7 @@
 import angular from 'angular';
+import ngSanitize from 'angular-sanitize';
 
+import IconController from './IconController';
 import './icon.less';
 
 
@@ -8,7 +10,7 @@ import './icon.less';
  * DIRECTIVE: icon
  */
 export default angular
-  .module('icon', [])
+  .module('icon', [ngSanitize])
   .config(['$sceDelegateProvider', function allowsrc($sceDelegateProvider) {
     const whitelist = $sceDelegateProvider.resourceUrlWhitelist();
     whitelist.push('data:image/svg+xml;base64,**');
@@ -16,9 +18,10 @@ export default angular
     $sceDelegateProvider.resourceUrlWhitelist(whitelist);
   }])
   .component('icon', {
-    template: '<img class="icon" ng-src="{{$ctrl.i}}">',
+    controller: IconController,
+    template: '<span class="icon" ng-bind-html="::$ctrl.icon"></span>',
     bindings: {
-      i: '<',
+      i: '@',
     },
   })
   .name;

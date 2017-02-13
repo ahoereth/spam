@@ -5,6 +5,7 @@ import blurOnEnter from '../../../lib/blur-on-enter';
 import dropdown from '../../../lib/dropdown';
 import tickable from '../../../lib/tickable';
 import tooltips from '../../../lib/tooltips';
+import icon from '../../../lib/icon';
 import userService from '../../services/user';
 import field from '../field';
 import gradeInput from '../grade-input';
@@ -77,6 +78,7 @@ const courseDirective = ['User', User => ({
 export default angular
   .module('spam.user.overview.course', [
     blurOnEnter, dropdown, tickable, tooltips, userService, field, gradeInput,
+    icon,
   ])
   .directive('course', courseDirective)
   .name;

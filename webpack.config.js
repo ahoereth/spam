@@ -46,6 +46,12 @@ module.exports = (env = {}) => {
             limit: 4096,
             name: PRODUCTION ? '[name].[hash:6].[ext]' : '[name].[ext]',
           },
+          exclude: /img\/icons/,
+        },
+        {
+          test: /\.svg$/i,
+          loader: 'raw-loader',
+          include: /img\/icons/,
         },
         {
           test: /\.(css|less)$/,

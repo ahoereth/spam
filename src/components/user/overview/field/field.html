@@ -34,16 +34,10 @@
             dropdown-toggle
             class="btn btn-xs btn-block dropdown-toggle"
             ng-class="{'btn-success': $ctrl.credits.available.compulsory == 0,
-                       'btn-warning': $ctrl.credits.available.compulsory != 0}">
-
-            <span
-              class="glyphicon"
-              ng-class="{
-                'glyphicon-ok'    : $ctrl.credits.available.compulsory == 0,
-                'glyphicon-pencil': $ctrl.credits.available.compulsory != 0
-              }"
-            ></span>
-
+                       'btn-warning': $ctrl.credits.available.compulsory != 0}"
+          >
+            <icon i="check" ng-show="$ctrl.credits.available.compulsory == 0"></icon>
+            <icon i="pencil" ng-show="$ctrl.credits.available.compulsory != 0"></icon>
           </button>
 
           <ul class="dropdown-menu pull-right">
