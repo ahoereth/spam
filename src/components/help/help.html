@@ -17,7 +17,7 @@
 
 
 <help-fragment slug="addCourse" title="Adding courses">
-  <p>There are multiple ways to add courses. The fastest one being the "quick search" in the top right of every page. Enter a course title and you will instantly get some results with a big green <span class="text-success glyphicon glyphicon-plus"></span> button. Look for this button on other pages as well. When a course already was added to your personal study plan before this button is replaced with a red <span class="text-danger glyphicon glyphicon-minus"></span> button. No need for explanation.</p>
+  <p>There are multiple ways to add courses. The fastest one being the "quick search" in the top right of every page. Enter a course title and you will instantly get some results with a big green <icon i="plus" class="text-success"></icon> button. Look for this button on other pages as well. When a course already was added to your personal study plan before this button is replaced with a red <icon i="plus" class="text-danger"></icon> button. No need for explanation.</p>
   <p>By default the quick search only looks up courses from the semesters of the last, current and next year. If you want to go back further just prepend a year number to your search query like this: "<strong>11: Philosophy</strong>"</p>
 </help-fragment>
 
@@ -29,14 +29,14 @@
 
 
 <help-fragment slug="overview/fields" title="Overview: Fields">
-  <p>Fields, as courses, can be in different <b>states</b>: If the field heading is gray the field has yet to be completed; If it is green you earned enough credits for it. The small button in the top right of the field also can have different states:</p>
+  <p>Fields, as courses, can be in different <b>states</b>:</p>
   <ul>
-    <li><span class="text-primary glyphicon glyphicon-pencil"></span> You did not yet complete the compulsory part of this field.</li>
-    <li><span class="text-success glyphicon glyphicon-ok"></span> Compulsory part of this field is completed.</li>
-    <li><span class="glyphicon glyphicon-saved"></span> Field is completed and relevant for your graduation grade.</li>
+    <li>Yellow background and <icon i="pencil" class="text-primary"></icon>: You still need to complete some compulsory courses in this field.</li>
+    <li>Grey background and <icon i="ok" class="text-success"></icon>: You completed the compulsory part of this field.</li>
+    <li>Green background and <icon i="ok" class="text-success"></icon>: You completed this field and it plays part in your graduation grade.</li>
   </ul>
-  <p>Below the courses of the field is a <b>progress bar</b> which shows you how many ects you completed and still have to complete for this field. <span class="text-success">Green</span> depicts completed, <span class="text-warning">orange</span> compulsory, <span class="text-info">blue</span> currently in progress and <span class="text-muted">gray</span> compulsory optional credits.</p>
-  <p>If you undertook a <b>module examination</b> in one of your fields, you can overwrite the automatically generated grade by opening the field's menu (the icon showing its state), checking the "examination" checkbox and entering the grade manually. If the field has a module examination grade all course grades in this field will be ignored.</p>
+  <p>Below the courses of the field is a <b>progress bar</b> which shows you how many ects you completed and still have to complete for this field. <span class="text-success">Green</span> depicts completed, <span class="text-warning">orange</span> compulsory, <span class="text-info">blue</span> currently in progress and <span class="text-muted">gray</span> optional credits. For a field to count to your final grade you will need to complete the whole bar.</p>
+  <p>If you undertook a <b>module examination</b> in one of your fields you can overwrite the automatically generated grade by opening the field's menu (click the icon showing its state), checking the "examination" checkbox and entering the grade manually. This is only possible after the field has been completed and turned green. If the field has a module examination grade all course grades in this field will be ignored.</p>
 </help-fragment>
 
 
@@ -45,9 +45,9 @@
   <p>Every course on the overview page is being displayed in one line consisting of the course's title and <span class="text-info">[credits]</span>, your grade in this course and it's status. When you hover the course title with your mouse a small popover appears which shows you the semester you participated in this course. The status icon, the last on each course line, is also a button which offers additional options.</p>
   <p>A course can have three different states:</p>
   <ul>
-    <li><span class="text-primary glyphicon glyphicon-pencil"></span> You are enrolled in this course currently but did not yet pass it course.</li>
-    <li><span class="text-success glyphicon glyphicon-ok"></span> You passed the course.</li>
-    <li><span class="text-danger glyphicon glyphicon-remove"></span> You failed the course.</li>
+    <li><icon i="pencil" class="text-primary"></icon>: You are enrolled in this course currently but did not yet pass it course.</li>
+    <li><icon i="ok" class="text-success"></icon>: You passed the course.</li>
+    <li><icon i="remove" class="text-danger"></icon>: You failed the course.</li>
   </ul>
   <p>Clicking the course status icon you get some options:</p>
   <ul>
