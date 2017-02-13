@@ -1,7 +1,18 @@
 import angular from 'angular';
 import ngSanitize from 'angular-sanitize';
 
-import IconController from './IconController';
+import 'svg-icon/dist/svg/bootstrap/pencil.svg';
+import 'svg-icon/dist/svg/bootstrap/ok.svg';
+import 'svg-icon/dist/svg/bootstrap/remove.svg';
+import 'svg-icon/dist/svg/bootstrap/refresh.svg';
+import 'svg-icon/dist/svg/bootstrap/plus.svg';
+import 'svg-icon/dist/svg/bootstrap/minus.svg';
+import 'svg-icon/dist/svg/bootstrap/download.svg';
+import 'svg-icon/dist/svg/bootstrap/chevron-right.svg';
+import 'svg-icon/dist/svg/bootstrap/chevron-down.svg';
+import 'svg-icon/dist/svg/bootstrap/saved.svg';
+import 'svg-icon/dist/svg/bootstrap/heart.svg';
+
 import './icon.less';
 
 
@@ -18,8 +29,12 @@ export default angular
     $sceDelegateProvider.resourceUrlWhitelist(whitelist);
   }])
   .component('icon', {
-    controller: IconController,
-    template: '<span class="icon" ng-bind-html="::$ctrl.icon"></span>',
+    controller: function IconController() {
+      this.$onInit = function $onInit() {
+        this.icon = `#${this.i}`;
+      };
+    },
+    template: '<svg class="icon"><use xlink:href="{{::$ctrl.icon}}" /></svg>',
     bindings: {
       i: '@',
     },

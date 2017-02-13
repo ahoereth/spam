@@ -3,6 +3,7 @@ import angular from 'angular';
 import instafocus from '../../../lib/instafocus';
 import iif from '../../../lib/iif';
 import restangular from '../../../lib/restangular';
+import icon from '../../../lib/icon';
 import userService from '../../services/user';
 import routes from '../../../app/services/routes';
 
@@ -41,7 +42,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.user.course.edit', [
-    restangular, instafocus, iif, routes, userService, routes,
+    restangular, instafocus, iif, routes, userService, routes, icon,
   ])
   .config(routing)
   .name;

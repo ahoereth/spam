@@ -4,6 +4,10 @@
 @progress-bar-warning-bg: #f0ad4e;
 
 .user {
+  h1 icon {
+    vertical-align: super;
+    margin-left: -.25em;
+  }
 
   table tr td {
     padding-left: 4px;
@@ -12,12 +16,6 @@
 
   .panel {
     width: 100%;
-
-    .glyphicon {
-      // workaround to prevent flickering on hover in css3 columns
-      position: static;
-      vertical-align: sub;
-    }
 
     .btn-xs {
       padding: 0;

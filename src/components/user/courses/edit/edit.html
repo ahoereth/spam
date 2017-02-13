@@ -92,7 +92,7 @@
 
     <div class="btn-group pull-right" style="width: 50%">
       <a href="~" type="button" class="btn btn-warning" style="width: 50%">
-        <span class="glyphicon glyphicon-remove"></span>
+        <icon i="cross"></icon>
       </a>
 
       <button
@@ -102,10 +102,8 @@
         ng-disabled="edit.submitted"
         style="width: 50%"
       >
-        <span class="glyphicon" ng-class="{
-           'glyphicon-ok': 'edit' == edit.page,
-           'glyphicon-plus': 'new' == edit.page
-        }"></span>
+        <icon i="ok" ng-show="edit.page == 'edit'"></icon>
+        <icon i="plus" ng-show="edit.page == 'new'"></icon>
       </button>
     </div>
 

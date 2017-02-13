@@ -23,7 +23,8 @@
     "bootstrap": "^3.3.7",
     "lodash": "^4.15.0",
     "lodash-es": "^4.16.2",
-    "restangular": "^1.5.2"
+    "restangular": "^1.5.2",
+    "svg-icon": "^0.8.1"
   },
   "devDependencies": {
     "babel-core": "^6.22.1",
@@ -51,6 +52,7 @@
     "less-loader": "^2.2.3",
     "raw-loader": "^0.5.1",
     "style-loader": "^0.13.1",
+    "svg-sprite-loader": "^0.2.1",
     "svg-url-loader": "^2.0.1",
     "url-loader": "^0.5.7",
     "webpack": "^2.2.1",

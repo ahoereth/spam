@@ -44,8 +44,8 @@
                    'btn-default':  course.grade > 4}"
       >
         <icon i="pencil" ng-show="!course.passed && !course.grade"></icon>
-        <icon i="check" ng-show="course.passed"></icon>
-        <icon i="close" ng-show="course.grade > 4"></icon>
+        <icon i="ok" ng-show="course.passed"></icon>
+        <icon i="remove" ng-show="course.grade > 4"></icon>
       </button>
 
       <ul class="dropdown-menu pull-right">

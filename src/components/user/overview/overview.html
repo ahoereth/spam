@@ -8,11 +8,11 @@
 <!-- Headline -->
 <h1>
   {{$ctrl.user.username}}'s overview
-  <span
-    class="glyphicon lead"
-    ng-class="{'glyphicon-heart'       :  $ctrl.facts.examinationFieldsCount,
-               'glyphicon-refresh spin': !$ctrl.facts.examinationFieldsCount}"
-  ></span>
+  <icon i="heart" ng-show="$ctrl.facts.examinationFieldsCount"></icon>
+  <icon
+    i="refresh" class="spin"
+    ng-hide="$ctrl.facts.examinationFieldsCount"
+  ></icon>
 </h1>
 
 
@@ -107,8 +107,8 @@
 <p class="pull-right" ng-show="$ctrl.user.mat_verify">
   <small>
     <icon i="pencil" class="text-primary"></icon> Current,&nbsp;
-    <icon i="check" class="text-success"></icon> Completed,&nbsp;
-    <icon i="close" class="text-danger"></icon> Failed
+    <icon i="ok" class="text-success"></icon> Completed,&nbsp;
+    <icon i="remove" class="text-danger"></icon> Failed
   </small>
 </p>
 

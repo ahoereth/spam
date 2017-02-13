@@ -2,6 +2,7 @@ import angular from 'angular';
 import { isUndefined, range, pick } from 'lodash-es';
 
 import buttons from '../../../lib/buttons';
+import icon from '../../../lib/icon';
 import userService from '../../services/user';
 
 import template from './matriculation-setter.html';
@@ -45,6 +46,8 @@ const userMatriculationSetterDirective = ['User', User => ({
  * DIRECTIVE: matriculation-setter
  */
 export default angular
-  .module('spam.user.settings.matriculation-setter', [buttons, userService])
+  .module('spam.user.settings.matriculation-setter', [
+    buttons, userService, icon,
+  ])
   .directive('matriculationSetter', userMatriculationSetterDirective)
   .name;

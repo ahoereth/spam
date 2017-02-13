@@ -3,6 +3,7 @@ import angular from 'angular';
 import iif from '../../lib/iif';
 import tooltips from '../../lib/tooltips';
 import restangular from '../../lib/restangular';
+import icon from '../../lib/icon';
 import routes from '../../app/services/routes';
 import userService from '../services/user';
 import columns from './columns';
@@ -35,7 +36,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
 export default angular
   .module('spam.user.overview', [
     restangular, tooltips, iif, routes, userService, columns, thesisInput,
-    gradeInput, matriculationSetter,
+    gradeInput, matriculationSetter, icon,
   ])
   .config(routing)
   .name;
