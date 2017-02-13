@@ -168,10 +168,11 @@
     <div class="col-sm-1 hidden-xs">
       <div class="form-control" style="border: none; text-align: center;">
         <!-- Spinner -->
-        <span class="glyphicon glyphicon-refresh spin" ng-show="loading"></span>
+        <icon i="icons.spinner" class="spin" ng-show="fetching"></icon>
+
         <!-- Result Counter -->
         <span
-          ng-hide="loading"
+          ng-hide="fetching"
           ng-bind="displayLimit>filteredCourses.length | iif
             : filteredCourses.length
             : displayLimit + '+'

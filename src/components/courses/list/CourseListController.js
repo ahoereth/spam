@@ -2,6 +2,8 @@ import {
   extend, isUndefined, compact, trim, isEmpty, get, find, without, pickBy,
 } from 'lodash-es';
 
+import spinner from '~/img/icons/spinner.svg';
+
 
 export default class CourseListController {
   static $inject = [
@@ -19,7 +21,6 @@ export default class CourseListController {
     let lowerYear = year;
     let url = {};
     let courses = [];
-    let fetching = false;
 
     extend($scope, {
       coursesPerFetch: 100,
@@ -28,10 +29,12 @@ export default class CourseListController {
       displayLimit: 25,
       filter: {},
       filteredCourses: [],
+      fetching: false,
       textModelOptions: {
         updateOn: 'default blur',
         debounce: { default: 200, blur: 0 },
       },
+      icons: { spinner },
       orderBys: { /* eslint-disable key-spacing, no-multi-spaces */
         code:        ['code',          '-year', '-term', 'course'],
         '-code':     ['-code',         '-year', '-term', 'course'],
@@ -129,7 +132,7 @@ export default class CourseListController {
         $scope.filteredCourses = $filter('courseFilter')(courses, filter);
       }
 
-      if (fetching || lowerYear < minYear) {
+      if ($scope.fetching || lowerYear < minYear) {
         return;
       }
 
@@ -137,14 +140,14 @@ export default class CourseListController {
         (order === orderBys.time && lowerYear > minYear) ||
         displayLimit > (filteredCourses.length - 5) || force
       ) {
-        fetching = true;
+        $scope.fetching = true;
 
         lowerYear -= 2;
         Courses
           .fetch(regulation_id, lowerYear, upperYear, null)
           .then(newCourses => {
             courses = newCourses;
-            fetching = false;
+            $scope.fetching = false;
             applyFilter();
           });
       }

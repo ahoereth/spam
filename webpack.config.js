@@ -25,6 +25,10 @@ module.exports = (env = {}) => {
       filename: PRODUCTION ? '[name].[chunkhash:6].js' : '[name].js',
       publicPath: '/static/',
     },
+    resolve: {
+      modules: ['node_modules', 'src'],
+      alias: { '~': path.resolve(__dirname, 'src') },
+    },
     module: {
       rules: [
         {
@@ -36,7 +40,7 @@ module.exports = (env = {}) => {
           exclude: /node_modules/,
         },
         {
-          test: /\.(woff2?|eot|ttf|png|gif)$/i,
+          test: /\.(woff2?|eot|ttf|png|gif|svg)$/i,
           loader: 'url-loader',
           options: {
             limit: 4096,
@@ -62,15 +66,6 @@ module.exports = (env = {}) => {
               'less-loader?sourceMap',
             ],
           }),
-        },
-        {
-          test: /\.svg$/i,
-          loader: 'svg-url-loader',
-          options: {
-            noquotes: true,
-            limit: 4096,
-            name: PRODUCTION ? '[name].[hash:6].[ext]' : '[name].[ext]',
-          },
         },
         {
           test: /\.html$/i,

@@ -7,6 +7,7 @@ import infiniteScroll from '../../lib/infinite-scroll';
 import buttons from '../../lib/buttons';
 import tooltips from '../../lib/tooltips';
 import restangular from '../../lib/restangular';
+import icon from '../../lib/icon';
 import routes from '../../app/services/routes';
 import coursesService from '../services/courses';
 import courseFilter from '../filters/course';
@@ -36,7 +37,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
 export default angular
   .module('spam.courses.list', [
     ngRoute, restangular, tooltips, iif, scroll, infiniteScroll, buttons,
-    routes, coursesService, courseFilter, courseSingle, row,
+    routes, coursesService, courseFilter, courseSingle, row, icon,
   ])
   .config(routing)
   .name;
