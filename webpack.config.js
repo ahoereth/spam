@@ -99,6 +99,8 @@ module.exports = (env = {}) => {
       }),
       new WebpackCopy([
         { from: 'robots.txt', to: '..' },
+        { from: 'img/spam.png' },
+        { from: 'img/spam.ico' },
         {
           from: '.htaccess',
           to: '..',
