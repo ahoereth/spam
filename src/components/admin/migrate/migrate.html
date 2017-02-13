@@ -1,10 +1,9 @@
 <h1>IKW o2 &rarr; SPAM course migration</h1>
 
-
-<form class="form-inline" ng-submit="migrate.fetch()" ng-if="!migrate.selected">
+<form class="form-inline" ng-submit="$ctrl.fetch()" ng-if="!$ctrl.selected">
   <h2>Year/Term:</h2>
   <input
-    ng-model="migrate.year"
+    ng-model="$ctrl.year"
     type="number"
     min="2000"
     max="2030"
@@ -14,7 +13,7 @@
 
   <div
     class="btn-group btn-group-lg"
-    ng-model="migrate.term"
+    ng-model="$ctrl.term"
     radio-button-group
   >
     <label class="btn btn-primary">
@@ -28,29 +27,29 @@
   </div>
 
   <button type="submit" class="btn btn-primary btn-lg">
-    <icon i="download"></icon>
+    Fetch
   </button>
 </form>
 
-<span ng-if="migrate.selected">
+<span ng-if="$ctrl.selected">
   <h2>
-    Year/Term: {{migrate.year}}{{migrate.term}}
-    <icon i="refresh" class="spin" ng-show="!migrate.fetching"></icon>
+    Year/Term: {{$ctrl.year}}{{$ctrl.term}}
+    <icon i="refresh" class="spin" ng-show="$ctrl.fetching"></icon>
     <icon
-      i="pencil" class="spin"
-      ng-show="migrate.fetching"
-      ng-click="migrate.selected=false"
+      i="pencil"
+      ng-hide="$ctrl.fetching"
+      ng-click="$ctrl.selected=false"
     ></icon>
   </h2>
 
-  <p class="lead">{{migrate.courses.length}} courses grabbed</p>
+  <p class="lead">Showing {{$ctrl.courses.length}} courses.</p>
 
   <p>
     Showing&nbsp;
-    <inline-selectable-group ng-model="migrate.sieve.course_id">
+    <inline-selectable-group ng-model="$ctrl.sieve.course_id">
       <inline-selectable value="">all</inline-selectable>&nbsp;
-      <inline-selectable value="'!'">new</inline-selectable>&nbsp;
-      <inline-selectable value="'!!'">existing</inline-selectable>&nbsp;
+      <inline-selectable value="!">new</inline-selectable>&nbsp;
+      <inline-selectable value="!!">existing</inline-selectable>&nbsp;
     </inline-selectable-group>
     courses.
   </p>
@@ -70,9 +69,9 @@
 
 <!-- course list -->
 <courserow
-  ng-repeat="course in migrate.courses | filter:migrate.sieve track by course.o3_id"
-  ng-if="!course.accepted"
+  ng-repeat="course in $ctrl.courses | filter:$ctrl.sieve track by course.o3_id"
+  ng-class="{ accepted: course.accepted }"
   course="course"
-  action="migrate.acceptCourse(course)"
+  action="$ctrl.acceptCourse(course)"
   expanded
 ></courserow>

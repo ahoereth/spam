@@ -1,22 +1,33 @@
-import { assign, assignIn, map, pick, debounce, has } from 'lodash-es';
+import { assign, assignIn, map, pick, debounce } from 'lodash-es';
 
-import { O2URL } from '../../../config';
+import { O2URL } from '~/config';
+
+import './migrate.css';
 
 
 export default class AdminMigrateController {
   static $inject = ['$location', '$routeParams', 'Restangular'];
 
-  constructor($location, $routeParams, Restangular) {
+  constructor($location, params, Restangular) {
+    this.$location = $location;
+    this.params = params;
+    this.Restangular = Restangular;
+
     const d = new Date(), m = d.getMonth(), y = d.getFullYear();
+    const year = ((m < 5) ? y : y + 1);
+    const term = ((m > 11 || m < 5) ? 'S' : 'W');
     assign(this, {
-      $location, Restangular,
-      params: $routeParams,
       fetch: debounce(this.fetch, 500),
-      year: parseInt(this.params.year, 10) || (m < 5) ? y : y + 1,
-      term: this.params.term || (m > 11 || m < 5) ? 'S' : 'W',
+      year: this.params.year ? parseInt(this.params.year, 10) : year,
+      term: this.params.term ? this.params.term : term,
       courses: [],
-      sieve: {},
+      sieve: { course_id: '' },
+      selected: false,
     });
+
+    if (this.params.year) {
+      this.fetch();
+    }
   }
 
   /**
@@ -32,11 +43,13 @@ export default class AdminMigrateController {
 
     this.Restangular.one('courses', 'find').customPOST(finders).then(ids => {
       this.fetching = false;
-      this.courses = this.Restangular.restangularizeCollection(
-        null,
-        // TODO: Needs assignIn?
-        map(courses, (c, k) => (has(ids, k) ? { ...c, course_id: ids[k] } : c)),
-        'courses',
+      this.courses = map(courses, (course, idx) =>
+        this.Restangular.restangularizeElement(
+          null,
+          ids[idx] ? { ...course, course_id: ids[idx] } : course,
+          'courses',
+          !!ids[idx],
+        ),
       );
     });
   }
@@ -52,7 +65,7 @@ export default class AdminMigrateController {
     this.$location.search(this.params);
     this.Restangular.allUrl('o2', O2URL).getList({
       year: this.year, term: this.term,
-    }).then(this.fetched);
+    }).then(courses => this.fetched(courses));
   }
 
   /**
@@ -61,12 +74,9 @@ export default class AdminMigrateController {
    * @param  {course} course Course to accept.
    */
   acceptCourse(course) {
-    if (course.course_id) {
-      // Course already is in the IKW database, update it.
-      course.save();
-    } else {
+    course.save().then(({ course_id }) => {
+      course.course_id = course_id;
       course.accepted = true;
-      course.post();
-    }
+    });
   }
 }

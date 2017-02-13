@@ -9,7 +9,7 @@ if (DEV) {
   header('Access-Control-Allow-Origin: *');
   header('Access-Control-Allow-Credentials: true');
   header('Access-Control-Allow-Methods: GET');
-  header('Access-Control-Allow-Headers: Origin, Content-Type, Accept');
+  header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization');
 }
 
 // GET Arguments.

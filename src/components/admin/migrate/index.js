@@ -17,7 +17,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
   RoutesProvider.add('/admin/migrate', {
     template,
     controller,
-    controllerAs: 'migrate',
+    controllerAs: '$ctrl',
     title: 'IKW DB Migration',
     reloadOnSearch: false,
     access: 32,

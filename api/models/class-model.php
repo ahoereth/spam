@@ -150,6 +150,8 @@ abstract class Model {
     // Get the data set of updated fields.
     if ($this->from_server && ! empty($this->server_data)) {
       $put_data = array_diff_assoc($this->data, $this->server_data);
+    } else {
+      $put_data = $this->data;
     }
 
     // Format data.

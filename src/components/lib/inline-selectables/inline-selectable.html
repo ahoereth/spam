@@ -1,6 +1,6 @@
 <span
   class="inline-selectable"
-  ng-class="{active: value == selected}"
-  ng-click="change()"
+  ng-class="{ active: $ctrl.value === $ctrl.groupVal }"
+  ng-click="$ctrl.change()"
   ng-transclude
 ></span>
