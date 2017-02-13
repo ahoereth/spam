@@ -10,18 +10,20 @@ const WebpackLivereload = require('webpack-livereload-plugin');
 
 module.exports = (env = {}) => {
   const remoteAPI = 'https://cogsci.uni-osnabrueck.de/~SPAM/api';
-  const APIURL = env.remote ? remoteAPI : '/~SPAM/api';
+  const APIURL = env.remote ? remoteAPI : undefined;
   const PRODUCTION = !!env.production;
+  const PREPRODUCTION = !!env.preproduction;
+  const DEVELOPMENT = !PRODUCTION && !PREPRODUCTION;
 
   return {
-    devtool: PRODUCTION ? 'source-map' : 'inline-source-map',
+    devtool: DEVELOPMENT ? 'inline-source-map' : 'source-map',
     context: path.resolve(__dirname, 'src'),
     entry: {
       app: './index.js',
     },
     output: {
       path: path.resolve(__dirname, 'app', 'static'),
-      filename: PRODUCTION ? '[name].[chunkhash:6].js' : '[name].js',
+      filename: DEVELOPMENT ? '[name].js' : '[name].[chunkhash:6].js',
       publicPath: '/static/',
     },
     resolve: {
@@ -43,7 +45,7 @@ module.exports = (env = {}) => {
           loader: 'url-loader',
           options: {
             limit: 4096,
-            name: PRODUCTION ? '[name].[hash:6].[ext]' : '[name].[ext]',
+            name: DEVELOPMENT ? '[name].[ext]' : '[name].[hash:6].[ext]',
           },
           exclude: /svg-icon/,
         },
@@ -62,7 +64,7 @@ module.exports = (env = {}) => {
                 options: {
                   importLoaders: 1,
                   sourceMap: true,
-                  minimize: !PRODUCTION ? false : {
+                  minimize: DEVELOPMENT ? false : {
                     discardComments: { removeAll: true },
                     autoprefixer: { browser: ['last 4 versions'], add: true },
                   },
@@ -80,8 +82,8 @@ module.exports = (env = {}) => {
     },
     plugins: [
       new WebpackExtractText({
-        filename: PRODUCTION ? 'styles.[contenthash:6].css' : 'styles.css',
-        // disable: !PRODUCTION, // Breaks web fonts.
+        filename: DEVELOPMENT ? 'styles.css' : 'styles.[contenthash:6].css',
+        disable: DEVELOPMENT, // Apparently breaks web fonts.
       }),
       new WebpackHtml({
         template: 'index.html',
@@ -112,10 +114,12 @@ module.exports = (env = {}) => {
         appendScriptTag: !PRODUCTION,
       }),
       new webpack.DefinePlugin({
-        PRODUCTION: JSON.stringify(PRODUCTION),
-        APIURL: JSON.stringify(APIURL),
+        'process.env': {
+          NODE_ENV: JSON.stringify(DEVELOPMENT ? 'development' : 'production'),
+          APIURL: JSON.stringify(APIURL),
+        },
       }),
-      !PRODUCTION ? () => {} : new webpack.optimize.UglifyJsPlugin({
+      DEVELOPMENT ? () => {} : new webpack.optimize.UglifyJsPlugin({
         compress: {
           warnings: false,
           properties: true,
