@@ -2,7 +2,11 @@ export default class FooterController {
   static $inject = ['$scope'];
 
   constructor($scope) {
-    $scope.$on('user-construct', (e, user) => this.userConstruct(user));
+    this.$scope = $scope;
+  }
+
+  $onInit() {
+    this.$scope.$on('user-construct', (e, u) => this.userConstruct(u));
     this.userConstruct();
   }
 

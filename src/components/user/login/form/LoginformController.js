@@ -5,9 +5,11 @@ export default class LoginformController {
     this.$location = $location;
     this.$routeParams = $routeParams;
     this.Auth = Auth;
+  }
 
+  $onInit() {
     if (!this.username) {
-      this.username = $routeParams.username || '';
+      this.username = this.$routeParams.username || '';
     }
   }
 

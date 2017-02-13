@@ -23,9 +23,5 @@ export default angular
   .module('spam.navbar', [
     highlight, iif, year, landing, courses, guide, user, admin,
   ])
-  .component('navbar', {
-    template,
-    controller,
-    controllerAs: 'navbar',
-  })
+  .component('navbar', { template, controller })
   .name;

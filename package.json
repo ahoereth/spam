@@ -16,9 +16,9 @@
   },
   "dependencies": {
     "Base64": "^1.0.0",
-    "angular": "1.5.x",
-    "angular-route": "1.5.x",
-    "angular-sanitize": "1.5.x",
+    "angular": "1.6.x",
+    "angular-route": "1.6.x",
+    "angular-sanitize": "1.6.x",
     "angular-tooltips": "^1.1.7",
     "babel-runtime": "^6.22.0",
     "bootstrap": "^3.3.7",

@@ -7,13 +7,16 @@ export default class AddRemoveCourseController {
   static $inject = ['$scope', 'User'];
 
   constructor($scope, User) {
+    this.$scope = $scope;
     this.User = User;
+  }
 
-    $scope.$on('user-construct', this.userConstruct);
+  $onInit() {
+    this.$scope.$on('user-construct', this.userConstruct);
 
     // Add remove buttons are only required for loggedin users.
-    if (User.details) {
-      this.userConstruct(undefined, get(User, 'details'));
+    if (this.User.details) {
+      this.userConstruct(undefined, get(this.User, 'details'));
     }
   }
 

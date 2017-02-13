@@ -11,19 +11,20 @@ export default class NotificationsController {
     errors: [],
   };
 
-  // TODO: split into instance methods and controller as style.
   constructor($scope, httpIntercept) {
+    this.$scope = $scope;
+    this.httpIntercept = httpIntercept;
+  }
+
+  $onInit() {
     assign(this, {
-      httpIntercept,
       http: cloneDeep(NotificationsController.defaultState),
     });
 
-    /**
-     * Listen to the http:error event and update the status appropriately.
-     * Will result in a http error message being displayed to the user -
-     * the server still retries!
-     */
-    $scope.$on('http:error', (event, response) => {
+    // Listen to the http:error event and update the status appropriately.
+    // Will result in a http error message being displayed to the user -
+    // the server still retries!
+    this.$scope.$on('http:error', (event, response) => {
       this.http.error = true;
       this.http.status = response.status;
 
@@ -32,12 +33,9 @@ export default class NotificationsController {
       }
     });
 
-
-    /**
-     * Listen to the http:error:resolved event and in result of this maybe hide
-     * the http error notice (if all errors have been resolved.)
-     */
-    $scope.$on('http:error:resolved', (event, response) => {
+    // Listen to the http:error:resolved event and in result of this maybe hide
+    // the http error notice (if all errors have been resolved.)
+    this.$scope.$on('http:error:resolved', (event, response) => {
       // remove the resolved error from the array
       const idx = indexOf(this.http.errors, response.config.url);
       if (idx === -1) {
@@ -51,11 +49,9 @@ export default class NotificationsController {
       }
     });
 
-
-    /**
-     * Listen to the http:error:permanent event and update the error message appropriately.
-     */
-    $scope.$on('http:error:permanent', (event, response) => {
+    // Listen to the http:error:permanent event and update
+    // the error message appropriately.
+    this.$scope.$on('http:error:permanent', (event, response) => {
       this.http.error = true;
       this.http.permanentError = true;
       this.http.status = response.status;
