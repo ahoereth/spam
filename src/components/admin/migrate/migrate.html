@@ -28,19 +28,19 @@
   </div>
 
   <button type="submit" class="btn btn-primary btn-lg">
-    <span class="glyphicon glyphicon-import"></span>
+    <icon i="download"></icon>
   </button>
 </form>
 
 <span ng-if="migrate.selected">
   <h2>
     Year/Term: {{migrate.year}}{{migrate.term}}
-    <small
-      class="glyphicon glyphicon-pencil undercover"
-      ng-class="{'glyphicon-refresh spin':  migrate.fetching,
-                 'glyphicon-pencil'      : !migrate.fetching}"
+    <icon i="refresh" class="spin" ng-show="!migrate.fetching"></icon>
+    <icon
+      i="pencil" class="spin"
+      ng-show="migrate.fetching"
       ng-click="migrate.selected=false"
-    ></small>
+    ></icon>
   </h2>
 
   <p class="lead">{{migrate.courses.length}} courses grabbed</p>

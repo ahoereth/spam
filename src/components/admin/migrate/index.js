@@ -5,6 +5,7 @@ import courseRow from '../../courses/row';
 import instafocus from '../../lib/instafocus';
 import inlineSelectables from '../../lib/inline-selectables';
 import restangular from '../../lib/restangular';
+import icon from '../../lib/icon';
 import buttons from '../../lib/buttons';
 import year from '../../lib/year';
 
@@ -31,7 +32,7 @@ const routing = ['RoutesProvider', RoutesProvider => {
 export default angular
   .module('spam.admin.migrate', [
     restangular, instafocus, inlineSelectables, buttons, year, courseRow,
-    routes,
+    routes, icon,
   ])
   .config(routing)
   .name;

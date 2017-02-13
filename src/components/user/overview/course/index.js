@@ -34,7 +34,10 @@ const courseDirective = ['User', User => ({
       course.failed = !course.passed && course.grade >= 5;
       fieldCtrl.courseChange(course);
 
-      if (course.grade !== course.oldGrade) {
+      if (
+        (course.grade !== course.oldGrade) ||
+        (course.passed && !course.grade)
+      ) {
         course.muted = course.muted && !course.grade;
         course.oldGrade = course.grade;
         course.customPUT({

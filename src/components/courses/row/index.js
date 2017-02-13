@@ -3,6 +3,7 @@ import { reduce } from 'lodash-es';
 
 import nl2br from '../../lib/nl2br';
 import year from '../../lib/year';
+import icon from '../../lib/icon';
 
 import template from './row.html';
 import './row.less';
@@ -65,7 +66,7 @@ const courserowFieldsDirective = () => ({
  * TODO: migrate to components
  */
 export default angular
-  .module('spam.courses.row', [nl2br, year])
+  .module('spam.courses.row', [nl2br, year, icon])
   .directive('courserow', courserowDirective)
   .directive('courserowFields', courserowFieldsDirective)
   .name;

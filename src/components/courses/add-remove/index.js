@@ -1,5 +1,6 @@
 import angular from 'angular';
 
+import icon from '../../lib/icon';
 import userService from '../../user/services/user';
 
 import controller from './AddRemoveCourseController';
@@ -11,7 +12,7 @@ import template from './add-remove.html';
  * DIRECTIVE: addRemoveCourse
  */
 export default angular
-  .module('spam.courses.add-remove', [userService])
+  .module('spam.courses.add-remove', [icon, userService])
   .component('addRemoveCourse', {
     template,
     controller,

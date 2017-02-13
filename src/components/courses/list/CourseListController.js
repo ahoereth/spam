@@ -2,8 +2,6 @@ import {
   extend, isUndefined, compact, trim, isEmpty, get, find, without, pickBy,
 } from 'lodash-es';
 
-import spinner from '~/img/icons/spinner.svg';
-
 
 export default class CourseListController {
   static $inject = [
@@ -34,7 +32,6 @@ export default class CourseListController {
         updateOn: 'default blur',
         debounce: { default: 200, blur: 0 },
       },
-      icons: { spinner },
       orderBys: { /* eslint-disable key-spacing, no-multi-spaces */
         code:        ['code',          '-year', '-term', 'course'],
         '-code':     ['-code',         '-year', '-term', 'course'],

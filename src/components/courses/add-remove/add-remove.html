@@ -10,7 +10,7 @@
     ng-if="$ctrl.fields.length>1 && !$ctrl.enrolled"
   >
     <a dropdown-toggle class="btn btn-success dropdown-toggle {{$ctrl.btnClass}}">
-      <span class="glyphicon glyphicon-plus"></span>
+      <icon i="plus"></icon>
     </a>
     <ul class="dropdown-menu pull-right">
       <li ng-repeat="field in $ctrl.fields track by field.field_id">
@@ -31,7 +31,7 @@
     ng-if="$ctrl.fields.length<=1 && !$ctrl.enrolled"
     ng-click="$ctrl.add($ctrl.singleField)"
   >
-    <span class="glyphicon glyphicon-plus"></span>
+    <icon i="plus"></icon>
   </a>
 
   <!-- remove course -->
@@ -42,6 +42,6 @@
     ng-show="$ctrl.enrolled"
     ng-click="$ctrl.remove()"
   >
-    <span class="glyphicon glyphicon-minus"></span>
+    <icon i="minus"></icon>
   </a>
 </div>

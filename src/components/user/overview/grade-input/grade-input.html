@@ -5,7 +5,7 @@
   blur-on-enter
   ng-model="$ctrl.grade"
   ng-model-options="{updateOn: 'blur'}"
-  placeholder="{{$ctrl.active | iif : '?' : ''}}"
+  placeholder="{{$ctrl.active | iif : '-' : ''}}"
   ng-disabled="!$ctrl.active"
   ng-readonly="!$ctrl.active"
 >
