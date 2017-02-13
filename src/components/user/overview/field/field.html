@@ -81,7 +81,7 @@
 
   <div class="panel-body" ng-hide="$ctrl.minimized">
     <p ng-if="$ctrl.courses | isEmpty">
-      Add some <a ng-if="$ctrl.field_id !== 1" ng-href="courses?field_str={{::$ctrl.field}}" class="text-info">{{::$ctrl.field}}</a><a ng-if="$ctrl.field_id === 1" href="courses" class="text-info">{{::$ctrl.field}}</a> courses.
+      Add some <a ng-if="$ctrl.field_id !== 1" ng-href="courses?regulation={{::$ctrl.regulation_id}}&field={{::$ctrl.field}}" class="text-info">{{::$ctrl.field}}</a><a ng-if="$ctrl.field_id === 1" href="courses" class="text-info">{{::$ctrl.field}}</a> courses.
     </p>
 
     <!-- 'course' directives -->

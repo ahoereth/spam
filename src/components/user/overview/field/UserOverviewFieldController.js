@@ -41,12 +41,12 @@ export default class UserOverviewFieldController {
 
   $onInit() {
     assign(this, pick(this.raw, [
-      'field', 'field_id', 'field_examination_possible',
-      'regulation_id', 'minimized', 'grade',
+      'field', 'field_id', 'field_examination_possible', 'minimized', 'grade',
     ]), {
       courses: this.courses || {},
       foreignCreditsMem: 0,
       hasManualGrade: false,
+      regulation_id: this.User.details.regulation_id,
     });
     const field = this.raw;
 

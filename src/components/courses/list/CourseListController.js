@@ -107,7 +107,7 @@ export default class CourseListController {
       const { code, course, teachers_str, fields_str } = filter;
       url = {
         regulation: regulation_id, pm: !!filter['fields_str#~'],
-        timeframe, code, course, teacher: teachers_str, fields_str,
+        timeframe, code, course, teacher: teachers_str, field: fields_str,
       };
       url = pickBy(url);
       $location.search(url);
