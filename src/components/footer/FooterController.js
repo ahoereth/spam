@@ -10,7 +10,7 @@ export default class FooterController {
     this.userConstruct();
   }
 
-  userConstruct(user) {
-    this.user = !!user;
+  userConstruct(user = {}) {
+    this.user = !!user.username;
   }
 }

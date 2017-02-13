@@ -1,5 +1,5 @@
 import {
-  range, isArray, sum, map, trimEnd, repeat, parseInt, isNull, clone,
+  range, isArray, sum, map, trimEnd, repeat, parseInt, clone,
   indexOf, max, flow, partialRight, groupBy, sortBy, partial,
 } from 'lodash-es';
 
@@ -9,7 +9,7 @@ function buildColumns(userdetails, fields, columncount = 3) {
   let division = clone(userdetails.overview_columns);
 
   // Order might be set by the user.
-  if (isNull(order) || order.length !== fields.length) {
+  if (!order || order.length !== fields.length) {
     order = range(0, fields.length);
   }
 

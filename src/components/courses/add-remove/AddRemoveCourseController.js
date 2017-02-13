@@ -20,8 +20,11 @@ export default class AddRemoveCourseController {
     }
   }
 
-  userConstruct(event, user) {
-    this.user = { loggedin: !!user, regulation_id: get(user, 'regulation_id') };
+  userConstruct(event, user = {}) {
+    this.user = {
+      loggedin: !!user.username,
+      regulation_id: get(user, 'regulation_id'),
+    };
 
     // The fields array might contain all fields from all regulations -
     // we only care about the regulations relevant for the current user.

@@ -2,7 +2,7 @@ import angular from 'angular';
 import {
   forEach, multiply, debounce, get, isPlainObject, mergeWith, trim, pick,
   find, isUndefined, isNumber, fromPairs, keys, map, omit, findIndex, sum, take,
-  filter, size, sortBy,
+  filter, size, sortBy, isEmpty,
 } from 'lodash-es';
 
 import restangular from '../../lib/restangular';
@@ -24,6 +24,7 @@ function userFactory(
     facts: {},
     fields: {},
     courses: {},
+    details: {},
     watchers: [],
     logininfo: {
       username: null,
@@ -101,22 +102,13 @@ function userFactory(
    * @param {bool}   force Force the update even if the data seems to be
    *                       unchanged.
    */
-  self.updateUser = function updateUser(data, force) {
-    if (!self.details) {
-      return;
+  self.updateUser = function updateUser(data) {
+    if (self.details && !isEmpty(data)) {
+      forEach(data, (v, k) => { self.details[k] = v; });
+      self.details.customPUT(data);
+      console.log(data, self.details.plain());
+      $log.info('User data saved.');
     }
-
-    let putData = {};
-    forEach(data, (value, key) => {
-      if (!angular.equals(self.details[key], value) || force) {
-        putData[key] = value;
-        self.details[key] = value;
-      }
-    });
-
-    putData.username = self.details.username;
-    putData = Restangular.restangularizeElement(null, putData, 'users');
-    putData.put().then(() => $log.info('User data saved.'));
   };
 
 
@@ -313,9 +305,9 @@ function userFactory(
 
   self.construct = function construct(data) {
     // Reset data.
-    self.fields = undefined;
-    self.courses = undefined;
-    self.details = undefined;
+    self.fields = {};
+    self.courses = {};
+    self.details = {};
 
     if (data) {
       if (!isUndefined(data.courses)) {

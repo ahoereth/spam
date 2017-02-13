@@ -8,8 +8,8 @@ export default class LandingController {
     this.userConstruct(User.details);
   }
 
-  userConstruct(user) {
-    if (!user) {
+  userConstruct(user = {}) {
+    if (!user.username) {
       this.loggedin = false;
       this.username = '';
     } else {

@@ -35,7 +35,7 @@ export default class UserOverviewController {
       forEach(guide, course => {
         const fieldId = course.singleField ? course.singleField :
           get(course, 'fields[0].field_id', null);
-        this.User.addCourse(course, fieldId);
+        this.UserService.addCourse(course, fieldId);
       });
     });
   }

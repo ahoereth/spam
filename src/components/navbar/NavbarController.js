@@ -116,8 +116,8 @@ export default class NavbarController {
     }, true);
   }
 
-  userConstruct(user) {
-    if (!user) {
+  userConstruct(user = {}) {
+    if (!user.username) {
       this.user = false;
     } else {
       this.user = {

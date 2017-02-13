@@ -7,8 +7,8 @@ export default class NotAuthorizedController {
     $scope.$on('user-construct', this.userConstruct);
   }
 
-  userConstruct(event, user) {
-    if (!user) {
+  userConstruct(event, user = {}) {
+    if (!user.username) {
       this.user = false;
     } else {
       this.user = {
