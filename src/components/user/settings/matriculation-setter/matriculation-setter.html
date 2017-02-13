@@ -1,10 +1,11 @@
-<div class="matriculation-setter">
+<div class="matriculation-setter row">
   <form class="form-group" name="matriculationSetter">
     <!-- summer/winter term selection -->
-    <div ng-class="{'col-md-3': verifyButton, 'col-md-4': !verifyButton}">
+    <div ng-class="{'col-md-3': $ctrl.verify, 'col-md-4': !$ctrl.verify}">
       <div
         class="btn-group btn-group-justified"
-        ng-model="user.mat_term"
+        ng-model="$ctrl.user.mat_term"
+        ng-change="$ctrl.change()"
         radio-button-group
       >
         <label class="btn btn-primary">
@@ -19,20 +20,21 @@
     </div>
 
     <!-- year selection -->
-    <div ng-class="{'col-md-6': verifyButton, 'col-md-8': !verifyButton}">
+    <div ng-class="{'col-md-6': $ctrl.verify, 'col-md-8': !$ctrl.verify}">
 
       <div class="input-group" style="width: 100%">
         <!-- the three most recent years as buttons -->
         <div
           class="input-group-btn"
           style="width: 25%"
-          ng-repeat="year in years"
+          ng-repeat="year in $ctrl.years"
         >
           <button
             class="btn btn-block btn-primary"
             value="{{::year}}"
             radio-button
-            ng-model="user.mat_year"
+            ng-model="$ctrl.user.mat_year"
+            ng-change="$ctrl.change()"
             ng-bind="::year"
           ></button>
         </div>
@@ -44,21 +46,21 @@
           type="number"
           name="year"
           required
-          placeholder="{{::years[2]-1}}"
+          placeholder="{{::$ctrl.years[2]-1}}"
           class="form-control centering"
           ng-class="{'has-error': matriculationSetter.year.$invalid}"
           blur-on-enter
-          ng-model="user.mat_year"
-          ng-model-options="{updateOn: 'blur'}">
+          ng-model="$ctrl.user.mat_year"
+          ng-change="$ctrl.change()">
       </div>
     </div>
 
     <!-- explicit confirmation -->
-    <div class="col-md-3" ng-if="verifyButton">
+    <div class="col-md-3" ng-if="$ctrl.verify">
       <button
         class="btn btn-block btn-success"
         ng-disabled="matriculationSetter.$invalid"
-        ng-click="verify()"
+        ng-click="$ctrl.doVerify()"
       >
         Verify&nbsp;
         <icon i="ok"></icon>

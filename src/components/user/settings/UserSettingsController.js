@@ -4,11 +4,15 @@ export default class UserSettingsController {
   constructor($scope, Restangular, User) {
     this.user = User.details;
     this.UserService = User;
-    $scope.$watchGroup(['user.firstname', 'user.lastname'], (n, o) => {
-      if (n === o) { return; }
-      const [firstname, lastname] = n;
-      User.updateUser({ firstname, lastname }, true);
-    });
+
+    $scope.$watchGroup(
+      [() => this.user.firstname, () => this.user.lastname],
+      ([firstname, lastname], [f2, l2]) => {
+        if (firstname !== f2 || lastname !== l2) {
+          User.updateUser({ firstname, lastname });
+        }
+      },
+    );
   }
 
   deleteUser() {

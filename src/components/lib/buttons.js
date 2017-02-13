@@ -109,6 +109,9 @@ const radioButtonGroupDirective = () => ({
     angular.forEach(children, child => {
       angular.element(child).attr('radio-button', '');
       angular.element(child).attr('ng-model', attr.ngModel);
+      if (attr.ngChange) {
+        angular.element(child).attr('ng-change', attr.ngChange);
+      }
     });
   },
 });
