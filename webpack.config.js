@@ -24,7 +24,7 @@ module.exports = (env = {}) => {
     output: {
       path: path.resolve(__dirname, 'app', 'static'),
       filename: DEVELOPMENT ? '[name].js' : '[name].[chunkhash:6].js',
-      publicPath: '/static/',
+      publicPath: '/~SPAM/static/',
     },
     resolve: {
       modules: ['node_modules', 'src'],
@@ -77,6 +77,9 @@ module.exports = (env = {}) => {
         {
           test: /\.html$/i,
           loader: 'html-loader',
+          options: {
+            minimize: !DEVELOPMENT,
+          },
         },
       ],
     },
