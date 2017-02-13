@@ -10,7 +10,7 @@
   "bugs": "http://github.com/ahoereth/spam/issues",
   "scripts": {
     "clean": "rm -rf app",
-    "build": "webpack -p --env.production",
+    "build": "webpack --env.production",
     "start": "webpack --watch"
   },
   "dependencies": {
