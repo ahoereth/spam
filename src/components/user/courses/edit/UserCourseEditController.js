@@ -35,7 +35,8 @@ export default class UserCourseEditController {
       });
     } else {
       // new course
-      const fieldId = $routeParams.fieldId ? parseInt($routeParams.field_id, 10) : 1;
+      const fieldId = $routeParams.field_id ?
+                        parseInt($routeParams.field_id, 10) : 1;
       this.course = {
         enrolled_field_id: fieldId,
         year: this.currentTermYear,
