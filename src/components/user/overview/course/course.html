@@ -1,33 +1,37 @@
 <div
   class="row course"
   ng-class="{
-    overflowing: 0 === course.counts || course.failed || course.muted,
-    passed: course.passed,
-    muted: course.muted,
-    failed: course.failed
+    overflowing: 0 === $ctrl.course.counts ||
+                 $ctrl.course.failed ||
+                 $ctrl.course.muted,
+    passed: $ctrl.course.passed,
+    muted: $ctrl.course.muted,
+    failed: $ctrl.course.failed
   }"
 >
 
   <!-- title + ects -->
   <div class="col-xs-9">
-    <span tooltips tooltip-template="{{::course.term_abbr}}">
-      <span class="course-title" ng-if="::!course.course_id">
-        {{::course.course}}
+    <span tooltips tooltip-template="{{::$ctrl.course.term_abbr}}">
+      <span class="course-title" ng-if="::!$ctrl.course.course_id">
+        {{::$ctrl.course.course}}
       </span>
       <a
         class="course-title"
-        ng-if="::course.course_id"
-        ng-href="courses/{{::course.course_id}}"
-      >{{::course.course}}</a>
-      <small ng-show="course.ects" class="text-info">[{{::course.ects}}]</small>
+        ng-if="::$ctrl.course.course_id"
+        ng-href="courses/{{::$ctrl.course.course_id}}"
+      >{{::$ctrl.course.course}}</a>
+      <small ng-show="$ctrl.course.ects" class="text-info">
+        [{{::$ctrl.course.ects}}]
+      </small>
     </span>
   </div>
 
   <!-- grade -->
   <grade-input
     class="col-xs-2"
-    grade="course.grade"
-    change="grade(newGrade)"
+    grade="$ctrl.course.grade"
+    change="$ctrl.grade(newGrade)"
     active="true"
   ></grade-input>
 
@@ -39,58 +43,58 @@
         type="button"
         dropdown-toggle
         class="btn btn-xs btn-block dropdown-toggle"
-        ng-class="{'btn-info'   : !course.passed && !course.grade,
-                   'btn-success':  course.passed,
-                   'btn-default':  course.grade > 4}"
+        ng-class="{'btn-info'   : !$ctrl.course.passed && !$ctrl.course.grade,
+                   'btn-success':  $ctrl.course.passed,
+                   'btn-default':  $ctrl.course.grade > 4}"
       >
-        <icon i="pencil" ng-show="!course.passed && !course.grade"></icon>
-        <icon i="ok" ng-show="course.passed"></icon>
-        <icon i="remove" ng-show="course.grade > 4"></icon>
+        <icon i="pencil" ng-show="!$ctrl.course.passed && !$ctrl.course.grade"></icon>
+        <icon i="ok" ng-show="$ctrl.course.passed"></icon>
+        <icon i="remove" ng-show="$ctrl.course.grade > 4"></icon>
       </button>
 
       <ul class="dropdown-menu pull-right">
 
         <!-- force pass or un-pass course -->
         <li>
-          <tickable ng-model="course.passed" ng-change="grade(null)">
+          <tickable ng-model="$ctrl.course.passed" ng-change="$ctrl.grade(null)">
             Passed
           </tickable>
         </li>
 
         <!-- mute course -->
         <li>
-          <tickable ng-model="course.muted" ng-change="mute()">
+          <tickable ng-model="$ctrl.course.muted" ng-change="$ctrl.mute()">
             Muted
           </tickable>
         </li>
 
         <!-- edit course -->
-        <li ng-if="!course.course_id">
-          <a ng-href="~/courses/edit/{{::course.student_in_course_id}}">
+        <li ng-if="!$ctrl.course.course_id">
+          <a ng-href="~/courses/edit/{{::$ctrl.course.student_in_course_id}}">
             Edit Course
           </a>
         </li>
 
         <!-- un-enroll from course -->
-        <li><a class="pointer" ng-click="remove()">Remove</a></li>
+        <li><a class="pointer" ng-click="$ctrl.remove()">Remove</a></li>
 
         <!-- move to other fields headline -->
-        <li ng-hide="!course.fields.length && course.enrolled_field_id == 1"
+        <li ng-hide="!$ctrl.course.fields.length && $ctrl.course.enrolled_field_id == 1"
             class="dropdown-header">
           Change field
         </li>
 
         <!-- move to other fields -->
-        <li ng-repeat="field in course.fields"
-            ng-hide="field.field_id == course.enrolled_field_id">
-          <a class="pointer" ng-click="move(field.field_id)">
+        <li ng-repeat="field in ::$ctrl.course.fields"
+            ng-if="field.field_id !== $ctrl.course.enrolled_field_id">
+          <a class="pointer" ng-click="$ctrl.move(field.field_id)">
             {{::field.field}}
           </a>
         </li>
 
         <!-- move to open studies -->
-        <li ng-hide="course.enrolled_field_id == 1">
-          <a class="pointer" ng-click="move(1)">Open Studies</a>
+        <li ng-hide="$ctrl.course.enrolled_field_id == 1">
+          <a class="pointer" ng-click="$ctrl.move(1)">Open Studies</a>
         </li>
 
       </ul>

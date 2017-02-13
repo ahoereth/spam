@@ -15,7 +15,7 @@ import template from './field.html';
 
 /**
  * MODULE: spam.user.overview.field
- * DIRECTIVE: field
+ * COMPONENT: field
  */
 export default angular
   .module('spam.user.overview.field', [
