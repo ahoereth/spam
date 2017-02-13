@@ -9,10 +9,9 @@ const WebpackLivereload = require('webpack-livereload-plugin');
 
 
 module.exports = (env = {}) => {
-  const PRODUCTION = !!env.production;
-  const LIVERELOAD_PORT = 35729;
   const remoteAPI = 'https://cogsci.uni-osnabrueck.de/~SPAM/api';
   const APIURL = env.remote ? remoteAPI : '/~SPAM/api';
+  const PRODUCTION = !!env.production;
 
   return {
     devtool: PRODUCTION ? 'source-map' : 'inline-source-map',
@@ -110,12 +109,11 @@ module.exports = (env = {}) => {
         },
       ]),
       new WebpackLivereload({
-        port: LIVERELOAD_PORT,
+        appendScriptTag: !PRODUCTION,
       }),
       new webpack.DefinePlugin({
         PRODUCTION: JSON.stringify(PRODUCTION),
         APIURL: JSON.stringify(APIURL),
-        LIVERELOAD_PORT: JSON.stringify(LIVERELOAD_PORT),
       }),
     ],
   };
