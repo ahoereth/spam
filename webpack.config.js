@@ -83,7 +83,7 @@ module.exports = (env = {}) => {
     plugins: [
       new WebpackExtractText({
         filename: DEVELOPMENT ? 'styles.css' : 'styles.[contenthash:6].css',
-        disable: DEVELOPMENT, // Apparently breaks web fonts.
+        // disable: DEVELOPMENT, // Apparently breaks web fonts.
       }),
       new WebpackHtml({
         template: 'index.html',

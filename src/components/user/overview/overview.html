@@ -26,12 +26,7 @@
     </span>
 
     <!-- enrolled ects -->
-    <span ng-show="$ctrl.facts.credits.enrolled">The courses you are currently <abbr tooltips tooltip-template="not passed, not failed and neither muted nor overflowing">enrolled</abbr> in promise&nbsp;
-    <ng-pluralize
-      count="$ctrl.facts.credits.enrolled"
-      when="{'1': 'one credit',
-             'other': '{} credits'}"
-    ></ng-pluralize>.</span>
+    <span ng-show="$ctrl.facts.credits.enrolled">Your current in-progress courses promise <ng-pluralize count="$ctrl.facts.credits.enrolled" when="{'1': 'one credit', 'other': '{} credits'}"></ng-pluralize>.</span>
 
     <!-- Add notice about overflowing credits. -->
 
@@ -43,26 +38,21 @@
     </span>
 
     <span ng-if="!$ctrl.thesisinput">
-      <abbr
-        class="undercover"
-        ng-click="$ctrl.thesisinput=!$ctrl.thesisinput"
-      >
-        You did not yet write your thesis
-      </abbr>{{
-        $ctrl.facts.examinationFieldsCount > $ctrl.facts.examinationFieldsCompletedCount |
-        iif : ' and ' : '.'
-      }}
+      <abbr class="undercover" ng-click="$ctrl.thesisinput=!$ctrl.thesisinput">You did not yet write your thesis</abbr>{{$ctrl.facts.examinationFieldsCount > $ctrl.facts.examinationFieldsCompletedCount | iif : ' and ' : '.' }}
     </span>
 
     <span ng-if="$ctrl.facts.examinationFieldsCount>$ctrl.facts.examinationFieldsCompletedCount">
-      {{$ctrl.thesis.active | iif:'B':'b'}}y now {{$ctrl.thesis.active | iif : 'you ' : ''}} completed {{$ctrl.facts.examinationFieldsCompletedCount}} of {{$ctrl.facts.examinationFieldsCount}} <abbr tooltips tooltip-template="You need to complete the compulsory part of all fields but the optional-compulsory part only of 5 of those.">optional-compulsory</abbr> fields.
+      {{$ctrl.thesis.active | iif:'B':'b'}}y now {{$ctrl.thesis.active | iif : 'you ' : ''}} completed both the compulsory and optional part for {{$ctrl.facts.examinationFieldsCompletedCount}} of the required {{$ctrl.facts.examinationFieldsCount}} fields.
     </span>
 
       <!-- Module Examinations -->
       <!-- TODO: Not relevant for MSc students -->
+      <!-- TODO: Add sentence about (best) passed oral module examination. -->
       <span ng-if="!$ctrl.facts.examinationCount">
         Finally, you still need to pass an oral module examination.
       </span>
+
+      <!-- TODO: Add sentence about best fields which count into the grade. -->
   </p>
 
   <!-- no courses yet -->
