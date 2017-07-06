@@ -1,71 +1,80 @@
 <h1>Help</h1>
-<p class="lead">You might find some useful information here.. But the list is far from complete. Remember: This project is still hot of the press! If you found an issue and want to help fixing it: <a href="mailto:ahoereth@uos.de" target="_blank" rel="noopener noreferrer">Drop me a line</a>.</p>
+<p class="lead">You might find some useful information here.. But the list is far from complete. If you found an issue and want to help fixing it, contribute through <a href="https://github.com/ahoereth/spam/issues" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>
 
 <div class="panel-group faq">
 
-<help-fragment slug="remember" title="Do you trust this device?">
-  <p>You select this checkbox on login the application will save your userdata on the device and auto login you the next time you open it. Otherwise you will need to enter your login credentials on every visit. Do not use this functionality when you are on a public computer.</p>
-</help-fragment>
+  <help-fragment slug="remember" title="Do you trust this device?">
+    <p>You select this checkbox on login the application will save your userdata on the device and auto login you the next time you open it. Otherwise you will need to enter your login credentials on every visit. Do not use this functionality when you are on a public computer.</p>
+  </help-fragment>
 
 
-<help-fragment slug="privacy" title="Privacy & Security">
-  <p>All connections to the server are <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol_Secure" target="_blank" rel="noopener noreferrer">ssl encrypted</a>. Your login credentials are compared to the official UOS authentication server every 30 minutes and everytime they are entered wrong. This debounced setup is necessary due to the <a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank" rel="noopener noreferrer">REST-API</a> centric layout of the application, which requires user authentication on every request. The RZ-servers don't like too many requests in a short time per user.</p>
-  <p>While this application obviously stores your personal information regarding your courses and grades, it <b>does not</b> store your username or password in clear text. The password is <a href="http://php.net/manual/en/function.crypt.php" target="_blank" rel="noopener noreferrer">encrypted</a> (safe) and the username <a href="http://de1.php.net/manual/en/function.md5.php" target="_blank" rel="noopener noreferrer">hashed</a> (made unreadable, not safe). Grades and other stuff you enter are saved in clear text!</p>
-  <p>Deleting your data <span ng-show="user">(see <a href="/~/settings">/~/settings</a>)</span> will only remove it from the live database. It might persist in backups - like with all other online services.</p>
-  <p>Further more the application logs some anonymous information about search queries and page/course views.</p>
-</help-fragment>
+  <help-fragment slug="privacy" title="Privacy & Security">
+    <p>All connections to the server are <a href="http://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol_Secure" target="_blank" rel="noopener noreferrer">ssl encrypted</a>. Your login credentials are compared to the official UOS authentication server every 30 minutes and everytime they are entered wrong. This debounced setup is necessary due to the <a href="http://en.wikipedia.org/wiki/Representational_state_transfer" target="_blank" rel="noopener noreferrer">REST-API</a> centric layout of the application, which requires user authentication on every request. The RZ-servers don't like too many requests in a short time per user.</p>
+    <p>While this application obviously stores your personal information regarding your courses and grades, it <b>does not</b> store your username or password in clear text. The password is <a href="http://php.net/manual/en/function.crypt.php" target="_blank" rel="noopener noreferrer">encrypted</a> (safe) and the username <a href="http://de1.php.net/manual/en/function.md5.php" target="_blank" rel="noopener noreferrer">hashed</a> (made unreadable, not safe). Grades and other stuff you enter are saved in clear text!</p>
+    <p>Deleting your data <span ng-show="user">(see <a href="/~/settings">/~/settings</a>)</span> will only remove it from the live database. It might persist in backups - like with all other online services.</p>
+    <p>Further more the application logs some anonymous information about search queries and page/course views.</p>
+  </help-fragment>
 
 
-<help-fragment slug="addCourse" title="Adding courses">
-  <p>There are multiple ways to add courses. The fastest one being the "quick search" in the top right of every page. Enter a course title and you will instantly get some results with a big green <icon i="plus" class="text-success"></icon> button. Look for this button on other pages as well. When a course already was added to your personal study plan before this button is replaced with a red <icon i="plus" class="text-danger"></icon> button. No need for explanation.</p>
-  <p>By default the quick search only looks up courses from the semesters of the last, current and next year. If you want to go back further just prepend a year number to your search query like this: "<strong>11: Philosophy</strong>"</p>
-</help-fragment>
+  <help-fragment slug="addCourse" title="Adding courses">
+    <p>There are multiple ways to add courses. The fastest one being the "quick search" in the top right of every page. Enter a course title and you will instantly get some results with a big green
+      <icon i="plus" class="text-success"></icon> button. Look for this button on other pages as well. When a course already was added to your personal study plan before this button is replaced with a red
+      <icon i="plus" class="text-danger"></icon> button. No need for explanation.</p>
+    <p>By default the quick search only looks up courses from the semesters of the last, current and next year. If you want to go back further just prepend a year number to your search query like this: "<strong>11: Philosophy</strong>"</p>
+  </help-fragment>
 
 
-<help-fragment slug="averagegrades" title="Average Grades">
-  <p>Every course's grade is being multiplied with it's credits. All course grade products are beeing added up and then divided by the sum of credits of all courses. Lastly the grade is rounded to one decimal and normalized to <em>.0</em>, <em>.3</em> or <em>.7</em>.</p>
-  <p>No warantee for correctness of any calculation results! Check them with the examinations office</p>
-</help-fragment>
+  <help-fragment slug="averagegrades" title="Average Grades">
+    <p>Every course's grade is being multiplied with it's credits. All course grade products are beeing added up and then divided by the sum of credits of all courses. Lastly the grade is rounded to one decimal and normalized to <em>.0</em>, <em>.3</em> or <em>.7</em>.</p>
+    <p>No warantee for correctness of any calculation results! Check them with the examinations office</p>
+  </help-fragment>
 
 
-<help-fragment slug="overview/fields" title="Overview: Fields">
-  <p>Fields, as courses, can be in different <b>states</b>:</p>
-  <ul>
-    <li>Yellow background and <icon i="pencil" class="text-primary"></icon>: You still need to complete some compulsory courses in this field.</li>
-    <li>Grey background and <icon i="ok" class="text-success"></icon>: You completed the compulsory part of this field.</li>
-    <li>Green background and <icon i="ok" class="text-success"></icon>: You completed this field and it plays part in your graduation grade.</li>
-  </ul>
-  <p>Below the courses of the field is a <b>progress bar</b> which shows you how many ects you completed and still have to complete for this field. <span class="text-success">Green</span> depicts completed, <span class="text-warning">orange</span> compulsory, <span class="text-info">blue</span> currently in progress and <span class="text-muted">gray</span> optional credits. For a field to count to your final grade you will need to complete the whole bar.</p>
-  <p>If you undertook a <b>module examination</b> in one of your fields you can overwrite the automatically generated grade by opening the field's menu (click the icon showing its state), checking the "examination" checkbox and entering the grade manually. This is only possible after the field has been completed and turned green. If the field has a module examination grade all course grades in this field will be ignored.</p>
-</help-fragment>
+  <help-fragment slug="overview/fields" title="Overview: Fields">
+    <p>Fields, as courses, can be in different <b>states</b>:</p>
+    <ul>
+      <li>Yellow background and
+        <icon i="pencil" class="text-primary"></icon>: You still need to complete some compulsory courses in this field.</li>
+      <li>Grey background and
+        <icon i="ok" class="text-success"></icon>: You completed the compulsory part of this field.</li>
+      <li>Green background and
+        <icon i="ok" class="text-success"></icon>: You completed this field and it plays part in your graduation grade.</li>
+    </ul>
+    <p>Below the courses of the field is a <b>progress bar</b> which shows you how many ects you completed and still have to complete for this field. <span class="text-success">Green</span> depicts completed, <span class="text-warning">orange</span> compulsory, <span class="text-info">blue</span> currently in progress and <span class="text-muted">gray</span> optional credits. For a field to count to your final grade you will need to complete the whole bar.</p>
+    <p>If you undertook a <b>module examination</b> in one of your fields you can overwrite the automatically generated grade by opening the field's menu (click the icon showing its state), checking the "examination" checkbox and entering the grade manually. This is only possible after the field has been completed and turned green. If the field has a module examination grade all course grades in this field will be ignored.</p>
+  </help-fragment>
 
 
-<help-fragment slug="overview/courses" title="Overview: Courses">
-  <p>When viewing your <a href="~">overview</a> courses are grouped into fields.</p>
-  <p>Every course on the overview page is being displayed in one line consisting of the course's title and <span class="text-info">[credits]</span>, your grade in this course and it's status. When you hover the course title with your mouse a small popover appears which shows you the semester you participated in this course. The status icon, the last on each course line, is also a button which offers additional options.</p>
-  <p>A course can have three different states:</p>
-  <ul>
-    <li><icon i="pencil" class="text-primary"></icon>: You are enrolled in this course currently but did not yet pass it course.</li>
-    <li><icon i="ok" class="text-success"></icon>: You passed the course.</li>
-    <li><icon i="remove" class="text-danger"></icon>: You failed the course.</li>
-  </ul>
-  <p>Clicking the course status icon you get some options:</p>
-  <ul>
-    <li>Passed: Some courses do offer grades but only passed/failed. Check this box if you passed a course without grade. <small class="text-muted">(only visible when no grade is entered)</small></li>
-    <li>Muted: You don't want this course to count for the field or for your graduation grade? Mute it.</li>
-    <li>Remove: Remove this course from your personal overview.</li>
-    <li>Move to other field: Move the course to other fields it can be accounted for. <small class="text-muted">(only visible if there are any other possible fields for this course)</small></li>
-  </ul>
-</help-fragment>
+  <help-fragment slug="overview/courses" title="Overview: Courses">
+    <p>When viewing your <a href="~">overview</a> courses are grouped into fields.</p>
+    <p>Every course on the overview page is being displayed in one line consisting of the course's title and <span class="text-info">[credits]</span>, your grade in this course and it's status. When you hover the course title with your mouse a small popover appears which shows you the semester you participated in this course. The status icon, the last on each course line, is also a button which offers additional options.</p>
+    <p>A course can have three different states:</p>
+    <ul>
+      <li>
+        <icon i="pencil" class="text-primary"></icon>: You are enrolled in this course currently but did not yet pass it course.</li>
+      <li>
+        <icon i="ok" class="text-success"></icon>: You passed the course.</li>
+      <li>
+        <icon i="remove" class="text-danger"></icon>: You failed the course.</li>
+    </ul>
+    <p>Clicking the course status icon you get some options:</p>
+    <ul>
+      <li>Passed: Some courses do offer grades but only passed/failed. Check this box if you passed a course without grade. <small class="text-muted">(only visible when no grade is entered)</small></li>
+      <li>Muted: You don't want this course to count for the field or for your graduation grade? Mute it.</li>
+      <li>Remove: Remove this course from your personal overview.</li>
+      <li>Move to other field: Move the course to other fields it can be accounted for. <small class="text-muted">(only visible if there are any other possible fields for this course)</small></li>
+    </ul>
+  </help-fragment>
 
 
-<help-fragment slug="regulations" title="Regulations">
-  <p>All values and calculations in this application are based on the official study regulations and module descriptions:</p>
-  <ul>
-    <li><a href="http://www-old.uni-osnabrueck.de/ordnungen/PO-Bachelor-CognitiveScience_2011-09.pdf" target="_blank" rel="noopener noreferrer">B.Sc. regulation</a></li>
-    <li><a href="http://ikw.uni-osnabrueck.de/de/system/files/Modulbeschreibungen_CognitiveScience-Bachelor_2011-09.pdf" target="_blank" rel="noopener noreferrer">B.Sc. field descriptions</a></li>
-  </ul>
-  <p>Course data is periodically pulled from the official Cognitive Science lectures <a href="http://cogsci.uni-osnabrueck.de/en/lectures" target="_blank" rel="noopener noreferrer">database.</p>
-</help-fragment>
+  <help-fragment slug="regulations" title="Regulations">
+    <p>This application aims to provide all values and calculations as described in the official study regulations and module descriptions:</p>
+    <ul>
+      <li><a href="https://ikw.uni-osnabrueck.de/en/cogsci/bachelor/regulations" target="_blank" rel="noopener noreferrer">B.Sc. regulation</a></li>
+      <li><a href="https://ikw.uni-osnabrueck.de/en/cogsci/master/regulations" target="_blank" rel="noopener noreferrer">M.Sc. regulations</a></li>
+    </ul>
+    <p>Course data is periodically pulled from the official Cognitive Science lectures <a href="http://cogsci.uni-osnabrueck.de/en/lectures" target="_blank" rel="noopener noreferrer">database.</p>
+  <p>If you find any errors please report them on the project's <a href="https://github.com/ahoereth/spam/issues" target="_blank" rel="noopener noreferrer">GitHub issues page</a>.</p>
+  </help-fragment>
 
 </div>

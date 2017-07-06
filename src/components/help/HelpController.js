@@ -4,7 +4,7 @@ export default class HelpController {
   constructor($scope, $location, $routeParams) {
     $scope.opened = $routeParams.subject || '';
     $scope.open = subject => {
-      subject = ($scope.opened !== subject) ? subject : '';
+      subject = $scope.opened !== subject ? subject : '';
       $location.path(`/help/${subject}`);
     };
   }

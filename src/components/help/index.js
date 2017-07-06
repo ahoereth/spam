@@ -9,17 +9,18 @@ import controller from './HelpController';
 import template from './help.html';
 import './help.less';
 
+const routing = [
+  'RoutesProvider',
+  RoutesProvider => {
+    RoutesProvider.add('/help/:subject*?', {
+      controller,
+      template,
+      title: 'Help',
+    });
 
-const routing = ['RoutesProvider', RoutesProvider => {
-  RoutesProvider.add('/help/:subject*?', {
-    template,
-    controller,
-    title: 'Help',
-  });
-
-  RoutesProvider.add('/help', { redirectTo: '/help/remember' });
-}];
-
+    RoutesProvider.add('/help', { redirectTo: '/help/remember' });
+  },
+];
 
 /**
  * MODULE: spam.help
@@ -27,5 +28,4 @@ const routing = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.help', [ngRoute, routes, fragment, icon])
-  .config(routing)
-  .name;
+  .config(routing).name;

@@ -2,22 +2,19 @@ import angular from 'angular';
 
 import template from './help-fragment.html';
 
-
 function helpFragmentLink(scope, elem, attrs) {
   scope.slug = attrs.slug;
   scope.title = attrs.title;
 }
 
-
 const helpFragmentDirective = () => ({
-  template,
+  link: helpFragmentLink,
   restrict: 'E',
   replace: true,
   scope: true,
+  template,
   transclude: true,
-  link: helpFragmentLink,
 });
-
 
 /**
  * MODULE: spam.help.fragment
@@ -25,5 +22,4 @@ const helpFragmentDirective = () => ({
  */
 export default angular
   .module('spam.help.fragment', [])
-  .directive('helpFragment', helpFragmentDirective)
-  .name;
+  .directive('helpFragment', helpFragmentDirective).name;
