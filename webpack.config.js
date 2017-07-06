@@ -7,7 +7,6 @@ const WebpackExtractText = require('extract-text-webpack-plugin');
 const WebpackCopy = require('copy-webpack-plugin');
 const WebpackLivereload = require('webpack-livereload-plugin');
 
-
 module.exports = (env = {}) => {
   const remoteAPI = 'https://cogsci.uni-osnabrueck.de/~SPAM/api';
   const APIURL = env.remote ? remoteAPI : undefined;
@@ -34,10 +33,7 @@ module.exports = (env = {}) => {
       rules: [
         {
           test: /\.js$/,
-          use: [
-            'babel-loader?cacheDirectory=tmp/cache',
-            'eslint-loader',
-          ],
+          use: ['babel-loader?cacheDirectory=tmp/cache', 'eslint-loader'],
           exclude: /node_modules/,
         },
         {
@@ -64,10 +60,15 @@ module.exports = (env = {}) => {
                 options: {
                   importLoaders: 1,
                   sourceMap: true,
-                  minimize: DEVELOPMENT ? false : {
-                    discardComments: { removeAll: true },
-                    autoprefixer: { browser: ['last 4 versions'], add: true },
-                  },
+                  minimize: DEVELOPMENT
+                    ? false
+                    : {
+                        discardComments: { removeAll: true },
+                        autoprefixer: {
+                          browser: ['last 4 versions'],
+                          add: true,
+                        },
+                      },
                 },
               },
               'less-loader?sourceMap',
@@ -86,7 +87,7 @@ module.exports = (env = {}) => {
     plugins: [
       new WebpackExtractText({
         filename: DEVELOPMENT ? 'styles.css' : 'styles.[contenthash:6].css',
-        // disable: DEVELOPMENT, // Apparently breaks web fonts.
+        // disable: DEVELOPMENT, // Apparently breaks web fonts.,
       }),
       new WebpackHtml({
         template: 'index.html',
@@ -108,9 +109,10 @@ module.exports = (env = {}) => {
         {
           from: '.htaccess',
           to: '..',
-          transform: buf => (
-            buf.toString().replace(PRODUCTION ? /#PROD#\s*/g : /#DEV#\s*/g, '')
-          ),
+          transform: buf =>
+            buf
+              .toString()
+              .replace(PRODUCTION ? /#PROD#\s*/g : /#DEV#\s*/g, ''),
         },
       ]),
       new WebpackLivereload({
@@ -122,41 +124,46 @@ module.exports = (env = {}) => {
           APIURL: JSON.stringify(APIURL),
         },
       }),
-      DEVELOPMENT ? () => {} : new webpack.optimize.UglifyJsPlugin({
-        compress: {
-          warnings: false,
-          properties: true,
-          sequences: true,
-          dead_code: true,
-          conditionals: true,
-          comparisons: true,
-          evaluate: true,
-          booleans: true,
-          unused: true,
-          loops: true,
-          hoist_funs: true,
-          cascade: true,
-          if_return: true,
-          join_vars: true,
-          drop_console: true,
-          drop_debugger: true,
-          unsafe: true,
-          hoist_vars: true,
-          negate_iife: true,
-          side_effects: true,
-        },
-        sourceMap: true,
-        mangle: {
-          toplevel: true,
-          sort: true,
-          eval: true,
-          properties: true,
-        },
-        output: {
-          space_colon: false,
-          comments: false,
-        },
-      }),
+      DEVELOPMENT
+        ? () => {}
+        : new webpack.optimize.ModuleConcatenationPlugin(),
+      DEVELOPMENT
+        ? () => {}
+        : new webpack.optimize.UglifyJsPlugin({
+            compress: {
+              warnings: false,
+              properties: true,
+              sequences: true,
+              dead_code: true,
+              conditionals: true,
+              comparisons: true,
+              evaluate: true,
+              booleans: true,
+              unused: true,
+              loops: true,
+              hoist_funs: true,
+              cascade: true,
+              if_return: true,
+              join_vars: true,
+              drop_console: true,
+              drop_debugger: true,
+              unsafe: true,
+              hoist_vars: true,
+              negate_iife: true,
+              side_effects: true,
+            },
+            sourceMap: true,
+            mangle: {
+              toplevel: true,
+              sort: true,
+              eval: true,
+              properties: true,
+            },
+            output: {
+              space_colon: false,
+              comments: false,
+            },
+          }),
     ],
   };
 };

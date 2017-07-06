@@ -1,5 +1,7 @@
 parser: babel-eslint
-extends: airbnb-base
+extends:
+  - airbnb-base
+  - prettier
 settings:
   import/resolver: webpack
 parserOptions:
@@ -12,6 +14,8 @@ env:
   es6: true
 globals:
   ENV: true
+plugins:
+  - prettier
 rules:
   arrow-parens:
     - warn
@@ -26,3 +30,4 @@ rules:
   no-prototype-builtins: off
   camelcase: off # lots of stuff from the api is snakecase
   semi: warn
+  prettier/prettier: error
