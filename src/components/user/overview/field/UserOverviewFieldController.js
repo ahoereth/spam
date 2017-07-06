@@ -1,21 +1,42 @@
 import {
-  omit, sum, forIn, orderBy, pickBy, isPlainObject, partialRight, pick, assign,
-  isNull, isFinite, map, mergeWith, multiply, clone, forEach, isUndefined,
+  assign,
+  clone,
+  forEach,
+  forIn,
+  isFinite,
+  isNull,
+  isPlainObject,
+  isUndefined,
+  map,
+  mergeWith,
+  multiply,
+  pickBy,
+  omit,
+  orderBy,
+  partialRight,
+  pick,
+  sum,
 } from 'lodash-es';
 import formatGrade from '../../formatGrade';
 
 function isNumeric(x) {
-  return !(isNaN(x)) && (typeof x !== 'object') &&
-    (x !== Number.POSITIVE_INFINITY) && (x !== Number.NEGATIVE_INFINITY);
+  return (
+    !isNaN(x) &&
+    typeof x !== 'object' &&
+    x !== Number.POSITIVE_INFINITY &&
+    x !== Number.NEGATIVE_INFINITY
+  );
 }
 
-const percent = (a, b) => ((a / b) > 1 ? 100 : ((a / b) * 100));
-
+const percent = (a, b) => (a / b > 1 ? 100 : a / b * 100);
 
 const defaultCreditSet = {
-  overflowing: 0, percentage: 0, compulsory: 0, optional: 0, sum: 0,
+  compulsory: 0,
+  optional: 0,
+  overflowing: 0,
+  percentage: 0,
+  sum: 0,
 };
-
 
 /**
  * Calculate the field grade either by just using the fixed grade as
@@ -30,7 +51,6 @@ function calculateGrade(courses, overall = false) {
   return formatGrade(grade);
 }
 
-
 export default class UserOverviewFieldController {
   static $inject = ['$scope', 'User'];
 
@@ -40,14 +60,22 @@ export default class UserOverviewFieldController {
   }
 
   $onInit() {
-    assign(this, pick(this.raw, [
-      'field', 'field_id', 'field_examination_possible', 'minimized', 'grade',
-    ]), {
-      courses: this.courses || {},
-      foreignCreditsMem: 0,
-      hasManualGrade: false,
-      regulation_id: this.User.details.regulation_id,
-    });
+    assign(
+      this,
+      pick(this.raw, [
+        'field',
+        'field_id',
+        'field_examination_possible',
+        'grade',
+        'minimized',
+      ]),
+      {
+        courses: this.courses || {},
+        foreignCreditsMem: 0,
+        hasManualGrade: false,
+        regulation_id: this.User.details.regulation_id,
+      },
+    );
     const field = this.raw;
 
     /**
@@ -61,7 +89,10 @@ export default class UserOverviewFieldController {
       const examinationCredits = this.User.facts.examinationCredits;
 
       // Run the analysis again with those foreign credits.
-      if (this.foreignCreditsMem !== (examinationCredits + foreignPassedCredits)) {
+      if (
+        this.foreignCreditsMem !==
+        examinationCredits + foreignPassedCredits
+      ) {
         this.foreignCreditsMem = examinationCredits + foreignPassedCredits;
         this.doAnalysis(this.foreignCreditsMem);
       }
@@ -80,7 +111,6 @@ export default class UserOverviewFieldController {
     this.examination = this.hasManualGrade;
     this.doAnalysis();
   }
-
 
   /**
    * Calculate the field data based on the courses associated with it.
@@ -115,7 +145,8 @@ export default class UserOverviewFieldController {
     forIn(
       orderBy(
         pickBy(this.courses, isPlainObject),
-        ['compulsory', 'passed', 'grade'], ['desc', 'desc', 'asc'],
+        ['compulsory', 'passed', 'grade'],
+        ['desc', 'desc', 'asc'],
       ),
       course => {
         const group = course.passed ? 'passed' : 'enrolled';
@@ -137,7 +168,7 @@ export default class UserOverviewFieldController {
         }
 
         // Overflowing credits can flow to the open studies module.
-        credits[group].overflowing += (course.credits - course.counts);
+        credits[group].overflowing += course.credits - course.counts;
       },
     );
 
@@ -148,28 +179,31 @@ export default class UserOverviewFieldController {
       credits.foreign = foreignCredits;
       available.optional -= counts;
       credits.passed.optional += counts;
-      credits.passed.overflowing += (foreignCredits - counts);
+      credits.passed.overflowing += foreignCredits - counts;
     }
 
     // Calculated the different progress values.
     forEach(['passed', 'enrolled', 'available'], group => {
       credits[group].sum = credits[group].compulsory + credits[group].optional;
       credits[group].percentage = percentage(credits[group].sum);
-      credits[group].percentage_compulsory = percentage(credits[group].compulsory);
+      credits[group].percentage_compulsory = percentage(
+        credits[group].compulsory,
+      );
       credits[group].percentage_optional = percentage(credits[group].optional);
     });
 
     // An examination is only possible with enough credits.
-    this.examination = (credits.passed.percentage === 100) ? this.hasManualGrade
-                                                           : false;
+    this.examination =
+      credits.passed.percentage === 100 ? this.hasManualGrade : false;
 
     // Only update the field's grade and update the user facts if the credits
     // do not include foreign credits. Foreign credit updates are always
     // called after the calculations already ran beforehand.
     if (!foreignCredits) {
       // Grade can be the average or manually defined.
-      this.grade = this.hasManualGrade ? formatGrade(field.grade)
-                                       : calculateGrade(this.courses);
+      this.grade = this.hasManualGrade
+        ? formatGrade(field.grade)
+        : calculateGrade(this.courses);
 
       this.User.updateFieldData(field.field_id, {
         grade: this.grade || calculateGrade(this.courses),
@@ -186,7 +220,6 @@ export default class UserOverviewFieldController {
       this.$scope.$digest();
     }
   }
-
 
   /**
    * Updates the fields courses grade cache and, if appropriate, fires
@@ -213,7 +246,6 @@ export default class UserOverviewFieldController {
     this.doAnalysis();
   }
 
-
   /**
    * Student in field grade edited. Redo some calculations and save the
    * changes to the server.
@@ -223,11 +255,13 @@ export default class UserOverviewFieldController {
 
     if (
       // Grade can't change if no module examination is possible.
-      (this.raw.field_examination_possible) &&
+      this.raw.field_examination_possible &&
       // Field was not passed so a module examination is not possible.
-      (this.credits.passed.percentage === 100)
+      this.credits.passed.percentage === 100
     ) {
-      this.hasManualGrade = !isUndefined(examine) ? examine : this.hasManualGrade;
+      this.hasManualGrade = !isUndefined(examine)
+        ? examine
+        : this.hasManualGrade;
       if (newGrade !== (this.raw.grade || null)) {
         this.hasManualGrade = newGrade !== null;
         this.raw.grade = newGrade;
@@ -237,7 +271,6 @@ export default class UserOverviewFieldController {
 
     this.doAnalysis();
   }
-
 
   /**
    * Update field minimization setting.

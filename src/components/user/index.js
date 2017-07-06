@@ -7,7 +7,6 @@ import logout from './logout';
 import courses from './courses';
 import login from './login';
 
-
 /**
  * MODULE: spam.user
  * ROUTES:
@@ -17,6 +16,11 @@ import login from './login';
  *   User
  *   Auth
  */
-export default angular
-  .module('spam.user', [services, overview, settings, logout, courses, login])
-  .name;
+export default angular.module('spam.user', [
+  courses,
+  logout,
+  login,
+  overview,
+  services,
+  settings,
+]).name;

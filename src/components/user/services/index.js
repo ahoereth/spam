@@ -3,7 +3,6 @@ import angular from 'angular';
 import user from './user';
 import auth from './auth';
 
-
 /**
  * MODULE: spam.app.services
  */

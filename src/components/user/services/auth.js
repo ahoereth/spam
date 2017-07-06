@@ -4,7 +4,6 @@ import { isEmpty, isUndefined, isNumber } from 'lodash-es';
 import restangular from '../../lib/restangular';
 import userService from './user';
 
-
 /* @ngInject */
 function authFactory($rootScope, $window, $http, $q, Restangular, User) {
   let deferredLogin = 'not_initiated';
@@ -14,16 +13,20 @@ function authFactory($rootScope, $window, $http, $q, Restangular, User) {
     const username = User.logininfo.username;
 
     if (!isEmpty(username)) {
-      $http.defaults.headers.common.Authorization = `Basic ${User.logininfo.authdata}`;
+      $http.defaults.headers.common.Authorization = `Basic ${User.logininfo
+        .authdata}`;
 
       // Server login request.
-      Restangular.one('users', username).get().then(data => {
-        User.construct(data);
-        deferredLogin.resolve(User.details);
-      }, () => {
-        User.logout();
-        deferredLogin.reject();
-      });
+      Restangular.one('users', username).get().then(
+        data => {
+          User.construct(data);
+          deferredLogin.resolve(User.details);
+        },
+        () => {
+          User.logout();
+          deferredLogin.reject();
+        },
+      );
     } else {
       deferredLogin.reject();
     }
@@ -37,7 +40,6 @@ function authFactory($rootScope, $window, $http, $q, Restangular, User) {
       User.setLogininfo(username, authdata, useLocalStorage);
       return login();
     },
-
 
     authenticate: function authenticate(accessSet) {
       const deferredAuthentication = $q.defer();
@@ -62,32 +64,35 @@ function authFactory($rootScope, $window, $http, $q, Restangular, User) {
         // the user information (after the login promise is fulfilled)
 
         // when login was successful
-        loginPromise.then(() => {
-          // Login was successful.
-          if (
-            // accessSet is a explicit user rank integer and the users rank is
-            // equal or higher
-            (isNumber(accessSet) && accessSet <= User.details.rank) ||
-            // The user himself is allowed to see this route, we will
-            // only retrieve data related to him
-            (!isUndefined(accessSet.self)) ||
-            // The user is explicitly named in the accessSet, so he is allowed
-            // to view this route as well
-            (!isUndefined(accessSet[User.getUsername()]))
-          ) {
-            deferredAuthentication.resolve(User.details);
-          } else {
-            // Could not match the accessSet to the current user, reject
-            // the authentication request
-            deferredAuthentication.reject('not_authenticated');
-          }
-        }, () => {
-          // Login was not successful. User is certainly not allowed to see
-          // this page, because we already checked accessSet === 0
+        loginPromise.then(
+          () => {
+            // Login was successful.
+            if (
+              // accessSet is a explicit user rank integer and the users rank is
+              // equal or higher
+              (isNumber(accessSet) && accessSet <= User.details.rank) ||
+              // The user himself is allowed to see this route, we will
+              // only retrieve data related to him
+              !isUndefined(accessSet.self) ||
+              // The user is explicitly named in the accessSet, so he is allowed
+              // to view this route as well
+              !isUndefined(accessSet[User.getUsername()])
+            ) {
+              deferredAuthentication.resolve(User.details);
+            } else {
+              // Could not match the accessSet to the current user, reject
+              // the authentication request
+              deferredAuthentication.reject('not_authenticated');
+            }
+          },
+          () => {
+            // Login was not successful. User is certainly not allowed to see
+            // this page, because we already checked accessSet === 0
 
-          // Reject authentication request
-          deferredAuthentication.reject('not_authenticated');
-        });
+            // Reject authentication request
+            deferredAuthentication.reject('not_authenticated');
+          },
+        );
       }
 
       // return the authentication promise
@@ -96,12 +101,10 @@ function authFactory($rootScope, $window, $http, $q, Restangular, User) {
   };
 }
 
-
 /**
  * MODULE: spam.user.services.auth
  * SERVICE: Auth
  */
 export default angular
   .module('spam.user.services.auth', [restangular, userService])
-  .factory('Auth', authFactory)
-  .name;
+  .factory('Auth', authFactory).name;

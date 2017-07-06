@@ -7,7 +7,6 @@ import controller from './GradeInputController';
 import template from './grade-input.html';
 import './grade-input.css';
 
-
 /**
  * MODULE: spam.user.overview.grade-input
  * COMPONENT: gradeInput
@@ -22,5 +21,4 @@ export default angular
       grade: '<',
       active: '<?',
     },
-  })
-  .name;
+  }).name;

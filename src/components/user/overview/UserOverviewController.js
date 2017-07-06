@@ -1,12 +1,12 @@
 import { assign, forEach, get } from 'lodash-es';
 
-
 export default class UserOverviewController {
   static $inject = ['$scope', 'Restangular', 'User'];
 
   constructor($scope, Restangular, User) {
     assign(this, {
-      Restangular, $scope,
+      Restangular,
+      $scope,
       UserService: User,
       user: User.details,
       facts: User.facts,
@@ -27,16 +27,20 @@ export default class UserOverviewController {
    * first semester to his personal overview.
    */
   headstart() {
-    this.Restangular.one('guides', 1).getList('courses', {
-      semester: 1,
-      year: this.UserService.details.mat_year,
-      term: this.UserService.details.mat_term,
-    }).then(guide => {
-      forEach(guide, course => {
-        const fieldId = course.singleField ? course.singleField :
-          get(course, 'fields[0].field_id', null);
-        this.UserService.addCourse(course, fieldId);
+    this.Restangular
+      .one('guides', 1)
+      .getList('courses', {
+        semester: 1,
+        year: this.UserService.details.mat_year,
+        term: this.UserService.details.mat_term,
+      })
+      .then(guide => {
+        forEach(guide, course => {
+          const fieldId = course.singleField
+            ? course.singleField
+            : get(course, 'fields[0].field_id', null);
+          this.UserService.addCourse(course, fieldId);
+        });
       });
-    });
   }
 }

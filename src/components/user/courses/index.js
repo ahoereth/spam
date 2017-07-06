@@ -2,7 +2,6 @@ import angular from 'angular';
 
 import edit from './edit';
 
-
 /**
  * MODULE: spam.user.courses
  * ROUTES:

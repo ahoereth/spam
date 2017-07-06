@@ -6,7 +6,6 @@ import routes from '../../app/services/routes';
 
 import template from './login.html';
 
-
 class UserLoginController {
   static $inject = ['$scope', '$routeParams'];
 
@@ -15,16 +14,17 @@ class UserLoginController {
   }
 }
 
-
-const routing = ['RoutesProvider', RoutesProvider => {
-  RoutesProvider.add('/login', {
-    template,
-    controller: UserLoginController,
-    controllerAs: '$ctrl',
-    title: 'Login',
-  });
-}];
-
+const routing = [
+  'RoutesProvider',
+  RoutesProvider => {
+    RoutesProvider.add('/login', {
+      controller: UserLoginController,
+      controllerAs: '$ctrl',
+      template,
+      title: 'Login',
+    });
+  },
+];
 
 /**
  * MODULE: spam.user.login
@@ -32,5 +32,4 @@ const routing = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.user.login', [ngRoute, routes, loginform])
-  .config(routing)
-  .name;
+  .config(routing).name;

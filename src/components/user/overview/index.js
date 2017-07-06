@@ -15,18 +15,19 @@ import controller from './UserOverviewController';
 import template from './overview.html';
 import './overview.less';
 
-
-const routing = ['RoutesProvider', RoutesProvider => {
-  RoutesProvider.add('/~', {
-    template,
-    controller,
-    controllerAs: '$ctrl',
-    title: ':username',
-    reloadOnSearch: false,
-    access: 1,
-  });
-}];
-
+const routing = [
+  'RoutesProvider',
+  RoutesProvider => {
+    RoutesProvider.add('/~', {
+      access: 1,
+      controller,
+      controllerAs: '$ctrl',
+      template,
+      title: ':username',
+      reloadOnSearch: false,
+    });
+  },
+];
 
 /**
  * MODULE: spam.user.overview
@@ -35,8 +36,15 @@ const routing = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.user.overview', [
-    restangular, tooltips, iif, routes, userService, columns, thesisInput,
-    gradeInput, matriculationSetter, icon,
+    columns,
+    gradeInput,
+    icon,
+    iif,
+    restangular,
+    routes,
+    thesisInput,
+    tooltips,
+    matriculationSetter,
+    userService,
   ])
-  .config(routing)
-  .name;
+  .config(routing).name;

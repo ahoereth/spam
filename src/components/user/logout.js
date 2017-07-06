@@ -3,16 +3,17 @@ import angular from 'angular';
 import routes from '../app/services/routes';
 import userService from './services/user';
 
-
-const routing = ['RoutesProvider', RoutesProvider => {
-  RoutesProvider.add('/~/logout', {
-    controller: 'UserLogoutController',
-    template: '',
-    title: 'Logout',
-    access: 1,
-  });
-}];
-
+const routing = [
+  'RoutesProvider',
+  RoutesProvider => {
+    RoutesProvider.add('/~/logout', {
+      access: 1,
+      controller: 'UserLogoutController',
+      template: '',
+      title: 'Logout',
+    });
+  },
+];
 
 class UserLogoutController {
   static $inject = ['$scope', '$location', 'User'];
@@ -24,7 +25,6 @@ class UserLogoutController {
   }
 }
 
-
 /**
  * MODULE: spam.user.logout
  * ROUTE: /~/logout
@@ -33,5 +33,4 @@ class UserLogoutController {
 export default angular
   .module('spam.user.logout', [routes, userService])
   .config(routing)
-  .controller('UserLogoutController', UserLogoutController)
-  .name;
+  .controller('UserLogoutController', UserLogoutController).name;

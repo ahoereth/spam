@@ -10,29 +10,30 @@ import routes from '../../../app/services/routes';
 import controller from './UserCourseEditController';
 import template from './edit.html';
 
+const routing = [
+  'RoutesProvider',
+  RoutesProvider => {
+    RoutesProvider.add('/~/courses/new', {
+      access: 1,
+      controller,
+      controllerAs: 'edit',
+      template,
+      title: 'Add unofficial course',
+    });
 
-const routing = ['RoutesProvider', RoutesProvider => {
-  RoutesProvider.add('/~/courses/new', {
-    template,
-    controller,
-    controllerAs: 'edit',
-    title: 'Add unofficial course',
-    access: 1,
-  });
+    RoutesProvider.add('/~/courses/edit/:student_in_course_id', {
+      access: 1,
+      controller,
+      controllerAs: 'edit',
+      template,
+      title: 'Edit personal course',
+    });
 
-  RoutesProvider.add('/~/courses/edit/:student_in_course_id', {
-    template,
-    controller,
-    controllerAs: 'edit',
-    title: 'Edit personal course',
-    access: 1,
-  });
-
-  RoutesProvider.add('/~/courses/edit', {
-    redirectTo: '/~/courses/new',
-  });
-}];
-
+    RoutesProvider.add('/~/courses/edit', {
+      redirectTo: '/~/courses/new',
+    });
+  },
+];
 
 /**
  * MODULE: spam.user.course.edit
@@ -42,7 +43,12 @@ const routing = ['RoutesProvider', RoutesProvider => {
  */
 export default angular
   .module('spam.user.course.edit', [
-    restangular, instafocus, iif, routes, userService, routes, icon,
+    restangular,
+    instafocus,
+    iif,
+    routes,
+    userService,
+    routes,
+    icon,
   ])
-  .config(routing)
-  .name;
+  .config(routing).name;

@@ -1,23 +1,46 @@
 import angular from 'angular';
 import {
-  forEach, multiply, debounce, get, isPlainObject, mergeWith, trim, pick,
-  find, isUndefined, isNumber, fromPairs, keys, map, omit, findIndex, sum, take,
-  filter, size, sortBy, isEmpty,
+  forEach,
+  multiply,
+  debounce,
+  get,
+  isPlainObject,
+  mergeWith,
+  trim,
+  pick,
+  find,
+  isUndefined,
+  isNumber,
+  fromPairs,
+  keys,
+  map,
+  omit,
+  findIndex,
+  sum,
+  take,
+  filter,
+  size,
+  sortBy,
+  isEmpty,
 } from 'lodash-es';
 
 import restangular from '../../lib/restangular';
 import formatGrade from '../formatGrade';
-
 
 function calculateGrade(credits, grades) {
   const acc = sum(mergeWith(grades, credits, multiply));
   return formatGrade(acc / sum(credits));
 }
 
-
 /* @ngInject */
 function userFactory(
-  $cacheFactory, $rootScope, $location, $http, $log, $q, Restangular,
+  $cacheFactory,
+  $rootScope,
+  $location,
+  $http,
+  $log,
+  $q,
+  Restangular,
 ) {
   const webstorage = !isUndefined(Storage); // browser object
   const self = {
@@ -34,11 +57,9 @@ function userFactory(
 
   const fieldData = {};
 
-
   function callWatchers() {
     forEach(self.watchers, watcher => watcher());
   }
-
 
   const factsCalculation = debounce(() => {
     const facts = self.facts;
@@ -46,18 +67,25 @@ function userFactory(
 
     // TODO: this '5' should be somehow dynamic
     facts.examinationFieldsCount = get(self, 'details.examination_fields', 5);
-    const examinationFields = take(filter(fields, {
-      examinationPossible: true,
-      completed: true,
-    }), facts.examinationFieldsCount);
+    const examinationFields = take(
+      filter(fields, {
+        examinationPossible: true,
+        completed: true,
+      }),
+      facts.examinationFieldsCount,
+    );
 
     facts.examinationFieldsCompletedCount = size(examinationFields);
 
     facts.grades = {
-      overall: calculateGrade(map(fields, 'overallPassedCredits'),
-                              map(fields, 'overallGrade')),
-      graduation: calculateGrade(map(examinationFields, 'passedCredits'),
-                                 map(examinationFields, 'grade')),
+      overall: calculateGrade(
+        map(fields, 'overallPassedCredits'),
+        map(fields, 'overallGrade'),
+      ),
+      graduation: calculateGrade(
+        map(examinationFields, 'passedCredits'),
+        map(examinationFields, 'grade'),
+      ),
     };
 
     // Take thesis grade into consideration.
@@ -65,7 +93,7 @@ function userFactory(
     const thesisGrade = parseFloat(self.details.thesis_grade);
     if (thesisGrade >= 1 && thesisGrade <= 4) {
       facts.grades.graduation = formatGrade(
-        ((parseFloat(facts.grades.graduation) * 2) + thesisGrade) / 3,
+        (parseFloat(facts.grades.graduation) * 2 + thesisGrade) / 3,
       );
     }
 
@@ -74,14 +102,15 @@ function userFactory(
     facts.examinationCredits = 3 * (facts.examinationCount || 0);
 
     facts.credits = {
-      passed: sum(map(fields, 'overallPassedCredits')) +
-              facts.examinationCredits + (thesisGrade ? 12 : 0),
+      passed:
+        sum(map(fields, 'overallPassedCredits')) +
+        facts.examinationCredits +
+        (thesisGrade ? 12 : 0),
       // overflow: fields.map('overflowPassedCredits').sum().value(),
       enrolled: sum(map(fields, 'enrolledCredits')),
     };
     callWatchers();
   }, 200);
-
 
   // TODO: required?
   self.setLogininfo = function setLogininfo(username, authdata, trust) {
@@ -94,7 +123,6 @@ function userFactory(
     }
   };
 
-
   /**
    * Save userdata to server.
    *
@@ -104,13 +132,14 @@ function userFactory(
    */
   self.updateUser = function updateUser(data) {
     if (self.details && !isEmpty(data)) {
-      forEach(data, (v, k) => { self.details[k] = v; });
+      forEach(data, (v, k) => {
+        self.details[k] = v;
+      });
       self.details.customPUT(data);
       console.log(data, self.details.plain());
       $log.info('User data saved.');
     }
   };
-
 
   self.logout = function logout() {
     $log.info('Destroying local user data.');
@@ -127,7 +156,9 @@ function userFactory(
 
     // Reset guide.
     const guide = $cacheFactory.get('guide');
-    if (guide) { guide.removeAll(); }
+    if (guide) {
+      guide.removeAll();
+    }
 
     // Reconstruct user with empty dataset.
     self.construct();
@@ -136,19 +167,20 @@ function userFactory(
     return $q.resolve();
   };
 
-
   self.deleteUser = function deleteUser() {
     $log.info('Deleting global user data.');
 
-    self.details.remove().then(() => {
-      $log.info('Global user data deleted.');
-      $location.search({}).path('/');
-      self.logout();
-    }, () => {
-      $log.info('Error while deleting global user data.');
-    });
+    self.details.remove().then(
+      () => {
+        $log.info('Global user data deleted.');
+        $location.search({}).path('/');
+        self.logout();
+      },
+      () => {
+        $log.info('Error while deleting global user data.');
+      },
+    );
   };
-
 
   self.updateThesis = function updateThesis(title, grade) {
     grade = formatGrade(grade);
@@ -164,16 +196,13 @@ function userFactory(
     return thesis;
   };
 
-
   self.getRegulation = function getRegulation(reg) {
-    return get(self, 'details.regulation_id', (reg || null));
+    return get(self, 'details.regulation_id', reg || null);
   };
-
 
   self.getUsername = function getUsername() {
     return get(self, 'details.username', null);
   };
-
 
   /**
    * Removes a course from the current user's planner.
@@ -182,8 +211,9 @@ function userFactory(
    * @param {object} course   object used for broadcasting
    */
   self.removeCourse = function removeCourse(course) {
-    const studentInCourseId = isPlainObject(course) ?
-      course.student_in_course_id : course;
+    const studentInCourseId = isPlainObject(course)
+      ? course.student_in_course_id
+      : course;
 
     course = find(self.courses, {
       student_in_course_id: studentInCourseId,
@@ -196,20 +226,22 @@ function userFactory(
     const title = course.course;
     const enrolledFieldId = course.enrolled_field_id;
 
-    const promise = course.remove().then(() => {
-      $log.info(`Removed: ${title}`);
-      self.courses.splice(findIndex(self.courses, course), 1);
-    }, () => {
-      $log.info(`Couldn't remove: ${title}`);
-      course.enrolled_field_id = enrolledFieldId;
-      course.student_in_course_id = studentInCourseId;
-    });
+    const promise = course.remove().then(
+      () => {
+        $log.info(`Removed: ${title}`);
+        self.courses.splice(findIndex(self.courses, course), 1);
+      },
+      () => {
+        $log.info(`Couldn't remove: ${title}`);
+        course.enrolled_field_id = enrolledFieldId;
+        course.student_in_course_id = studentInCourseId;
+      },
+    );
 
     course.enrolled_field_id = null;
     course.student_in_course_id = null;
     return promise;
   };
-
 
   /**
    * Adds a course to the current user's planner.
@@ -231,7 +263,7 @@ function userFactory(
     }
 
     // Fill in field_id.
-    course.field_id = isNumber(fieldId) ? fieldId : (course.field_id || null);
+    course.field_id = isNumber(fieldId) ? fieldId : course.field_id || null;
 
     return self.courses.post(course).then(c => {
       const old = find(self.courses, { course_id: c.course_id });
@@ -248,10 +280,10 @@ function userFactory(
     });
   };
 
-
   self.refreshCourse = function refreshCourse(course) {
-    const studentInCourseId = isPlainObject(course) ?
-      course.student_in_course_id : course;
+    const studentInCourseId = isPlainObject(course)
+      ? course.student_in_course_id
+      : course;
 
     const idx = findIndex(self.courses, {
       student_in_course_id: studentInCourseId,
@@ -274,12 +306,10 @@ function userFactory(
     });
   };
 
-
   self.updateFieldData = function updateFieldData(id, data) {
     fieldData[id] = data;
     factsCalculation();
   };
-
 
   /**
    * Function to return all overflowing credits from the fields.
@@ -289,7 +319,6 @@ function userFactory(
   self.getOverflowingCredits = function getOverflowingCredits() {
     return fromPairs(keys(fieldData), map(fieldData, 'overflowPassedCredits'));
   };
-
 
   /**
    * Add a function which will be called whenever the facts update.
@@ -301,7 +330,6 @@ function userFactory(
     self.watchers.push(func);
     return self.watchers.length - 1;
   };
-
 
   self.construct = function construct(data) {
     // Reset data.
@@ -328,23 +356,18 @@ function userFactory(
     return self;
   };
 
-
   // Initialize logininfo from session or localstorage.
   self.logininfo = {
-    username: webstorage ?
-      sessionStorage.getItem('username') ||
-      localStorage.getItem('username') :
-      null,
-    authdata: webstorage ?
-      sessionStorage.getItem('authdata') ||
-      localStorage.getItem('authdata') :
-      null,
+    username: webstorage
+      ? sessionStorage.getItem('username') || localStorage.getItem('username')
+      : null,
+    authdata: webstorage
+      ? sessionStorage.getItem('authdata') || localStorage.getItem('authdata')
+      : null,
   };
-
 
   return self;
 }
-
 
 /**
  * MODULE: spam.user.services.user
@@ -352,5 +375,4 @@ function userFactory(
  */
 export default angular
   .module('spam.user.services.user', [restangular])
-  .factory('User', userFactory)
-  .name;
+  .factory('User', userFactory).name;

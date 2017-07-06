@@ -12,21 +12,26 @@ import gradeInput from '../grade-input';
 import controller from './UserOverviewFieldController';
 import template from './field.html';
 
-
 /**
  * MODULE: spam.user.overview.field
  * COMPONENT: field
  */
 export default angular
   .module('spam.user.overview.field', [
-    progress, tickable, iif, isEmpty, dropdown, userService, gradeInput, icon,
+    dropdown,
+    gradeInput,
+    icon,
+    iif,
+    isEmpty,
+    progress,
+    tickable,
+    userService,
   ])
   .component('field', {
-    template,
-    controller,
-    transclude: true,
     bindings: {
       raw: '=field',
     },
-  })
-  .name;
+    controller,
+    template,
+    transclude: true,
+  }).name;

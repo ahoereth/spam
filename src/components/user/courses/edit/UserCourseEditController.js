@@ -1,18 +1,19 @@
 import { assign, defaults, isEmpty } from 'lodash-es';
 
-
 export default class UserCourseEditController {
   static $inject = ['$location', '$routeParams', 'Restangular', 'User'];
 
   constructor($location, $routeParams, Restangular, User) {
-    const d = new Date(), m = d.getMonth(), y = d.getFullYear();
+    const d = new Date(),
+      m = d.getMonth(),
+      y = d.getFullYear();
     assign(this, {
       $location,
       User,
       course: {},
       page: $routeParams.student_in_course_id ? 'edit' : 'new',
-      currentTermYear: (m > 3) ? y : y - 1,
-      currentTerm: (m > 8 || m < 3) ? 'W' : 'S',
+      currentTermYear: m > 3 ? y : y - 1,
+      currentTerm: m > 8 || m < 3 ? 'W' : 'S',
     });
 
     this.fields = Restangular.all('fields').getList({
@@ -22,21 +23,25 @@ export default class UserCourseEditController {
     if (this.page === 'edit') {
       // edit course
       const id = parseInt($routeParams.student_in_course_id, 10);
-      User.details.one('courses', id).get().then(c => {
-        // No edits allowed for official courses yet.
-        if (c.course_id) {
+      User.details.one('courses', id).get().then(
+        c => {
+          // No edits allowed for official courses yet.
+          if (c.course_id) {
+            $location.path('/~/courses/new');
+            return;
+          }
+          this.course = c;
+        },
+        () => {
+          // Course does not exist, redirect.
           $location.path('/~/courses/new');
-          return;
-        }
-        this.course = c;
-      }, () => {
-        // Course does not exist, redirect.
-        $location.path('/~/courses/new');
-      });
+        },
+      );
     } else {
       // new course
-      const fieldId = $routeParams.field_id ?
-                        parseInt($routeParams.field_id, 10) : 1;
+      const fieldId = $routeParams.field_id
+        ? parseInt($routeParams.field_id, 10)
+        : 1;
       this.course = {
         enrolled_field_id: fieldId,
         year: this.currentTermYear,

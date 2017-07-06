@@ -1,6 +1,5 @@
 import { isNull, isNaN, isNumber } from 'lodash-es';
 
-
 /**
  * Format a given string to a grade.
  *
@@ -69,10 +68,16 @@ export default function formatGrade(g, course) {
 
   // format decimal place number
   /* eslint-disable brace-style */
-  if (b <= 1) { b = 0; }
-  else if (b >= 2 && b <= 4) { b = 3; }
-  else if (b >= 5 && b <= 8) { b = 7; }
-  else { b = 0; a++; }
+  if (b <= 1) {
+    b = 0;
+  } else if (b >= 2 && b <= 4) {
+    b = 3;
+  } else if (b >= 5 && b <= 8) {
+    b = 7;
+  } else {
+    b = 0;
+    a++;
+  }
   /* eslint-enable brace-style */
 
   // concatenate again

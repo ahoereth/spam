@@ -1,8 +1,20 @@
 import {
-  range, isArray, sum, map, trimEnd, repeat, parseInt, clone,
-  indexOf, max, flow, partialRight, groupBy, sortBy, partial,
+  clone,
+  flow,
+  groupBy,
+  indexOf,
+  isArray,
+  map,
+  max,
+  parseInt,
+  partial,
+  partialRight,
+  range,
+  repeat,
+  sortBy,
+  sum,
+  trimEnd,
 } from 'lodash-es';
-
 
 function buildColumns(userdetails, fields, columncount = 3) {
   let order = userdetails.overview_order;
@@ -21,23 +33,28 @@ function buildColumns(userdetails, fields, columncount = 3) {
   ) {
     const height = Math.ceil(fields.length / columncount);
     division = map(
-      trimEnd(repeat(`${height}|${columncount}`), '|').split('|'), parseInt,
+      trimEnd(repeat(`${height}|${columncount}`), '|').split('|'),
+      parseInt,
     );
   }
 
   // Create grouped object.
   const obj = flow(
-    partialRight(map, f => { // Add 'pos' attribute.
+    partialRight(map, f => {
+      // Add 'pos' attribute.
       const pos = indexOf(order, f.field_id);
       f.pos = pos !== -1 ? pos : 0;
       return f;
     }),
     partialRight(sortBy, 'pos'), // Sort by position initially.
-    partialRight(groupBy, f => { // Group into columns.
+    partialRight(groupBy, f => {
+      // Group into columns.
       let col = f.pos % columncount;
       while (division[col] <= 0) {
         col = (col + 1) % columncount;
-        if (col === (f.pos % columncount)) { break; } // All full.
+        if (col === f.pos % columncount) {
+          break;
+        } // All full.
       }
       division[col] -= 1;
       return col;
@@ -47,7 +64,6 @@ function buildColumns(userdetails, fields, columncount = 3) {
   // Create column array from grouped object.
   return map(division, (n, i) => obj[i] || []);
 }
-
 
 function refreshOrder(userdetails, columns) {
   const columnheights = map(columns, 'length');
@@ -70,12 +86,14 @@ function refreshOrder(userdetails, columns) {
   return order;
 }
 
-
 const breakpoints = [750, 970, 1170];
 
-
-export default ['$window', 'User', ($window, User) => ({
-  breakpoints,
-  build: partial(buildColumns, User.details),
-  refresh: partial(refreshOrder, User.details),
-})];
+export default [
+  '$window',
+  'User',
+  ($window, User) => ({
+    breakpoints,
+    build: partial(buildColumns, User.details),
+    refresh: partial(refreshOrder, User.details),
+  }),
+];

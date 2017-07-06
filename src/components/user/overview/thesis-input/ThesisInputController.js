@@ -1,11 +1,12 @@
 import { assign } from 'lodash-es';
 
-
 export default class ThesisInputController {
   static $inject = ['User'];
 
   constructor(User) {
-    if (!User.details) { return; }
+    if (!User.details) {
+      return;
+    }
     this.User = User;
   }
 

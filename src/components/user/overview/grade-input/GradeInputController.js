@@ -1,6 +1,5 @@
 import formatGrade from '../../formatGrade';
 
-
 export default class GradeInputController {
   static $inject = ['$scope'];
 

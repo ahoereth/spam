@@ -7,7 +7,6 @@ import auth from '../../services/auth';
 import controller from './LoginformController';
 import template from './form.html';
 
-
 /**
  * MODULE: spam.user.login.form
  * COMPONENT: loginform
@@ -15,11 +14,10 @@ import template from './form.html';
 export default angular
   .module('spam.user.login.form', [ngRoute, iif, auth])
   .component('loginform', {
-    template,
-    controller,
     bindings: {
       username: '=?',
       loading: '=?',
     },
-  })
-  .name;
+    controller,
+    template,
+  }).name;

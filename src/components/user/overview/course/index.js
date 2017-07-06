@@ -12,24 +12,28 @@ import gradeInput from '../grade-input';
 import controller from './CourseController';
 import template from './course.html';
 
-
 /**
  * MODULE: spam.user.overview.course
  * COMPONENT: course
  */
 export default angular
   .module('spam.user.overview.course', [
-    blurOnEnter, dropdown, tickable, tooltips, userService, field, gradeInput,
+    blurOnEnter,
+    dropdown,
+    field,
+    gradeInput,
     icon,
+    tickable,
+    tooltips,
+    userService,
   ])
   .component('course', {
-    template,
-    controller,
-    require: {
-      field: '^^field',
-    },
     bindings: {
       course: '=',
     },
-  })
-  .name;
+    controller,
+    template,
+    require: {
+      field: '^^field',
+    },
+  }).name;

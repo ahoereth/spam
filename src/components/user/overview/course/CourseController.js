@@ -2,7 +2,6 @@ import { pick } from 'lodash-es';
 
 import formatGrade from '../../formatGrade';
 
-
 export default class CourseController {
   static $inject = ['User'];
 
@@ -19,16 +18,15 @@ export default class CourseController {
 
   grade(newGrade) {
     this.course.grade = formatGrade(newGrade);
-    this.course.passed = (
+    this.course.passed =
       (this.course.grade >= 1 && this.course.grade <= 4) ||
-      (this.course.passed && this.course.grade === this.oldGrade)
-    );
+      (this.course.passed && this.course.grade === this.oldGrade);
     this.course.failed = !this.course.passed && this.course.grade >= 5;
     this.field.courseChange(this.course);
 
     if (
-      (this.course.grade !== this.oldGrade) ||
-      (this.course.passed !== this.oldPassed)
+      this.course.grade !== this.oldGrade ||
+      this.course.passed !== this.oldPassed
     ) {
       this.course.muted = this.course.muted && !this.course.grade;
       this.oldGrade = this.course.grade;
