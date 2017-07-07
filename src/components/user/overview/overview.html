@@ -1,5 +1,6 @@
 <!-- demo warning -->
-<div class="alert alert-warning" ng-if="$ctrl.user.username === 'demo'">
+<div class="alert alert-warning"
+  ng-if="$ctrl.user.username === 'demo'">
   You are currently viewing the live demo. To make sustaining changes please log in with your own credentials!
 </div>
 
@@ -8,11 +9,11 @@
 <!-- Headline -->
 <h1>
   {{$ctrl.user.username}}'s overview
-  <icon i="heart" ng-show="$ctrl.facts.examinationFieldsCount"></icon>
-  <icon
-    i="refresh" class="spin"
-    ng-hide="$ctrl.facts.examinationFieldsCount"
-  ></icon>
+  <icon i="heart"
+    ng-show="$ctrl.facts.examinationFieldsCount"></icon>
+  <icon i="refresh"
+    class="spin"
+    ng-hide="$ctrl.facts.examinationFieldsCount"></icon>
 </h1>
 
 
@@ -20,7 +21,8 @@
 <!-- Leading descriptive sentences. -->
 <div ng-if="$ctrl.user.mat_verify">
   <!-- already enrolled in some courses -->
-  <p class="lead" ng-if="$ctrl.courses.length">
+  <p class="lead"
+    ng-if="$ctrl.courses.length">
     <span ng-show="$ctrl.facts.grades.overall && $ctrl.facts.credits.passed">
       You earned a total of <strong>{{$ctrl.facts.credits.passed}} credits</strong> with the <strong>average grade {{$ctrl.facts.grades.overall}}</strong>.
     </span>
@@ -45,21 +47,24 @@
       {{$ctrl.thesis.active | iif:'B':'b'}}y now {{$ctrl.thesis.active | iif : 'you ' : ''}} completed both the compulsory and optional part for {{$ctrl.facts.examinationFieldsCompletedCount}} of the required {{$ctrl.facts.examinationFieldsCount}} fields.
     </span>
 
-      <!-- Module Examinations -->
-      <!-- TODO: Not relevant for MSc students -->
-      <!-- TODO: Add sentence about (best) passed oral module examination. -->
-      <span ng-if="!$ctrl.facts.examinationCount">
+    <!-- Module Examinations -->
+    <!-- TODO: Not relevant for MSc students -->
+    <!-- TODO: Add sentence about (best) passed oral module examination. -->
+    <span ng-if="!$ctrl.facts.examinationCount">
         Finally, you still need to pass an oral module examination.
       </span>
 
-      <!-- TODO: Add sentence about best fields which count into the grade. -->
+    <!-- TODO: Add sentence about best fields which count into the grade. -->
   </p>
 
   <!-- no courses yet -->
-  <p class="lead" ng-if="$ctrl.courses.length==0">
-    You have not yet added any courses.
-    To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation={{$ctrl.user.regulation_id}}&timeframe=11%2B}">course index</a> or take a look at the <a href="guide">study guide</a>.
-    Alternatively I can also give you a head start by adding the typical courses for your first semester: <button class="btn btn-primary" ng-click="$ctrl.headstart()">Initialize</button>
+  <p class="lead"
+    ng-if="$ctrl.courses.length==0">
+    You have not yet added any courses. To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation={{$ctrl.user.regulation_id}}&timeframe=11%2B}">course index</a> or take a look at the <a href="guide">study guide</a>. Alternatively I can also give you a head start by adding the typical courses for your first semester:
+    <button class="btn btn-primary"
+      ng-click="$ctrl.headstart()">
+      Initialize
+    </button>
   </p>
 
   <hr>
@@ -69,7 +74,8 @@
 
 <!-- verify enrollment semester -->
 <div ng-if="!$ctrl.user.mat_verify">
-  <p class="lead" style="margin-bottom: 0">
+  <p class="lead"
+    style="margin-bottom: 0">
     Please verify your matriculation semester:
   </p>
   <matriculation-setter verify=1></matriculation-setter>
@@ -87,14 +93,16 @@
 
 
 <!-- the fields -->
-<overview-columns fields="$ctrl.fields" courses="$ctrl.courses">
+<overview-columns fields="$ctrl.fields"
+  courses="$ctrl.courses">
 </overview-columns>
 
 
 
 <!-- legend -->
 <hr>
-<p class="pull-right" ng-show="$ctrl.user.mat_verify">
+<p class="pull-right"
+  ng-show="$ctrl.user.mat_verify">
   <small>
     <icon i="pencil" class="text-primary"></icon> Current,&nbsp;
     <icon i="ok" class="text-success"></icon> Completed,&nbsp;
