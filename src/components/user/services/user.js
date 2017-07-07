@@ -44,15 +44,15 @@ function userFactory(
 ) {
   const webstorage = !isUndefined(Storage); // browser object
   const self = {
-    facts: {},
-    fields: {},
     courses: {},
     details: {},
-    watchers: [],
+    facts: {},
+    fields: {},
     logininfo: {
-      username: null,
       authdata: null,
+      username: null,
     },
+    watchers: [],
   };
 
   const fieldData = {};
@@ -62,11 +62,11 @@ function userFactory(
   }
 
   const factsCalculation = debounce(() => {
+    const regulation = self.details.regulations[self.details.regulation_id];
     const facts = self.facts;
     const fields = sortBy(fieldData, 'grade');
 
-    // TODO: this '5' should be somehow dynamic
-    facts.examinationFieldsCount = get(self, 'details.examination_fields', 5);
+    facts.examinationFieldsCount = regulation.examination_fields;
     const examinationFields = take(
       filter(fields, {
         examinationPossible: true,
@@ -135,9 +135,10 @@ function userFactory(
       forEach(data, (v, k) => {
         self.details[k] = v;
       });
-      self.details.customPUT(data);
-      console.log(data, self.details.plain());
-      $log.info('User data saved.');
+      self.details.customPUT(data).then(result => {
+        self.construct(result);
+        $log.info('User data saved.');
+      });
     }
   };
 

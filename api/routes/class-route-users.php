@@ -151,7 +151,8 @@ class Route_Users extends Route {
       'lastname',
       'mat_term',
       'mat_year',
-      'mat_verify'
+      'mat_verify',
+      'regulation_id',
     );
 
     foreach ($cols AS $col) {

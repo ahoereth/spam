@@ -3,6 +3,7 @@ export default class UserSettingsController {
 
   constructor($scope, Restangular, User) {
     this.user = User.details;
+    this.regulation = User.details.regulations[this.user.regulation_id];
     this.UserService = User;
 
     $scope.$watchGroup(
@@ -10,6 +11,15 @@ export default class UserSettingsController {
       ([firstname, lastname], [f2, l2]) => {
         if (firstname !== f2 || lastname !== l2) {
           User.updateUser({ firstname, lastname });
+        }
+      },
+    );
+
+    $scope.$watch(
+      () => this.regulation,
+      (regulation, oldRegulation) => {
+        if (regulation !== oldRegulation) {
+          User.updateUser({ regulation_id: regulation.regulation_id });
         }
       },
     );
@@ -29,5 +39,5 @@ export default class UserSettingsController {
         this.export.loading = false;
       });
     },
-  }
+  };
 }

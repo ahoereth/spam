@@ -44,9 +44,8 @@
       for="regulation">Regulation</label>
     <div class="col-md-10">
       <select class="form-control"
-        id="regulation"
-        disabled="disabled">
-        <option selected="selected">{{::$ctrl.user.regulation}}</option>
+        ng-options="item as item.regulation for item in $ctrl.user.regulations track by item.regulation_id"
+        ng-model="$ctrl.regulation">
       </select>
     </div>
   </div>
