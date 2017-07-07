@@ -2,6 +2,7 @@ version: '2'
 services:
   mysql:
     image: mysql:5.5
+    container_name: spam_database
     volumes:
       - ./docker/mysql:/var/lib/mysql
       - ./docker/initdb.d:/docker-entrypoint-initdb.d
@@ -13,6 +14,7 @@ services:
       MYSQL_PASSWORD: studyplanning
   php:
     build: ./docker/apache
+    container_name: spam_php
     links:
       - mysql:db
     volumes:
@@ -29,6 +31,7 @@ services:
       - 8080:80
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: spam_phpmyadmin
     links:
       - mysql:db
     environment:
