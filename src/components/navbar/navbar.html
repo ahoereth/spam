@@ -1,13 +1,12 @@
-<div
-  class="navbar navbar-fixed-top navbar-default"
+<div class="navbar navbar-fixed-top navbar-default"
   ng-mouseover="$ctrl.search.hover = true"
-  ng-mouseout=" $ctrl.search.hover = false"
->
+  ng-mouseout=" $ctrl.search.hover = false">
 
   <!-- animated loader -->
   <div class="loader">
     <div class="container">
-      <div class="loadingbar" ng-class="{visible: $ctrl.showLoader}"></div>
+      <div class="loadingbar"
+        ng-class="{visible: $ctrl.showLoader}"></div>
     </div>
   </div>
 
@@ -17,27 +16,24 @@
 
     <!-- SPAM icon text and home link + navbar-toggle for small devices -->
     <div class="navbar-header">
-      <button
-        type="button"
+      <button type="button"
         class="navbar-toggle"
-        ng-click="$ctrl.navExpanded = !$ctrl.navExpanded"
-      >
+        ng-click="$ctrl.navExpanded = !$ctrl.navExpanded">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
 
-      <a href="." class="navbar-brand pointer">SPAM</a>
+      <a href="."
+        class="navbar-brand pointer">SPAM</a>
     </div>
 
-    <div class="navbar-collapse collapse" ng-class="{in: $ctrl.navExpanded}">
+    <div class="navbar-collapse collapse"
+      ng-class="{in: $ctrl.navExpanded}">
       <ul class="nav navbar-nav">
         <li ng-class="$ctrl.getNavigationActiveClass('/courses')">
-          <a
-            href="courses"
-            ng-href="courses?regulation={{$ctrl.user.regulation_id
-              | iif : $ctrl.user.regulation_id : 1}}&timeframe=13%2B"
-          >
+          <a href="courses"
+            ng-href="courses?regulation={{$ctrl.user.regulation_id | iif : $ctrl.user.regulation_id : 1}}&timeframe={{$ctrl.year}}+">
             courses
           </a>
         </li>
@@ -46,24 +42,20 @@
           <a href="guide">guide</a>
         </li>
 
-        <li
-          ng-class="$ctrl.getNavigationActiveClass('/~')"
-          ng-hide="!$ctrl.user || $ctrl.user.role != 'student'"
-        >
-          <a href="~" ng-bind="$ctrl.user.username"></a>
+        <li ng-class="$ctrl.getNavigationActiveClass('/~')"
+          ng-hide="!$ctrl.user || $ctrl.user.role != 'student'">
+          <a href="~"
+            ng-bind="$ctrl.user.username"></a>
         </li>
 
-        <li
-          ng-class="$ctrl.getNavigationActiveClass('/admin')"
-          ng-if="$ctrl.user.rank >= 16"
-        >
+        <li ng-class="$ctrl.getNavigationActiveClass('/admin')"
+          ng-if="$ctrl.user.rank >= 16">
           <a href="admin">admin</a>
         </li>
       </ul>
 
       <form class="navbar-form navbar-right hidden-xs">
-        <input
-          type="text"
+        <input type="text"
           class="form-control"
           placeholder="{{$ctrl.search.placeholder}}"
           ng-model="$ctrl.search.query"
@@ -75,49 +67,47 @@
   </div>
 
   <!-- quick search section -->
-  <div
-    class="container quicksearch"
+  <div class="container quicksearch"
     ng-if="$ctrl.search.active && 0 < $ctrl.search.filtered.length"
     style="background: #fff;">
 
 
     <!-- quick search result rows -->
-    <div
-      class="row hidden-xs"
-      ng-repeat="course in $ctrl.search.filtered track by course.course_id"
-    >
+    <div class="row hidden-xs"
+      ng-repeat="course in $ctrl.search.filtered track by course.course_id">
       <!-- course code -->
       <div class="col-sm-1 hidden-xs"><code>{{::course.code}}</code></div>
 
       <!-- course name -->
       <div class="col-sm-4 col-xs-6 course-title">
-        <a
-          ng-href="courses/{{::course.course_id}}"
-          ng-bind-html="::course.course | highlight: search.filter.course"
-        ></a>
+        <a ng-href="courses/{{::course.course_id}}"
+          ng-bind-html="::course.course | highlight: search.filter.course"></a>
       </div>
 
       <!-- course year/term -->
-      <div class="col-sm-1 col-xs-2" style="text-align: right;">
+      <div class="col-sm-1 col-xs-2"
+        style="text-align: right;">
         {{::course.term}}{{::course.year | year}}
       </div>
 
       <!-- teachers -->
-      <div class="col-sm-2 hidden-xs" ng-bind="::course.teachers_str"></div>
+      <div class="col-sm-2 hidden-xs"
+        ng-bind="::course.teachers_str"></div>
 
       <!-- fields -->
-      <div
-        class="col-sm-3 hidden-xs"
-        ng-class="{ 'col-xs-5': $ctrl.user, 'col-xs-7': !$ctrl.user }"
-      >
+      <div class="col-sm-3 hidden-xs"
+        ng-class="{ 'col-xs-5': $ctrl.user, 'col-xs-7': !$ctrl.user }">
         {{::course.fields_str}}
       </div>
 
       <!-- add/remove + details buttons -->
-      <div class="col-sm-1 col-xs-2" ng-show="$ctrl.user">
-        <add-remove-course course="course" btn-class="btn-block">
+      <div class="col-sm-1 col-xs-2"
+        ng-show="$ctrl.user">
+        <add-remove-course course="course"
+          btn-class="btn-block">
         </add-remove-course>
       </div>
     </div>
-  </div><!--/quick search section -->
+  </div>
+  <!--/quick search section -->
 </div>

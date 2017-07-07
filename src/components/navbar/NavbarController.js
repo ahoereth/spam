@@ -154,12 +154,15 @@ export default class NavbarController {
   userConstruct(user = {}) {
     if (!user.username) {
       this.user = false;
+      const date = new Date();
+      this.year = date.getYear() - 1;
     } else {
       this.user = {
         username: user.username,
         role: user.role,
         rank: user.rank,
       };
+      this.year = user.mat_year;
     }
   }
 
