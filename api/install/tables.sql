@@ -123,13 +123,14 @@ CREATE TABLE IF NOT EXISTS teachers_in_courses (
 -- @since 0.1
 --
 CREATE TABLE IF NOT EXISTS regulations (
-  regulation_id    BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  regulation_abbr  VARCHAR(32),
-  regulation_title VARCHAR(3),
-  regulation       VARCHAR(255),
-  regulation_desc  TEXT,
+  regulation_id      BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  regulation_abbr    VARCHAR(32),
+  regulation_title   VARCHAR(3),
+  regulation         VARCHAR(255),
+  regulation_desc    TEXT,
   examination_fields TINYINT DEFAULT NULL,
-  invisible        BOOLEAN NOT NULL DEFAULT FALSE,
+  fields_to_thesis   VARCHAR(3),
+  invisible          BOOLEAN NOT NULL DEFAULT FALSE,
   PRIMARY KEY (regulation_id)
 ) COLLATE utf8_unicode_ci ENGINE=INNODB;
 

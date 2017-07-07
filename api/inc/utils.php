@@ -173,3 +173,19 @@ function getenv_default($var, $default) {
   $val = getenv($var);
   return ($val === FALSE) ? $default  : $val;
 }
+
+
+/**
+ * Pick a specific value from a list of associative arrays.
+ */
+function pick_values($arr, $key) {
+  $result = array();
+
+  foreach ($arr AS $assoc) {
+    if (array_key_exists($key, $assoc)) {
+      $result[] = $assoc[$key];
+    }
+  }
+
+  return $result;
+}

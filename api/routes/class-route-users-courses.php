@@ -34,10 +34,10 @@ class Route_Users_Courses extends Route {
       ':regulation_id' => $user['regulation_id']
     );
 
-    $get_one = "";
+    $get_one = '';
     if (! empty($student_in_course_id)) {
-      $get_one = "AND sc.student_in_course_id = :student_in_course_id";
-      $args[":student_in_course_id"] = $student_in_course_id;
+      $get_one = 'AND sc.student_in_course_id = :student_in_course_id';
+      $args[':student_in_course_id'] = $student_in_course_id;
     }
 
     $select = "SELECT

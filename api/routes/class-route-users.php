@@ -77,10 +77,12 @@ class Route_Users extends Route {
 
     // regulation
     $regulation = self::$db->sql_select_one(
-      array('students_in_regulations', 'regulations'), array(
+      array('students_in_regulations', 'regulations'),
+      array(
         'username' => md5($username),
         'regulation_id' => $user['regulation_id'],
-      ), array(
+      ),
+      array(
         'regulation_id',
         'regulation_title',
         'regulation_abbr',
@@ -103,6 +105,26 @@ class Route_Users extends Route {
 
     // fields
     $user['fields'] = $this->get_fields($username, $user['regulation_id']);
+
+    // Available regulations
+    $regulations = self::$db->sql_select(
+      'regulations',
+      array(
+        'invisible' => 'FALSE',
+      ),
+      array(
+        'regulation_id',
+        'regulation_title',
+        'regulation_abbr',
+        'regulation',
+        'examination_fields',
+        'fields_to_thesis',
+      )
+    );
+    $user['regulations'] = array_combine(
+      pick_values($regulations, 'regulation_id'),
+      $regulations
+    );
 
     // Function might be called from another api function, return result instead
     // of sending it down the wire directly.
