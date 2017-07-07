@@ -5,14 +5,28 @@
 <form class="form-horizontal">
   <!-- student's name -->
   <div class="form-group row">
-    <label class="control-label col-md-2" for="firstname">Name</label>
+    <label class="control-label col-md-2"
+      for="firstname">Name</label>
     <div class="col-md-5">
       <!-- first name input -->
-      <input type="text" id="firstname" class="form-control" placeholder="Firstname" blur-on-enter instafocus ng-model="$ctrl.user.firstname" ng-model-options="{updateOn: 'blur'}">
+      <input type="text"
+        id="firstname"
+        class="form-control"
+        placeholder="Firstname"
+        blur-on-enter
+        instafocus
+        ng-model="$ctrl.user.firstname"
+        ng-model-options="{updateOn: 'blur'}">
     </div>
     <div class="col-md-5">
       <!-- last name input -->
-      <input type="text" id="lastname" class="form-control" placeholder="Lastname" blur-on-enter ng-model="$ctrl.user.lastname" ng-model-options="{updateOn: 'blur'}">
+      <input type="text"
+        id="lastname"
+        class="form-control"
+        placeholder="Lastname"
+        blur-on-enter
+        ng-model="$ctrl.user.lastname"
+        ng-model-options="{updateOn: 'blur'}">
     </div>
   </div>
 
@@ -26,11 +40,14 @@
 
   <!-- student's study regulation -->
   <div class="form-group row">
-    <label class="control-label col-md-2" for="regulation">Regulation</label>
+    <label class="control-label col-md-2"
+      for="regulation">Regulation</label>
     <div class="col-md-10">
-      <select class="form-control" id="regulation" disabled="disabled">
-        <option selected="selected">{{::$ctrl.user.regulation}}</option>
-      </select>
+      <select class="form-control"
+        id="regulation"
+        disabled="disabled">
+          <option selected="selected">{{::$ctrl.user.regulation}}</option>
+          </select>
     </div>
   </div>
 </form>
@@ -39,24 +56,40 @@
 
 <div class="btn-group btn-group-justified">
   <!-- export data -->
-  <a class="btn btn-info hidden-xs hidden-sm" ng-click="$ctrl.export.init()" ng-disabled="$ctrl.export.loading" ng-if="!$ctrl.export.data" ng-bind="$ctrl.export.loading | iif : 'Preparing...' : 'Export Data'"></a>
-  <a class="btn btn-success hidden-xs hidden-sm" ng-if="$ctrl.export.data" download="{{::$ctrl.user.username}}.json" ng-href="{{$ctrl.export.data | textDownload}}">
-    Download personal data
-  </a>
+  <a class="btn btn-info hidden-xs hidden-sm"
+    ng-click="$ctrl.export.init()"
+    ng-disabled="$ctrl.export.loading"
+    ng-if="!$ctrl.export.data"
+    ng-bind="$ctrl.export.loading | iif : 'Preparing...' : 'Export Data'"></a>
+  <a class="btn btn-success hidden-xs hidden-sm"
+    ng-if="$ctrl.export.data"
+    download="{{::$ctrl.user.username}}.json"
+    ng-href="{{$ctrl.export.data | textDownload}}">
+      Download personal data
+      </a>
 
   <!-- delete account -->
-  <a class="btn btn-default" ng-click="$ctrl.showDelete = true" ng-hide="$ctrl.showDelete">
-    Delete all my data
-  </a>
-  <a class="btn btn-warning" ng-click="$ctrl.showDelete2 = true" ng-show="$ctrl.showDelete && !$ctrl.showDelete2">
-    Delete all my data, for sure!
-  </a>
-  <a class="btn btn-danger" ng-click="$ctrl.deleteUser()" ng-show="$ctrl.showDelete2">
-    Delete all my data, for really sure!
-  </a>
+  <a class="btn btn-default"
+    ng-click="$ctrl.showDelete = true"
+    ng-hide="$ctrl.showDelete">
+        Delete all my data
+        </a>
+  <a class="btn btn-warning"
+    ng-click="$ctrl.showDelete2 = true"
+    ng-show="$ctrl.showDelete && !$ctrl.showDelete2">
+          Delete all my data, for sure!
+          </a>
+  <a class="btn btn-danger"
+    ng-click="$ctrl.deleteUser()"
+    ng-show="$ctrl.showDelete2">
+            Delete all my data, for really sure!
+            </a>
 </div>
 
-<div class="alert alert-warning" role="alert" style="width: 50%; margin: 1em 0;" ng-class="{invisible: !$ctrl.export.data&&!$ctrl.export.loading}">
+<div class="alert alert-warning"
+  role="alert"
+  style="width: 50%; margin: 1em 0;"
+  ng-class="{invisible: !$ctrl.export.data&&!$ctrl.export.loading}">
   <span ng-if="$ctrl.export.data||$ctrl.export.loading">
     Downloading your personal data requires a <a href='http://caniuse.com/#feat=download' target='_blank' rel='noopener noreferrer'>modern browser</a>.
   </span>
