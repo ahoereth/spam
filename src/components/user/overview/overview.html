@@ -60,11 +60,14 @@
   <!-- no courses yet -->
   <p class="lead"
     ng-if="$ctrl.courses.length==0">
-    You have not yet added any courses. To do so you can use the <span class="text-success">quick search</span> in the top right of this page, browse the more specifically filterable <a ng-href="courses?regulation={{$ctrl.user.regulation_id}}&timeframe=11%2B}">course index</a> or take a look at the <a href="guide">study guide</a>. Alternatively I can also give you a head start by adding the typical courses for your first semester:
-    <button class="btn btn-primary"
-      ng-click="$ctrl.headstart()">
-      Initialize
-    </button>
+    You have not yet added any courses. To do so you can use the <span class="text-success">quick search</span> in the top right of this page or browse the more finely filterable <a ng-href="courses?regulation={{$ctrl.user.regulation_id}}&timeframe=11%2B}">course index</a>.
+    <span ng-if="$ctrl.user.regulation_id==1">
+      Alternatively you can take a look at the <a href="guide">study guide</a> or I can give you a head start by adding the typical courses for your first semesters:
+      <button class="btn btn-primary"
+        ng-click="$ctrl.headstart()">
+        Initialize
+      </button>
+    </span>
   </p>
 
   <hr>
