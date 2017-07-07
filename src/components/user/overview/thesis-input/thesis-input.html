@@ -1,8 +1,12 @@
 <div>
   <form class="inline-form row">
-    <div class="form-group col-lg-10 col-sm-9 col-xs-8" style="margin: 0;">
-      <input
-        type="text"
+    <div class="col-xs-1 hidden-xs"
+      style="margin: 0; line-height: 2.5em">
+      <label>Thesis</label>
+    </div>
+    <div class="form-group col-lg-9 col-sm-8 col-xs-7"
+      style="margin: 0;">
+      <input type="text"
         class="form-control"
         blur-on-enter
         placeholder="Thesis title"
@@ -12,9 +16,9 @@
         ng-style="!$ctrl.styled && { border: 'none', boxShadow: 'none' }">
     </div>
 
-    <div class="form-group col-lg-2 col-sm-3 col-xs-4" style="margin: 0;">
-      <input
-        type="text"
+    <div class="form-group col-lg-2 col-sm-3 col-xs-4"
+      style="margin: 0;">
+      <input type="text"
         class="form-control form-control-tight"
         blur-on-enter
         placeholder="Grade"
