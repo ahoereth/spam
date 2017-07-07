@@ -46,8 +46,8 @@
       <select class="form-control"
         id="regulation"
         disabled="disabled">
-          <option selected="selected">{{::$ctrl.user.regulation}}</option>
-          </select>
+        <option selected="selected">{{::$ctrl.user.regulation}}</option>
+      </select>
     </div>
   </div>
 </form>
@@ -65,25 +65,25 @@
     ng-if="$ctrl.export.data"
     download="{{::$ctrl.user.username}}.json"
     ng-href="{{$ctrl.export.data | textDownload}}">
-      Download personal data
-      </a>
+    Download personal data
+  </a>
 
   <!-- delete account -->
   <a class="btn btn-default"
     ng-click="$ctrl.showDelete = true"
     ng-hide="$ctrl.showDelete">
-        Delete all my data
-        </a>
+    Delete all my data
+  </a>
   <a class="btn btn-warning"
     ng-click="$ctrl.showDelete2 = true"
     ng-show="$ctrl.showDelete && !$ctrl.showDelete2">
-          Delete all my data, for sure!
-          </a>
+    Delete all my data, for sure!
+  </a>
   <a class="btn btn-danger"
     ng-click="$ctrl.deleteUser()"
     ng-show="$ctrl.showDelete2">
-            Delete all my data, for really sure!
-            </a>
+    Delete all my data, for really sure!
+  </a>
 </div>
 
 <div class="alert alert-warning"
