@@ -1,6 +1,5 @@
 import angular from 'angular';
 
-
 function sortableDirective() {
   let draggedelement;
   let sourcemodel;
@@ -56,7 +55,6 @@ function sortableDirective() {
         this.parentElement.parentElement.classList.add('sortable-active');
       };
 
-
       // Dragging element over a dropzone - continuously.
       sortable.handleDragOver = function handleDragOver(e) {
         if (e.preventDefault) {
@@ -69,21 +67,19 @@ function sortableDirective() {
         }
       };
 
-
       // Dragging element over a dropzone - initial.
       sortable.handleDragEnter = function handleDragEnter() {};
-
 
       // Dragging element out of a dropzone.
       sortable.handleDragLeave = function handleDragLeave() {
         this.classList.remove('over');
       };
 
-
       // Dropping element into a dropzone.
       sortable.handleDrop = function handleDrop(e) {
         // this/e.target is current target element.
-        if (e.stopPropagation) { // Stop redirection.
+        if (e.stopPropagation) {
+          // Stop redirection.
           e.stopPropagation();
         }
         e.preventDefault();
@@ -95,8 +91,9 @@ function sortableDirective() {
 
         const draggedmodel = draggedelement.model;
         const dragIndex = ngModel.$modelValue.indexOf(draggedmodel);
-        const dropIndex = !angular.isDefined(this.index) ?
-                           ngModel.$modelValue.length : this.index;
+        const dropIndex = !angular.isDefined(this.index)
+          ? ngModel.$modelValue.length
+          : this.index;
 
         if (dragIndex !== -1) {
           // Move inside of one group.
@@ -119,7 +116,6 @@ function sortableDirective() {
         }
       };
 
-
       // Dragging stopped, element dropped - whereever.
       sortable.handleDragEnd = () => {
         angular.forEach(sortable.cols, col => {
@@ -130,12 +126,10 @@ function sortableDirective() {
         });
       };
 
-
       // Fired when the specified handle is used for dragging.
       sortable.activehandle = () => {
         sortable.is_handle = true;
       };
-
 
       // Required because querySelector is not available during init.
       function bindHandleBinder() {
@@ -145,7 +139,6 @@ function sortableDirective() {
           handle.addEventListener('mousedown', sortable.activehandle, false);
         }
       }
-
 
       // Unbind all events.
       sortable.unbind = () => {
@@ -159,13 +152,13 @@ function sortableDirective() {
           c.removeEventListener('dragend', sortable.handleDragEnd, false);
           if (sortable.options.handle) {
             c.removeEventListener('mouseover', bindHandleBinder, false);
-            c.querySelector(sortable.options.handle)
-             .removeEventListener('mousedown', sortable.activehandle, false);
+            c
+              .querySelector(sortable.options.handle)
+              .removeEventListener('mousedown', sortable.activehandle, false);
           }
         });
         sortable.in_use = false;
       };
-
 
       // Bind all events.
       sortable.bind_single = elem => {
@@ -181,7 +174,6 @@ function sortableDirective() {
         }
       };
 
-
       // Update sortable. Fired for example when a new element is added or
       // removed from the model.
       sortable.update = function update() {
@@ -191,7 +183,9 @@ function sortableDirective() {
 
         // Create drop zone below all other elements if it does not exist yet.
         if (!element[0].querySelector('.dropzone')) {
-          const placeholder = angular.element('<div class="dropzone"><br><br><br></div>')[0];
+          const placeholder = angular.element(
+            '<div class="dropzone"><br><br><br></div>',
+          )[0];
           element[0].appendChild(placeholder);
         }
 
@@ -211,41 +205,49 @@ function sortableDirective() {
         sortable.in_use = true;
       };
 
-
       // Watch sortable option for changes.
-      scope.$watch('options', options => {
-        sortable.options = angular.extend({}, defaults, options);
+      scope.$watch(
+        'options',
+        options => {
+          sortable.options = angular.extend({}, defaults, options);
 
-        if (sortable.options.active === false) {
-          if (sortable.in_use) {
-            sortable.unbind();
-            sortable.in_use = false;
+          if (sortable.options.active === false) {
+            if (sortable.in_use) {
+              sortable.unbind();
+              sortable.in_use = false;
+            }
+            return;
           }
-          return;
-        }
 
-        if (angular.isFunction(sortable.options.construct)) {
-          sortable.options.construct(ngModel.$modelValue);
-        }
+          if (angular.isFunction(sortable.options.construct)) {
+            sortable.options.construct(ngModel.$modelValue);
+          }
 
-        element[0].classList.add('sortable');
-        sortable.update();
-      }, true);
-
+          element[0].classList.add('sortable');
+          sortable.update();
+        },
+        true,
+      );
 
       // Watch ngModel for changes in order to refresh the DOM listeners.
-      scope.$watch('ngModel', (n, o) => {
-        if (
-          n === o || n.length === o.length ||
-          sortable.options.active === false
-        ) { return; }
+      scope.$watch(
+        'ngModel',
+        (n, o) => {
+          if (
+            n === o ||
+            n.length === o.length ||
+            sortable.options.active === false
+          ) {
+            return;
+          }
 
-        sortable.update();
-      }, true);
+          sortable.update();
+        },
+        true,
+      );
     },
   };
 }
-
 
 /**
  * MODULE: sortable
@@ -257,5 +259,4 @@ function sortableDirective() {
  */
 export default angular
   .module('sortable', [])
-  .directive('htmlSortable', sortableDirective)
-  .name;
+  .directive('htmlSortable', sortableDirective).name;

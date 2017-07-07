@@ -1,6 +1,5 @@
 import angular from 'angular';
 
-
 function buttonsProvider() {
   this.defaults = {
     activeClass: 'active',
@@ -11,7 +10,6 @@ function buttonsProvider() {
     defaults: this.defaults,
   });
 }
-
 
 const checkboxButtonGroupDirective = () => ({
   restrict: 'A',
@@ -28,76 +26,80 @@ const checkboxButtonGroupDirective = () => ({
   },
 });
 
+const checkboxButtonDirective = [
+  'Buttons',
+  '$$rAF',
+  (Buttons, $$rAF) => {
+    const defaults = Buttons.defaults;
+    const constantValueRegExp = /^(true|false|\d+)$/;
 
-const checkboxButtonDirective = ['Buttons', '$$rAF', (Buttons, $$rAF) => {
-  const defaults = Buttons.defaults;
-  const constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        const options = defaults;
 
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    link: function postLink(scope, element, attr, controller) {
-      const options = defaults;
+        // Support label > input[type="checkbox"]
+        const isInput = element[0].nodeName === 'INPUT';
+        const activeElement = isInput ? element.parent() : element;
 
-      // Support label > input[type="checkbox"]
-      const isInput = element[0].nodeName === 'INPUT';
-      const activeElement = isInput ? element.parent() : element;
+        let trueValue = angular.isDefined(attr.trueValue)
+          ? attr.trueValue
+          : true;
+        if (constantValueRegExp.test(attr.trueValue)) {
+          trueValue = scope.$eval(attr.trueValue);
+        }
 
-      let trueValue = angular.isDefined(attr.trueValue) ?
-                      attr.trueValue : true;
-      if (constantValueRegExp.test(attr.trueValue)) {
-        trueValue = scope.$eval(attr.trueValue);
-      }
+        let falseValue = angular.isDefined(attr.falseValue)
+          ? attr.falseValue
+          : false;
+        if (constantValueRegExp.test(attr.falseValue)) {
+          falseValue = scope.$eval(attr.falseValue);
+        }
 
-      let falseValue = angular.isDefined(attr.falseValue) ?
-                       attr.falseValue : false;
-      if (constantValueRegExp.test(attr.falseValue)) {
-        falseValue = scope.$eval(attr.falseValue);
-      }
+        const hasExoticValues =
+          typeof trueValue !== 'boolean' || typeof falseValue !== 'boolean';
+        if (hasExoticValues) {
+          controller.$parsers.push(
+            viewValue => (viewValue ? trueValue : falseValue),
+          );
 
-      const hasExoticValues = typeof trueValue !== 'boolean' ||
-                              typeof falseValue !== 'boolean';
-      if (hasExoticValues) {
-        controller.$parsers.push(viewValue => (
-          viewValue ? trueValue : falseValue
-        ));
+          controller.$formatters.push(modelValue =>
+            angular.equals(modelValue, trueValue),
+          );
 
-        controller.$formatters.push(modelValue => (
-          angular.equals(modelValue, trueValue)
-        ));
-
-        scope.$watch(attr.ngModel, () => {
-          controller.$render();
-        });
-      }
-
-      controller.$render = () => {
-        const isActive = angular.equals(controller.$modelValue, trueValue);
-        $$rAF(() => {
-          if (isInput) {
-            element[0].checked = isActive;
-          }
-
-          activeElement.toggleClass(options.activeClass, isActive);
-        });
-      };
-
-      // view -> model
-      element.bind(options.toggleEvent, () => {
-        scope.$apply(() => {
-          if (!isInput) {
-            controller.$setViewValue(!activeElement.hasClass('active'));
-          }
-
-          if (!hasExoticValues) {
+          scope.$watch(attr.ngModel, () => {
             controller.$render();
-          }
-        });
-      });
-    },
-  };
-}];
+          });
+        }
 
+        controller.$render = () => {
+          const isActive = angular.equals(controller.$modelValue, trueValue);
+          $$rAF(() => {
+            if (isInput) {
+              element[0].checked = isActive;
+            }
+
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+
+        // view -> model
+        element.bind(options.toggleEvent, () => {
+          scope.$apply(() => {
+            if (!isInput) {
+              controller.$setViewValue(!activeElement.hasClass('active'));
+            }
+
+            if (!hasExoticValues) {
+              controller.$render();
+            }
+          });
+        });
+      },
+    };
+  },
+];
 
 const radioButtonGroupDirective = () => ({
   restrict: 'A',
@@ -116,48 +118,50 @@ const radioButtonGroupDirective = () => ({
   },
 });
 
+const radioButtonDirective = [
+  'Buttons',
+  '$$rAF',
+  (Buttons, $$rAF) => {
+    const defaults = Buttons.defaults;
+    const constantValueRegExp = /^(true|false|\d+)$/;
 
-const radioButtonDirective = ['Buttons', '$$rAF', (Buttons, $$rAF) => {
-  const defaults = Buttons.defaults;
-  const constantValueRegExp = /^(true|false|\d+)$/;
+    return {
+      restrict: 'A',
+      require: 'ngModel',
+      link: function postLink(scope, element, attr, controller) {
+        const options = defaults;
 
-  return {
-    restrict: 'A',
-    require: 'ngModel',
-    link: function postLink(scope, element, attr, controller) {
-      const options = defaults;
+        // Support `label > input[type="radio"]` markup
+        const isInput = element[0].nodeName === 'INPUT';
+        const activeElement = isInput ? element.parent() : element;
 
-      // Support `label > input[type="radio"]` markup
-      const isInput = element[0].nodeName === 'INPUT';
-      const activeElement = isInput ? element.parent() : element;
-
-      let value;
-      attr.$observe('value', v => {
-        value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
-        controller.$render();
-      });
-
-      controller.$render = () => {
-        const isActive = angular.equals(controller.$modelValue, value);
-        $$rAF(() => {
-          if (isInput) {
-            element[0].checked = isActive;
-          }
-
-          activeElement.toggleClass(options.activeClass, isActive);
-        });
-      };
-
-      element.bind(options.toggleEvent, () => {
-        scope.$apply(() => {
-          controller.$setViewValue(value);
+        let value;
+        attr.$observe('value', v => {
+          value = constantValueRegExp.test(v) ? scope.$eval(v) : v;
           controller.$render();
         });
-      });
-    },
-  };
-}];
 
+        controller.$render = () => {
+          const isActive = angular.equals(controller.$modelValue, value);
+          $$rAF(() => {
+            if (isInput) {
+              element[0].checked = isActive;
+            }
+
+            activeElement.toggleClass(options.activeClass, isActive);
+          });
+        };
+
+        element.bind(options.toggleEvent, () => {
+          scope.$apply(() => {
+            controller.$setViewValue(value);
+            controller.$render();
+          });
+        });
+      },
+    };
+  },
+];
 
 /**
  * MODULE: buttons
@@ -174,5 +178,4 @@ export default angular
   .directive('checkboxButtonGroup', checkboxButtonGroupDirective)
   .directive('checkboxButton', checkboxButtonDirective)
   .directive('radioButtonGroup', radioButtonGroupDirective)
-  .directive('radioButton', radioButtonDirective)
-  .name;
+  .directive('radioButton', radioButtonDirective).name;
